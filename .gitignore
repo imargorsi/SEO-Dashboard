@@ -51,6 +51,13 @@ project.md
 /laravel-old/.phpunit.cache/
 /laravel-old/.phpunit.result.cache/
 
+# old-next-frontend reference — source only (install deps locally)
+/old-next-frontend/node_modules/
+/old-next-frontend/dist/
+/old-next-frontend/dist-ssr/
+/old-next-frontend/.env
+/old-next-frontend/.env.*
+
 # os & debug logs
 .DS_Store
 Thumbs.db

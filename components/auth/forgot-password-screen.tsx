@@ -3,10 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AuthScreenShell } from "@/components/auth/auth-screen-shell";
-import {
-  ForgotPasswordFormSection,
-  type ForgotPasswordAuthAlert,
-} from "@/sections/forgot-password-form-section";
+import { ForgotPasswordFormSection, type ForgotPasswordAuthAlert } from "@/sections/forgot-password-form-section";
 import type { ForgotPasswordValues } from "@/sections/forgot-password.types";
 
 export function ForgotPasswordScreen() {

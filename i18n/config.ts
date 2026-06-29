@@ -9,6 +9,7 @@ import en from "@/locales/en";
 const RTL = new Set(["ar", "he", "fa", "ur"]);
 
 export function applyDirLang(lng: string) {
+  if (typeof document === "undefined") return;
   const base = lng.split(/[-_]/)[0] ?? "en";
   const dir: "rtl" | "ltr" = RTL.has(base) ? "rtl" : "ltr";
   document.documentElement.lang = lng;

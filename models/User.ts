@@ -9,22 +9,18 @@ const userSchema = new Schema(
     password: { type: String, required: true },
     emailVerifiedAt: { type: Date, default: null },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 userSchema.methods.hasVerifiedEmail = function hasVerifiedEmail(this: UserDocument): boolean {
   return this.emailVerifiedAt instanceof Date;
 };
 
-userSchema.methods.getEmailForVerification = function getEmailForVerification(
-  this: UserDocument,
-): string {
+userSchema.methods.getEmailForVerification = function getEmailForVerification(this: UserDocument): string {
   return this.email;
 };
 
-userSchema.methods.getEmailForPasswordReset = function getEmailForPasswordReset(
-  this: UserDocument,
-): string {
+userSchema.methods.getEmailForPasswordReset = function getEmailForPasswordReset(this: UserDocument): string {
   return this.email;
 };
 
@@ -36,5 +32,4 @@ export type UserDocument = InferSchemaType<typeof userSchema> &
     getEmailForPasswordReset(): string;
   };
 
-export const User: Model<UserDocument> =
-  mongoose.models.User ?? mongoose.model<UserDocument>("User", userSchema);
+export const User: Model<UserDocument> = mongoose.models.User ?? mongoose.model<UserDocument>("User", userSchema);

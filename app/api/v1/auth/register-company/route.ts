@@ -38,9 +38,5 @@ export const POST = withApiHandler(async (request) => {
 
   const usersCount = await User.countDocuments({ companyId: company._id });
 
-  return ApiResponse.success(
-    serializeCompany(company, usersCount),
-    authMessages.registrationReceived,
-    201,
-  );
+  return ApiResponse.success(serializeCompany(company, usersCount), authMessages.registrationReceived, 201);
 });

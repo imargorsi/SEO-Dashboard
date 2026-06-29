@@ -3,10 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AuthScreenShell } from "@/components/auth/auth-screen-shell";
-import {
-  RegisterFormSection,
-  type RegisterAuthAlert,
-} from "@/sections/register-form-section";
+import { RegisterFormSection, type RegisterAuthAlert } from "@/sections/register-form-section";
 import type { RegisterValues } from "@/sections/register.types";
 
 export function RegisterScreen() {

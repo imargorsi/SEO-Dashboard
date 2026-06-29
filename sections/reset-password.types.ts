@@ -1,4 +1,4 @@
 export type ResetPasswordValues = {
-  password: string
-  password_confirmation: string
-}
+  password: string;
+  password_confirmation: string;
+};

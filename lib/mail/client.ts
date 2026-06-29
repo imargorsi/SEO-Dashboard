@@ -86,19 +86,11 @@ export function companyApprovedMailContent(companyName: string, pocName: string)
   const app = env.appName();
   return {
     subject: `Your ${app} company has been approved`,
-    text: [
-      `Hello ${pocName},`,
-      "",
-      `Your company ${companyName} has been approved. You can now sign in.`,
-    ].join("\n"),
+    text: [`Hello ${pocName},`, "", `Your company ${companyName} has been approved. You can now sign in.`].join("\n"),
   };
 }
 
-export function pocWelcomeMailContent(
-  companyName: string,
-  pocName: string,
-  plainPassword: string,
-) {
+export function pocWelcomeMailContent(companyName: string, pocName: string, plainPassword: string) {
   const app = env.appName();
   return {
     subject: `Welcome to ${app}`,

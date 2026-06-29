@@ -1,555 +1,555 @@
 export interface Translation {
   layout: {
-    appName: string
-  }
+    appName: string;
+  };
   nav: {
-    aria: string
-    modules: string
-    openMenu: string
-    closeMenu: string
-    dashboard: string
-    companies: string
-    users: string
-    roles: string
-    permissions: string
-    projects: string
-  }
+    aria: string;
+    modules: string;
+    openMenu: string;
+    closeMenu: string;
+    dashboard: string;
+    companies: string;
+    users: string;
+    roles: string;
+    permissions: string;
+    projects: string;
+  };
   breadcrumb: {
     /** First crumb linking to `/dashboard` on nested pages */
-    root: string
-  }
+    root: string;
+  };
   table: {
-    emptyTitle: string
-    emptyBody: string
-    loading: string
-  }
+    emptyTitle: string;
+    emptyBody: string;
+    loading: string;
+  };
   form: {
-    showPassword: string
-    hidePassword: string
-  }
+    showPassword: string;
+    hidePassword: string;
+  };
   userMenu: {
-    openMenu: string
-    menuLabel: string
-    settings: string
-    editProfile: string
-    changePassword: string
-    logOut: string
-    fallbackName: string
-    noEmail: string
-  }
+    openMenu: string;
+    menuLabel: string;
+    settings: string;
+    editProfile: string;
+    changePassword: string;
+    logOut: string;
+    fallbackName: string;
+    noEmail: string;
+  };
   settings: {
-    title: string
-    subtitle: string
-  }
+    title: string;
+    subtitle: string;
+  };
   profile: {
     changePassword: {
-      title: string
-      lead: string
-      currentPassword: string
-      currentPasswordPh: string
-      newPassword: string
-      newPasswordPh: string
-      confirmPassword: string
-      confirmPasswordPh: string
-      submit: string
-      submitting: string
-      successTitle: string
-      successFallback: string
-      errorTitle: string
-      errorFallback: string
-      valRequired: string
-      valMin: string
-      valMatch: string
-      cancel: string
-    }
+      title: string;
+      lead: string;
+      currentPassword: string;
+      currentPasswordPh: string;
+      newPassword: string;
+      newPasswordPh: string;
+      confirmPassword: string;
+      confirmPasswordPh: string;
+      submit: string;
+      submitting: string;
+      successTitle: string;
+      successFallback: string;
+      errorTitle: string;
+      errorFallback: string;
+      valRequired: string;
+      valMin: string;
+      valMatch: string;
+      cancel: string;
+    };
     edit: {
-      breadcrumbTitle: string
-      title: string
-      lead: string
-      loading: string
-      loadErrorTitle: string
-      loadErrorBody: string
-      saving: string
-      save: string
-      successTitle: string
-      successFallback: string
-      errorTitle: string
-      errorFallback: string
-      nameLabel: string
-      namePh: string
-      valRequired: string
-      valMin: string
-      photoLabel: string
-      photoHint: string
-      photoPick: string
-      photoChange: string
-      photoClear: string
-      sectionReadonly: string
-      emailLabel: string
-      rolesHeading: string
-      permissionsHeading: string
-      noRoles: string
-      noPermissions: string
-      linkChangePassword: string
-    }
-  }
+      breadcrumbTitle: string;
+      title: string;
+      lead: string;
+      loading: string;
+      loadErrorTitle: string;
+      loadErrorBody: string;
+      saving: string;
+      save: string;
+      successTitle: string;
+      successFallback: string;
+      errorTitle: string;
+      errorFallback: string;
+      nameLabel: string;
+      namePh: string;
+      valRequired: string;
+      valMin: string;
+      photoLabel: string;
+      photoHint: string;
+      photoPick: string;
+      photoChange: string;
+      photoClear: string;
+      sectionReadonly: string;
+      emailLabel: string;
+      rolesHeading: string;
+      permissionsHeading: string;
+      noRoles: string;
+      noPermissions: string;
+      linkChangePassword: string;
+    };
+  };
   home: {
-    title: string
-    subtitle: string
-  }
+    title: string;
+    subtitle: string;
+  };
   modules: {
     companies: {
-      title: string
-      subtitle: string
-      createCompanyTitle: string
-      editCompanyTitle: string
+      title: string;
+      subtitle: string;
+      createCompanyTitle: string;
+      editCompanyTitle: string;
       createForm: {
-        title: string
-        lead: string
-        editTitle: string
-        editLead: string
-        editSubmit: string
-        editSubmitting: string
-        editSuccessTitle: string
-        editSuccessFallback: string
-        editErrorTitle: string
-        editErrorFallback: string
-        companyName: string
-        companyNamePh: string
-        pocName: string
-        pocNamePh: string
-        pocEmail: string
-        pocEmailPh: string
-        statusLabel: string
-        statusDescription: string
-        submit: string
-        submitting: string
-        successTitle: string
-        successFallback: string
-        errorTitle: string
-        errorFallback: string
-        valRequired: string
-        valEmail: string
-        valCompanyMin: string
-        backToList: string
-      }
+        title: string;
+        lead: string;
+        editTitle: string;
+        editLead: string;
+        editSubmit: string;
+        editSubmitting: string;
+        editSuccessTitle: string;
+        editSuccessFallback: string;
+        editErrorTitle: string;
+        editErrorFallback: string;
+        companyName: string;
+        companyNamePh: string;
+        pocName: string;
+        pocNamePh: string;
+        pocEmail: string;
+        pocEmailPh: string;
+        statusLabel: string;
+        statusDescription: string;
+        submit: string;
+        submitting: string;
+        successTitle: string;
+        successFallback: string;
+        errorTitle: string;
+        errorFallback: string;
+        valRequired: string;
+        valEmail: string;
+        valCompanyMin: string;
+        backToList: string;
+      };
       table: {
-        toolbarHint: string
-        colId: string
-        colName: string
-        colPocName: string
-        colEmail: string
-        colStatus: string
-        colRegistered: string
-        registeredPending: string
-        registeredApproved: string
-        approvePendingHint: string
-        approvePendingAria: string
-        approveSuccessTitle: string
-        approveSuccessFallback: string
-        approveErrorTitle: string
-        colProjects: string
-        seeProjects: string
-        colActions: string
-        createCompany: string
-        rowsSelected: string
-        rowsPerPage: string
-        pageOf: string
-        firstPage: string
-        previousPage: string
-        nextPage: string
-        lastPage: string
-        updating: string
-        loadErrorTitle: string
-        loadErrorBody: string
-        edit: string
-        delete: string
-        more: string
-        moreView: string
-        moreDuplicate: string
-        deleteConfirmTitle: string
-        deleteConfirmDescription: string
-        deleteConfirmCancel: string
-        deleteConfirmAction: string
-        deleteInProgress: string
-        deleteSuccessTitle: string
-        deleteSuccessFallback: string
-        deleteErrorTitle: string
-        dismiss: string
-        detailSheetLead: string
-        statusActive: string
-        statusInactive: string
-        accessDeniedTitle: string
-        accessDeniedBody: string
-      }
-    }
+        toolbarHint: string;
+        colId: string;
+        colName: string;
+        colPocName: string;
+        colEmail: string;
+        colStatus: string;
+        colRegistered: string;
+        registeredPending: string;
+        registeredApproved: string;
+        approvePendingHint: string;
+        approvePendingAria: string;
+        approveSuccessTitle: string;
+        approveSuccessFallback: string;
+        approveErrorTitle: string;
+        colProjects: string;
+        seeProjects: string;
+        colActions: string;
+        createCompany: string;
+        rowsSelected: string;
+        rowsPerPage: string;
+        pageOf: string;
+        firstPage: string;
+        previousPage: string;
+        nextPage: string;
+        lastPage: string;
+        updating: string;
+        loadErrorTitle: string;
+        loadErrorBody: string;
+        edit: string;
+        delete: string;
+        more: string;
+        moreView: string;
+        moreDuplicate: string;
+        deleteConfirmTitle: string;
+        deleteConfirmDescription: string;
+        deleteConfirmCancel: string;
+        deleteConfirmAction: string;
+        deleteInProgress: string;
+        deleteSuccessTitle: string;
+        deleteSuccessFallback: string;
+        deleteErrorTitle: string;
+        dismiss: string;
+        detailSheetLead: string;
+        statusActive: string;
+        statusInactive: string;
+        accessDeniedTitle: string;
+        accessDeniedBody: string;
+      };
+    };
     users: {
-      title: string
-      subtitle: string
-      createUserTitle: string
-      createComingSoon: string
-    }
+      title: string;
+      subtitle: string;
+      createUserTitle: string;
+      createComingSoon: string;
+    };
     projects: {
-      title: string
-      subtitle: string
-      companyProjectsTitle: string
-      companyProjectsTitleFallback: string
-      createProjectTitle: string
-      editProjectTitle: string
-      createLead: string
+      title: string;
+      subtitle: string;
+      companyProjectsTitle: string;
+      companyProjectsTitleFallback: string;
+      createProjectTitle: string;
+      editProjectTitle: string;
+      createLead: string;
       createForm: {
-        title: string
-        lead: string
-        editTitle: string
-        editLead: string
-        sectionBusinessTitle: string
-        sectionBusinessLead: string
-        sectionSeoTitle: string
-        sectionSeoLead: string
-        sectionGoogleTitle: string
-        sectionGoogleLead: string
-        sectionCmsTitle: string
-        sectionCmsLead: string
-        businessName: string
-        businessNamePh: string
-        websiteUrl: string
-        websiteUrlPh: string
-        industryNiche: string
-        industryNichePh: string
-        industryNicheLoading: string
-        industryNicheLoadError: string
-        targetLocations: string
-        targetLocationsPh: string
-        targetLocationsHelp: string
-        isB2b: string
-        isB2bDesc: string
-        isB2c: string
-        isB2cDesc: string
-        briefDescription: string
-        briefDescriptionPh: string
-        briefDescriptionHelp: string
-        seoGoals: string
-        seoGoalsHelp: string
-        seoGoalsLoading: string
-        seoGoalsLoadError: string
-        seoGoalsEmpty: string
-        hasGoogleAnalytics: string
-        hasGoogleAnalyticsDesc: string
-        hasGoogleSearchConsole: string
-        hasGoogleSearchConsoleDesc: string
-        hasGoogleTagManager: string
-        hasGoogleTagManagerDesc: string
-        hasGoogleAds: string
-        hasGoogleAdsDesc: string
-        googleConnect: string
-        googleConnectError: string
-        hasWebsiteLoginDetails: string
-        hasWebsiteLoginDetailsDesc: string
-        cmsLoginPageUrl: string
-        cmsLoginPageUrlPh: string
-        cmsUsername: string
-        cmsUsernamePh: string
-        cmsPassword: string
-        cmsPasswordPh: string
-        cmsPasswordEditPh: string
-        cmsPasswordEditHelp: string
-        submit: string
-        submitting: string
-        editSubmit: string
-        editSubmitting: string
-        successTitle: string
-        successFallback: string
-        editSuccessTitle: string
-        editSuccessFallback: string
-        errorTitle: string
-        errorFallback: string
-        editErrorTitle: string
-        editErrorFallback: string
-        missingCompany: string
-        valRequired: string
-        valMin: string
-        valUrl: string
-        valTargetLocations: string
-        valSeoGoals: string
-        backToList: string
-        remove: string
-      }
+        title: string;
+        lead: string;
+        editTitle: string;
+        editLead: string;
+        sectionBusinessTitle: string;
+        sectionBusinessLead: string;
+        sectionSeoTitle: string;
+        sectionSeoLead: string;
+        sectionGoogleTitle: string;
+        sectionGoogleLead: string;
+        sectionCmsTitle: string;
+        sectionCmsLead: string;
+        businessName: string;
+        businessNamePh: string;
+        websiteUrl: string;
+        websiteUrlPh: string;
+        industryNiche: string;
+        industryNichePh: string;
+        industryNicheLoading: string;
+        industryNicheLoadError: string;
+        targetLocations: string;
+        targetLocationsPh: string;
+        targetLocationsHelp: string;
+        isB2b: string;
+        isB2bDesc: string;
+        isB2c: string;
+        isB2cDesc: string;
+        briefDescription: string;
+        briefDescriptionPh: string;
+        briefDescriptionHelp: string;
+        seoGoals: string;
+        seoGoalsHelp: string;
+        seoGoalsLoading: string;
+        seoGoalsLoadError: string;
+        seoGoalsEmpty: string;
+        hasGoogleAnalytics: string;
+        hasGoogleAnalyticsDesc: string;
+        hasGoogleSearchConsole: string;
+        hasGoogleSearchConsoleDesc: string;
+        hasGoogleTagManager: string;
+        hasGoogleTagManagerDesc: string;
+        hasGoogleAds: string;
+        hasGoogleAdsDesc: string;
+        googleConnect: string;
+        googleConnectError: string;
+        hasWebsiteLoginDetails: string;
+        hasWebsiteLoginDetailsDesc: string;
+        cmsLoginPageUrl: string;
+        cmsLoginPageUrlPh: string;
+        cmsUsername: string;
+        cmsUsernamePh: string;
+        cmsPassword: string;
+        cmsPasswordPh: string;
+        cmsPasswordEditPh: string;
+        cmsPasswordEditHelp: string;
+        submit: string;
+        submitting: string;
+        editSubmit: string;
+        editSubmitting: string;
+        successTitle: string;
+        successFallback: string;
+        editSuccessTitle: string;
+        editSuccessFallback: string;
+        errorTitle: string;
+        errorFallback: string;
+        editErrorTitle: string;
+        editErrorFallback: string;
+        missingCompany: string;
+        valRequired: string;
+        valMin: string;
+        valUrl: string;
+        valTargetLocations: string;
+        valSeoGoals: string;
+        backToList: string;
+        remove: string;
+      };
       table: {
-        toolbarHint: string
-        toolbarHintCompany: string
-        toolbarHintCompanyId: string
-        colId: string
-        colBusinessName: string
-        colWebsite: string
-        colBusinessType: string
-        colActions: string
-        createProject: string
-        noBusinessType: string
-        businessTypeB2b: string
-        businessTypeB2c: string
-        rowsSelected: string
-        rowsPerPage: string
-        pageOf: string
-        firstPage: string
-        previousPage: string
-        nextPage: string
-        lastPage: string
-        updating: string
-        loadErrorTitle: string
-        loadErrorBody: string
-        edit: string
-        delete: string
-        more: string
-        moreView: string
-        deleteConfirmTitle: string
-        deleteConfirmDescription: string
-        deleteConfirmCancel: string
-        deleteConfirmAction: string
-        deleteInProgress: string
-        deleteSuccessTitle: string
-        deleteSuccessFallback: string
-        deleteErrorTitle: string
-        dismiss: string
-        detailSheetLead: string
-        accessDeniedTitle: string
-        accessDeniedBody: string
-        yes: string
-        no: string
-        colCompanyId: string
-        colIsB2b: string
-        colIsB2c: string
-        colIndustryNiche: string
-        colIndustryOther: string
-        colTargetLocations: string
-        colBriefDescription: string
-        colMainCompetitors: string
-        colSeoGoals: string
-        colSeoGoalOther: string
-        colGoogleAnalytics: string
-        colGoogleSearchConsole: string
-        colGoogleTagManager: string
-        colGoogleAds: string
-        colWebsiteLoginDetails: string
-        colCmsLoginUrl: string
-        colCmsUsername: string
-        colCmsPasswordSet: string
-        colCreatedAt: string
-        colUpdatedAt: string
-      }
-    }
+        toolbarHint: string;
+        toolbarHintCompany: string;
+        toolbarHintCompanyId: string;
+        colId: string;
+        colBusinessName: string;
+        colWebsite: string;
+        colBusinessType: string;
+        colActions: string;
+        createProject: string;
+        noBusinessType: string;
+        businessTypeB2b: string;
+        businessTypeB2c: string;
+        rowsSelected: string;
+        rowsPerPage: string;
+        pageOf: string;
+        firstPage: string;
+        previousPage: string;
+        nextPage: string;
+        lastPage: string;
+        updating: string;
+        loadErrorTitle: string;
+        loadErrorBody: string;
+        edit: string;
+        delete: string;
+        more: string;
+        moreView: string;
+        deleteConfirmTitle: string;
+        deleteConfirmDescription: string;
+        deleteConfirmCancel: string;
+        deleteConfirmAction: string;
+        deleteInProgress: string;
+        deleteSuccessTitle: string;
+        deleteSuccessFallback: string;
+        deleteErrorTitle: string;
+        dismiss: string;
+        detailSheetLead: string;
+        accessDeniedTitle: string;
+        accessDeniedBody: string;
+        yes: string;
+        no: string;
+        colCompanyId: string;
+        colIsB2b: string;
+        colIsB2c: string;
+        colIndustryNiche: string;
+        colIndustryOther: string;
+        colTargetLocations: string;
+        colBriefDescription: string;
+        colMainCompetitors: string;
+        colSeoGoals: string;
+        colSeoGoalOther: string;
+        colGoogleAnalytics: string;
+        colGoogleSearchConsole: string;
+        colGoogleTagManager: string;
+        colGoogleAds: string;
+        colWebsiteLoginDetails: string;
+        colCmsLoginUrl: string;
+        colCmsUsername: string;
+        colCmsPasswordSet: string;
+        colCreatedAt: string;
+        colUpdatedAt: string;
+      };
+    };
     roles: {
-      title: string
-      subtitle: string
-      createRoleTitle: string
-      editRoleTitle: string
+      title: string;
+      subtitle: string;
+      createRoleTitle: string;
+      editRoleTitle: string;
       createForm: {
-        title: string
-        lead: string
-        editTitle: string
-        editLead: string
-        editSubmit: string
-        editSubmitting: string
-        editSuccessTitle: string
-        editSuccessFallback: string
-        editErrorTitle: string
-        editErrorFallback: string
-        name: string
-        namePh: string
-        permsHeading: string
-        permsSelectAll: string
-        permsCount: string
-        permsLoading: string
-        permsEmpty: string
-        permsLoadErrorTitle: string
-        permsLoadErrorBody: string
-        submit: string
-        submitting: string
-        successTitle: string
-        successFallback: string
-        errorTitle: string
-        errorFallback: string
-        valRequired: string
-        valMin: string
-        backToList: string
-      }
+        title: string;
+        lead: string;
+        editTitle: string;
+        editLead: string;
+        editSubmit: string;
+        editSubmitting: string;
+        editSuccessTitle: string;
+        editSuccessFallback: string;
+        editErrorTitle: string;
+        editErrorFallback: string;
+        name: string;
+        namePh: string;
+        permsHeading: string;
+        permsSelectAll: string;
+        permsCount: string;
+        permsLoading: string;
+        permsEmpty: string;
+        permsLoadErrorTitle: string;
+        permsLoadErrorBody: string;
+        submit: string;
+        submitting: string;
+        successTitle: string;
+        successFallback: string;
+        errorTitle: string;
+        errorFallback: string;
+        valRequired: string;
+        valMin: string;
+        backToList: string;
+      };
       table: {
-        toolbarHint: string
-        colId: string
-        colName: string
-        colPermissions: string
-        colActions: string
-        createRole: string
-        rowsSelected: string
-        rowsPerPage: string
-        pageOf: string
-        firstPage: string
-        previousPage: string
-        nextPage: string
-        lastPage: string
-        updating: string
-        loadErrorTitle: string
-        loadErrorBody: string
-        edit: string
-        delete: string
-        more: string
-        moreView: string
-        deleteConfirmTitle: string
-        deleteConfirmDescription: string
-        deleteConfirmCancel: string
-        deleteConfirmAction: string
-        deleteInProgress: string
-        deleteSuccessTitle: string
-        deleteSuccessFallback: string
-        deleteErrorTitle: string
-        dismiss: string
-        detailSheetLead: string
-        accessDeniedTitle: string
-        accessDeniedBody: string
-      }
-    }
+        toolbarHint: string;
+        colId: string;
+        colName: string;
+        colPermissions: string;
+        colActions: string;
+        createRole: string;
+        rowsSelected: string;
+        rowsPerPage: string;
+        pageOf: string;
+        firstPage: string;
+        previousPage: string;
+        nextPage: string;
+        lastPage: string;
+        updating: string;
+        loadErrorTitle: string;
+        loadErrorBody: string;
+        edit: string;
+        delete: string;
+        more: string;
+        moreView: string;
+        deleteConfirmTitle: string;
+        deleteConfirmDescription: string;
+        deleteConfirmCancel: string;
+        deleteConfirmAction: string;
+        deleteInProgress: string;
+        deleteSuccessTitle: string;
+        deleteSuccessFallback: string;
+        deleteErrorTitle: string;
+        dismiss: string;
+        detailSheetLead: string;
+        accessDeniedTitle: string;
+        accessDeniedBody: string;
+      };
+    };
     permissions: {
-      title: string
-      subtitle: string
-      createPermissionTitle: string
-      editPermissionTitle: string
+      title: string;
+      subtitle: string;
+      createPermissionTitle: string;
+      editPermissionTitle: string;
       createForm: {
-        title: string
-        lead: string
-        editTitle: string
-        editLead: string
-        editSubmit: string
-        editSubmitting: string
-        editSuccessTitle: string
-        editSuccessFallback: string
-        editErrorTitle: string
-        editErrorFallback: string
-        name: string
-        namePh: string
-        submit: string
-        submitting: string
-        successTitle: string
-        successFallback: string
-        errorTitle: string
-        errorFallback: string
-        valRequired: string
-        valMin: string
-        backToList: string
-      }
+        title: string;
+        lead: string;
+        editTitle: string;
+        editLead: string;
+        editSubmit: string;
+        editSubmitting: string;
+        editSuccessTitle: string;
+        editSuccessFallback: string;
+        editErrorTitle: string;
+        editErrorFallback: string;
+        name: string;
+        namePh: string;
+        submit: string;
+        submitting: string;
+        successTitle: string;
+        successFallback: string;
+        errorTitle: string;
+        errorFallback: string;
+        valRequired: string;
+        valMin: string;
+        backToList: string;
+      };
       table: {
-        toolbarHint: string
-        colId: string
-        colName: string
-        colRoles: string
-        colActions: string
-        createPermission: string
-        rowsSelected: string
-        rowsPerPage: string
-        pageOf: string
-        firstPage: string
-        previousPage: string
-        nextPage: string
-        lastPage: string
-        updating: string
-        loadErrorTitle: string
-        loadErrorBody: string
-        edit: string
-        delete: string
-        more: string
-        moreView: string
-        deleteConfirmTitle: string
-        deleteConfirmDescription: string
-        deleteConfirmCancel: string
-        deleteConfirmAction: string
-        deleteInProgress: string
-        deleteSuccessTitle: string
-        deleteSuccessFallback: string
-        deleteErrorTitle: string
-        dismiss: string
-        detailSheetLead: string
-      }
-    }
-  }
+        toolbarHint: string;
+        colId: string;
+        colName: string;
+        colRoles: string;
+        colActions: string;
+        createPermission: string;
+        rowsSelected: string;
+        rowsPerPage: string;
+        pageOf: string;
+        firstPage: string;
+        previousPage: string;
+        nextPage: string;
+        lastPage: string;
+        updating: string;
+        loadErrorTitle: string;
+        loadErrorBody: string;
+        edit: string;
+        delete: string;
+        more: string;
+        moreView: string;
+        deleteConfirmTitle: string;
+        deleteConfirmDescription: string;
+        deleteConfirmCancel: string;
+        deleteConfirmAction: string;
+        deleteInProgress: string;
+        deleteSuccessTitle: string;
+        deleteSuccessFallback: string;
+        deleteErrorTitle: string;
+        dismiss: string;
+        detailSheetLead: string;
+      };
+    };
+  };
   auth: {
     signIn: {
-      title: string
-      subtitle: string
-      email: string
-      password: string
-      submit: string
-      forgotPassword: string
-      heroTitle: string
-      heroLead: string
-      heroPoint1: string
-      heroPoint2: string
-      heroPoint3: string
-      emailInvalid: string
-      passwordMin: string
-      fieldRequired: string
-      loginSuccess: string
-      loginErrorUnexpected: string
-      noAccountPrompt: string
-      registerCta: string
-    }
+      title: string;
+      subtitle: string;
+      email: string;
+      password: string;
+      submit: string;
+      forgotPassword: string;
+      heroTitle: string;
+      heroLead: string;
+      heroPoint1: string;
+      heroPoint2: string;
+      heroPoint3: string;
+      emailInvalid: string;
+      passwordMin: string;
+      fieldRequired: string;
+      loginSuccess: string;
+      loginErrorUnexpected: string;
+      noAccountPrompt: string;
+      registerCta: string;
+    };
     forgotPassword: {
-      title: string
-      subtitle: string
-      email: string
-      submit: string
-      backToSignIn: string
-      emailInvalid: string
-      fieldRequired: string
-      submitSuccess: string
-      submitErrorFallback: string
-    }
+      title: string;
+      subtitle: string;
+      email: string;
+      submit: string;
+      backToSignIn: string;
+      emailInvalid: string;
+      fieldRequired: string;
+      submitSuccess: string;
+      submitErrorFallback: string;
+    };
     resetPassword: {
-      title: string
-      subtitle: string
-      password: string
-      confirmPassword: string
-      submit: string
-      backToSignIn: string
-      fieldRequired: string
-      passwordMin: string
-      passwordMismatch: string
-      submitSuccess: string
-      submitErrorFallback: string
-      invalidLinkTitle: string
-      invalidLinkBody: string
-    }
+      title: string;
+      subtitle: string;
+      password: string;
+      confirmPassword: string;
+      submit: string;
+      backToSignIn: string;
+      fieldRequired: string;
+      passwordMin: string;
+      passwordMismatch: string;
+      submitSuccess: string;
+      submitErrorFallback: string;
+      invalidLinkTitle: string;
+      invalidLinkBody: string;
+    };
     register: {
-      title: string
-      subtitle: string
-      companyName: string
-      companyNamePh: string
-      companyNameMin: string
-      contactPersonName: string
-      contactPersonNamePh: string
-      contactPersonNameMin: string
-      contactPersonEmail: string
-      password: string
-      confirmPassword: string
-      passwordMin: string
-      passwordMismatch: string
-      submit: string
-      hasAccount: string
-      signInLink: string
-      fieldRequired: string
-      emailInvalid: string
-      submitSuccess: string
-      submitErrorFallback: string
-    }
-  }
+      title: string;
+      subtitle: string;
+      companyName: string;
+      companyNamePh: string;
+      companyNameMin: string;
+      contactPersonName: string;
+      contactPersonNamePh: string;
+      contactPersonNameMin: string;
+      contactPersonEmail: string;
+      password: string;
+      confirmPassword: string;
+      passwordMin: string;
+      passwordMismatch: string;
+      submit: string;
+      hasAccount: string;
+      signInLink: string;
+      fieldRequired: string;
+      emailInvalid: string;
+      submitSuccess: string;
+      submitErrorFallback: string;
+    };
+  };
   lang: {
-    en: string
-    ar: string
-    aria: string
-    switchToArabic: string
-    switchToEnglish: string
-  }
+    en: string;
+    ar: string;
+    aria: string;
+    switchToArabic: string;
+    switchToEnglish: string;
+  };
   theme: {
-    switchToLight: string
-    switchToDark: string
-  }
+    switchToLight: string;
+    switchToDark: string;
+  };
 }
 
 const translation: Translation = {
@@ -573,8 +573,7 @@ const translation: Translation = {
   },
   table: {
     emptyTitle: "No records found",
-    emptyBody:
-      "There is nothing to show here yet. Create a new entry or check back later.",
+    emptyBody: "There is nothing to show here yet. Create a new entry or check back later.",
     loading: "Loading…",
   },
   form: {
@@ -735,8 +734,7 @@ const translation: Translation = {
         statusActive: "Active",
         statusInactive: "Inactive",
         accessDeniedTitle: "No access",
-        accessDeniedBody:
-          "You don’t have permission to view companies. Ask an administrator if you need access.",
+        accessDeniedBody: "You don’t have permission to view companies. Ask an administrator if you need access.",
       },
     },
     users: {
@@ -821,7 +819,8 @@ const translation: Translation = {
         errorFallback: "Something went wrong. Try again.",
         editErrorTitle: "Could not update project",
         editErrorFallback: "Something went wrong. Try again.",
-        missingCompany: "Your account isn't linked to a company yet. Ask an administrator to assign one before creating projects.",
+        missingCompany:
+          "Your account isn't linked to a company yet. Ask an administrator to assign one before creating projects.",
         valRequired: "This field is required.",
         valMin: "Use at least 2 characters.",
         valUrl: "Enter a valid URL (https://…).",
@@ -858,8 +857,7 @@ const translation: Translation = {
         more: "More actions",
         moreView: "View details",
         deleteConfirmTitle: "Delete this project?",
-        deleteConfirmDescription:
-          "This will remove “{{name}}”. This action cannot be undone.",
+        deleteConfirmDescription: "This will remove “{{name}}”. This action cannot be undone.",
         deleteConfirmCancel: "Cancel",
         deleteConfirmAction: "Delete project",
         deleteInProgress: "Deleting…",
@@ -869,8 +867,7 @@ const translation: Translation = {
         dismiss: "Dismiss",
         detailSheetLead: "Full project details from the current page.",
         accessDeniedTitle: "No access",
-        accessDeniedBody:
-          "You don't have permission to view projects. Ask an administrator if you need access.",
+        accessDeniedBody: "You don't have permission to view projects. Ask an administrator if you need access.",
         yes: "Yes",
         no: "No",
         colCompanyId: "Company ID",
@@ -1025,8 +1022,7 @@ const translation: Translation = {
         dismiss: "Dismiss",
         detailSheetLead: "Details from the current page — refresh the list after edits elsewhere.",
         accessDeniedTitle: "No access",
-        accessDeniedBody:
-          "You don't have permission to view roles. Ask an administrator if you need access.",
+        accessDeniedBody: "You don't have permission to view roles. Ask an administrator if you need access.",
       },
     },
   },
@@ -1039,8 +1035,7 @@ const translation: Translation = {
       submit: "Sign in",
       forgotPassword: "Forgot password?",
       heroTitle: "SEO clarity for every client",
-      heroLead:
-        "Track rankings, spot opportunities, and keep stakeholders aligned from one calm workspace.",
+      heroLead: "Track rankings, spot opportunities, and keep stakeholders aligned from one calm workspace.",
       heroPoint1: "Multi-client dashboards without the spreadsheet chaos",
       heroPoint2: "Scheduled checks and history you can trust",
       heroPoint3: "Built for teams who care about accuracy",
@@ -1054,21 +1049,18 @@ const translation: Translation = {
     },
     forgotPassword: {
       title: "Forgot password",
-      subtitle:
-        "Enter your account email and we'll send reset instructions if the address is registered.",
+      subtitle: "Enter your account email and we'll send reset instructions if the address is registered.",
       email: "Email",
       submit: "Send reset link",
       backToSignIn: "Back to sign in",
       emailInvalid: "Enter a valid email address.",
       fieldRequired: "This field is required.",
-      submitSuccess:
-        "If that email is in our system, you'll receive reset instructions shortly.",
+      submitSuccess: "If that email is in our system, you'll receive reset instructions shortly.",
       submitErrorFallback: "Could not send the reset link. Try again.",
     },
     resetPassword: {
       title: "Reset password",
-      subtitle:
-        "Choose a new password for your account. This link can only be used once.",
+      subtitle: "Choose a new password for your account. This link can only be used once.",
       password: "New password",
       confirmPassword: "Confirm password",
       submit: "Reset password",
@@ -1076,17 +1068,14 @@ const translation: Translation = {
       fieldRequired: "This field is required.",
       passwordMin: "Use at least 8 characters.",
       passwordMismatch: "Passwords do not match.",
-      submitSuccess:
-        "Your password has been updated. You can sign in with your new password.",
+      submitSuccess: "Your password has been updated. You can sign in with your new password.",
       submitErrorFallback: "Could not reset your password. Try again or request a new link.",
       invalidLinkTitle: "Invalid reset link",
-      invalidLinkBody:
-        "This link is missing required information. Request a new reset email from the sign-in page.",
+      invalidLinkBody: "This link is missing required information. Request a new reset email from the sign-in page.",
     },
     register: {
       title: "Register your company",
-      subtitle:
-        "Tell us about your organization. We'll set up your workspace and follow up with next steps.",
+      subtitle: "Tell us about your organization. We'll set up your workspace and follow up with next steps.",
       companyName: "Company name",
       companyNamePh: "Acme SEO Agency",
       companyNameMin: "Enter at least 2 characters.",
@@ -1103,8 +1092,7 @@ const translation: Translation = {
       signInLink: "Sign in",
       fieldRequired: "This field is required.",
       emailInvalid: "Enter a valid email address.",
-      submitSuccess:
-        "Your company account was created. Sign in with your email and password.",
+      submitSuccess: "Your company account was created. Sign in with your email and password.",
       submitErrorFallback: "Could not complete registration. Please try again.",
     },
   },
@@ -1119,6 +1107,6 @@ const translation: Translation = {
     switchToLight: "Switch to light theme",
     switchToDark: "Switch to dark theme",
   },
-}
+};
 
-export default translation
+export default translation;

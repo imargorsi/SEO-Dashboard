@@ -2,7 +2,7 @@
 
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
 import Link from "next/link";
-import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { IoAlertCircle, IoCheckmarkCircle } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 import { SignInAuthCardShell } from "@/components/sign-in-auth-card-shell";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -11,7 +11,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { Heading } from "@/components/heading";
 import { Input } from "@/components/input";
 import { Paragraph } from "@/components/paragraph";
-import { Button as MovingBorderButton } from "@/components/ui/moving-border";
+import { AuthSubmitButton } from "@/components/auth/auth-submit-button";
 import { Spinner } from "@/components/ui/spinner";
 import type { SignInValues } from "@/sections/sign-in.types";
 
@@ -54,14 +54,12 @@ export function SignInFormSection({
       {authAlert ? (
         <Alert variant={authAlert.variant} className="mt-5">
           {authAlert.variant === "destructive" ? (
-            <AlertCircle className="size-4 shrink-0" aria-hidden />
+            <IoAlertCircle className="size-4 shrink-0" aria-hidden />
           ) : (
-            <CheckCircle2 className="size-4 shrink-0" aria-hidden />
+            <IoCheckmarkCircle className="size-4 shrink-0" aria-hidden />
           )}
           <AlertTitle>{authAlert.title}</AlertTitle>
-          {authAlert.description ? (
-            <AlertDescription>{authAlert.description}</AlertDescription>
-          ) : null}
+          {authAlert.description ? <AlertDescription>{authAlert.description}</AlertDescription> : null}
         </Alert>
       ) : null}
 
@@ -97,20 +95,10 @@ export function SignInFormSection({
           })}
         />
 
-        <MovingBorderButton
-          type="submit"
-          disabled={isSubmitting}
-          aria-busy={isSubmitting}
-          borderRadius="0.5rem"
-          containerClassName="mt-1 w-full max-w-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand)] disabled:pointer-events-none disabled:opacity-60"
-        >
-          <span className="inline-flex items-center justify-center gap-2">
-            {isSubmitting ? (
-              <Spinner className="size-4 shrink-0 text-[var(--motion-btn-fg)]" />
-            ) : null}
-            {t("submit")}
-          </span>
-        </MovingBorderButton>
+        <AuthSubmitButton disabled={isSubmitting} className="mt-1">
+          {isSubmitting ? <Spinner className="size-4 shrink-0 text-white" /> : null}
+          {t("submit")}
+        </AuthSubmitButton>
       </form>
 
       <div className="mt-2 flex flex-col gap-3">
@@ -120,10 +108,7 @@ export function SignInFormSection({
           </Link>
         </Paragraph>
 
-        <Paragraph
-          moreSmaller
-          className="border-t border-[var(--border)] pt-4 text-center leading-relaxed"
-        >
+        <Paragraph moreSmaller className="border-t border-[var(--border)] pt-4 text-center leading-relaxed">
           <span className="text-[var(--text-muted)]">{t("noAccountPrompt")} </span>
           <Link href="/register" className="font-medium text-[var(--brand)] hover:underline">
             {t("registerCta")}

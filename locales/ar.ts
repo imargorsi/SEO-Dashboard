@@ -1,4 +1,4 @@
-import type { Translation } from "./en"
+import type { Translation } from "./en";
 
 const translation: Translation = {
   layout: {
@@ -169,8 +169,7 @@ const translation: Translation = {
         moreView: "عرض التفاصيل",
         moreDuplicate: "نسخ",
         deleteConfirmTitle: "حذف هذه الشركة؟",
-        deleteConfirmDescription:
-          "سيتم إزالة «{{name}}» والبيانات المرتبطة بها. لا يمكن التراجع عن هذا الإجراء.",
+        deleteConfirmDescription: "سيتم إزالة «{{name}}» والبيانات المرتبطة بها. لا يمكن التراجع عن هذا الإجراء.",
         deleteConfirmCancel: "إلغاء",
         deleteConfirmAction: "حذف الشركة",
         deleteInProgress: "جارٍ الحذف…",
@@ -182,8 +181,7 @@ const translation: Translation = {
         statusActive: "نشط",
         statusInactive: "غير نشط",
         accessDeniedTitle: "لا يوجد وصول",
-        accessDeniedBody:
-          "ليس لديك صلاحية عرض الشركات. اطلب من المسؤول إن كنت بحاجة إلى الوصول.",
+        accessDeniedBody: "ليس لديك صلاحية عرض الشركات. اطلب من المسؤول إن كنت بحاجة إلى الوصول.",
       },
     },
     users: {
@@ -305,8 +303,7 @@ const translation: Translation = {
         more: "المزيد",
         moreView: "عرض التفاصيل",
         deleteConfirmTitle: "حذف هذا المشروع؟",
-        deleteConfirmDescription:
-          "سيتم إزالة «{{name}}». لا يمكن التراجع عن هذا الإجراء.",
+        deleteConfirmDescription: "سيتم إزالة «{{name}}». لا يمكن التراجع عن هذا الإجراء.",
         deleteConfirmCancel: "إلغاء",
         deleteConfirmAction: "حذف المشروع",
         deleteInProgress: "جارٍ الحذف…",
@@ -316,8 +313,7 @@ const translation: Translation = {
         dismiss: "إغلاق",
         detailSheetLead: "تفاصيل المشروع الكاملة من الصفحة الحالية.",
         accessDeniedTitle: "لا يوجد وصول",
-        accessDeniedBody:
-          "ليس لديك صلاحية عرض المشاريع. اطلب من المسؤول إن كنت بحاجة إلى الوصول.",
+        accessDeniedBody: "ليس لديك صلاحية عرض المشاريع. اطلب من المسؤول إن كنت بحاجة إلى الوصول.",
         yes: "نعم",
         no: "لا",
         colCompanyId: "معرّف الشركة",
@@ -392,8 +388,7 @@ const translation: Translation = {
         more: "المزيد",
         moreView: "عرض التفاصيل",
         deleteConfirmTitle: "حذف هذه الصلاحية؟",
-        deleteConfirmDescription:
-          "سيتم إزالة «{{name}}» وفصلها عن الأدوار المرتبطة. لا يمكن التراجع عن هذا الإجراء.",
+        deleteConfirmDescription: "سيتم إزالة «{{name}}» وفصلها عن الأدوار المرتبطة. لا يمكن التراجع عن هذا الإجراء.",
         deleteConfirmCancel: "إلغاء",
         deleteConfirmAction: "حذف الصلاحية",
         deleteInProgress: "جارٍ الحذف…",
@@ -461,8 +456,7 @@ const translation: Translation = {
         more: "المزيد",
         moreView: "عرض التفاصيل",
         deleteConfirmTitle: "حذف هذا الدور؟",
-        deleteConfirmDescription:
-          "سيتم إزالة «{{name}}» وفصل المستخدمين المرتبطين به. لا يمكن التراجع عن هذا الإجراء.",
+        deleteConfirmDescription: "سيتم إزالة «{{name}}» وفصل المستخدمين المرتبطين به. لا يمكن التراجع عن هذا الإجراء.",
         deleteConfirmCancel: "إلغاء",
         deleteConfirmAction: "حذف الدور",
         deleteInProgress: "جارٍ الحذف…",
@@ -472,8 +466,7 @@ const translation: Translation = {
         dismiss: "إغلاق",
         detailSheetLead: "تفاصيل من الصفحة الحالية — حدّث القائمة بعد أي تعديل من مكان آخر.",
         accessDeniedTitle: "لا يوجد وصول",
-        accessDeniedBody:
-          "ليس لديك صلاحية عرض الأدوار. اطلب من المسؤول إن كنت بحاجة إلى الوصول.",
+        accessDeniedBody: "ليس لديك صلاحية عرض الأدوار. اطلب من المسؤول إن كنت بحاجة إلى الوصول.",
       },
     },
   },
@@ -486,8 +479,7 @@ const translation: Translation = {
       submit: "تسجيل الدخول",
       forgotPassword: "هل نسيت كلمة المرور؟",
       heroTitle: "وضوح السيو لكل عميل",
-      heroLead:
-        "تابع الترتيب، واكتشف الفرص، وحافظ على توافق أصحاب المصلحة من مساحة عمل واحدة منظمة.",
+      heroLead: "تابع الترتيب، واكتشف الفرص، وحافظ على توافق أصحاب المصلحة من مساحة عمل واحدة منظمة.",
       heroPoint1: "لوحات متعددة العملاء دون فوضى الجداول",
       heroPoint2: "فحوصات مجدولة وسجل يمكن الاعتماد عليه",
       heroPoint3: "مصمم للفرق التي تهتم بالدقة",
@@ -501,21 +493,18 @@ const translation: Translation = {
     },
     forgotPassword: {
       title: "نسيت كلمة المرور",
-      subtitle:
-        "أدخل بريد حسابك وسنرسل تعليمات إعادة التعيين إذا كان العنوان مسجّلًا.",
+      subtitle: "أدخل بريد حسابك وسنرسل تعليمات إعادة التعيين إذا كان العنوان مسجّلًا.",
       email: "البريد الإلكتروني",
       submit: "إرسال رابط إعادة التعيين",
       backToSignIn: "العودة لتسجيل الدخول",
       emailInvalid: "أدخل بريدًا إلكترونيًا صالحًا.",
       fieldRequired: "هذا الحقل مطلوب.",
-      submitSuccess:
-        "إذا كان هذا البريد مسجّلًا لدينا، ستصلك تعليمات إعادة التعيين قريبًا.",
+      submitSuccess: "إذا كان هذا البريد مسجّلًا لدينا، ستصلك تعليمات إعادة التعيين قريبًا.",
       submitErrorFallback: "تعذّر إرسال رابط إعادة التعيين. حاول مرة أخرى.",
     },
     resetPassword: {
       title: "إعادة تعيين كلمة المرور",
-      subtitle:
-        "اختر كلمة مرور جديدة لحسابك. يمكن استخدام هذا الرابط مرة واحدة فقط.",
+      subtitle: "اختر كلمة مرور جديدة لحسابك. يمكن استخدام هذا الرابط مرة واحدة فقط.",
       password: "كلمة المرور الجديدة",
       confirmPassword: "تأكيد كلمة المرور",
       submit: "إعادة تعيين كلمة المرور",
@@ -523,18 +512,14 @@ const translation: Translation = {
       fieldRequired: "هذا الحقل مطلوب.",
       passwordMin: "استخدم 8 أحرف على الأقل.",
       passwordMismatch: "كلمتا المرور غير متطابقتين.",
-      submitSuccess:
-        "تم تحديث كلمة المرور. يمكنك تسجيل الدخول بكلمة المرور الجديدة.",
-      submitErrorFallback:
-        "تعذّرت إعادة تعيين كلمة المرور. حاول مرة أخرى أو اطلب رابطًا جديدًا.",
+      submitSuccess: "تم تحديث كلمة المرور. يمكنك تسجيل الدخول بكلمة المرور الجديدة.",
+      submitErrorFallback: "تعذّرت إعادة تعيين كلمة المرور. حاول مرة أخرى أو اطلب رابطًا جديدًا.",
       invalidLinkTitle: "رابط إعادة تعيين غير صالح",
-      invalidLinkBody:
-        "ينقص هذا الرابط معلومات مطلوبة. اطلب بريد إعادة تعيين جديدًا من صفحة تسجيل الدخول.",
+      invalidLinkBody: "ينقص هذا الرابط معلومات مطلوبة. اطلب بريد إعادة تعيين جديدًا من صفحة تسجيل الدخول.",
     },
     register: {
       title: "تسجيل شركتك",
-      subtitle:
-        "أخبرنا عن مؤسستك. سنُعدّ مساحة عملك ونتواصل معك بخطوات المتابعة.",
+      subtitle: "أخبرنا عن مؤسستك. سنُعدّ مساحة عملك ونتواصل معك بخطوات المتابعة.",
       companyName: "اسم الشركة",
       companyNamePh: "وكالة Acme للسيو",
       companyNameMin: "أدخل حرفين على الأقل.",
@@ -551,8 +536,7 @@ const translation: Translation = {
       signInLink: "تسجيل الدخول",
       fieldRequired: "هذا الحقل مطلوب.",
       emailInvalid: "أدخل بريدًا إلكترونيًا صالحًا.",
-      submitSuccess:
-        "تم إنشاء حساب شركتك. سجّل الدخول ببريدك وكلمة المرور.",
+      submitSuccess: "تم إنشاء حساب شركتك. سجّل الدخول ببريدك وكلمة المرور.",
       submitErrorFallback: "تعذّر إكمال التسجيل. حاول مرة أخرى.",
     },
   },
@@ -567,6 +551,6 @@ const translation: Translation = {
     switchToLight: "التبديل إلى الوضع الفاتح",
     switchToDark: "التبديل إلى الوضع الداكن",
   },
-}
+};
 
-export default translation
+export default translation;

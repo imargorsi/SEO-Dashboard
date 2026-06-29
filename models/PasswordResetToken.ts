@@ -6,11 +6,10 @@ const passwordResetTokenSchema = new Schema(
     tokenHash: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
   },
-  { timestamps: false },
+  { timestamps: false }
 );
 
-export type PasswordResetTokenDocument = InferSchemaType<typeof passwordResetTokenSchema> &
-  mongoose.Document;
+export type PasswordResetTokenDocument = InferSchemaType<typeof passwordResetTokenSchema> & mongoose.Document;
 
 export const PasswordResetToken: Model<PasswordResetTokenDocument> =
   mongoose.models.PasswordResetToken ??

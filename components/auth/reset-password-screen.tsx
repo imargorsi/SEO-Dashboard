@@ -4,10 +4,7 @@ import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSearchParams } from "next/navigation";
 import { AuthScreenShell } from "@/components/auth/auth-screen-shell";
-import {
-  ResetPasswordFormSection,
-  type ResetPasswordAuthAlert,
-} from "@/sections/reset-password-form-section";
+import { ResetPasswordFormSection, type ResetPasswordAuthAlert } from "@/sections/reset-password-form-section";
 import type { ResetPasswordValues } from "@/sections/reset-password.types";
 import { parseResetPasswordLinkParams } from "@/lib/frontend/reset-password-link";
 
@@ -15,7 +12,7 @@ export function ResetPasswordScreen() {
   const searchParams = useSearchParams();
   const resetLink = useMemo(
     () => parseResetPasswordLinkParams(new URLSearchParams(searchParams.toString())),
-    [searchParams],
+    [searchParams]
   );
 
   const [resetComplete, setResetComplete] = useState(false);

@@ -2,12 +2,7 @@ import { ApiResponse } from "@/lib/api/response";
 import { authMessages } from "@/lib/auth/messages";
 import { loadUserAuthData } from "@/lib/auth/guards";
 import { verifyPassword } from "@/lib/auth/password";
-import {
-  clearLoginAttempts,
-  clientIp,
-  ensureLoginNotRateLimited,
-  recordLoginFailure,
-} from "@/lib/auth/rate-limit";
+import { clearLoginAttempts, clientIp, ensureLoginNotRateLimited, recordLoginFailure } from "@/lib/auth/rate-limit";
 import { createAccessToken } from "@/lib/auth/tokens";
 import { serializeUser } from "@/lib/serializers/user";
 import { COMPANY_STATUS, Company, User, type UserDocument } from "@/models";
@@ -16,7 +11,7 @@ import { NextResponse } from "next/server";
 export async function authenticateLogin(
   email: string,
   password: string,
-  request: Request,
+  request: Request
 ): Promise<{ user: UserDocument } | NextResponse> {
   const ip = clientIp(request);
   const normalizedEmail = email.toLowerCase();
@@ -79,7 +74,7 @@ export async function buildLoginResponse(user: UserDocument): Promise<NextRespon
         includeHomeApiPath: false,
       }),
     },
-    authMessages.authenticated,
+    authMessages.authenticated
   );
 }
 

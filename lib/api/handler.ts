@@ -2,10 +2,7 @@ import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 import { ApiResponse } from "@/lib/api/response";
 
-type RouteHandler = (
-  request: Request,
-  context?: { params: Promise<Record<string, string>> },
-) => Promise<NextResponse>;
+type RouteHandler = (request: Request, context?: { params: Promise<Record<string, string>> }) => Promise<NextResponse>;
 
 export function withApiHandler(handler: RouteHandler): RouteHandler {
   return async (request, context) => {

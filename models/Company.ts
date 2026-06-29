@@ -22,7 +22,7 @@ const companySchema = new Schema(
       default: COMPANY_STATUS.APPROVED,
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 companySchema.methods.isApproved = function isApproved(this: CompanyDocument): boolean {

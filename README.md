@@ -33,11 +33,11 @@ Quick reference:
 
 ## Status (summary)
 
-| Layer | Status |
-|-------|--------|
-| API auth + tests | ✅ |
-| Auth UI screens | ✅ (API wiring pending) |
-| Dashboard UI | Scaffold only |
-| Remaining API modules | Not started |
+| Layer                 | Status                  |
+| --------------------- | ----------------------- |
+| API auth + tests      | ✅                      |
+| Auth UI screens       | ✅ (API wiring pending) |
+| Dashboard UI          | Scaffold only           |
+| Remaining API modules | Not started             |
 
 See `doc/migration.md` locally for the full tracker.

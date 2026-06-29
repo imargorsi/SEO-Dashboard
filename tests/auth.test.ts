@@ -10,8 +10,8 @@ import { createSignedVerificationUrl, hasValidSignature } from "@/lib/auth/signe
 
 function jsonRequest(url: string, init?: RequestInit): Request {
   return new Request(url, {
-  headers: { "content-type": "application/json", ...(init?.headers ?? {}) },
-  ...init,
+    headers: { "content-type": "application/json", ...(init?.headers ?? {}) },
+    ...init,
   });
 }
 
@@ -91,7 +91,7 @@ describe("Auth API parity", () => {
     const login = await authenticateLogin(
       "pat@pending.example.com",
       "Password1!",
-      jsonRequest("http://localhost/login"),
+      jsonRequest("http://localhost/login")
     );
     expect(login).toBeInstanceOf(Response);
   });

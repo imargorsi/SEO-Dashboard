@@ -2,10 +2,7 @@ import crypto from "crypto";
 import { authMessages } from "@/lib/auth/messages";
 import { hashPassword, verifyPassword } from "@/lib/auth/password";
 import { env } from "@/lib/config/env";
-import {
-  passwordResetMailContent,
-  sendMail,
-} from "@/lib/mail/client";
+import { passwordResetMailContent, sendMail } from "@/lib/mail/client";
 import { revokeAllUserTokens } from "@/lib/auth/tokens";
 import { PasswordResetToken, User } from "@/models";
 import { ApiResponse } from "@/lib/api/response";
@@ -21,7 +18,7 @@ export async function sendPasswordResetLink(email: string): Promise<NextResponse
     return ApiResponse.error(
       authMessages.passwordResetUserNotFound,
       { email: [authMessages.passwordResetUserNotFound] },
-      422,
+      422
     );
   }
 
@@ -41,7 +38,7 @@ export async function sendPasswordResetLink(email: string): Promise<NextResponse
   await PasswordResetToken.findOneAndUpdate(
     { email },
     { email, tokenHash, createdAt: new Date() },
-    { upsert: true, returnDocument: "after" },
+    { upsert: true, returnDocument: "after" }
   );
 
   const resetUrl = `${env.frontendUrl().replace(/\/$/, "")}/reset-password?${new URLSearchParams({
@@ -65,11 +62,7 @@ export async function sendPasswordResetLink(email: string): Promise<NextResponse
   return ApiResponse.success(null, authMessages.passwordResetSent, 202);
 }
 
-export async function resetPassword(input: {
-  email: string;
-  token: string;
-  password: string;
-}): Promise<NextResponse> {
+export async function resetPassword(input: { email: string; token: string; password: string }): Promise<NextResponse> {
   const record = await PasswordResetToken.findOne({ email: input.email });
   if (!record) {
     return ApiResponse.error(authMessages.passwordResetInvalidToken, {}, 422);

@@ -1,7 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useTheme } from "next-themes";
 import { useTranslation } from "react-i18next";
-import { useTheme } from "@/context/theme-context";
 import { cn } from "@/lib/utils";
 
 function IconSun({ className }: { className?: string }) {
@@ -69,21 +70,29 @@ export function ThemeToggle({
   size?: keyof typeof sizeClass;
   className?: string;
 }) {
-  const { theme, toggleTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const { t } = useTranslation("translation", { keyPrefix: "theme" });
-  const isDark = theme === "dark";
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  const isDark = resolvedTheme === "dark";
   const label = isDark ? t("switchToLight") : t("switchToDark");
   const iconCls = iconSizeClass[size];
+
+  if (!mounted) {
+    return <span className={cn("inline-flex shrink-0", sizeClass[size], className)} aria-hidden />;
+  }
 
   return (
     <button
       type="button"
-      onClick={toggleTheme}
+      onClick={() => setTheme(isDark ? "light" : "dark")}
       className={cn(
-        "inline-flex shrink-0 items-center justify-center border transition-[border-color,background-color,transform,box-shadow,color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:scale-[0.96]",
+        "inline-flex shrink-0 items-center justify-center border transition-[border-color,background-color,transform,box-shadow,color] duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.96]",
         sizeClass[size],
         toneClass[tone],
-        className,
+        className
       )}
       aria-label={label}
       title={label}

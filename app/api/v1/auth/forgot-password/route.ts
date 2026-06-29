@@ -24,7 +24,7 @@ export const POST = withApiHandler(async (request) => {
     return ApiResponse.error(
       authMessages.passwordResetUserNotFound,
       { email: [authMessages.passwordResetUserNotFound] },
-      422,
+      422
     );
   }
 

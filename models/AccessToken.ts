@@ -7,13 +7,13 @@ const accessTokenSchema = new Schema(
     tokenHash: { type: String, required: true },
     expiresAt: { type: Date, default: null },
   },
-  { timestamps: { createdAt: true, updatedAt: false } },
+  { timestamps: { createdAt: true, updatedAt: false } }
 );
 
-export type AccessTokenDocument = InferSchemaType<typeof accessTokenSchema> & mongoose.Document & {
-  userId: Types.ObjectId;
-};
+export type AccessTokenDocument = InferSchemaType<typeof accessTokenSchema> &
+  mongoose.Document & {
+    userId: Types.ObjectId;
+  };
 
 export const AccessToken: Model<AccessTokenDocument> =
-  mongoose.models.AccessToken ??
-  mongoose.model<AccessTokenDocument>("AccessToken", accessTokenSchema);
+  mongoose.models.AccessToken ?? mongoose.model<AccessTokenDocument>("AccessToken", accessTokenSchema);

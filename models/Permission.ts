@@ -5,7 +5,7 @@ const permissionSchema = new Schema(
     name: { type: String, required: true, unique: true },
     guardName: { type: String, required: true, default: "web" },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 export type PermissionDocument = InferSchemaType<typeof permissionSchema> & mongoose.Document;

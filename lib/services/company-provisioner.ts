@@ -20,8 +20,7 @@ type ProvisionInput = {
 };
 
 function generatePassword(length = 16): string {
-  const chars =
-    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+  const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
   const bytes = crypto.randomBytes(length);
   let result = "";
   for (let i = 0; i < length; i++) {
@@ -113,7 +112,7 @@ export class CompanyProvisioner {
     company: CompanyDocument,
     user: InstanceType<typeof User>,
     plainPassword: string,
-    status: CompanyStatus,
+    status: CompanyStatus
   ): Promise<void> {
     try {
       if (status === COMPANY_STATUS.PENDING) {

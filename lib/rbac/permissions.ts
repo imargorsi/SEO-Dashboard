@@ -19,17 +19,13 @@ const ADMIN_PERMISSIONS = [
   "admin.permissions.delete",
 ] as const;
 
-const COMPANY_ADMIN_PERMISSIONS = [
-  "company.dashboard.view",
-  "company.profile.view",
-  "company.profile.update",
-] as const;
+const COMPANY_ADMIN_PERMISSIONS = ["company.dashboard.view", "company.profile.view", "company.profile.update"] as const;
 
 export async function findOrCreateRole(name: string): Promise<Types.ObjectId> {
   const role = await Role.findOneAndUpdate(
     { name, guardName: GUARD },
     { $setOnInsert: { name, guardName: GUARD } },
-    { upsert: true, returnDocument: "after" },
+    { upsert: true, returnDocument: "after" }
   );
   return role._id;
 }
@@ -38,15 +34,12 @@ export async function findOrCreatePermission(name: string): Promise<Types.Object
   const permission = await Permission.findOneAndUpdate(
     { name, guardName: GUARD },
     { $setOnInsert: { name, guardName: GUARD } },
-    { upsert: true, returnDocument: "after" },
+    { upsert: true, returnDocument: "after" }
   );
   return permission._id;
 }
 
-export async function syncRolePermissions(
-  roleName: string,
-  permissionNames: readonly string[],
-): Promise<void> {
+export async function syncRolePermissions(roleName: string, permissionNames: readonly string[]): Promise<void> {
   const roleId = await findOrCreateRole(roleName);
   const permissionIds: Types.ObjectId[] = [];
 
@@ -58,7 +51,7 @@ export async function syncRolePermissions(
   if (permissionIds.length > 0) {
     await RolePermission.insertMany(
       permissionIds.map((permissionId) => ({ roleId, permissionId })),
-      { ordered: false },
+      { ordered: false }
     );
   }
 }
@@ -70,7 +63,7 @@ export async function syncSuperAdminWithAllPermissions(): Promise<void> {
   if (allPermissions.length > 0) {
     await RolePermission.insertMany(
       allPermissions.map((p) => ({ roleId, permissionId: p._id })),
-      { ordered: false },
+      { ordered: false }
     );
   }
 }
@@ -84,16 +77,9 @@ export async function seedRolesAndPermissions(): Promise<void> {
   await syncSuperAdminWithAllPermissions();
 }
 
-export async function assignRoleToUser(
-  userId: Types.ObjectId,
-  roleName: string,
-): Promise<void> {
+export async function assignRoleToUser(userId: Types.ObjectId, roleName: string): Promise<void> {
   const roleId = await findOrCreateRole(roleName);
-  await UserRole.findOneAndUpdate(
-    { userId, roleId },
-    { $setOnInsert: { userId, roleId } },
-    { upsert: true },
-  );
+  await UserRole.findOneAndUpdate({ userId, roleId }, { $setOnInsert: { userId, roleId } }, { upsert: true });
 }
 
 export async function userHasRole(userId: Types.ObjectId, roleName: string): Promise<boolean> {
@@ -108,18 +94,14 @@ export async function getUserRoleNames(userId: Types.ObjectId): Promise<string[]
     path: "roleId",
     select: "name",
   });
-  return assignments
-    .map((a) => a.roleId?.name)
-    .filter((name): name is string => typeof name === "string");
+  return assignments.map((a) => a.roleId?.name).filter((name): name is string => typeof name === "string");
 }
 
 export async function getUserPermissionNames(userId: Types.ObjectId): Promise<string[]> {
-  const direct = await UserPermission.find({ userId }).populate<{ permissionId: { name: string } }>(
-    {
-      path: "permissionId",
-      select: "name",
-    },
-  );
+  const direct = await UserPermission.find({ userId }).populate<{ permissionId: { name: string } }>({
+    path: "permissionId",
+    select: "name",
+  });
 
   const roleAssignments = await UserRole.find({ userId });
   const roleIds = roleAssignments.map((a) => a.roleId);

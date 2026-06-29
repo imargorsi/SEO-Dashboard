@@ -15,6 +15,6 @@ export const GET = withApiHandler(async (request) => {
     serializeUser(auth.user, {
       ...authData,
       includeHomeApiPath: true,
-    }),
+    })
   );
 });

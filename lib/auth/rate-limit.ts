@@ -69,11 +69,7 @@ export function clearLoginAttempts(email: string, ip: string): void {
   clear(loginThrottleKey(email, ip));
 }
 
-export function ensureRouteNotRateLimited(
-  routeKey: string,
-  ip: string,
-  maxAttempts = 6,
-): number | null {
+export function ensureRouteNotRateLimited(routeKey: string, ip: string, maxAttempts = 6): number | null {
   const key = `route:${routeKey}|${ip}`;
   if (!tooManyAttempts(key, maxAttempts, ROUTE_WINDOW_MS)) return null;
   return availableIn(key);

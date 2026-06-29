@@ -34,7 +34,7 @@ export const ApiResponse = {
         message,
         errors: Object.keys(errors).length === 0 ? {} : errors,
       },
-      { status },
+      { status }
     );
   },
 
@@ -46,7 +46,7 @@ export const ApiResponse = {
     items: T[],
     pagination: PaginatedPayload<T>["pagination"],
     filters: Record<string, unknown> = {},
-    message: string | null = null,
+    message: string | null = null
   ) {
     return this.success({ items, pagination, filters }, message);
   },

@@ -39,19 +39,14 @@ export async function requireAuth(request: Request): Promise<AuthContext | NextR
   return auth;
 }
 
-export async function requireVerifiedEmail(
-  auth: AuthContext,
-): Promise<NextResponse | null> {
+export async function requireVerifiedEmail(auth: AuthContext): Promise<NextResponse | null> {
   if (!auth.user.hasVerifiedEmail()) {
     return ApiResponse.error(authMessages.unverifiedEmail, {}, 403);
   }
   return null;
 }
 
-export async function requireRole(
-  auth: AuthContext,
-  ...roles: string[]
-): Promise<NextResponse | null> {
+export async function requireRole(auth: AuthContext, ...roles: string[]): Promise<NextResponse | null> {
   const userRoles = await getUserRoleNames(auth.user._id);
   const allowed = roles.some((role) => userRoles.includes(role));
   if (!allowed) {
@@ -60,9 +55,7 @@ export async function requireRole(
   return null;
 }
 
-export async function requireCompanyAccount(
-  auth: AuthContext,
-): Promise<NextResponse | null> {
+export async function requireCompanyAccount(auth: AuthContext): Promise<NextResponse | null> {
   if (!auth.user.companyId) {
     return ApiResponse.error("Forbidden.", {}, 403);
   }
@@ -79,9 +72,6 @@ export async function loadUserAuthData(userId: Types.ObjectId): Promise<{
   roles: string[];
   permissions: string[];
 }> {
-  const [roles, permissions] = await Promise.all([
-    getUserRoleNames(userId),
-    getUserPermissionNames(userId),
-  ]);
+  const [roles, permissions] = await Promise.all([getUserRoleNames(userId), getUserPermissionNames(userId)]);
   return { roles, permissions };
 }

@@ -1,13 +1,12 @@
-import mongoose from "mongoose";
+import mongoose, { type Mongoose } from "mongoose";
 import { env } from "@/lib/config/env";
 
 interface MongooseCache {
-  conn: typeof mongoose | null;
-  promise: Promise<typeof mongoose> | null;
+  conn: Mongoose | null;
+  promise: Promise<Mongoose> | null;
 }
 
 declare global {
-  // eslint-disable-next-line no-var
   var mongooseCache: MongooseCache | undefined;
 }
 
@@ -20,15 +19,21 @@ if (!global.mongooseCache) {
   global.mongooseCache = cached;
 }
 
-export async function connectDb(): Promise<typeof mongoose> {
+/** Cached MongoDB connection for Next.js (safe across dev hot reload). */
+export async function connectDb(): Promise<Mongoose> {
   if (cached.conn) {
     return cached.conn;
   }
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(env.mongodbUri(), {
-      bufferCommands: false,
-    });
+    cached.promise = mongoose
+      .connect(env.mongodbUri(), {
+        bufferCommands: false,
+      })
+      .catch((error) => {
+        cached.promise = null;
+        throw error;
+      });
   }
 
   cached.conn = await cached.promise;

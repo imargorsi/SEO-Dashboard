@@ -39,8 +39,7 @@ AGENTS.md
 CLAUDE.md
 project.md
 
-# local Laravel reference copy (separate repo; do not nest)
-/laravel-old/
+ 
 
 # os & debug logs
 .DS_Store

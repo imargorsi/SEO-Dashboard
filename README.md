@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SEO Dashboard
 
-## Getting Started
+Full-stack **Next.js** application for SEO operations management — companies, projects, Google integrations, and sheet sync.
 
-First, run the development server:
+## Quick start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local   # set MONGODB_URI, APP_KEY
+npm install
+npm run seed                 # super admin + RBAC
+npm run dev                  # http://localhost:3000
+npm test
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Documentation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Detailed internal docs live in **`doc/`** (gitignored — local/agent use only).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Quick reference:
 
-## Learn More
+- **API:** `app/api/v1/*` — JSON envelope `{ success, message, data }`
+- **Auth API:** login, register-company, forgot/reset password, Bearer tokens
+- **UI:** `app/(auth)/` sign-in flows · `app/(dashboard)/` (in progress)
+- **References:** `laravel-old/` (Laravel API) · `old-next-frontend/` (old React UI)
 
-To learn more about Next.js, take a look at the following resources:
+## Repo structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **`app/(auth)/`** — Sign in, register, password flows
+- **`app/(dashboard)/`** — Authenticated app (in progress)
+- **`app/api/v1/`** — REST API
+- **`laravel-old/`** — Original Laravel API (reference)
+- **`old-next-frontend/`** — Original Vite React UI (reference)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Status (summary)
 
-## Deploy on Vercel
+| Layer | Status |
+|-------|--------|
+| API auth + tests | ✅ |
+| Auth UI screens | ✅ (API wiring pending) |
+| Dashboard UI | Scaffold only |
+| Remaining API modules | Not started |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See `doc/migration.md` locally for the full tracker.

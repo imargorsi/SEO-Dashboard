@@ -32,12 +32,15 @@ next-env.d.ts
 # user uploads (runtime data)
 /public/profile-images/
 
-# agent / internal docs (not for production repo)
+# internal documentation & agent context (local only — not pushed)
 /doc/
 /docs/
 AGENTS.md
 CLAUDE.md
 project.md
+
+# legacy root doc
+/project.md
 
 # laravel-old reference — source only (install vendor/npm locally)
 /laravel-old/vendor/

@@ -39,7 +39,17 @@ AGENTS.md
 CLAUDE.md
 project.md
 
- 
+# laravel-old reference — source only (install vendor/npm locally)
+/laravel-old/vendor/
+/laravel-old/node_modules/
+/laravel-old/.env
+/laravel-old/.env.*
+!/laravel-old/.env.example
+/laravel-old/storage/logs/
+/laravel-old/storage/framework/
+/laravel-old/storage/app/
+/laravel-old/.phpunit.cache/
+/laravel-old/.phpunit.result.cache/
 
 # os & debug logs
 .DS_Store

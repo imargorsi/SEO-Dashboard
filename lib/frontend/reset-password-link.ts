@@ -12,3 +12,11 @@ export function parseResetPasswordLinkParams(searchParams: URLSearchParams): Res
 
   return { valid: true, token, email };
 }
+
+/** Removes `token` and `email` from reset-password query string after a successful reset. */
+export function clearResetPasswordSearchParams(searchParams: URLSearchParams): URLSearchParams {
+  const next = new URLSearchParams(searchParams);
+  next.delete("token");
+  next.delete("email");
+  return next;
+}

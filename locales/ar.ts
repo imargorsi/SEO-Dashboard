@@ -488,6 +488,9 @@ const translation: Translation = {
       fieldRequired: "هذا الحقل مطلوب.",
       loginSuccess: "تم تسجيل الدخول بنجاح.",
       loginErrorUnexpected: "حدث خطأ ما. حاول مرة أخرى.",
+      emailVerifiedSuccess: "تم التحقق من بريدك الإلكتروني. يمكنك تسجيل الدخول الآن.",
+      registrationPendingSuccess:
+        "تم استلام التسجيل. حسابك بانتظار موافقة المسؤول. سنرسل إليك بريدًا عندما يمكنك تسجيل الدخول.",
       noAccountPrompt: "جديد على Rank Radar؟",
       registerCta: "سجّل شركتك",
     },
@@ -536,8 +539,16 @@ const translation: Translation = {
       signInLink: "تسجيل الدخول",
       fieldRequired: "هذا الحقل مطلوب.",
       emailInvalid: "أدخل بريدًا إلكترونيًا صالحًا.",
-      submitSuccess: "تم إنشاء حساب شركتك. سجّل الدخول ببريدك وكلمة المرور.",
+      submitSuccess: "تم استلام التسجيل. حسابك بانتظار موافقة المسؤول.",
       submitErrorFallback: "تعذّر إكمال التسجيل. حاول مرة أخرى.",
+    },
+    verification: {
+      title: "تحقق من بريدك الإلكتروني",
+      description:
+        "قبل المتابعة، أكّد بريدك عبر الرابط الذي أرسلناه. إذا لم يصلك، يمكنك طلب رابط جديد.",
+      resendCta: "إعادة إرسال بريد التحقق",
+      resendSuccess: "تم إرسال رابط تحقق جديد إلى بريدك الإلكتروني.",
+      resendErrorFallback: "تعذّر إرسال بريد التحقق. حاول مرة أخرى.",
     },
   },
   lang: {

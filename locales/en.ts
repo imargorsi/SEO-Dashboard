@@ -487,6 +487,8 @@ export interface Translation {
       fieldRequired: string;
       loginSuccess: string;
       loginErrorUnexpected: string;
+      emailVerifiedSuccess: string;
+      registrationPendingSuccess: string;
       noAccountPrompt: string;
       registerCta: string;
     };
@@ -537,6 +539,13 @@ export interface Translation {
       emailInvalid: string;
       submitSuccess: string;
       submitErrorFallback: string;
+    };
+    verification: {
+      title: string;
+      description: string;
+      resendCta: string;
+      resendSuccess: string;
+      resendErrorFallback: string;
     };
   };
   lang: {
@@ -1044,6 +1053,9 @@ const translation: Translation = {
       fieldRequired: "This field is required.",
       loginSuccess: "Signed in successfully.",
       loginErrorUnexpected: "Something went wrong. Please try again.",
+      emailVerifiedSuccess: "Your email address has been verified. You can sign in now.",
+      registrationPendingSuccess:
+        "Registration received. Your account is pending admin approval. We'll email you when you can sign in.",
       noAccountPrompt: "New to Rank Radar?",
       registerCta: "Register your company",
     },
@@ -1092,8 +1104,16 @@ const translation: Translation = {
       signInLink: "Sign in",
       fieldRequired: "This field is required.",
       emailInvalid: "Enter a valid email address.",
-      submitSuccess: "Your company account was created. Sign in with your email and password.",
+      submitSuccess: "Registration received. Your account is pending admin approval.",
       submitErrorFallback: "Could not complete registration. Please try again.",
+    },
+    verification: {
+      title: "Verify your email address",
+      description:
+        "Before you continue, confirm your email using the link we sent. If you did not receive it, you can request another.",
+      resendCta: "Resend verification email",
+      resendSuccess: "A new verification link has been sent to your email address.",
+      resendErrorFallback: "Could not send the verification email. Try again.",
     },
   },
   lang: {

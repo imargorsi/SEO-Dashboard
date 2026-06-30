@@ -4,9 +4,9 @@ import { getAccessToken } from "@/lib/frontend/auth/session";
 
 const API_PREFIX = "/api/v1";
 
-export type ApiRequestOptions = Omit<RequestInit, "body" | "method"> & {
+export type BaseQueryOptions = Omit<RequestInit, "body" | "method"> & {
   headers?: Record<string, string>;
-  /** Skip attaching Bearer token (e.g. login). */
+  /** Public routes (login, register) — skip Bearer header. */
   skipAuth?: boolean;
 };
 
@@ -53,8 +53,7 @@ async function parseBody(response: Response): Promise<unknown> {
 
 async function request<T>(path: string, init: RequestInit & { skipAuth?: boolean } = {}): Promise<T> {
   const { skipAuth = false, headers: extraHeaders, ...rest } = init;
-  const url = resolveUrl(path);
-  const response = await fetch(url, {
+  const response = await fetch(resolveUrl(path), {
     ...rest,
     headers: {
       ...buildHeaders(rest.body, skipAuth),
@@ -79,11 +78,7 @@ async function request<T>(path: string, init: RequestInit & { skipAuth?: boolean
   return body as T;
 }
 
-/** Unwrap `{ success, data }` envelope or throw on `success: false`. */
-export async function apiRequest<TData>(
-  path: string,
-  init: RequestInit & ApiRequestOptions = {}
-): Promise<ApiSuccessEnvelope<TData>> {
+async function unwrap<TData>(path: string, init: RequestInit & BaseQueryOptions = {}): Promise<ApiSuccessEnvelope<TData>> {
   const envelope = await request<ApiSuccessEnvelope<TData> | ApiErrorEnvelope>(path, init);
 
   if (isApiErrorEnvelope(envelope)) {
@@ -93,36 +88,37 @@ export async function apiRequest<TData>(
   return envelope;
 }
 
-export const apiClient = {
-  get<TData>(path: string, options: ApiRequestOptions = {}) {
-    return apiRequest<TData>(path, { ...options, method: "GET" });
+/** RTK-style base query — all feature API modules use this. */
+export const baseQuery = {
+  get<TData>(path: string, options: BaseQueryOptions = {}) {
+    return unwrap<TData>(path, { ...options, method: "GET" });
   },
 
-  post<TData>(path: string, body?: unknown, options: ApiRequestOptions = {}) {
-    return apiRequest<TData>(path, {
+  post<TData>(path: string, body?: unknown, options: BaseQueryOptions = {}) {
+    return unwrap<TData>(path, {
       ...options,
       method: "POST",
       body: body instanceof FormData ? body : JSON.stringify(body ?? {}),
     });
   },
 
-  put<TData>(path: string, body?: unknown, options: ApiRequestOptions = {}) {
-    return apiRequest<TData>(path, {
+  put<TData>(path: string, body?: unknown, options: BaseQueryOptions = {}) {
+    return unwrap<TData>(path, {
       ...options,
       method: "PUT",
       body: body instanceof FormData ? body : JSON.stringify(body ?? {}),
     });
   },
 
-  patch<TData>(path: string, body?: unknown, options: ApiRequestOptions = {}) {
-    return apiRequest<TData>(path, {
+  patch<TData>(path: string, body?: unknown, options: BaseQueryOptions = {}) {
+    return unwrap<TData>(path, {
       ...options,
       method: "PATCH",
       body: body instanceof FormData ? body : JSON.stringify(body ?? {}),
     });
   },
 
-  delete<TData>(path: string, options: ApiRequestOptions = {}) {
-    return apiRequest<TData>(path, { ...options, method: "DELETE" });
+  delete<TData>(path: string, options: BaseQueryOptions = {}) {
+    return unwrap<TData>(path, { ...options, method: "DELETE" });
   },
 };

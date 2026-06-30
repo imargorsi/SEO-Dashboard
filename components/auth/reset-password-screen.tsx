@@ -1,15 +1,24 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
-import { useSearchParams } from "next/navigation";
 import { AuthScreenShell } from "@/components/auth/auth-screen-shell";
 import { ResetPasswordFormSection, type ResetPasswordAuthAlert } from "@/sections/reset-password-form-section";
 import type { ResetPasswordValues } from "@/sections/reset-password.types";
-import { parseResetPasswordLinkParams } from "@/lib/frontend/reset-password-link";
+import { useResetPasswordMutation } from "@/features/auth/auth.api";
+import { ApiError } from "@/lib/frontend/api/errors";
+import {
+  clearResetPasswordSearchParams,
+  parseResetPasswordLinkParams,
+} from "@/lib/frontend/reset-password-link";
 
 export function ResetPasswordScreen() {
+  const router = useRouter();
   const searchParams = useSearchParams();
+  const resetPasswordMutation = useResetPasswordMutation();
+  const { t } = useTranslation("translation", { keyPrefix: "auth.resetPassword" });
   const resetLink = useMemo(
     () => parseResetPasswordLinkParams(new URLSearchParams(searchParams.toString())),
     [searchParams]
@@ -23,13 +32,35 @@ export function ResetPasswordScreen() {
     mode: "onBlur",
   });
 
-  async function onSubmit(_values: ResetPasswordValues) {
+  async function onSubmit(values: ResetPasswordValues) {
     if (!resetLink.valid) return;
 
     setAuthAlert(null);
-    // API integration pending
-    setResetComplete(true);
-    form.reset();
+
+    try {
+      const result = await resetPasswordMutation.mutateAsync({
+        token: resetLink.token,
+        email: resetLink.email,
+        password: values.password,
+        password_confirmation: values.password_confirmation,
+      });
+
+      setResetComplete(true);
+      setAuthAlert({
+        variant: "default",
+        title: result.message?.trim() || t("submitSuccess"),
+      });
+      form.reset();
+
+      const nextParams = clearResetPasswordSearchParams(new URLSearchParams(searchParams.toString()));
+      const query = nextParams.toString();
+      router.replace(query ? `/reset-password?${query}` : "/reset-password", { scroll: false });
+    } catch (error) {
+      setAuthAlert({
+        variant: "destructive",
+        title: ApiError.messageFrom(error, t("submitErrorFallback"), "password"),
+      });
+    }
   }
 
   return (
@@ -37,7 +68,7 @@ export function ResetPasswordScreen() {
       <ResetPasswordFormSection
         register={form.register}
         errors={form.formState.errors}
-        isSubmitting={form.formState.isSubmitting}
+        isSubmitting={form.formState.isSubmitting || resetPasswordMutation.isPending}
         onValidSubmit={form.handleSubmit(onSubmit)}
         resetComplete={resetComplete}
         authAlert={authAlert}

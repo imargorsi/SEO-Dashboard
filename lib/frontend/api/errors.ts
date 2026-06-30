@@ -23,4 +23,14 @@ export class ApiError extends Error {
     }
     return null;
   }
+
+  static messageFrom(error: unknown, fallback: string, field?: string): string {
+    if (error instanceof ApiError) {
+      return error.firstFieldMessage(field) ?? error.message ?? fallback;
+    }
+    if (error instanceof Error && error.message) {
+      return error.message;
+    }
+    return fallback;
+  }
 }

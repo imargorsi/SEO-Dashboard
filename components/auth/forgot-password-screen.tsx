@@ -1,12 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { AuthScreenShell } from "@/components/auth/auth-screen-shell";
 import { ForgotPasswordFormSection, type ForgotPasswordAuthAlert } from "@/sections/forgot-password-form-section";
 import type { ForgotPasswordValues } from "@/sections/forgot-password.types";
+import { useForgotPasswordMutation } from "@/features/auth/auth.api";
+import { ApiError } from "@/lib/frontend/api/errors";
 
 export function ForgotPasswordScreen() {
+  const forgotPasswordMutation = useForgotPasswordMutation();
+  const { t } = useTranslation("translation", { keyPrefix: "auth.forgotPassword" });
   const [requestSent, setRequestSent] = useState(false);
   const [authAlert, setAuthAlert] = useState<ForgotPasswordAuthAlert | null>(null);
 
@@ -15,10 +20,25 @@ export function ForgotPasswordScreen() {
     mode: "onBlur",
   });
 
-  async function onSubmit(_values: ForgotPasswordValues) {
+  async function onSubmit(values: ForgotPasswordValues) {
     setAuthAlert(null);
-    // API integration pending
-    setRequestSent(true);
+
+    try {
+      const result = await forgotPasswordMutation.mutateAsync({
+        email: values.email.trim(),
+      });
+
+      setRequestSent(true);
+      setAuthAlert({
+        variant: "default",
+        title: result.message?.trim() || t("submitSuccess"),
+      });
+    } catch (error) {
+      setAuthAlert({
+        variant: "destructive",
+        title: ApiError.messageFrom(error, t("submitErrorFallback"), "email"),
+      });
+    }
   }
 
   return (
@@ -26,7 +46,7 @@ export function ForgotPasswordScreen() {
       <ForgotPasswordFormSection
         register={form.register}
         errors={form.formState.errors}
-        isSubmitting={form.formState.isSubmitting}
+        isSubmitting={form.formState.isSubmitting || forgotPasswordMutation.isPending}
         onValidSubmit={form.handleSubmit(onSubmit)}
         requestSent={requestSent}
         authAlert={authAlert}

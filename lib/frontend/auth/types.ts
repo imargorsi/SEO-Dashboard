@@ -28,6 +28,29 @@ export type LoginResult = {
   user: AuthUser;
 };
 
+export type RegisterCompanyRequest = {
+  company_name: string;
+  poc_name: string;
+  poc_email: string;
+  password: string;
+  password_confirmation: string;
+};
+
+export type ForgotPasswordRequest = {
+  email: string;
+};
+
+export type ResetPasswordRequest = {
+  token: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+};
+
+export type AuthMessageResult = {
+  message: string | null;
+};
+
 export function normalizeAuthUser(raw: unknown): AuthUser | null {
   if (raw == null || typeof raw !== "object") return null;
 

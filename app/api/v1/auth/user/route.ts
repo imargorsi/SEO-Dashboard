@@ -9,7 +9,7 @@ export const GET = withApiHandler(async (request) => {
   const auth = await requireAuth(request);
   if (auth instanceof Response) return auth;
 
-  const authData = await loadUserAuthData(auth.user._id);
+  const authData = loadUserAuthData(auth.user);
 
   return ApiResponse.success(
     serializeUser(auth.user, {

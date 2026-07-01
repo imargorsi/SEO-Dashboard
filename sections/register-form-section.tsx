@@ -65,42 +65,28 @@ export function RegisterFormSection({
 
       <form className="mt-8 flex flex-col gap-5" onSubmit={onValidSubmit} noValidate>
         <Input
-          id="register-company-name"
-          label={t("companyName")}
+          id="register-name"
+          label={t("fullName")}
           type="text"
-          placeholder={t("companyNamePh")}
-          required
-          autoComplete="organization"
-          error={errors.company_name?.message ?? ""}
-          {...register("company_name", {
-            required: t("fieldRequired"),
-            minLength: { value: 2, message: t("companyNameMin") },
-          })}
-        />
-
-        <Input
-          id="register-poc-name"
-          label={t("contactPersonName")}
-          type="text"
-          placeholder={t("contactPersonNamePh")}
+          placeholder={t("fullNamePh")}
           required
           autoComplete="name"
-          error={errors.poc_name?.message ?? ""}
-          {...register("poc_name", {
+          error={errors.name?.message ?? ""}
+          {...register("name", {
             required: t("fieldRequired"),
-            minLength: { value: 2, message: t("contactPersonNameMin") },
+            minLength: { value: 2, message: t("fullNameMin") },
           })}
         />
 
         <Input
-          id="register-poc-email"
-          label={t("contactPersonEmail")}
+          id="register-email"
+          label={t("email")}
           type="email"
-          placeholder="contact@company.com"
+          placeholder="you@example.com"
           required
           autoComplete="email"
-          error={errors.poc_email?.message ?? ""}
-          {...register("poc_email", {
+          error={errors.email?.message ?? ""}
+          {...register("email", {
             required: t("fieldRequired"),
             pattern: {
               value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,

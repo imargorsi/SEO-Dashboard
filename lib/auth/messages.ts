@@ -11,6 +11,9 @@ export const authMessages = {
   alreadyVerified: "Already verified.",
   verificationSent: "Verification link sent.",
   registrationReceived: "Registration received. Your account is pending admin approval.",
+  registrationSuccess:
+    "Account created. Check your email for a verification link, then sign in to continue.",
+  registrationUnableToSend: "We could not send the verification email. Please try again later.",
   passwordResetSent:
     "Check your email for a link to reset your password. If you do not see it within a few minutes, check your spam folder or try again.",
   passwordResetUserNotFound: "We could not find an account with that email address.",

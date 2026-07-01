@@ -21,11 +21,15 @@ export const env = {
   superAdminPassword: () => optional("SUPER_ADMIN_PASSWORD", "password"),
   mailFrom: () => optional("MAIL_FROM_ADDRESS", "noreply@example.com"),
   mailFromName: () => optional("MAIL_FROM_NAME", "SEO Dashboard"),
+  mailLogOnly: () => optional("MAIL_MAILER", "log") === "log",
   smtpHost: () => optional("MAIL_HOST"),
   smtpPort: () => Number(optional("MAIL_PORT", "587")),
   smtpUser: () => optional("MAIL_USERNAME"),
   smtpPass: () => optional("MAIL_PASSWORD"),
-  mailLogOnly: () => optional("MAIL_MAILER", "log") === "log",
+  smtpConfigured: () => {
+    if (optional("MAIL_MAILER", "log") === "log") return false;
+    return Boolean(optional("MAIL_HOST") && optional("MAIL_USERNAME") && optional("MAIL_PASSWORD"));
+  },
   passwordResetExpireMinutes: () => Number(optional("PASSWORD_RESET_EXPIRE", "60")),
   passwordResetThrottleSeconds: () => Number(optional("PASSWORD_RESET_THROTTLE", "60")),
   emailVerificationExpireMinutes: () => Number(optional("EMAIL_VERIFICATION_EXPIRE", "60")),

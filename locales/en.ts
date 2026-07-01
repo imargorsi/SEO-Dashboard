@@ -528,7 +528,7 @@ export interface Translation {
       loginSuccess: string;
       loginErrorUnexpected: string;
       emailVerifiedSuccess: string;
-      registrationPendingSuccess: string;
+      registrationSuccess: string;
       noAccountPrompt: string;
       registerCta: string;
     };
@@ -561,13 +561,10 @@ export interface Translation {
     register: {
       title: string;
       subtitle: string;
-      companyName: string;
-      companyNamePh: string;
-      companyNameMin: string;
-      contactPersonName: string;
-      contactPersonNamePh: string;
-      contactPersonNameMin: string;
-      contactPersonEmail: string;
+      fullName: string;
+      fullNamePh: string;
+      fullNameMin: string;
+      email: string;
       password: string;
       confirmPassword: string;
       passwordMin: string;
@@ -1134,10 +1131,10 @@ const translation: Translation = {
       loginSuccess: "Signed in successfully.",
       loginErrorUnexpected: "Something went wrong. Please try again.",
       emailVerifiedSuccess: "Your email address has been verified. You can sign in now.",
-      registrationPendingSuccess:
-        "Registration received. Your account is pending admin approval. We'll email you when you can sign in.",
+      registrationSuccess:
+        "Account created. Check your email for a verification link, then sign in to continue.",
       noAccountPrompt: "New to Rank Radar?",
-      registerCta: "Register your company",
+      registerCta: "Create an account",
     },
     forgotPassword: {
       title: "Forgot password",
@@ -1166,15 +1163,12 @@ const translation: Translation = {
       invalidLinkBody: "This link is missing required information. Request a new reset email from the sign-in page.",
     },
     register: {
-      title: "Register your company",
-      subtitle: "Tell us about your organization. We'll set up your workspace and follow up with next steps.",
-      companyName: "Company name",
-      companyNamePh: "Acme SEO Agency",
-      companyNameMin: "Enter at least 2 characters.",
-      contactPersonName: "Contact person name",
-      contactPersonNamePh: "Jane Doe",
-      contactPersonNameMin: "Enter at least 2 characters.",
-      contactPersonEmail: "Contact person email",
+      title: "Create your account",
+      subtitle: "Sign up with your name and email. You can set up your first project after you sign in.",
+      fullName: "Full name",
+      fullNamePh: "Jane Doe",
+      fullNameMin: "Enter at least 2 characters.",
+      email: "Email",
       password: "Password",
       confirmPassword: "Confirm password",
       passwordMin: "Use at least 8 characters.",
@@ -1184,7 +1178,7 @@ const translation: Translation = {
       signInLink: "Sign in",
       fieldRequired: "This field is required.",
       emailInvalid: "Enter a valid email address.",
-      submitSuccess: "Registration received. Your account is pending admin approval.",
+      submitSuccess: "Account created. Check your email for a verification link, then sign in.",
       submitErrorFallback: "Could not complete registration. Please try again.",
     },
     verification: {

@@ -12,7 +12,7 @@ import {
   type LoginRequest,
   type LoginResponseData,
   type LoginResult,
-  type RegisterCompanyRequest,
+  type RegisterRequest,
   type ResetPasswordRequest,
 } from "@/lib/frontend/auth/types";
 
@@ -69,8 +69,8 @@ async function loadAuthUser(): Promise<AuthUser> {
   }
 }
 
-async function registerCompany(input: RegisterCompanyRequest): Promise<AuthMessageResult> {
-  const envelope = await baseQuery.post<unknown>("auth/register-company", input, { skipAuth: true });
+async function registerUser(input: RegisterRequest): Promise<AuthMessageResult> {
+  const envelope = await baseQuery.post<unknown>("auth/register", input, { skipAuth: true });
   return { message: envelope.message };
 }
 
@@ -122,8 +122,8 @@ export function useLogoutMutation() {
   });
 }
 
-export function useRegisterCompanyMutation() {
-  return useMutation({ mutationFn: registerCompany });
+export function useRegisterMutation() {
+  return useMutation({ mutationFn: registerUser });
 }
 
 export function useForgotPasswordMutation() {

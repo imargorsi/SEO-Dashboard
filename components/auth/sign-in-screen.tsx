@@ -30,7 +30,7 @@ export function SignInScreen() {
     if (registered) {
       return {
         variant: "default",
-        title: registrationMessage || t("registrationPendingSuccess"),
+        title: registrationMessage || t("registrationSuccess"),
       };
     }
     return null;

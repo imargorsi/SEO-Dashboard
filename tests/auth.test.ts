@@ -70,7 +70,34 @@ describe("Auth API parity", () => {
     expect(await findAccessToken(token)).toBeNull();
   });
 
-  it("registers pending company and blocks login", async () => {
+  it("registers user without company and sends verification", async () => {
+    const { registerUser, buildRegisterResponse } = await import("@/lib/auth/register");
+
+    const result = await registerUser({
+      name: "Pat Example",
+      email: "pat@example.com",
+      password: "Password1!",
+    });
+
+    expect(result).not.toBeInstanceOf(Response);
+    if (result instanceof Response) return;
+
+    expect(result.user.companyId).toBeNull();
+    expect(result.user.emailVerifiedAt).toBeNull();
+    expect(result.user.name).toBe("Pat Example");
+
+    const response = await buildRegisterResponse(result.user);
+    const body = await response.json();
+    expect(response.status).toBe(201);
+    expect(body.success).toBe(true);
+    expect(body.data.email).toBe("pat@example.com");
+    expect(body.data.company_id).toBeNull();
+
+    const login = await authenticateLogin("pat@example.com", "Password1!", jsonRequest("http://localhost/login"));
+    expect(login).not.toBeInstanceOf(Response);
+  });
+
+  it("company provisioner still blocks login for pending company users", async () => {
     const company = await companyProvisioner.provision({
       company_name: "Pending Co",
       poc_name: "Pat",

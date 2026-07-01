@@ -7,20 +7,19 @@ import { useForm } from "react-hook-form";
 import { AuthScreenShell } from "@/components/auth/auth-screen-shell";
 import { RegisterFormSection, type RegisterAuthAlert } from "@/sections/register-form-section";
 import type { RegisterValues } from "@/sections/register.types";
-import { useRegisterCompanyMutation } from "@/features/auth/auth.api";
+import { useRegisterMutation } from "@/features/auth/auth.api";
 import { ApiError } from "@/lib/frontend/api/errors";
 
 export function RegisterScreen() {
   const router = useRouter();
-  const registerMutation = useRegisterCompanyMutation();
+  const registerMutation = useRegisterMutation();
   const { t } = useTranslation("translation", { keyPrefix: "auth.register" });
   const [authAlert, setAuthAlert] = useState<RegisterAuthAlert | null>(null);
 
   const form = useForm<RegisterValues>({
     defaultValues: {
-      company_name: "",
-      poc_name: "",
-      poc_email: "",
+      name: "",
+      email: "",
       password: "",
       password_confirmation: "",
     },
@@ -31,21 +30,20 @@ export function RegisterScreen() {
     setAuthAlert(null);
 
     try {
-      const pocEmail = values.poc_email.trim();
+      const email = values.email.trim();
       const result = await registerMutation.mutateAsync({
-        company_name: values.company_name.trim(),
-        poc_name: values.poc_name.trim(),
-        poc_email: pocEmail,
+        name: values.name.trim(),
+        email,
         password: values.password,
         password_confirmation: values.password_confirmation,
       });
 
       const successText = result.message?.trim() || t("submitSuccess");
-      router.push(`/?registered=1&email=${encodeURIComponent(pocEmail)}&message=${encodeURIComponent(successText)}`);
+      router.push(`/?registered=1&email=${encodeURIComponent(email)}&message=${encodeURIComponent(successText)}`);
     } catch (error) {
       setAuthAlert({
         variant: "destructive",
-        title: ApiError.messageFrom(error, t("submitErrorFallback"), "poc_email"),
+        title: ApiError.messageFrom(error, t("submitErrorFallback"), "email"),
       });
     }
   }

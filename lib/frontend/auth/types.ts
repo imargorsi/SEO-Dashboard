@@ -28,10 +28,9 @@ export type LoginResult = {
   user: AuthUser;
 };
 
-export type RegisterCompanyRequest = {
-  company_name: string;
-  poc_name: string;
-  poc_email: string;
+export type RegisterRequest = {
+  name: string;
+  email: string;
   password: string;
   password_confirmation: string;
 };

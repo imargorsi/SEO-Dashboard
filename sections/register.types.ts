@@ -1,7 +1,6 @@
 export type RegisterValues = {
-  company_name: string;
-  poc_name: string;
-  poc_email: string;
+  name: string;
+  email: string;
   password: string;
   password_confirmation: string;
 };

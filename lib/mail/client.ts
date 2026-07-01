@@ -1,26 +1,33 @@
 import nodemailer from "nodemailer";
+import type SMTPTransport from "nodemailer/lib/smtp-transport";
 import type { Transporter } from "nodemailer";
 import { env } from "@/lib/config/env";
 
 let transporter: Transporter | null = null;
 
+function smtpTransportOptions(): SMTPTransport.Options {
+  const port = env.smtpPort();
+  const secure = port === 465;
+
+  return {
+    host: env.smtpHost(),
+    port,
+    secure,
+    requireTLS: !secure,
+    auth: {
+      user: env.smtpUser(),
+      pass: env.smtpPass(),
+    },
+  };
+}
+
 function getTransporter(): Transporter | null {
-  if (env.mailLogOnly() || !env.smtpHost()) {
+  if (!env.smtpConfigured()) {
     return null;
   }
 
   if (!transporter) {
-    transporter = nodemailer.createTransport({
-      host: env.smtpHost(),
-      port: env.smtpPort(),
-      secure: env.smtpPort() === 465,
-      auth: env.smtpUser()
-        ? {
-            user: env.smtpUser(),
-            pass: env.smtpPass(),
-          }
-        : undefined,
-    });
+    transporter = nodemailer.createTransport(smtpTransportOptions());
   }
 
   return transporter;
@@ -42,13 +49,18 @@ export async function sendMail(payload: MailPayload): Promise<void> {
     return;
   }
 
-  await transport.sendMail({
-    from,
-    to: payload.to,
-    subject: payload.subject,
-    text: payload.text,
-    html: payload.html ?? payload.text.replace(/\n/g, "<br>"),
-  });
+  try {
+    await transport.sendMail({
+      from,
+      to: payload.to,
+      subject: payload.subject,
+      text: payload.text,
+      html: payload.html ?? payload.text.replace(/\n/g, "<br>"),
+    });
+  } catch (error) {
+    console.error("[mail] SMTP send failed:", error);
+    throw error;
+  }
 }
 
 export function passwordResetMailContent(resetUrl: string, expireMinutes: number) {

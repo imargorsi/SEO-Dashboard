@@ -9,6 +9,8 @@ const ADMIN_PERMISSIONS = [
   "admin.companies.create",
   "admin.companies.update",
   "admin.companies.delete",
+  "admin.users.view",
+  "admin.users.create",
   "admin.roles.view",
   "admin.roles.create",
   "admin.roles.update",

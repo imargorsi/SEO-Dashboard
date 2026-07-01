@@ -1,5 +1,5 @@
-import { PlaceholderPage } from "@/components/migration/placeholder-page";
+import { DashboardHomeSection } from "@/sections/dashboard-home-section";
 
 export default function DashboardPage() {
-  return <PlaceholderPage title="Dashboard" />;
+  return <DashboardHomeSection />;
 }

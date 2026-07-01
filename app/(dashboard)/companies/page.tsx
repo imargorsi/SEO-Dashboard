@@ -1,5 +1,5 @@
-import { PlaceholderPage } from "@/components/migration/placeholder-page";
+import { CompaniesListSection } from "@/sections/companies-list-section";
 
 export default function CompaniesPage() {
-  return <PlaceholderPage title="Companies" />;
+  return <CompaniesListSection />;
 }

@@ -1,5 +1,10 @@
-import { PlaceholderPage } from "@/components/migration/placeholder-page";
+import { CompaniesFormSection } from "@/sections/companies-form-section";
 
-export default function EditCompanyPage() {
-  return <PlaceholderPage title="Edit company" />;
+type PageProps = {
+  params: Promise<{ id: string }>;
+};
+
+export default async function CompaniesEditPage({ params }: PageProps) {
+  const { id } = await params;
+  return <CompaniesFormSection companyId={id} />;
 }

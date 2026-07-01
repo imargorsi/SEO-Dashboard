@@ -188,6 +188,46 @@ export interface Translation {
       subtitle: string;
       createUserTitle: string;
       createComingSoon: string;
+      createForm: {
+        title: string;
+        lead: string;
+        name: string;
+        namePh: string;
+        email: string;
+        emailPh: string;
+        submit: string;
+        submitting: string;
+        successTitle: string;
+        successFallback: string;
+        errorTitle: string;
+        errorFallback: string;
+        valRequired: string;
+        valEmail: string;
+        backToList: string;
+      };
+      table: {
+        toolbarHint: string;
+        colName: string;
+        colEmail: string;
+        colCompany: string;
+        colRoles: string;
+        colVerified: string;
+        verifiedYes: string;
+        verifiedNo: string;
+        createUser: string;
+        rowsSelected: string;
+        rowsPerPage: string;
+        pageOf: string;
+        firstPage: string;
+        previousPage: string;
+        nextPage: string;
+        lastPage: string;
+        updating: string;
+        loadErrorTitle: string;
+        loadErrorBody: string;
+        accessDeniedTitle: string;
+        accessDeniedBody: string;
+      };
     };
     projects: {
       title: string;
@@ -751,6 +791,46 @@ const translation: Translation = {
       subtitle: "Manage team members and permissions.",
       createUserTitle: "Create user",
       createComingSoon: "User creation form will be added here.",
+      createForm: {
+        title: "New user",
+        lead: "Add a team member to the workspace. They will receive an invitation email when the API is connected.",
+        name: "Full name",
+        namePh: "Jane Cooper",
+        email: "Email address",
+        emailPh: "jane@company.example",
+        submit: "Create user",
+        submitting: "Creating…",
+        successTitle: "User created",
+        successFallback: "The user was added to the list (dummy data).",
+        errorTitle: "Could not create user",
+        errorFallback: "Something went wrong. Try again.",
+        valRequired: "This field is required.",
+        valEmail: "Enter a valid email address.",
+        backToList: "Back to users",
+      },
+      table: {
+        toolbarHint: "Team members in your workspace.",
+        colName: "Name",
+        colEmail: "Email",
+        colCompany: "Company",
+        colRoles: "Roles",
+        colVerified: "Verified",
+        verifiedYes: "Verified",
+        verifiedNo: "Pending",
+        createUser: "Create user",
+        rowsSelected: "{{selected}} of {{total}} row(s) selected",
+        rowsPerPage: "Rows per page",
+        pageOf: "Page {{page}} of {{count}}",
+        firstPage: "First page",
+        previousPage: "Previous page",
+        nextPage: "Next page",
+        lastPage: "Last page",
+        updating: "Updating…",
+        loadErrorTitle: "Could not load users",
+        loadErrorBody: "Check your connection and try again.",
+        accessDeniedTitle: "No access",
+        accessDeniedBody: "You don't have permission to view users. Ask an administrator if you need access.",
+      },
     },
     projects: {
       title: "Projects",

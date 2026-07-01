@@ -1,5 +1,5 @@
-import { PlaceholderPage } from "@/components/migration/placeholder-page";
+import { UsersListSection } from "@/sections/users-list-section";
 
 export default function UsersPage() {
-  return <PlaceholderPage title="Users" />;
+  return <UsersListSection />;
 }

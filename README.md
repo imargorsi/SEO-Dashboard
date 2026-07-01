@@ -16,12 +16,18 @@ npm test
 
 Detailed internal docs live in **`doc/`** (gitignored — local/agent use only).
 
+| Start | Path |
+|-------|------|
+| Agent hub | `doc/AGENTS.md` |
+| Product modules (1–12) | `doc/modules/README.md` |
+| Migration tracker | `doc/migration.md` |
+
 Quick reference:
 
 - **API:** `app/api/v1/*` — JSON envelope `{ success, message, data }`
-- **Auth API:** login, register-company, forgot/reset password, Bearer tokens
-- **UI:** `app/(auth)/` sign-in flows · `app/(dashboard)/` (in progress)
-- **References:** `laravel-old/` (Laravel API) · `old-next-frontend/` (old React UI)
+- **Module 1 (Auth):** login, register, forgot/reset, Bearer tokens — `doc/modules/01-authentication.md`
+- **UI:** `app/(auth)/` · `app/(dashboard)/` — `doc/frontend.md`
+- **References:** `laravel-old/` · `old-next-frontend/`
 
 ## Repo structure
 
@@ -33,11 +39,10 @@ Quick reference:
 
 ## Status (summary)
 
-| Layer                 | Status                  |
-| --------------------- | ----------------------- |
-| API auth + tests      | ✅                      |
-| Auth UI screens       | ✅ (API wiring pending) |
-| Dashboard UI          | Scaffold only           |
-| Remaining API modules | Not started             |
+| Layer | Status |
+|-------|--------|
+| Module 1 — Auth API + UI | ✅ |
+| Modules 2–11 | ⬜ |
+| Dashboard shell + admin UI (dummy data) | 🟡 |
 
-See `doc/migration.md` locally for the full tracker.
+See `doc/migration.md` and `doc/modules/README.md` for the full tracker.

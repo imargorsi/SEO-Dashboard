@@ -1,5 +1,5 @@
-import { PlaceholderPage } from "@/components/migration/placeholder-page";
+import { UsersCreateSection } from "@/sections/users-create-section";
 
-export default function CreateUserPage() {
-  return <PlaceholderPage title="Create user" />;
+export default function UsersNewPage() {
+  return <UsersCreateSection />;
 }

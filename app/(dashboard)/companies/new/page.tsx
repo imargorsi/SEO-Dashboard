@@ -1,5 +1,5 @@
-import { PlaceholderPage } from "@/components/migration/placeholder-page";
+import { CompaniesFormSection } from "@/sections/companies-form-section";
 
-export default function CreateCompanyPage() {
-  return <PlaceholderPage title="Create company" />;
+export default function CompaniesNewPage() {
+  return <CompaniesFormSection />;
 }

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { AuthSessionLoading } from "@/components/auth/auth-session-loading";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
 import { getAccessToken, resolvePostLoginPath } from "@/lib/frontend/auth/session";
+import { useIsAuthRevealActive } from "@/context/auth-reveal-transition";
 
 function useIsClient() {
   return useSyncExternalStore(
@@ -18,14 +19,19 @@ function useIsClient() {
 export function GuestOnly({ children }: { children: ReactNode }) {
   const router = useRouter();
   const isClient = useIsClient();
+  const isRevealActive = useIsAuthRevealActive();
   const hasToken = isClient && Boolean(getAccessToken());
   const { data: user, isPending, isFetching } = useAuthUserQuery({ enabled: hasToken });
 
   useEffect(() => {
-    if (user) {
+    if (user && !isRevealActive) {
       router.replace(resolvePostLoginPath(user));
     }
-  }, [router, user]);
+  }, [router, user, isRevealActive]);
+
+  if (isRevealActive) {
+    return children;
+  }
 
   if (!isClient || (hasToken && (isPending || isFetching)) || user) {
     return <AuthSessionLoading />;

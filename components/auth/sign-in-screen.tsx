@@ -10,11 +10,13 @@ import type { SignInValues } from "@/sections/sign-in.types";
 import { useLoginMutation } from "@/features/auth/auth.api";
 import { ApiError } from "@/lib/frontend/api/errors";
 import { resolvePostLoginPath } from "@/lib/frontend/auth/session";
+import { useAuthReveal } from "@/context/auth-reveal-transition";
 
 export function SignInScreen() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const loginMutation = useLoginMutation();
+  const { armAuthReveal, disarmAuthReveal, beginAuthReveal } = useAuthReveal();
   const { t } = useTranslation("translation", { keyPrefix: "auth.signIn" });
   const [submitAlert, setSubmitAlert] = useState<SignInAuthAlert | null>(null);
 
@@ -52,8 +54,15 @@ export function SignInScreen() {
     }
   }, [emailFromQuery, registered, router, verified]);
 
+  useEffect(() => {
+    return () => {
+      disarmAuthReveal();
+    };
+  }, [disarmAuthReveal]);
+
   async function onSubmit(values: SignInValues) {
     setSubmitAlert(null);
+    armAuthReveal();
 
     try {
       const result = await loginMutation.mutateAsync({
@@ -61,8 +70,9 @@ export function SignInScreen() {
         password: values.password,
       });
 
-      router.push(resolvePostLoginPath(result.user));
+      beginAuthReveal(resolvePostLoginPath(result.user));
     } catch (error) {
+      disarmAuthReveal();
       setSubmitAlert({
         variant: "destructive",
         title: ApiError.messageFrom(error, t("loginErrorUnexpected"), "email"),

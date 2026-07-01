@@ -2,17 +2,24 @@ export interface Translation {
   layout: {
     appName: string;
   };
+  projectSelector: {
+    triggerLabel: string;
+    listLabel: string;
+    listHeading: string;
+  };
   nav: {
     aria: string;
-    modules: string;
     openMenu: string;
     closeMenu: string;
     dashboard: string;
-    companies: string;
     users: string;
-    roles: string;
-    permissions: string;
+    rolesPermissions: string;
     projects: string;
+    analytics: string;
+    seoActivities: string;
+    leads: string;
+    reports: string;
+    settings: string;
   };
   breadcrumb: {
     /** First crumb linking to `/dashboard` on nested pages */
@@ -602,17 +609,24 @@ const translation: Translation = {
   layout: {
     appName: "SEO Dashboard",
   },
+  projectSelector: {
+    triggerLabel: "Selected project: {{name}}",
+    listLabel: "Switch project",
+    listHeading: "Your projects",
+  },
   nav: {
-    aria: "Main modules",
-    modules: "Modules",
+    aria: "Main navigation",
     openMenu: "Open menu",
     closeMenu: "Close menu",
     dashboard: "Dashboard",
-    companies: "Companies",
     users: "Users",
-    roles: "Roles",
-    permissions: "Permissions",
+    rolesPermissions: "Roles & Permissions",
     projects: "Projects",
+    analytics: "Analytics",
+    seoActivities: "SEO Activities",
+    leads: "Leads",
+    reports: "Reports",
+    settings: "Settings",
   },
   breadcrumb: {
     root: "Dashboard",

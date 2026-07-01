@@ -1,0 +1,16 @@
+"use client";
+
+import { LanguageSwitcher } from "@/components/language-switcher";
+import { NavbarProfileMenu } from "@/components/layout/navbar-profile-menu";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { dashboardNavIconClass } from "@/lib/frontend/layout/dashboard-chrome";
+
+export function DashboardNavbarActions() {
+  return (
+    <div className="flex shrink-0 items-center gap-1.5">
+      <ThemeToggle tone="ghost" size="sm" className={dashboardNavIconClass} />
+      <LanguageSwitcher tone="ghost" size="sm" className={dashboardNavIconClass} />
+      <NavbarProfileMenu />
+    </div>
+  );
+}

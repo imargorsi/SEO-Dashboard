@@ -2,64 +2,8 @@
 
 import { useTranslation } from "react-i18next";
 
+import { FlagSaudiArabia, FlagUnitedKingdom } from "@/components/flag-icons";
 import { cn } from "@/lib/utils";
-
-function IconSwitchToArabic({
-  className,
-  compact,
-  extraCompact,
-}: {
-  className?: string;
-  compact?: boolean;
-  extraCompact?: boolean;
-}) {
-  const fontSize = extraCompact ? "10px" : compact ? "12px" : "15px";
-  return (
-    <svg className={className} viewBox="0 0 32 32" fill="currentColor" aria-hidden>
-      <text
-        x="16"
-        y="22"
-        textAnchor="middle"
-        style={{
-          fontSize,
-          fontWeight: 600,
-          fontFamily: 'system-ui, "Segoe UI", Tahoma, "Noto Naskh Arabic", "Arial Unicode MS", sans-serif',
-        }}
-      >
-        ع
-      </text>
-    </svg>
-  );
-}
-
-function IconSwitchToEnglish({
-  className,
-  compact,
-  extraCompact,
-}: {
-  className?: string;
-  compact?: boolean;
-  extraCompact?: boolean;
-}) {
-  const fontSize = extraCompact ? "8px" : compact ? "9px" : "11px";
-  return (
-    <svg className={className} viewBox="0 0 32 32" fill="currentColor" aria-hidden>
-      <text
-        x="16"
-        y="21"
-        textAnchor="middle"
-        style={{
-          fontSize,
-          fontWeight: 700,
-          fontFamily: 'ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif',
-          letterSpacing: "-0.02em",
-        }}
-      >
-        EN
-      </text>
-    </svg>
-  );
-}
 
 const toneClass = {
   default:
@@ -76,10 +20,10 @@ const sizeClass = {
   xs: "h-7 w-7 rounded-lg",
 } as const;
 
-const langIconWrap = {
-  default: "h-7 w-7",
-  sm: "h-6 w-6",
-  xs: "h-5 w-5",
+const flagClass = {
+  default: "h-3.5 w-5 rounded-[2px]",
+  sm: "h-3 w-[18px] rounded-[1.5px]",
+  xs: "h-2.5 w-4 rounded-[1.5px]",
 } as const;
 
 export function LanguageSwitcher({
@@ -96,8 +40,6 @@ export function LanguageSwitcher({
   const isArabic = base === "ar";
   const nextLang = isArabic ? "en" : "ar";
   const label = isArabic ? t("switchToEnglish") : t("switchToArabic");
-  const compact = size === "sm" || size === "xs";
-  const extraCompact = size === "xs";
 
   return (
     <button
@@ -106,7 +48,7 @@ export function LanguageSwitcher({
         void i18n.changeLanguage(nextLang);
       }}
       className={cn(
-        "inline-flex shrink-0 items-center justify-center border transition-[border-color,background-color,transform,box-shadow,color] duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.96]",
+        "inline-flex shrink-0 items-center justify-center overflow-hidden border transition-[border-color,background-color,transform,box-shadow] duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.96]",
         sizeClass[size],
         toneClass[tone],
         className
@@ -115,9 +57,9 @@ export function LanguageSwitcher({
       title={label}
     >
       {isArabic ? (
-        <IconSwitchToEnglish className={langIconWrap[size]} compact={compact} extraCompact={extraCompact} />
+        <FlagSaudiArabia className={flagClass[size]} />
       ) : (
-        <IconSwitchToArabic className={langIconWrap[size]} compact={compact} extraCompact={extraCompact} />
+        <FlagUnitedKingdom className={flagClass[size]} />
       )}
     </button>
   );

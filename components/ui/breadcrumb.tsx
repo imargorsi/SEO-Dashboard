@@ -3,28 +3,10 @@ import { IoChevronForward, IoEllipsisHorizontal } from "react-icons/io5";
 
 import { cn } from "@/lib/utils";
 export const breadcrumbLinkClassName = cn(
-  "rounded-lg px-2 py-1 font-medium text-[var(--text)] underline-offset-4 backdrop-blur-[2px] transition-[color,transform,box-shadow,background-color] duration-200",
+  "rounded-lg px-2 py-1 font-medium text-[var(--text)] underline-offset-4 transition-[color,background-color] duration-200",
   "hover:bg-[var(--accent-bg)] hover:text-[var(--text-h)] hover:underline",
-  "active:translate-y-px active:shadow-none",
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-border)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)]",
-  "dark:text-white/90 dark:hover:bg-white/15 dark:hover:text-white dark:focus-visible:ring-white/60 dark:focus-visible:ring-offset-transparent"
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-border)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-elevated)]"
 );
-
-export const breadcrumbBarShellClassName = cn(
-  "relative isolate w-full max-w-none overflow-hidden rounded-none border-x-0 border-t-0 border-b",
-  "border-[var(--border)] bg-[color-mix(in_srgb,var(--social-bg)_88%,var(--brand)_10%)]",
-  "dark:border-white/12 dark:bg-[linear-gradient(102deg,color-mix(in_srgb,var(--brand)_60%,#312e81)_0%,color-mix(in_srgb,#57534e_78%,var(--text-h))_45%,color-mix(in_srgb,#ca8a04_50%,#713f12)_100%)]"
-);
-
-export function BreadcrumbBarShell({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="breadcrumb-bar-shell"
-      className={cn(breadcrumbBarShellClassName, className)}
-      {...props}
-    />
-  );
-}
 
 function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -43,7 +25,6 @@ function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">) {
       data-slot="breadcrumb-list"
       className={cn(
         "relative z-[1] flex flex-wrap items-center gap-x-1 gap-y-1.5 break-words text-sm text-[var(--text-h)] sm:gap-x-1.5",
-        "dark:text-white/95",
         className
       )}
       {...props}
@@ -77,8 +58,8 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
       data-slot="breadcrumb-page"
       aria-current="page"
       className={cn(
-        "inline-flex max-w-[min(100%,18rem)] items-center truncate rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] px-2.5 py-1 font-semibold text-[var(--text-h)] shadow-sm sm:max-w-md",
-        "dark:border-white/35 dark:bg-[rgba(0,0,0,0.22)] dark:text-white dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_4px_14px_rgba(0,0,0,0.35)]",
+        "inline-flex max-w-[min(100%,18rem)] items-center truncate rounded-lg border border-[var(--border)] bg-[var(--social-bg)] px-2.5 py-1 text-sm font-semibold leading-none text-[var(--text-h)] sm:max-w-md",
+        "dark:border-white/35 dark:bg-[rgba(0,0,0,0.22)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]",
         className
       )}
       {...props}

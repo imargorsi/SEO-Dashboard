@@ -29,6 +29,8 @@ export interface ReusableInputProps {
   options?: Option[];
   rows?: number;
   required?: boolean;
+  readOnly?: boolean;
+  disabled?: boolean;
   error?: string;
   className?: string;
   autoComplete?: string;
@@ -48,6 +50,8 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement | HTMLSel
       options = [],
       rows = 4,
       required = false,
+      readOnly = false,
+      disabled = false,
       error = "",
       className = "",
       autoComplete,
@@ -99,6 +103,8 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement | HTMLSel
             rows={rows}
             placeholder={placeholder}
             required={required}
+            readOnly={readOnly}
+            disabled={disabled}
             aria-invalid={showError}
             aria-describedby={showError ? `${id}-error` : undefined}
             onChange={onChange}
@@ -114,6 +120,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement | HTMLSel
               id={id}
               name={name}
               required={required}
+              disabled={disabled}
               aria-invalid={showError}
               aria-describedby={showError ? `${id}-error` : undefined}
               onChange={onChange as ChangeEventHandler<HTMLSelectElement>}
@@ -146,6 +153,8 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement | HTMLSel
             type={type}
             placeholder={placeholder}
             required={required}
+            readOnly={readOnly}
+            disabled={disabled}
             aria-invalid={showError}
             aria-describedby={showError ? `${id}-error` : undefined}
             onChange={onChange}

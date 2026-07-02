@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { IoChevronDown, IoKey, IoLogOutOutline, IoPersonCircle } from "react-icons/io5";
+import { IoChevronDown, IoLogOutOutline, IoPersonCircle } from "react-icons/io5";
 
 import { SidebarUserAvatar } from "@/components/layout/sidebar-user-avatar";
 import { Spinner } from "@/components/ui/spinner";
@@ -80,7 +80,7 @@ export function NavbarProfileMenu() {
         aria-label={t("openMenu")}
         onClick={() => setOpen((v) => !v)}
       >
-        <SidebarUserAvatar name={displayName} verified={verified} size="sm" />
+        <SidebarUserAvatar name={displayName} imageUrl={user?.profile_image ?? null} verified={verified} size="sm" />
         <span className="hidden max-w-[7rem] truncate text-xs font-medium text-[var(--text-h)] sm:inline">
           {displayName}
         </span>
@@ -98,7 +98,12 @@ export function NavbarProfileMenu() {
         >
           <div className="border-b border-[var(--border)] px-3 py-3">
             <div className="flex items-center gap-2.5">
-              <SidebarUserAvatar name={displayName} verified={verified} size="sm" />
+              <SidebarUserAvatar
+                name={displayName}
+                imageUrl={user?.profile_image ?? null}
+                verified={verified}
+                size="sm"
+              />
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-semibold text-[var(--text-h)]">{displayName}</p>
                 {email ? (
@@ -116,10 +121,6 @@ export function NavbarProfileMenu() {
             <Link href="/edit-profile" role="menuitem" className={menuItemClass} onClick={close}>
               <IoPersonCircle className="size-4 shrink-0 opacity-80" aria-hidden />
               {t("editProfile")}
-            </Link>
-            <Link href="/change-password" role="menuitem" className={menuItemClass} onClick={close}>
-              <IoKey className="size-4 shrink-0 opacity-80" aria-hidden />
-              {t("changePassword")}
             </Link>
             <button
               type="button"

@@ -4,16 +4,16 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { AuthScreenShell } from "@/components/auth/auth-screen-shell";
-import { ForgotPasswordFormSection, type ForgotPasswordAuthAlert } from "@/sections/forgot-password-form-section";
+import { ForgotPasswordFormSection } from "@/sections/forgot-password-form-section";
 import type { ForgotPasswordValues } from "@/sections/forgot-password.types";
 import { useForgotPasswordMutation } from "@/features/auth/auth.api";
 import { ApiError } from "@/lib/frontend/api/errors";
+import { notify } from "@/lib/frontend/feedback/notify";
 
 export function ForgotPasswordScreen() {
   const forgotPasswordMutation = useForgotPasswordMutation();
   const { t } = useTranslation("translation", { keyPrefix: "auth.forgotPassword" });
   const [requestSent, setRequestSent] = useState(false);
-  const [authAlert, setAuthAlert] = useState<ForgotPasswordAuthAlert | null>(null);
 
   const form = useForm<ForgotPasswordValues>({
     defaultValues: { email: "" },
@@ -21,23 +21,15 @@ export function ForgotPasswordScreen() {
   });
 
   async function onSubmit(values: ForgotPasswordValues) {
-    setAuthAlert(null);
-
     try {
       const result = await forgotPasswordMutation.mutateAsync({
         email: values.email.trim(),
       });
 
       setRequestSent(true);
-      setAuthAlert({
-        variant: "default",
-        title: result.message?.trim() || t("submitSuccess"),
-      });
+      notify.success(result.message?.trim() || t("submitSuccess"));
     } catch (error) {
-      setAuthAlert({
-        variant: "destructive",
-        title: ApiError.messageFrom(error, t("submitErrorFallback"), "email"),
-      });
+      notify.error(ApiError.messageFrom(error, t("submitErrorFallback"), "email"));
     }
   }
 
@@ -49,7 +41,6 @@ export function ForgotPasswordScreen() {
         isSubmitting={form.formState.isSubmitting || forgotPasswordMutation.isPending}
         onValidSubmit={form.handleSubmit(onSubmit)}
         requestSent={requestSent}
-        authAlert={authAlert}
       />
     </AuthScreenShell>
   );

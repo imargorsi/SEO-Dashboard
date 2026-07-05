@@ -45,6 +45,9 @@ export interface Translation {
     logOut: string;
     fallbackName: string;
     noEmail: string;
+    emailVerified: string;
+    emailNotVerified: string;
+    resendVerification: string;
   };
   settings: {
     title: string;
@@ -653,6 +656,9 @@ const translation: Translation = {
     logOut: "Log out",
     fallbackName: "User",
     noEmail: "No email on file",
+    emailVerified: "Your Email is Verified",
+    emailNotVerified: "Your Email is not Verified",
+    resendVerification: "Tap to resend verification email",
   },
   settings: {
     title: "Settings",
@@ -660,23 +666,23 @@ const translation: Translation = {
   },
   profile: {
     changePassword: {
-      title: "Change password",
-      lead: "Update your password. Use a strong, unique password you don't reuse elsewhere.",
-      currentPassword: "Current password",
-      currentPasswordPh: "Enter your current password",
-      newPassword: "New password",
-      newPasswordPh: "At least 8 characters",
-      confirmPassword: "Confirm new password",
-      confirmPasswordPh: "Re-enter your new password",
-      submit: "Update password",
+      title: "Change Password",
+      lead: "Update Your Password. Use A Strong, Unique Password You Don't Reuse Elsewhere.",
+      currentPassword: "Current Password",
+      currentPasswordPh: "Enter Your Current Password",
+      newPassword: "New Password",
+      newPasswordPh: "At Least 8 Characters",
+      confirmPassword: "Confirm New Password",
+      confirmPasswordPh: "Re-Enter Your New Password",
+      submit: "Update Password",
       submitting: "Updating…",
-      successTitle: "Password updated",
-      successFallback: "Your password has been changed.",
-      errorTitle: "Could not update password",
-      errorFallback: "Something went wrong. Try again.",
-      valRequired: "This field is required.",
-      valMin: "Use at least 8 characters.",
-      valMatch: "Passwords do not match.",
+      successTitle: "Password Updated",
+      successFallback: "Your Password Has Been Changed.",
+      errorTitle: "Could Not Update Password",
+      errorFallback: "Something Went Wrong. Try Again.",
+      valRequired: "This Field Is Required.",
+      valMin: "Use At Least 8 Characters.",
+      valMatch: "Passwords Do Not Match.",
       cancel: "Cancel",
     },
     edit: {

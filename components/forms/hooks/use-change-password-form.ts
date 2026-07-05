@@ -1,21 +1,17 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { useChangePasswordMutation } from "@/features/auth/auth.api";
 import { ApiError } from "@/lib/frontend/api/errors";
+import { notify } from "@/lib/frontend/feedback/notify";
 
 export type ChangePasswordFormValues = {
   current_password: string;
   new_password: string;
   new_password_confirmation: string;
 };
-
-export type ChangePasswordFormAlert =
-  | { variant: "default"; title: string; description?: string }
-  | { variant: "destructive"; title: string; description?: string };
 
 const emptyValues: ChangePasswordFormValues = {
   current_password: "",
@@ -28,7 +24,6 @@ const passwordFields = ["current_password", "new_password", "new_password_confir
 export function useChangePasswordForm() {
   const { t } = useTranslation("translation", { keyPrefix: "profile.changePassword" });
   const changePasswordMutation = useChangePasswordMutation();
-  const [formAlert, setFormAlert] = useState<ChangePasswordFormAlert | null>(null);
 
   const form = useForm<ChangePasswordFormValues>({
     defaultValues: emptyValues,
@@ -45,42 +40,24 @@ export function useChangePasswordForm() {
   } = form;
 
   async function onSubmit(values: ChangePasswordFormValues) {
-    setFormAlert(null);
-
     try {
       const result = await changePasswordMutation.mutateAsync(values);
       reset();
-      setFormAlert({
-        variant: "default",
-        title: t("successTitle"),
-        description: result.message?.trim() || t("successFallback"),
-      });
+      notify.success(result.message?.trim() || t("successFallback"));
     } catch (error) {
       if (error instanceof ApiError) {
-        let attachedFieldError = false;
-
         for (const field of passwordFields) {
           const message = error.errors[field]?.[0];
           if (message) {
             setError(field, { type: "server", message });
-            attachedFieldError = true;
           }
         }
 
-        const apiMessage = error.message?.trim() || null;
-        setFormAlert({
-          variant: "destructive",
-          title: t("errorTitle"),
-          description: apiMessage ?? (attachedFieldError ? undefined : t("errorFallback")),
-        });
+        notify.error(error.message?.trim() || error.firstFieldMessage() || t("errorFallback"));
         return;
       }
 
-      setFormAlert({
-        variant: "destructive",
-        title: t("errorTitle"),
-        description: t("errorFallback"),
-      });
+      notify.error(t("errorFallback"));
     }
   }
 
@@ -89,7 +66,6 @@ export function useChangePasswordForm() {
     handleSubmit,
     watch,
     errors,
-    formAlert,
     isSubmitting: isSubmitting || changePasswordMutation.isPending,
     onSubmit,
   };

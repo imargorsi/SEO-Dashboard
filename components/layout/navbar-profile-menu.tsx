@@ -4,11 +4,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { IoChevronDown, IoLogOutOutline, IoPersonCircle } from "react-icons/io5";
+import { IoAlertCircle, IoCheckmarkCircle, IoChevronDown, IoLogOutOutline, IoPersonCircle } from "react-icons/io5";
 
 import { SidebarUserAvatar } from "@/components/layout/sidebar-user-avatar";
 import { Spinner } from "@/components/ui/spinner";
-import { useAuthUserQuery, useLogoutMutation } from "@/features/auth/auth.api";
+import { useAuthUserQuery, useLogoutMutation, useResendEmailVerificationMutation } from "@/features/auth/auth.api";
+import { ApiError } from "@/lib/frontend/api/errors";
+import { notify } from "@/lib/frontend/feedback/notify";
 import { cn } from "@/lib/utils";
 
 const menuItemClass =
@@ -21,12 +23,14 @@ function formatRolesForDisplay(roles: string[]): string {
 
 export function NavbarProfileMenu() {
   const { t } = useTranslation("translation", { keyPrefix: "userMenu" });
+  const { t: tVerification } = useTranslation("translation", { keyPrefix: "auth.verification" });
   const router = useRouter();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const { data: user } = useAuthUserQuery();
   const logoutMutation = useLogoutMutation();
+  const resendMutation = useResendEmailVerificationMutation();
 
   const displayName = user?.name?.trim() || t("fallbackName");
   const email = user?.email?.trim() || "";
@@ -62,6 +66,17 @@ export function NavbarProfileMenu() {
     } finally {
       close();
       router.replace("/");
+    }
+  }
+
+  async function onResendVerification() {
+    if (resendMutation.isPending || verified) return;
+
+    try {
+      const result = await resendMutation.mutateAsync();
+      notify.success(result.message?.trim() || tVerification("resendSuccess"));
+    } catch (error) {
+      notify.error(ApiError.messageFrom(error, tVerification("resendErrorFallback")));
     }
   }
 
@@ -117,6 +132,32 @@ export function NavbarProfileMenu() {
               </div>
             </div>
           </div>
+
+          {verified ? (
+            <div className="flex items-center gap-2 border-b border-[var(--border)] px-3 py-2.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">
+              <IoCheckmarkCircle className="size-4 shrink-0" aria-hidden />
+              <span>{t("emailVerified")}</span>
+            </div>
+          ) : (
+            <button
+              type="button"
+              disabled={resendMutation.isPending}
+              aria-busy={resendMutation.isPending}
+              className="flex w-full items-start gap-2 border-b border-[var(--border)] px-3 py-2.5 text-start transition hover:bg-amber-500/10 disabled:opacity-70"
+              onClick={() => void onResendVerification()}
+            >
+              {resendMutation.isPending ? (
+                <Spinner className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-400" aria-hidden />
+              ) : (
+                <IoAlertCircle className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-400" aria-hidden />
+              )}
+              <span className="min-w-0 flex-1">
+                <span className="block text-xs font-medium text-amber-700 dark:text-amber-300">{t("emailNotVerified")}</span>
+                <span className="mt-0.5 block text-[11px] text-[var(--text-muted)]">{t("resendVerification")}</span>
+              </span>
+            </button>
+          )}
+
           <div className="p-1.5" role="none">
             <Link href="/edit-profile" role="menuitem" className={menuItemClass} onClick={close}>
               <IoPersonCircle className="size-4 shrink-0 opacity-80" aria-hidden />

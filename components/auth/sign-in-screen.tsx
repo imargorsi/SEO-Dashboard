@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { AuthScreenShell } from "@/components/auth/auth-screen-shell";
-import { SignInFormSection, type SignInAuthAlert } from "@/sections/sign-in-form-section";
+import { SignInFormSection } from "@/sections/sign-in-form-section";
 import type { SignInValues } from "@/sections/sign-in.types";
 import { useLoginMutation } from "@/features/auth/auth.api";
 import { ApiError } from "@/lib/frontend/api/errors";
+import { notify } from "@/lib/frontend/feedback/notify";
 import { resolvePostLoginPath } from "@/lib/frontend/auth/session";
 import { useAuthReveal } from "@/context/auth-reveal-transition";
 
@@ -18,25 +19,12 @@ export function SignInScreen() {
   const loginMutation = useLoginMutation();
   const { armAuthReveal, disarmAuthReveal, beginAuthReveal } = useAuthReveal();
   const { t } = useTranslation("translation", { keyPrefix: "auth.signIn" });
-  const [submitAlert, setSubmitAlert] = useState<SignInAuthAlert | null>(null);
+  const queryToastShown = useRef(false);
 
   const verified = searchParams.get("verified") === "1";
   const registered = searchParams.get("registered") === "1";
   const registrationMessage = searchParams.get("message")?.trim() ?? "";
   const emailFromQuery = searchParams.get("email")?.trim() ?? "";
-
-  const queryAlert = useMemo((): SignInAuthAlert | null => {
-    if (verified) {
-      return { variant: "default", title: t("emailVerifiedSuccess") };
-    }
-    if (registered) {
-      return {
-        variant: "default",
-        title: registrationMessage || t("registrationSuccess"),
-      };
-    }
-    return null;
-  }, [registered, registrationMessage, t, verified]);
 
   const form = useForm<SignInValues>({
     defaultValues: { email: emailFromQuery, password: "" },
@@ -44,15 +32,21 @@ export function SignInScreen() {
   });
 
   useEffect(() => {
+    if (queryToastShown.current) return;
+
     if (verified) {
+      queryToastShown.current = true;
+      notify.success(t("emailVerifiedSuccess"));
       router.replace("/", { scroll: false });
       return;
     }
 
     if (registered) {
+      queryToastShown.current = true;
+      notify.success(registrationMessage || t("registrationSuccess"));
       router.replace(emailFromQuery ? `/?email=${encodeURIComponent(emailFromQuery)}` : "/", { scroll: false });
     }
-  }, [emailFromQuery, registered, router, verified]);
+  }, [emailFromQuery, registered, registrationMessage, router, t, verified]);
 
   useEffect(() => {
     return () => {
@@ -61,7 +55,6 @@ export function SignInScreen() {
   }, [disarmAuthReveal]);
 
   async function onSubmit(values: SignInValues) {
-    setSubmitAlert(null);
     armAuthReveal();
 
     try {
@@ -73,10 +66,7 @@ export function SignInScreen() {
       beginAuthReveal(resolvePostLoginPath(result.user));
     } catch (error) {
       disarmAuthReveal();
-      setSubmitAlert({
-        variant: "destructive",
-        title: ApiError.messageFrom(error, t("loginErrorUnexpected"), "email"),
-      });
+      notify.error(ApiError.messageFrom(error, t("loginErrorUnexpected"), "email"));
     }
   }
 
@@ -87,7 +77,6 @@ export function SignInScreen() {
         errors={form.formState.errors}
         isSubmitting={form.formState.isSubmitting || loginMutation.isPending}
         onValidSubmit={form.handleSubmit(onSubmit)}
-        authAlert={submitAlert ?? queryAlert}
       />
     </AuthScreenShell>
   );

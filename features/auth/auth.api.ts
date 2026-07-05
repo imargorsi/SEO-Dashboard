@@ -91,7 +91,7 @@ async function resendEmailVerification(): Promise<AuthMessageResult> {
 }
 
 async function changePassword(input: ChangePasswordRequest): Promise<AuthMessageResult> {
-  const envelope = await baseQuery.put<null>("me/change-password", input);
+  const envelope = await baseQuery.put<null>("me/password", input);
   return { message: envelope.message };
 }
 

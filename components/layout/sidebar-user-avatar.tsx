@@ -1,4 +1,4 @@
-import { IoCheckmark, IoPencil, IoPerson } from "react-icons/io5";
+import { IoAlertCircle, IoCheckmark, IoPencil, IoPerson } from "react-icons/io5";
 import { useEffect, useState, type ChangeEvent, type ChangeEventHandler } from "react";
 import { cn } from "@/lib/utils";
 
@@ -58,7 +58,7 @@ export function SidebarUserAvatar({
     size === "sm" ? "size-8 rounded-md text-[0.5625rem]" : "size-10 rounded-lg text-[0.6875rem]";
   const userIcon = size === "sm" ? "size-4" : "size-5";
   const badgeWrap = size === "sm" ? "size-3.5 -end-px -bottom-px" : "size-4 -end-0.5 -bottom-0.5";
-  const checkIcon = size === "sm" ? "size-2" : "size-2.5";
+  const badgeIcon = size === "sm" ? "size-2" : "size-2.5";
 
   return (
     <div
@@ -92,16 +92,28 @@ export function SidebarUserAvatar({
           />
         </label>
       ) : null}
-      {verified ? (
-        <span
-          className={cn(
-            "absolute flex items-center justify-center rounded-full border border-[var(--social-bg)] bg-[var(--bg-elevated)] text-[var(--text-h)]",
-            badgeWrap
-          )}
-          aria-hidden
-        >
-          <IoCheckmark className={cn(checkIcon, "stroke-[2.5]")} aria-hidden />
-        </span>
+      {uploadMode === "display" ? (
+        verified ? (
+          <span
+            className={cn(
+              "absolute flex items-center justify-center rounded-full border border-[var(--social-bg)] bg-[var(--bg-elevated)] text-emerald-600 dark:text-emerald-400",
+              badgeWrap
+            )}
+            aria-hidden
+          >
+            <IoCheckmark className={cn(badgeIcon, "stroke-[2.5]")} aria-hidden />
+          </span>
+        ) : (
+          <span
+            className={cn(
+              "absolute flex items-center justify-center rounded-full border border-[var(--social-bg)] bg-[var(--bg-elevated)] text-amber-600 dark:text-amber-400",
+              badgeWrap
+            )}
+            aria-hidden
+          >
+            <IoAlertCircle className={badgeIcon} aria-hidden />
+          </span>
+        )
       ) : null}
     </div>
   );

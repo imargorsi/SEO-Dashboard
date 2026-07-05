@@ -85,7 +85,6 @@ export function SidebarUserAvatar({
           <IoPencil className="size-3.5" aria-hidden />
           <input
             id={uploadInputId}
-            name="profile_image"
             type="file"
             accept={uploadAccept}
             onChange={handleFileChange}

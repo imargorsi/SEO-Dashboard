@@ -19,4 +19,6 @@ export const authMessages = {
   passwordResetSuccess: "Your password has been reset. You can sign in with your new password.",
   passwordResetInvalidToken: "This password reset link is invalid or has expired. Request a new link and try again.",
   passwordResetUnable: "We could not reset your password. Please request a new reset link and try again.",
+  changePasswordSuccess: "Your password has been changed.",
+  passwordChangeInvalidCurrentPassword: "The current password is incorrect.",
 };

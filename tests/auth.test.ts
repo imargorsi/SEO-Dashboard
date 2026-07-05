@@ -173,4 +173,51 @@ describe("Auth API parity", () => {
     expect(authData.roles).toContain(COMPANY_ADMIN_ROLE);
     expect(authData.permissions).toContain("company.dashboard.view");
   });
+
+  it("change password updates hash when current password is correct", async () => {
+    const { verifyPassword } = await import("@/lib/auth/password");
+    const { changePassword } = await import("@/lib/auth/change-password");
+
+    const user = await User.create({
+      name: "Password User",
+      email: "changepw@example.com",
+      password: await hashPassword("old-password"),
+      emailVerifiedAt: new Date(),
+    });
+
+    const response = await changePassword(user, {
+      current_password: "old-password",
+      new_password: "New-password-1",
+    });
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.success).toBe(true);
+    expect(body.message).toBe("Your password has been changed.");
+
+    const fresh = await User.findById(user._id);
+    expect(await verifyPassword("New-password-1", fresh!.password)).toBe(true);
+    expect(await verifyPassword("old-password", fresh!.password)).toBe(false);
+  });
+
+  it("change password rejects wrong current password", async () => {
+    const { changePassword } = await import("@/lib/auth/change-password");
+
+    const user = await User.create({
+      name: "Password User",
+      email: "wrongpw@example.com",
+      password: await hashPassword("old-password"),
+      emailVerifiedAt: new Date(),
+    });
+
+    const response = await changePassword(user, {
+      current_password: "wrong-password",
+      new_password: "New-password-1",
+    });
+    const body = await response.json();
+
+    expect(response.status).toBe(422);
+    expect(body.success).toBe(false);
+    expect(body.errors.current_password).toBeDefined();
+  });
 });

@@ -35,3 +35,13 @@ export const resetPasswordSchema = z
     message: "The password confirmation does not match.",
     path: ["password_confirmation"],
   });
+
+
+export const changePasswordSchema = z.object({
+  current_password: z.string().min(1), 
+  new_password: passwordSchema,
+  new_password_confirmation: z.string().min(1),
+}).refine((data) => data.new_password === data.new_password_confirmation, {
+  message: "The new password confirmation does not match.",
+  path: ["new_password_confirmation"],
+})

@@ -1,86 +1,98 @@
 "use client";
 
-import { useEffect, useState, type ChangeEvent } from "react";
+import { useRef, useState, type ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
+import { useUpdateProfileMutation } from "@/features/auth/auth.api";
+import { ApiError } from "@/lib/frontend/api/errors";
+import { notify } from "@/lib/frontend/feedback/notify";
 import type { AuthUser } from "@/lib/frontend/auth/types";
-import { validateProfileImageFile } from "@/lib/frontend/forms/profile-image-validation";
 
 export type ProfileFormValues = {
   name: string;
-  email: string;
-  profile_image: File | null;
 };
 
-export function authUserToProfileFormValues(user: AuthUser): ProfileFormValues {
-  return {
-    name: user.name,
-    email: user.email,
-    profile_image: null,
-  };
-}
-
 export function useProfileForm(user: AuthUser) {
+  const { t } = useTranslation("translation", { keyPrefix: "profile.edit" });
+  const updateProfileMutation = useUpdateProfileMutation();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const pendingFileRef = useRef<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
   const form = useForm<ProfileFormValues>({
-    defaultValues: authUserToProfileFormValues(user),
+    defaultValues: { name: user.name },
     mode: "onSubmit",
   });
 
-  const profileImage = form.watch("profile_image");
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setError,
+    watch,
+    formState: { errors, isSubmitting },
+  } = form;
 
-  useEffect(() => {
-    if (!profileImage) {
-      setPreviewUrl(null);
-      return;
-    }
+  function openFilePicker() {
+    fileInputRef.current?.click();
+  }
 
-    const url = URL.createObjectURL(profileImage);
-    setPreviewUrl(url);
-    return () => URL.revokeObjectURL(url);
-  }, [profileImage]);
-
-  function handleProfileImageChange(event: ChangeEvent<HTMLInputElement>) {
+  function onFilePicked(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0] ?? null;
+    event.target.value = "";
+    if (!file) return;
 
-    if (!file) {
-      form.setValue("profile_image", null);
-      form.clearErrors("profile_image");
-      return;
-    }
-
-    const message = validateProfileImageFile(file);
-    if (message) {
-      form.setError("profile_image", { type: "validate", message });
-      form.setValue("profile_image", null);
-      event.target.value = "";
-      return;
-    }
-
-    form.clearErrors("profile_image");
-    form.setValue("profile_image", file, { shouldDirty: true });
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    pendingFileRef.current = file;
+    setPreviewUrl(URL.createObjectURL(file));
   }
 
   async function onSubmit(values: ProfileFormValues) {
-    if (values.profile_image) {
-      const message = validateProfileImageFile(values.profile_image);
-      if (message) {
-        form.setError("profile_image", { type: "validate", message });
-        return;
-      }
+    const payload: { name?: string; profile_image_file?: File } = {};
+    const trimmedName = values.name.trim();
+
+    if (trimmedName !== user.name) payload.name = trimmedName;
+    if (pendingFileRef.current) payload.profile_image_file = pendingFileRef.current;
+
+    if (!payload.name && !payload.profile_image_file) {
+      notify.info(t("noChanges"));
+      return;
     }
 
-    console.log(values, "profile form values"); // later -> mutation
+    try {
+      const result = await updateProfileMutation.mutateAsync(payload);
+      pendingFileRef.current = null;
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+      setPreviewUrl(null);
+      reset({ name: result.user.name });
+      notify.success(result.message?.trim() || t("successFallback"));
+    } catch (error) {
+      if (error instanceof ApiError) {
+        const nameMessage = error.errors.name?.[0];
+        if (nameMessage) setError("name", { type: "server", message: nameMessage });
+
+        notify.error(error.message?.trim() || error.firstFieldMessage() || t("errorFallback"));
+        return;
+      }
+
+      notify.error(t("errorFallback"));
+    }
   }
 
+  const name = watch("name");
+
   return {
-    register: form.register,
-    handleSubmit: form.handleSubmit,
-    watch: form.watch,
-    errors: form.formState.errors,
-    isSubmitting: form.formState.isSubmitting,
+    register,
+    handleSubmit,
+    errors,
+    isSubmitting: isSubmitting || updateProfileMutation.isPending,
     onSubmit,
-    handleProfileImageChange,
+    fileInputRef,
+    openFilePicker,
+    onFilePicked,
     avatarImageUrl: previewUrl ?? user.profile_image ?? null,
+    name,
+    hasPhoto: Boolean(previewUrl || user.profile_image),
   };
 }

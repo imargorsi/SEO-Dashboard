@@ -220,4 +220,64 @@ describe("Auth API parity", () => {
     expect(body.success).toBe(false);
     expect(body.errors.current_password).toBeDefined();
   });
+
+  it("updates profile name", async () => {
+    const { updateProfile } = await import("@/lib/auth/update-profile");
+
+    const user = await User.create({
+      name: "Before Name",
+      email: "profile@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+    });
+
+    const response = await updateProfile(user, { name: "After Name" });
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.success).toBe(true);
+    expect(body.data.name).toBe("After Name");
+
+    const fresh = await User.findById(user._id);
+    expect(fresh?.name).toBe("After Name");
+  });
+
+  it("uploads and stores profile image file", async () => {
+    const { updateProfile } = await import("@/lib/auth/update-profile");
+
+    const user = await User.create({
+      name: "Upload User",
+      email: "photo-file@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+    });
+
+    const file = new File([Uint8Array.from([255, 216, 255])], "avatar.jpg", { type: "image/jpeg" });
+    const response = await updateProfile(user, { profile_image_file: file });
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.data.profile_image).toContain("/storage/profile-images/");
+
+    const fresh = await User.findById(user._id);
+    expect(fresh?.profileImage).toMatch(/^profile-images\//);
+  });
+
+  it("rejects empty profile update", async () => {
+    const { updateProfile } = await import("@/lib/auth/update-profile");
+
+    const user = await User.create({
+      name: "Empty Update User",
+      email: "empty-profile@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+    });
+
+    const response = await updateProfile(user, {});
+    const body = await response.json();
+
+    expect(response.status).toBe(422);
+    expect(body.success).toBe(false);
+    expect(body.errors.profile).toBeDefined();
+  });
 });

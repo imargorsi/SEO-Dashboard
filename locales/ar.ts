@@ -97,6 +97,7 @@ const translation: Translation = {
       photoPick: "رفع صورة",
       photoChange: "تغيير الصورة",
       photoClear: "إلغاء الصورة الجديدة",
+      noChanges: "لا توجد تغييرات على الملف الشخصي للحفظ.",
       sectionReadonly: "تفاصيل الحساب",
       emailLabel: "البريد الإلكتروني",
       rolesHeading: "الأدوار",

@@ -21,4 +21,6 @@ export const authMessages = {
   passwordResetUnable: "We could not reset your password. Please request a new reset link and try again.",
   changePasswordSuccess: "Your password has been changed.",
   passwordChangeInvalidCurrentPassword: "The current password is incorrect.",
+  profileUpdateSuccess: "Profile updated.",
+  profileEmptyUpdate: "Provide a name or profile image to update.",
 };

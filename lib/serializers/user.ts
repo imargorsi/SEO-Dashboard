@@ -10,6 +10,7 @@ type UserSerializeOptions = {
 
 function profileImageUrl(profileImage: string | null | undefined): string | null {
   if (!profileImage) return null;
+
   const base = env.appUrl().replace(/\/$/, "");
   return `${base}/storage/${profileImage.replace(/^\//, "")}`;
 }

@@ -95,7 +95,13 @@ export function NavbarProfileMenu() {
         aria-label={t("openMenu")}
         onClick={() => setOpen((v) => !v)}
       >
-        <SidebarUserAvatar name={displayName} imageUrl={user?.profile_image ?? null} verified={verified} size="sm" />
+        <SidebarUserAvatar
+          name={displayName}
+          imageUrl={user?.profile_image ?? null}
+          verified={verified}
+          showVerificationBadge
+          size="sm"
+        />
         <span className="hidden max-w-[7rem] truncate text-xs font-medium text-[var(--text-h)] sm:inline">
           {displayName}
         </span>
@@ -117,6 +123,7 @@ export function NavbarProfileMenu() {
                 name={displayName}
                 imageUrl={user?.profile_image ?? null}
                 verified={verified}
+                showVerificationBadge
                 size="sm"
               />
               <div className="min-w-0 flex-1">

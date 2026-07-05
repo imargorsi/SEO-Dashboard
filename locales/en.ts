@@ -704,7 +704,7 @@ const translation: Translation = {
       valRequired: "This Field Is Required.",
       valMin: "Use At Least 2 Characters.",
       photoLabel: "Profile Photo",
-      photoHint: "JPG, PNG, WEBP, Or GIF. Max 2 MB.",
+      photoHint: "JPG, PNG, WEBP, Or GIF. Max 5 MB.",
       photoPick: "Upload Photo",
       photoChange: "Change Photo",
       photoClear: "Remove New Photo",

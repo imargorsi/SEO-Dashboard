@@ -24,6 +24,8 @@ export interface Translation {
   breadcrumb: {
     /** First crumb linking to `/dashboard` on nested pages */
     root: string;
+    new: string;
+    edit: string;
   };
   table: {
     emptyTitle: string;
@@ -630,6 +632,8 @@ const translation: Translation = {
   },
   breadcrumb: {
     root: "Dashboard",
+    new: "New",
+    edit: "Edit",
   },
   table: {
     emptyTitle: "No records found",

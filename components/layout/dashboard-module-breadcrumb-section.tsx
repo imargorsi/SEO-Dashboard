@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect } from "react";
 
 import {
   breadcrumbKey,
@@ -10,20 +10,15 @@ import {
 
 export type DashboardBreadcrumbSegment = DashboardBreadcrumbItem;
 
-function useSetDashboardBreadcrumbs(items: DashboardBreadcrumbSegment[]) {
-  const { setBreadcrumbs } = useDashboardBreadcrumbs();
-  const itemsRef = useRef(items);
-  itemsRef.current = items;
+
+export function DashboardModuleBreadcrumbSection({ items }: { items: DashboardBreadcrumbSegment[] }) {
+  const { setBreadcrumbOverride } = useDashboardBreadcrumbs();
   const key = breadcrumbKey(items);
 
   useEffect(() => {
-    setBreadcrumbs(itemsRef.current);
-    return () => setBreadcrumbs([]);
-  }, [key, setBreadcrumbs]);
-}
+    setBreadcrumbOverride(items);
+    return () => setBreadcrumbOverride(null);
+  }, [key, setBreadcrumbOverride, items]);
 
-/** Registers page breadcrumbs for the shell top bar. Renders nothing. */
-export function DashboardModuleBreadcrumbSection({ items }: { items: DashboardBreadcrumbSegment[] }) {
-  useSetDashboardBreadcrumbs(items);
   return null;
 }

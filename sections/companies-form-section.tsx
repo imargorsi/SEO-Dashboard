@@ -2,10 +2,8 @@
 
 import { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { useTranslation } from "react-i18next";
 
 import { CreateCompanyForm } from "@/components/forms/create-company-form";
-import { DashboardModuleBreadcrumbSection } from "@/components/layout/dashboard-module-breadcrumb-section";
 import { Spinner } from "@/components/ui/spinner";
 import { useCompanyQuery } from "@/features/companies/companies.api";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
@@ -19,8 +17,6 @@ type CompaniesFormSectionProps = {
 export function CompaniesFormSection({ companyId }: CompaniesFormSectionProps) {
   const router = useRouter();
   const { data: authUser } = useAuthUserQuery();
-  const { t } = useTranslation("translation", { keyPrefix: "modules.companies" });
-  const { t: tCrumb } = useTranslation("translation", { keyPrefix: "breadcrumb" });
 
   const isEdit = Boolean(companyId);
 
@@ -69,16 +65,6 @@ export function CompaniesFormSection({ companyId }: CompaniesFormSectionProps) {
 
   return (
     <div className="w-full min-w-0">
-      <DashboardModuleBreadcrumbSection
-        items={[
-          { id: "root", label: tCrumb("root"), href: "/dashboard" },
-          { id: "companies", label: t("title"), href: "/companies" },
-          {
-            id: isEdit ? "edit-company" : "create-company",
-            label: isEdit ? t("editCompanyTitle") : t("createCompanyTitle"),
-          },
-        ]}
-      />
       <div className="w-full px-4 py-6 sm:px-6">
         <CreateCompanyForm companyId={companyId} initialValues={initialValues} />
       </div>

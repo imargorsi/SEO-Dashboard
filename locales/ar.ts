@@ -25,6 +25,8 @@ const translation: Translation = {
   },
   breadcrumb: {
     root: "لوحة التحكم",
+    new: "جديد",
+    edit: "تعديل",
   },
   table: {
     emptyTitle: "لا توجد سجلات",

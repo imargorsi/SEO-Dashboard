@@ -8,7 +8,6 @@ import { useTranslation } from "react-i18next";
 import { IoAlertCircle, IoCheckmarkCircle } from "react-icons/io5";
 
 import { FormTextField } from "@/components/form/form-text-field";
-import { DashboardModuleBreadcrumbSection } from "@/components/layout/dashboard-module-breadcrumb-section";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -25,7 +24,6 @@ export function UsersCreateSection() {
   const router = useRouter();
   const { data: authUser } = useAuthUserQuery();
   const { t } = useTranslation("translation", { keyPrefix: "modules.users" });
-  const { t: tCrumb } = useTranslation("translation", { keyPrefix: "breadcrumb" });
   const createMutation = useCreateUserMutation();
   const [formAlert, setFormAlert] = useState<{
     variant: "default" | "destructive";
@@ -74,13 +72,6 @@ export function UsersCreateSection() {
 
   return (
     <div className="w-full min-w-0">
-      <DashboardModuleBreadcrumbSection
-        items={[
-          { id: "root", label: tCrumb("root"), href: "/dashboard" },
-          { id: "users", label: t("title"), href: "/users" },
-          { id: "create-user", label: t("createUserTitle") },
-        ]}
-      />
       <div className="px-4 py-6 sm:px-6">
         <div className="mx-auto w-full max-w-xl rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-6 shadow-[var(--shadow)] sm:p-8">
           <div className="mb-6 space-y-1">

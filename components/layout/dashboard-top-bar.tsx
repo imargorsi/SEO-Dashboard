@@ -2,6 +2,7 @@
 
 import { Fragment } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
 import { DashboardNavbarActions } from "@/components/layout/dashboard-navbar-actions";
@@ -14,17 +15,23 @@ import {
   breadcrumbLinkClassName,
 } from "@/components/ui/breadcrumb";
 import { useDashboardBreadcrumbs } from "@/context/dashboard-breadcrumb-context";
-import { useDashboardSidebar } from "@/context/dashboard-sidebar-context";
+import { breadcrumbsFromPathname } from "@/lib/frontend/layout/dashboard-breadcrumbs";
 import {
   dashboardHeaderRowClass,
   dashboardNavIconClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
+import { useDashboardSidebar } from "@/context/dashboard-sidebar-context";
 import { cn } from "@/lib/utils";
 
 export function DashboardTopBar() {
   const sidebar = useDashboardSidebar();
-  const { items } = useDashboardBreadcrumbs();
+  const pathname = usePathname();
+  const { overrideItems } = useDashboardBreadcrumbs();
+  const { t } = useTranslation("translation");
   const { t: tNav } = useTranslation("translation", { keyPrefix: "nav" });
+
+  const items =
+    overrideItems ?? breadcrumbsFromPathname(pathname, (key) => String(t(key as never)));
 
   return (
     <header className="relative z-10 w-full shrink-0 bg-[var(--bg-elevated)]">

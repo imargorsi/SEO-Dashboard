@@ -10,8 +10,8 @@ export type DashboardBreadcrumbItem = {
 };
 
 type DashboardBreadcrumbContextValue = {
-  items: DashboardBreadcrumbItem[];
-  setBreadcrumbs: (items: DashboardBreadcrumbItem[]) => void;
+  overrideItems: DashboardBreadcrumbItem[] | null;
+  setBreadcrumbOverride: (items: DashboardBreadcrumbItem[] | null) => void;
 };
 
 const DashboardBreadcrumbContext = createContext<DashboardBreadcrumbContextValue | null>(null);
@@ -23,16 +23,20 @@ export function breadcrumbKey(items: DashboardBreadcrumbItem[]): string {
 }
 
 export function DashboardBreadcrumbProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<DashboardBreadcrumbItem[]>([]);
+  const [overrideItems, setOverrideItems] = useState<DashboardBreadcrumbItem[] | null>(null);
 
-  const setBreadcrumbs = useCallback((next: DashboardBreadcrumbItem[]) => {
-    setItems((prev) => {
-      if (breadcrumbKey(prev) === breadcrumbKey(next)) return prev;
+  const setBreadcrumbOverride = useCallback((next: DashboardBreadcrumbItem[] | null) => {
+    setOverrideItems((prev) => {
+      if (next === null) return null;
+      if (prev && breadcrumbKey(prev) === breadcrumbKey(next)) return prev;
       return next;
     });
   }, []);
 
-  const value = useMemo(() => ({ items, setBreadcrumbs }), [items, setBreadcrumbs]);
+  const value = useMemo(
+    () => ({ overrideItems, setBreadcrumbOverride }),
+    [overrideItems, setBreadcrumbOverride]
+  );
 
   return (
     <DashboardBreadcrumbContext.Provider value={value}>{children}</DashboardBreadcrumbContext.Provider>

@@ -3,12 +3,15 @@
 import { cn } from "@/lib/utils";
 import {
   forwardRef,
+  useState,
   type ChangeEvent,
   type ComponentPropsWithoutRef,
   type FocusEvent,
   type Ref,
   type ChangeEventHandler,
 } from "react";
+import { IoEye, IoEyeOff } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
 import SelectDropdownArrowIcon from "@/components/icons/input-select-dropdown-arrow";
 
 export type InputType = "text" | "number" | "email" | "password" | "textarea" | "select";
@@ -83,6 +86,11 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
     ref: registerRef,
     ...rest
   } = props as ReusableInputProps & { ref?: Ref<ControlElement> };
+
+  const isPassword = type === "password";
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const inputType = isPassword ? (passwordVisible ? "text" : "password") : type;
+  const { t } = useTranslation("translation", { keyPrefix: "form" });
 
   const showError = Boolean(error);
   const baseClasses =
@@ -165,24 +173,42 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
           </span>
         </div>
       ) : (
-        <input
-          id={id}
-          name={name}
-          type={type}
-          placeholder={placeholder}
-          required={required}
-          readOnly={readOnly}
-          disabled={disabled}
-          aria-invalid={showError}
-          aria-describedby={showError ? `${id}-error` : undefined}
-          onChange={onChange}
-          onBlur={handleBlur}
-          ref={setControlRef}
-          className={controlClassName}
-          autoComplete={autoComplete}
-          {...valueProps}
-          {...rest}
-        />
+        <div className={cn(isPassword && "relative")}>
+          <input
+            id={id}
+            name={name}
+            type={inputType}
+            placeholder={placeholder}
+            required={required}
+            readOnly={readOnly}
+            disabled={disabled}
+            aria-invalid={showError}
+            aria-describedby={showError ? `${id}-error` : undefined}
+            onChange={onChange}
+            onBlur={handleBlur}
+            ref={setControlRef}
+            className={cn(controlClassName, isPassword && "pe-10")}
+            autoComplete={autoComplete}
+            {...valueProps}
+            {...rest}
+          />
+          {isPassword ? (
+            <button
+              type="button"
+              onClick={() => setPasswordVisible((visible) => !visible)}
+              disabled={disabled}
+              aria-label={passwordVisible ? t("hidePassword") : t("showPassword")}
+              aria-pressed={passwordVisible}
+              className="absolute inset-y-0 end-0 flex items-center justify-center px-3 text-[var(--text-muted)] transition-colors hover:text-[var(--text-h)] focus-visible:text-[var(--text-h)] focus-visible:outline-none disabled:pointer-events-none disabled:opacity-60"
+            >
+              {passwordVisible ? (
+                <IoEyeOff className="size-4" aria-hidden />
+              ) : (
+                <IoEye className="size-4" aria-hidden />
+              )}
+            </button>
+          ) : null}
+        </div>
       )}
 
       {showError ? (

@@ -14,6 +14,7 @@ import {
   type LoginResult,
   type RegisterRequest,
   type ResetPasswordRequest,
+  type ChangePasswordRequest,
 } from "@/lib/frontend/auth/types";
 
 const authApi = {
@@ -89,6 +90,11 @@ async function resendEmailVerification(): Promise<AuthMessageResult> {
   return { message: envelope.message };
 }
 
+async function changePassword(input: ChangePasswordRequest): Promise<AuthMessageResult> {
+  const envelope = await baseQuery.put<null>("me/change-password", input);
+  return { message: envelope.message };
+}
+
 export function useAuthUserQuery(options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: authKeys.user(),
@@ -132,6 +138,10 @@ export function useForgotPasswordMutation() {
 
 export function useResetPasswordMutation() {
   return useMutation({ mutationFn: submitPasswordReset });
+}
+
+export function useChangePasswordMutation() {
+  return useMutation({ mutationFn: changePassword });
 }
 
 export function useResendEmailVerificationMutation() {

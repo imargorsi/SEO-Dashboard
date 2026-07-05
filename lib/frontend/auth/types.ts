@@ -50,6 +50,13 @@ export type AuthMessageResult = {
   message: string | null;
 };
 
+export type ChangePasswordRequest = {
+  current_password: string;
+  new_password: string;
+  new_password_confirmation: string;
+
+};
+
 export function normalizeAuthUser(raw: unknown): AuthUser | null {
   if (raw == null || typeof raw !== "object") return null;
 

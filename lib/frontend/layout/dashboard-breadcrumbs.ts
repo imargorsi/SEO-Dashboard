@@ -5,10 +5,12 @@ export type BreadcrumbTranslate = (key: string) => string;
 const SEGMENT_KEYS: Record<string, string> = {
   dashboard: "home.title",
   users: "modules.users.title",
-  companies: "modules.companies.title",
   projects: "modules.projects.title",
   roles: "modules.roles.title",
-  permissions: "modules.permissions.title",
+  analytics: "modules.analytics.title",
+  "seo-activities": "modules.seoActivities.title",
+  leads: "modules.leads.title",
+  reports: "modules.reports.title",
   settings: "settings.title",
   "edit-profile": "profile.edit.breadcrumbTitle",
   new: "breadcrumb.new",
@@ -16,17 +18,13 @@ const SEGMENT_KEYS: Record<string, string> = {
 };
 
 const CREATE_KEYS: Record<string, string> = {
-  companies: "modules.companies.createCompanyTitle",
   users: "modules.users.createUserTitle",
   roles: "modules.roles.createRoleTitle",
-  permissions: "modules.permissions.createPermissionTitle",
   projects: "modules.projects.createProjectTitle",
 };
 
 const EDIT_KEYS: Record<string, string> = {
-  companies: "modules.companies.editCompanyTitle",
   roles: "modules.roles.editRoleTitle",
-  permissions: "modules.permissions.editPermissionTitle",
   projects: "modules.projects.editProjectTitle",
 };
 

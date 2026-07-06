@@ -31,21 +31,77 @@ export type SidebarNavItem = {
   matchPaths?: string[];
 };
 
-export const SIDEBAR_NAV_ITEMS: SidebarNavItem[] = [
-  { path: "/dashboard", labelKey: "dashboard", icon: IoGridOutline },
-  { path: "/projects", labelKey: "projects", icon: IoFolderOpenOutline },
-  { path: "/analytics", labelKey: "analytics", icon: IoBarChartOutline },
-  { path: "/seo-activities", labelKey: "seoActivities", icon: IoSearchOutline },
-  { path: "/leads", labelKey: "leads", icon: IoPeopleOutline },
-  { path: "/reports", labelKey: "reports", icon: IoDocumentTextOutline },
-  { path: "/users", labelKey: "users", icon: IoPeopleCircleOutline },
+export type SidebarNavDefinition = SidebarNavItem & {
+  /** `.view` permission required; `null` = always visible (e.g. settings). */
+  viewPermission: string | null;
+  permissionScope: "platform" | "project";
+};
+
+/** Same nav for all roles — visibility is permission-driven. */
+export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
+  {
+    path: "/dashboard",
+    labelKey: "dashboard",
+    icon: IoGridOutline,
+    viewPermission: "dashboard.view",
+    permissionScope: "project",
+  },
+  {
+    path: "/projects",
+    labelKey: "projects",
+    icon: IoFolderOpenOutline,
+    viewPermission: "projects.view",
+    permissionScope: "project",
+  },
+  {
+    path: "/analytics",
+    labelKey: "analytics",
+    icon: IoBarChartOutline,
+    viewPermission: "analytics.view",
+    permissionScope: "project",
+  },
+  {
+    path: "/seo-activities",
+    labelKey: "seoActivities",
+    icon: IoSearchOutline,
+    viewPermission: "seo_activities.view",
+    permissionScope: "project",
+  },
+  {
+    path: "/leads",
+    labelKey: "leads",
+    icon: IoPeopleOutline,
+    viewPermission: "leads.view",
+    permissionScope: "project",
+  },
+  {
+    path: "/reports",
+    labelKey: "reports",
+    icon: IoDocumentTextOutline,
+    viewPermission: "reports.view",
+    permissionScope: "project",
+  },
+  {
+    path: "/users",
+    labelKey: "users",
+    icon: IoPeopleCircleOutline,
+    viewPermission: "admin.users.view",
+    permissionScope: "platform",
+  },
   {
     path: "/roles",
     labelKey: "rolesPermissions",
     icon: IoShieldOutline,
-    matchPaths: ["/permissions"],
+    viewPermission: "admin.roles.view",
+    permissionScope: "platform",
   },
-  { path: "/settings", labelKey: "settings", icon: IoSettingsOutline },
+  {
+    path: "/settings",
+    labelKey: "settings",
+    icon: IoSettingsOutline,
+    viewPermission: null,
+    permissionScope: "platform",
+  },
 ];
 
 export function isSidebarNavItemActive(

@@ -7,7 +7,7 @@ const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   eslintConfigPrettier,
-  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts", "laravel-old/**", "old-next-frontend/**"]),
+  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts", "laravel-old/**"]),
 ]);
 
 export default eslintConfig;

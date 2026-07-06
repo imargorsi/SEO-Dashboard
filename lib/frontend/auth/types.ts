@@ -3,7 +3,6 @@ export type AuthUser = {
   name: string;
   email: string;
   email_verified_at: string | null;
-  company_id: string | null;
   roles: string[];
   permissions: string[];
   home_api_path?: string | null;
@@ -84,9 +83,6 @@ export function normalizeAuthUser(raw: unknown): AuthUser | null {
     ? record.permissions.filter((permission): permission is string => typeof permission === "string")
     : [];
 
-  const companyId =
-    typeof record.company_id === "string" ? record.company_id : record.company_id === null ? null : null;
-
   const emailVerifiedAt = typeof record.email_verified_at === "string" ? record.email_verified_at : null;
 
   const homeApiPath = typeof record.home_api_path === "string" ? record.home_api_path : null;
@@ -99,7 +95,6 @@ export function normalizeAuthUser(raw: unknown): AuthUser | null {
     name,
     email,
     email_verified_at: emailVerifiedAt,
-    company_id: companyId,
     roles,
     permissions,
     home_api_path: homeApiPath,

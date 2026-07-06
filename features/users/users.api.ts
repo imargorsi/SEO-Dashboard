@@ -43,12 +43,7 @@ export function useCreateUserMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (payload: {
-      name: string;
-      email: string;
-      company_id: string | null;
-      company_name: string | null;
-    }) => {
+    mutationFn: async (payload: { name: string; email: string }) => {
       await new Promise((r) => setTimeout(r, 300));
       return createDummyUser(payload);
     },

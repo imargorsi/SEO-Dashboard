@@ -2,14 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { IoClose } from "react-icons/io5";
 
 import { ProjectSelector } from "@/components/layout/project-selector";
-import {
-  isSidebarNavItemActive,
-  SIDEBAR_NAV_ITEMS,
-} from "@/lib/frontend/layout/sidebar-nav";
+import { useProjectAccess } from "@/context/project-access-context";
+import { useAuthUserQuery } from "@/features/auth/auth.api";
+import { buildSidebarNavItems, hasProjectWorkspace } from "@/lib/frontend/layout/build-sidebar-nav";
+import { isSidebarNavItemActive } from "@/lib/frontend/layout/sidebar-nav";
 import { dashboardHeaderRowClass, dashboardHeaderTitleClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
@@ -21,6 +22,17 @@ export function DashboardSidebar({ onClose }: DashboardSidebarProps) {
   const { t: tNav } = useTranslation("translation", { keyPrefix: "nav" });
   const { t: tLayout } = useTranslation("translation", { keyPrefix: "layout" });
   const pathname = usePathname();
+  const { data: user } = useAuthUserQuery();
+  const { projectPermissions } = useProjectAccess();
+
+  const navItems = useMemo(() => {
+    if (!user) return [];
+    return buildSidebarNavItems(user.permissions, projectPermissions, user.roles);
+  }, [projectPermissions, user]);
+
+  const showProjectSelector = user
+    ? hasProjectWorkspace(user.permissions, projectPermissions, user.roles)
+    : false;
 
   return (
     <aside
@@ -53,11 +65,11 @@ export function DashboardSidebar({ onClose }: DashboardSidebarProps) {
         ) : null}
       </div>
 
-      <ProjectSelector />
+      {showProjectSelector ? <ProjectSelector /> : null}
 
       <nav className="flex min-h-0 flex-1 flex-col overflow-y-auto px-3 pb-4 pt-1">
         <ul className="flex flex-col gap-0.5" role="list">
-          {SIDEBAR_NAV_ITEMS.map((item) => {
+          {navItems.map((item) => {
             const isActive = isSidebarNavItemActive(pathname, item);
             const Icon = item.icon;
 

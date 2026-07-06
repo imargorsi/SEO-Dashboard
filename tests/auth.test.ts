@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { hashPassword } from "@/lib/auth/password";
 import { createAccessToken, findAccessToken, revokeAccessToken } from "@/lib/auth/tokens";
 import { loadUserAuthData } from "@/lib/auth/guards";
-import { COMPANY_ADMIN_ROLE, SUPER_ADMIN_ROLE } from "@/lib/auth/rbac";
+import { SUPER_ADMIN_ROLE } from "@/lib/auth/rbac";
 import { authenticateLogin, buildLoginResponse } from "@/lib/auth/login";
 import { sendPasswordResetLink, resetPassword } from "@/lib/auth/password-reset";
 import { User } from "@/models";
@@ -92,7 +92,6 @@ describe("Auth API parity", () => {
     expect(response.status).toBe(201);
     expect(body.success).toBe(true);
     expect(body.data.email).toBe("pat@example.com");
-    expect(body.data.company_id).toBeNull();
 
     const login = await authenticateLogin("pat@example.com", "Password1!", jsonRequest("http://localhost/login"));
     expect(login).not.toBeInstanceOf(Response);
@@ -160,18 +159,35 @@ describe("Auth API parity", () => {
     expect(fresh!.emailVerifiedAt).not.toBeNull();
   });
 
-  it("derives permissions from embedded user roles", async () => {
+  it("derives platform permissions from super_admin on User.roles", async () => {
     const user = await User.create({
-      name: "Company Admin",
-      email: "ca@example.com",
+      name: "Platform Admin",
+      email: "admin-perms@example.com",
       password: await hashPassword("password"),
       emailVerifiedAt: new Date(),
-      roles: [COMPANY_ADMIN_ROLE],
+      roles: [SUPER_ADMIN_ROLE],
     });
 
     const authData = loadUserAuthData(user);
-    expect(authData.roles).toContain(COMPANY_ADMIN_ROLE);
-    expect(authData.permissions).toContain("company.dashboard.view");
+    expect(authData.roles).toContain(SUPER_ADMIN_ROLE);
+    expect(authData.permissions).toContain("admin.dashboard.view");
+    expect(authData.permissions).toContain("admin.users.view");
+    expect(authData.permissions).toContain("dashboard.view");
+    expect(authData.permissions).not.toContain("admin.companies.view");
+  });
+
+  it("regular user has empty platform roles and permissions on User.roles", async () => {
+    const user = await User.create({
+      name: "Regular User",
+      email: "regular@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+    });
+
+    const authData = loadUserAuthData(user);
+    expect(authData.roles).toEqual([]);
+    expect(authData.permissions).toEqual([]);
   });
 
   it("change password updates hash when current password is correct", async () => {

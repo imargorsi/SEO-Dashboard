@@ -16,7 +16,6 @@ export type UserTableRow = {
   id: string;
   name: string;
   email: string;
-  companyName: string | null;
   roles: string[];
   verified: boolean;
 };
@@ -43,7 +42,6 @@ export function UsersTable() {
       id: item.id,
       name: item.name,
       email: item.email,
-      companyName: item.company_name,
       roles: item.roles,
       verified: Boolean(item.email_verified_at),
     }));
@@ -87,11 +85,6 @@ export function UsersTable() {
             </a>
           </DataTableCellPill>
         ),
-      },
-      {
-        id: "company",
-        header: t("table.colCompany"),
-        cell: (row) => <DataTableCellPill>{row.companyName}</DataTableCellPill>,
       },
       {
         id: "roles",

@@ -111,91 +111,6 @@ export interface Translation {
     subtitle: string;
   };
   modules: {
-    companies: {
-      title: string;
-      subtitle: string;
-      createCompanyTitle: string;
-      editCompanyTitle: string;
-      createForm: {
-        title: string;
-        lead: string;
-        editTitle: string;
-        editLead: string;
-        editSubmit: string;
-        editSubmitting: string;
-        editSuccessTitle: string;
-        editSuccessFallback: string;
-        editErrorTitle: string;
-        editErrorFallback: string;
-        companyName: string;
-        companyNamePh: string;
-        pocName: string;
-        pocNamePh: string;
-        pocEmail: string;
-        pocEmailPh: string;
-        statusLabel: string;
-        statusDescription: string;
-        submit: string;
-        submitting: string;
-        successTitle: string;
-        successFallback: string;
-        errorTitle: string;
-        errorFallback: string;
-        valRequired: string;
-        valEmail: string;
-        valCompanyMin: string;
-        backToList: string;
-      };
-      table: {
-        toolbarHint: string;
-        colId: string;
-        colName: string;
-        colPocName: string;
-        colEmail: string;
-        colStatus: string;
-        colRegistered: string;
-        registeredPending: string;
-        registeredApproved: string;
-        approvePendingHint: string;
-        approvePendingAria: string;
-        approveSuccessTitle: string;
-        approveSuccessFallback: string;
-        approveErrorTitle: string;
-        colProjects: string;
-        seeProjects: string;
-        colActions: string;
-        createCompany: string;
-        rowsSelected: string;
-        rowsPerPage: string;
-        pageOf: string;
-        firstPage: string;
-        previousPage: string;
-        nextPage: string;
-        lastPage: string;
-        updating: string;
-        loadErrorTitle: string;
-        loadErrorBody: string;
-        edit: string;
-        delete: string;
-        more: string;
-        moreView: string;
-        moreDuplicate: string;
-        deleteConfirmTitle: string;
-        deleteConfirmDescription: string;
-        deleteConfirmCancel: string;
-        deleteConfirmAction: string;
-        deleteInProgress: string;
-        deleteSuccessTitle: string;
-        deleteSuccessFallback: string;
-        deleteErrorTitle: string;
-        dismiss: string;
-        detailSheetLead: string;
-        statusActive: string;
-        statusInactive: string;
-        accessDeniedTitle: string;
-        accessDeniedBody: string;
-      };
-    };
     users: {
       title: string;
       subtitle: string;
@@ -222,7 +137,6 @@ export interface Translation {
         toolbarHint: string;
         colName: string;
         colEmail: string;
-        colCompany: string;
         colRoles: string;
         colVerified: string;
         verifiedYes: string;
@@ -245,8 +159,7 @@ export interface Translation {
     projects: {
       title: string;
       subtitle: string;
-      companyProjectsTitle: string;
-      companyProjectsTitleFallback: string;
+      listTitle: string;
       createProjectTitle: string;
       editProjectTitle: string;
       createLead: string;
@@ -318,7 +231,7 @@ export interface Translation {
         errorFallback: string;
         editErrorTitle: string;
         editErrorFallback: string;
-        missingCompany: string;
+        missingProjectAccess: string;
         valRequired: string;
         valMin: string;
         valUrl: string;
@@ -329,8 +242,6 @@ export interface Translation {
       };
       table: {
         toolbarHint: string;
-        toolbarHintCompany: string;
-        toolbarHintCompanyId: string;
         colId: string;
         colBusinessName: string;
         colWebsite: string;
@@ -368,7 +279,6 @@ export interface Translation {
         accessDeniedBody: string;
         yes: string;
         no: string;
-        colCompanyId: string;
         colIsB2b: string;
         colIsB2c: string;
         colIndustryNiche: string;
@@ -389,6 +299,18 @@ export interface Translation {
         colCreatedAt: string;
         colUpdatedAt: string;
       };
+    };
+    analytics: {
+      title: string;
+    };
+    seoActivities: {
+      title: string;
+    };
+    leads: {
+      title: string;
+    };
+    reports: {
+      title: string;
     };
     roles: {
       title: string;
@@ -458,67 +380,6 @@ export interface Translation {
         detailSheetLead: string;
         accessDeniedTitle: string;
         accessDeniedBody: string;
-      };
-    };
-    permissions: {
-      title: string;
-      subtitle: string;
-      createPermissionTitle: string;
-      editPermissionTitle: string;
-      createForm: {
-        title: string;
-        lead: string;
-        editTitle: string;
-        editLead: string;
-        editSubmit: string;
-        editSubmitting: string;
-        editSuccessTitle: string;
-        editSuccessFallback: string;
-        editErrorTitle: string;
-        editErrorFallback: string;
-        name: string;
-        namePh: string;
-        submit: string;
-        submitting: string;
-        successTitle: string;
-        successFallback: string;
-        errorTitle: string;
-        errorFallback: string;
-        valRequired: string;
-        valMin: string;
-        backToList: string;
-      };
-      table: {
-        toolbarHint: string;
-        colId: string;
-        colName: string;
-        colRoles: string;
-        colActions: string;
-        createPermission: string;
-        rowsSelected: string;
-        rowsPerPage: string;
-        pageOf: string;
-        firstPage: string;
-        previousPage: string;
-        nextPage: string;
-        lastPage: string;
-        updating: string;
-        loadErrorTitle: string;
-        loadErrorBody: string;
-        edit: string;
-        delete: string;
-        more: string;
-        moreView: string;
-        deleteConfirmTitle: string;
-        deleteConfirmDescription: string;
-        deleteConfirmCancel: string;
-        deleteConfirmAction: string;
-        deleteInProgress: string;
-        deleteSuccessTitle: string;
-        deleteSuccessFallback: string;
-        deleteErrorTitle: string;
-        dismiss: string;
-        detailSheetLead: string;
       };
     };
   };
@@ -723,92 +584,6 @@ const translation: Translation = {
     subtitle: "Overview — add widgets and KPIs for your SEO workspace here.",
   },
   modules: {
-    companies: {
-      title: "Companies",
-      subtitle: "Manage companies in your workspace.",
-      createCompanyTitle: "Create company",
-      editCompanyTitle: "Edit company",
-      createForm: {
-        title: "New company",
-        lead: "Add the company profile, point of contact, and active status.",
-        editTitle: "Edit company",
-        editLead: "Update the company profile and save your changes.",
-        editSubmit: "Save changes",
-        editSubmitting: "Saving…",
-        editSuccessTitle: "Company updated",
-        editSuccessFallback: "The company was updated.",
-        editErrorTitle: "Could not update company",
-        editErrorFallback: "Something went wrong. Try again.",
-        companyName: "Company name",
-        companyNamePh: "Acme SEO Agency",
-        pocName: "Point of contact — name",
-        pocNamePh: "Jane Doe",
-        pocEmail: "Point of contact — email",
-        pocEmailPh: "jane@company.com",
-        statusLabel: "Active company",
-        statusDescription: "When off, the company is stored as inactive.",
-        submit: "Create company",
-        submitting: "Creating…",
-        successTitle: "Company created",
-        successFallback: "The company was saved.",
-        errorTitle: "Could not create company",
-        errorFallback: "Something went wrong. Try again.",
-        valRequired: "This field is required.",
-        valEmail: "Enter a valid email address.",
-        valCompanyMin: "Use at least 2 characters.",
-        backToList: "Back to companies",
-      },
-      table: {
-        toolbarHint: "Companies from your workspace API.",
-        colId: "ID",
-        colName: "Name",
-        colPocName: "POC name",
-        colEmail: "Email",
-        colStatus: "Status",
-        colRegistered: "Registered",
-        registeredPending: "Pending",
-        registeredApproved: "Approved",
-        approvePendingHint: "Click to approve this company",
-        approvePendingAria: "Approve {{name}}",
-        approveSuccessTitle: "Company approved",
-        approveSuccessFallback: "The company registration was approved.",
-        approveErrorTitle: "Could not approve company",
-        colProjects: "Projects",
-        seeProjects: "See projects",
-        colActions: "Actions",
-        createCompany: "Create company",
-        rowsSelected: "{{selected}} of {{total}} row(s) selected",
-        rowsPerPage: "Rows per page",
-        pageOf: "Page {{page}} of {{count}}",
-        firstPage: "First page",
-        previousPage: "Previous page",
-        nextPage: "Next page",
-        lastPage: "Last page",
-        updating: "Refreshing…",
-        loadErrorTitle: "Could not load companies",
-        loadErrorBody: "Check your connection and try again.",
-        edit: "Edit",
-        delete: "Delete",
-        more: "More actions",
-        moreView: "View details",
-        moreDuplicate: "Duplicate",
-        deleteConfirmTitle: "Delete this company?",
-        deleteConfirmDescription:
-          "This will remove “{{name}}” and related workspace data. This action cannot be undone.",
-        deleteConfirmCancel: "Cancel",
-        deleteConfirmAction: "Delete company",
-        deleteInProgress: "Deleting…",
-        deleteSuccessTitle: "Company deleted",
-        deleteSuccessFallback: "The company was removed.",
-        deleteErrorTitle: "Could not delete company",
-        dismiss: "Dismiss",
-        detailSheetLead: "Details from the current page — refresh the list after edits elsewhere.",
-        statusActive: "Active",
-        statusInactive: "Inactive",
-        accessDeniedTitle: "No access",
-        accessDeniedBody: "You don’t have permission to view companies. Ask an administrator if you need access.",
-      },
-    },
     users: {
       title: "Users",
       subtitle: "Manage team members and permissions.",
@@ -835,7 +610,6 @@ const translation: Translation = {
         toolbarHint: "Team members in your workspace.",
         colName: "Name",
         colEmail: "Email",
-        colCompany: "Company",
         colRoles: "Roles",
         colVerified: "Verified",
         verifiedYes: "Verified",
@@ -857,9 +631,8 @@ const translation: Translation = {
     },
     projects: {
       title: "Projects",
-      subtitle: "SEO projects linked to your companies.",
-      companyProjectsTitle: "Projects — {{company}}",
-      companyProjectsTitleFallback: "Projects — company #{{id}}",
+      subtitle: "Manage SEO projects in your workspace.",
+      listTitle: "Projects",
       createProjectTitle: "New project",
       editProjectTitle: "Edit project",
       createLead: "Capture the project brief, SEO goals, and access details in one place.",
@@ -931,8 +704,8 @@ const translation: Translation = {
         errorFallback: "Something went wrong. Try again.",
         editErrorTitle: "Could not update project",
         editErrorFallback: "Something went wrong. Try again.",
-        missingCompany:
-          "Your account isn't linked to a company yet. Ask an administrator to assign one before creating projects.",
+        missingProjectAccess:
+          "You are not a member of any project yet. Complete onboarding or ask a project owner to invite you.",
         valRequired: "This field is required.",
         valMin: "Use at least 2 characters.",
         valUrl: "Enter a valid URL (https://…).",
@@ -942,9 +715,7 @@ const translation: Translation = {
         remove: "Remove",
       },
       table: {
-        toolbarHint: "Projects from your workspace API.",
-        toolbarHintCompany: "Projects for {{company}}.",
-        toolbarHintCompanyId: "Projects for company #{{id}}.",
+        toolbarHint: "Projects in your workspace.",
         colId: "ID",
         colBusinessName: "Business name",
         colWebsite: "Website",
@@ -982,7 +753,6 @@ const translation: Translation = {
         accessDeniedBody: "You don't have permission to view projects. Ask an administrator if you need access.",
         yes: "Yes",
         no: "No",
-        colCompanyId: "Company ID",
         colIsB2b: "B2B",
         colIsB2c: "B2C",
         colIndustryNiche: "Industry niche",
@@ -1004,67 +774,17 @@ const translation: Translation = {
         colUpdatedAt: "Updated",
       },
     },
-    permissions: {
-      title: "Permissions",
-      subtitle: "Manage permissions and assign them to roles.",
-      createPermissionTitle: "Create permission",
-      editPermissionTitle: "Edit permission",
-      createForm: {
-        title: "New permission",
-        lead: "Add a permission name. Use a dotted convention like “module.resource.action”.",
-        editTitle: "Edit permission",
-        editLead: "Update the permission name and save your changes.",
-        editSubmit: "Save changes",
-        editSubmitting: "Saving…",
-        editSuccessTitle: "Permission updated",
-        editSuccessFallback: "The permission was updated.",
-        editErrorTitle: "Could not update permission",
-        editErrorFallback: "Something went wrong. Try again.",
-        name: "Permission name",
-        namePh: "permissions.view",
-        submit: "Create permission",
-        submitting: "Creating…",
-        successTitle: "Permission created",
-        successFallback: "The permission was saved.",
-        errorTitle: "Could not create permission",
-        errorFallback: "Something went wrong. Try again.",
-        valRequired: "This field is required.",
-        valMin: "Use at least 2 characters.",
-        backToList: "Back to permissions",
-      },
-      table: {
-        toolbarHint: "Permissions from your workspace API.",
-        colId: "ID",
-        colName: "Name",
-        colRoles: "Roles",
-        colActions: "Actions",
-        createPermission: "Create permission",
-        rowsSelected: "{{selected}} of {{total}} row(s) selected",
-        rowsPerPage: "Rows per page",
-        pageOf: "Page {{page}} of {{count}}",
-        firstPage: "First page",
-        previousPage: "Previous page",
-        nextPage: "Next page",
-        lastPage: "Last page",
-        updating: "Refreshing…",
-        loadErrorTitle: "Could not load permissions",
-        loadErrorBody: "Check your connection and try again.",
-        edit: "Edit",
-        delete: "Delete",
-        more: "More actions",
-        moreView: "View details",
-        deleteConfirmTitle: "Delete this permission?",
-        deleteConfirmDescription:
-          "This will remove “{{name}}” and detach it from related roles. This action cannot be undone.",
-        deleteConfirmCancel: "Cancel",
-        deleteConfirmAction: "Delete permission",
-        deleteInProgress: "Deleting…",
-        deleteSuccessTitle: "Permission deleted",
-        deleteSuccessFallback: "The permission was removed.",
-        deleteErrorTitle: "Could not delete permission",
-        dismiss: "Dismiss",
-        detailSheetLead: "Details from the current page — refresh the list after edits elsewhere.",
-      },
+    analytics: {
+      title: "Analytics",
+    },
+    seoActivities: {
+      title: "SEO Activities",
+    },
+    leads: {
+      title: "Leads",
+    },
+    reports: {
+      title: "Reports",
     },
     roles: {
       title: "Roles",

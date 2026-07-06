@@ -1,35 +1,16 @@
-/** Auth-only role → permission map. Full RBAC collections ship with Module 4. */
+import { allSuperAdminPermissions } from "@/lib/rbac/permission-catalog";
+import { PROJECT_OWNER_ROLE, PROJECT_USER_ROLE, SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
 
-export const SUPER_ADMIN_ROLE = "super_admin";
-export const COMPANY_ADMIN_ROLE = "company_admin";
+/**
+ * Platform RBAC for User.roles (super_admin only).
+ * Project roles (project_owner, project_user) live in the roles collection
+ * and are assigned per project via project_members — see doc/rbac.md.
+ */
 
-const ADMIN_PERMISSIONS = [
-  "admin.dashboard.view",
-  "admin.companies.view",
-  "admin.companies.create",
-  "admin.companies.update",
-  "admin.companies.delete",
-  "admin.users.view",
-  "admin.users.create",
-  "admin.roles.view",
-  "admin.roles.create",
-  "admin.roles.update",
-  "admin.roles.delete",
-  "admin.permissions.view",
-  "admin.permissions.create",
-  "admin.permissions.update",
-  "admin.permissions.delete",
-] as const;
-
-const COMPANY_ADMIN_PERMISSIONS = [
-  "company.dashboard.view",
-  "company.profile.view",
-  "company.profile.update",
-] as const;
+export { PROJECT_OWNER_ROLE, PROJECT_USER_ROLE, SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
 
 const ROLE_PERMISSIONS: Record<string, readonly string[]> = {
-  [SUPER_ADMIN_ROLE]: ADMIN_PERMISSIONS,
-  [COMPANY_ADMIN_ROLE]: COMPANY_ADMIN_PERMISSIONS,
+  [SUPER_ADMIN_ROLE]: allSuperAdminPermissions(),
 };
 
 export function permissionsForRoles(roles: string[]): string[] {
@@ -47,7 +28,6 @@ export function userHasRole(roles: string[], role: string): boolean {
 }
 
 export function homeApiPathForRoles(roles: string[]): string | null {
-  if (userHasRole(roles, SUPER_ADMIN_ROLE)) return "/api/v1/admin/dashboard";
-  if (userHasRole(roles, COMPANY_ADMIN_ROLE)) return "/api/v1/company/dashboard";
+  if (userHasRole(roles, SUPER_ADMIN_ROLE)) return "/api/v1/projects";
   return null;
 }

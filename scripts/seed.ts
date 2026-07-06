@@ -3,10 +3,14 @@ import { env } from "../lib/config/env";
 import { connectDb } from "../lib/db/mongoose";
 import { hashPassword } from "../lib/auth/password";
 import { SUPER_ADMIN_ROLE } from "../lib/auth/rbac";
+import { seedSystemRoles } from "../lib/rbac/seed-roles";
 import { User } from "../models";
 
 async function seed(): Promise<void> {
   await connectDb();
+
+  await seedSystemRoles();
+  console.log("Seeded system roles: project_owner, project_user");
 
   const email = env.superAdminEmail();
   const password = env.superAdminPassword();

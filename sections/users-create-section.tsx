@@ -46,8 +46,6 @@ export function UsersCreateSection() {
       await createMutation.mutateAsync({
         name: values.name.trim(),
         email: values.email.trim(),
-        company_id: authUser?.company_id ?? null,
-        company_name: null,
       });
       notify.success(t("createForm.successFallback"));
       reset();

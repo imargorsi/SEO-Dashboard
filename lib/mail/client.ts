@@ -81,41 +81,6 @@ export function passwordResetMailContent(resetUrl: string, expireMinutes: number
   };
 }
 
-export function companyRegistrationPendingMailContent(companyName: string, pocName: string) {
-  const app = env.appName();
-  return {
-    subject: `Your ${app} company registration was received`,
-    text: [
-      `Hello ${pocName},`,
-      "",
-      `We received your registration for ${companyName}.`,
-      "Your account is pending admin approval. You will receive another email once approved.",
-    ].join("\n"),
-  };
-}
-
-export function companyApprovedMailContent(companyName: string, pocName: string) {
-  const app = env.appName();
-  return {
-    subject: `Your ${app} company has been approved`,
-    text: [`Hello ${pocName},`, "", `Your company ${companyName} has been approved. You can now sign in.`].join("\n"),
-  };
-}
-
-export function pocWelcomeMailContent(companyName: string, pocName: string, plainPassword: string) {
-  const app = env.appName();
-  return {
-    subject: `Welcome to ${app}`,
-    text: [
-      `Hello ${pocName},`,
-      "",
-      `Your company ${companyName} has been created.`,
-      `Your temporary password is: ${plainPassword}`,
-      "Please sign in and change your password.",
-    ].join("\n"),
-  };
-}
-
 export function emailVerificationMailContent(verificationUrl: string) {
   const app = env.appName();
   return {

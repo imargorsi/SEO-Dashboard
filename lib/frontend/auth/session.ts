@@ -1,4 +1,5 @@
 import { normalizeAuthUser, type AuthUser } from "@/lib/frontend/auth/types";
+import { resolveDefaultAccessiblePath } from "@/lib/frontend/layout/route-access";
 
 const TOKEN_KEY = "auth_access_token";
 const USER_KEY = "auth_user";
@@ -53,7 +54,7 @@ export function persistAuthSession(token: string, user: AuthUser): void {
   setStoredAuthUser(user);
 }
 
-/** Default post-login route in the App Router UI. */
-export function resolvePostLoginPath(_user: AuthUser): string {
-  return "/dashboard";
+/** Default post-login route based on platform and project permissions. */
+export function resolvePostLoginPath(user: AuthUser, projectPermissions: string[] = []): string {
+  return resolveDefaultAccessiblePath(user.permissions, projectPermissions, user.roles);
 }

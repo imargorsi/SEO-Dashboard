@@ -6,4 +6,3 @@ build
 .env*
 public
 laravel-old
-old-next-frontend

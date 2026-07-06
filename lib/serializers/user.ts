@@ -22,7 +22,6 @@ export function serializeUser(user: UserDocument, options: UserSerializeOptions)
     email: user.email,
     profile_image: profileImageUrl(user.profileImage),
     email_verified_at: user.emailVerifiedAt,
-    company_id: null,
     roles: options.roles,
     permissions: options.permissions,
   };

@@ -1,0 +1,25 @@
+---
+description: Default title case for all user-facing copy and labels
+alwaysApply: true
+---
+
+# Title case (default)
+
+Unless the user gives different instructions, write **user-facing text in title case**: capitalize the first letter of **each word** in a sentence or phrase.
+
+Applies to:
+
+- i18n strings in `locales/`
+- Button, label, heading, menu, and toast copy
+- Empty states, errors, and success messages shown in the UI
+
+Examples:
+
+- ✅ `Your Email Is Not Verified`
+- ✅ `Save Password`
+- ❌ `Your email is not verified`
+- ❌ `Save password`
+
+**Code:** toast/feedback messages go through `notify.*()` in `lib/frontend/feedback/notify.ts`, which applies `capitalizeFeedbackText()` from `lib/frontend/feedback/format.ts`. When adding new i18n keys or static UI strings, author them in title case at the source.
+
+Sentence case or lowercase is fine only when the user explicitly asks for it, or when matching an external API message verbatim.

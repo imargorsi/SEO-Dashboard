@@ -5,7 +5,7 @@ import { verifyPassword } from "@/lib/auth/password";
 import { clearLoginAttempts, clientIp, ensureLoginNotRateLimited, recordLoginFailure } from "@/lib/auth/rate-limit";
 import { createAccessToken } from "@/lib/auth/tokens";
 import { serializeUser } from "@/lib/serializers/user";
-import { COMPANY_STATUS, Company, User, type UserDocument } from "@/models";
+import { User, type UserDocument } from "@/models";
 import { NextResponse } from "next/server";
 
 export async function authenticateLogin(
@@ -31,38 +31,12 @@ export async function authenticateLogin(
     });
   }
 
-  if (user.companyId) {
-    const company = await Company.findById(user.companyId);
-    if (company) {
-      if (company.isPending()) {
-        recordLoginFailure(normalizedEmail, ip);
-        return ApiResponse.validation(authMessages.pendingCompany, {
-          email: [authMessages.pendingCompany],
-        });
-      }
-
-      if (company.status === COMPANY_STATUS.REJECTED) {
-        recordLoginFailure(normalizedEmail, ip);
-        return ApiResponse.validation(authMessages.rejectedCompany, {
-          email: [authMessages.rejectedCompany],
-        });
-      }
-
-      if (!company.isActive) {
-        recordLoginFailure(normalizedEmail, ip);
-        return ApiResponse.validation(authMessages.disabledCompany, {
-          email: [authMessages.disabledCompany],
-        });
-      }
-    }
-  }
-
   clearLoginAttempts(normalizedEmail, ip);
   return { user };
 }
 
 export async function buildLoginResponse(user: UserDocument): Promise<NextResponse> {
-  const authData = await loadUserAuthData(user._id);
+  const authData = loadUserAuthData(user);
   const token = await createAccessToken(user._id, "api");
 
   return ApiResponse.success(

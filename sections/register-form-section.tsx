@@ -3,9 +3,7 @@
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
-import { IoAlertCircle, IoCheckmarkCircle } from "react-icons/io5";
 import { SignInAuthCardShell } from "@/components/sign-in-auth-card-shell";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Heading } from "@/components/heading";
 import { Input } from "@/components/input";
 import { Paragraph } from "@/components/paragraph";
@@ -15,16 +13,11 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { RegisterValues } from "@/sections/register.types";
 
-export type RegisterAuthAlert =
-  | { variant: "default"; title: string; description?: string }
-  | { variant: "destructive"; title: string; description?: string };
-
 type RegisterFormSectionProps = {
   register: UseFormRegister<RegisterValues>;
   errors: FieldErrors<RegisterValues>;
   isSubmitting: boolean;
   onValidSubmit: () => void;
-  authAlert?: RegisterAuthAlert | null;
 };
 
 export function RegisterFormSection({
@@ -32,7 +25,6 @@ export function RegisterFormSection({
   errors,
   isSubmitting,
   onValidSubmit,
-  authAlert = null,
 }: RegisterFormSectionProps) {
   const { t } = useTranslation("translation", { keyPrefix: "auth.register" });
 
@@ -50,18 +42,6 @@ export function RegisterFormSection({
         {t("title")}
       </Heading>
       <Paragraph className="mt-2 text-sm leading-relaxed">{t("subtitle")}</Paragraph>
-
-      {authAlert ? (
-        <Alert variant={authAlert.variant} className="mt-5">
-          {authAlert.variant === "destructive" ? (
-            <IoAlertCircle className="size-4 shrink-0" aria-hidden />
-          ) : (
-            <IoCheckmarkCircle className="size-4 shrink-0" aria-hidden />
-          )}
-          <AlertTitle>{authAlert.title}</AlertTitle>
-          {authAlert.description ? <AlertDescription>{authAlert.description}</AlertDescription> : null}
-        </Alert>
-      ) : null}
 
       <form className="mt-8 flex flex-col gap-5" onSubmit={onValidSubmit} noValidate>
         <Input

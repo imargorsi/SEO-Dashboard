@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { hashPassword } from "@/lib/auth/password";
 import { createAccessToken, findAccessToken, revokeAccessToken } from "@/lib/auth/tokens";
-import { assignRoleToUser, getUserPermissionNames, getUserRoleNames } from "@/lib/rbac/permissions";
+import { loadUserAuthData } from "@/lib/auth/guards";
+import { COMPANY_ADMIN_ROLE, SUPER_ADMIN_ROLE } from "@/lib/auth/rbac";
 import { authenticateLogin, buildLoginResponse } from "@/lib/auth/login";
 import { sendPasswordResetLink, resetPassword } from "@/lib/auth/password-reset";
-import { companyProvisioner } from "@/lib/services/company-provisioner";
-import { COMPANY_STATUS, User } from "@/models";
+import { User } from "@/models";
 import { createSignedVerificationUrl, hasValidSignature } from "@/lib/auth/signed-url";
 
 function jsonRequest(url: string, init?: RequestInit): Request {
@@ -22,8 +22,8 @@ describe("Auth API parity", () => {
       email: "admin@example.com",
       password: await hashPassword("password"),
       emailVerifiedAt: new Date(),
+      roles: [SUPER_ADMIN_ROLE],
     });
-    await assignRoleToUser(user._id, "super_admin");
 
     const result = await authenticateLogin("admin@example.com", "password", jsonRequest("http://localhost/login"));
     expect(result).not.toBeInstanceOf(Response);
@@ -37,7 +37,8 @@ describe("Auth API parity", () => {
     expect(body.data.token_type).toBe("Bearer");
     expect(body.data.token).toBeTruthy();
     expect(body.data.user.email).toBe("admin@example.com");
-    expect(body.data.user.roles).toContain("super_admin");
+    expect(body.data.user.roles).toContain(SUPER_ADMIN_ROLE);
+    expect(body.data.user.permissions).toContain("admin.dashboard.view");
     expect(body.data.user.home_api_path).toBeUndefined();
   });
 
@@ -70,7 +71,7 @@ describe("Auth API parity", () => {
     expect(await findAccessToken(token)).toBeNull();
   });
 
-  it("registers user without company and sends verification", async () => {
+  it("registers user with empty roles and sends verification", async () => {
     const { registerUser, buildRegisterResponse } = await import("@/lib/auth/register");
 
     const result = await registerUser({
@@ -82,7 +83,7 @@ describe("Auth API parity", () => {
     expect(result).not.toBeInstanceOf(Response);
     if (result instanceof Response) return;
 
-    expect(result.user.companyId).toBeNull();
+    expect(result.user.roles).toEqual([]);
     expect(result.user.emailVerifiedAt).toBeNull();
     expect(result.user.name).toBe("Pat Example");
 
@@ -95,32 +96,6 @@ describe("Auth API parity", () => {
 
     const login = await authenticateLogin("pat@example.com", "Password1!", jsonRequest("http://localhost/login"));
     expect(login).not.toBeInstanceOf(Response);
-  });
-
-  it("company provisioner still blocks login for pending company users", async () => {
-    const company = await companyProvisioner.provision({
-      company_name: "Pending Co",
-      poc_name: "Pat",
-      poc_email: "pat@pending.example.com",
-      password: "Password1!",
-      status: COMPANY_STATUS.PENDING,
-      is_active: false,
-    });
-
-    expect(company.status).toBe("pending");
-    expect(company.isActive).toBe(false);
-
-    const poc = await User.findOne({ email: "pat@pending.example.com" });
-    expect(poc).not.toBeNull();
-    expect(await getUserRoleNames(poc!._id)).toContain("company_admin");
-    expect(poc!.emailVerifiedAt).toBeNull();
-
-    const login = await authenticateLogin(
-      "pat@pending.example.com",
-      "Password1!",
-      jsonRequest("http://localhost/login")
-    );
-    expect(login).toBeInstanceOf(Response);
   });
 
   it("password reset flow updates password and revokes tokens", async () => {
@@ -138,7 +113,6 @@ describe("Auth API parity", () => {
     const record = await import("@/models").then((m) => m.PasswordResetToken.findOne({ email: "reset@example.com" }));
     expect(record).not.toBeNull();
 
-    // Extract token from mail log isn't possible; create known token path via broker internals
     const crypto = await import("crypto");
     const plain = crypto.randomBytes(32).toString("hex");
     record!.tokenHash = await hashPassword(plain);
@@ -186,17 +160,124 @@ describe("Auth API parity", () => {
     expect(fresh!.emailVerifiedAt).not.toBeNull();
   });
 
-  it("assigns permissions via roles", async () => {
+  it("derives permissions from embedded user roles", async () => {
     const user = await User.create({
       name: "Company Admin",
       email: "ca@example.com",
       password: await hashPassword("password"),
       emailVerifiedAt: new Date(),
+      roles: [COMPANY_ADMIN_ROLE],
     });
-    const { seedRolesAndPermissions } = await import("@/lib/rbac/permissions");
-    await seedRolesAndPermissions();
-    await assignRoleToUser(user._id, "company_admin");
-    const permissions = await getUserPermissionNames(user._id);
-    expect(permissions).toContain("company.dashboard.view");
+
+    const authData = loadUserAuthData(user);
+    expect(authData.roles).toContain(COMPANY_ADMIN_ROLE);
+    expect(authData.permissions).toContain("company.dashboard.view");
+  });
+
+  it("change password updates hash when current password is correct", async () => {
+    const { verifyPassword } = await import("@/lib/auth/password");
+    const { changePassword } = await import("@/lib/auth/change-password");
+
+    const user = await User.create({
+      name: "Password User",
+      email: "changepw@example.com",
+      password: await hashPassword("old-password"),
+      emailVerifiedAt: new Date(),
+    });
+
+    const response = await changePassword(user, {
+      current_password: "old-password",
+      new_password: "New-password-1",
+    });
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.success).toBe(true);
+    expect(body.message).toBe("Your password has been changed.");
+
+    const fresh = await User.findById(user._id);
+    expect(await verifyPassword("New-password-1", fresh!.password)).toBe(true);
+    expect(await verifyPassword("old-password", fresh!.password)).toBe(false);
+  });
+
+  it("change password rejects wrong current password", async () => {
+    const { changePassword } = await import("@/lib/auth/change-password");
+
+    const user = await User.create({
+      name: "Password User",
+      email: "wrongpw@example.com",
+      password: await hashPassword("old-password"),
+      emailVerifiedAt: new Date(),
+    });
+
+    const response = await changePassword(user, {
+      current_password: "wrong-password",
+      new_password: "New-password-1",
+    });
+    const body = await response.json();
+
+    expect(response.status).toBe(422);
+    expect(body.success).toBe(false);
+    expect(body.errors.current_password).toBeDefined();
+  });
+
+  it("updates profile name", async () => {
+    const { updateProfile } = await import("@/lib/auth/update-profile");
+
+    const user = await User.create({
+      name: "Before Name",
+      email: "profile@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+    });
+
+    const response = await updateProfile(user, { name: "After Name" });
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.success).toBe(true);
+    expect(body.data.name).toBe("After Name");
+
+    const fresh = await User.findById(user._id);
+    expect(fresh?.name).toBe("After Name");
+  });
+
+  it("uploads and stores profile image file", async () => {
+    const { updateProfile } = await import("@/lib/auth/update-profile");
+
+    const user = await User.create({
+      name: "Upload User",
+      email: "photo-file@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+    });
+
+    const file = new File([Uint8Array.from([255, 216, 255])], "avatar.jpg", { type: "image/jpeg" });
+    const response = await updateProfile(user, { profile_image_file: file });
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.data.profile_image).toContain("/storage/profile-images/");
+
+    const fresh = await User.findById(user._id);
+    expect(fresh?.profileImage).toMatch(/^profile-images\//);
+  });
+
+  it("rejects empty profile update", async () => {
+    const { updateProfile } = await import("@/lib/auth/update-profile");
+
+    const user = await User.create({
+      name: "Empty Update User",
+      email: "empty-profile@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+    });
+
+    const response = await updateProfile(user, {});
+    const body = await response.json();
+
+    expect(response.status).toBe(422);
+    expect(body.success).toBe(false);
+    expect(body.errors.profile).toBeDefined();
   });
 });

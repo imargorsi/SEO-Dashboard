@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-import { EmailVerificationBanner } from "@/components/auth/email-verification-banner";
 import { DashboardSidebar } from "@/components/layout/dashboard-sidebar";
 import { DashboardTopBar } from "@/components/layout/dashboard-top-bar";
 import { DashboardBreadcrumbProvider } from "@/context/dashboard-breadcrumb-context";
@@ -31,7 +30,6 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
               </div>
             ) : null}
             <div className="relative flex min-w-0 flex-1 flex-col">
-              <EmailVerificationBanner />
               <div className="dashboard-enter-item dashboard-enter-topbar">
                 <DashboardTopBar />
               </div>

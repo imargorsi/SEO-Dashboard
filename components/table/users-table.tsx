@@ -1,16 +1,16 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { IoAdd, IoAlertCircle, IoMail } from "react-icons/io5";
+import { IoAdd, IoMail } from "react-icons/io5";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { DataTable, DataTableCellPill, type DataTableColumn } from "@/components/table/data-table";
 import { useUsersQuery } from "@/features/users/users.api";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
 import { userCanCreate, userCanView } from "@/lib/frontend/users/acl";
+import { notify } from "@/lib/frontend/feedback/notify";
 
 export type UserTableRow = {
   id: string;
@@ -24,7 +24,7 @@ export type UserTableRow = {
 export function UsersTable() {
   const { t } = useTranslation("translation", { keyPrefix: "modules.users" });
   const router = useRouter();
-  const { data: authUser } = useAuthUserQuery();
+  const { data: authUser, isLoading: isAuthLoading } = useAuthUserQuery();
 
   const canView = useMemo(() => userCanView(authUser?.permissions), [authUser]);
   const canCreate = useMemo(() => userCanCreate(authUser?.permissions), [authUser]);
@@ -50,6 +50,21 @@ export function UsersTable() {
   }, [data]);
 
   const totalRows = data?.pagination.total ?? 0;
+
+  const accessDeniedNotified = useRef(false);
+  const loadErrorNotified = useRef(false);
+
+  useEffect(() => {
+    if (isAuthLoading || canView || accessDeniedNotified.current) return;
+    accessDeniedNotified.current = true;
+    notify.error(t("table.accessDeniedBody"));
+  }, [canView, isAuthLoading, t]);
+
+  useEffect(() => {
+    if (!error || loadErrorNotified.current) return;
+    loadErrorNotified.current = true;
+    notify.error(error instanceof Error ? error.message : t("table.loadErrorBody"));
+  }, [error, t]);
 
   const columns = useMemo<DataTableColumn<UserTableRow>[]>(
     () => [
@@ -109,24 +124,11 @@ export function UsersTable() {
   );
 
   if (!canView) {
-    return (
-      <Alert variant="destructive">
-        <IoAlertCircle className="size-4 shrink-0" aria-hidden />
-        <AlertTitle>{t("table.accessDeniedTitle")}</AlertTitle>
-        <AlertDescription>{t("table.accessDeniedBody")}</AlertDescription>
-      </Alert>
-    );
+    return null;
   }
 
   return (
     <div className="flex w-full min-w-0 flex-col gap-3">
-      {error ? (
-        <Alert variant="destructive">
-          <IoAlertCircle className="size-4" aria-hidden />
-          <AlertTitle>{t("table.loadErrorTitle")}</AlertTitle>
-          <AlertDescription>{error instanceof Error ? error.message : t("table.loadErrorBody")}</AlertDescription>
-        </Alert>
-      ) : null}
       <DataTable
         columns={columns}
         data={rows}

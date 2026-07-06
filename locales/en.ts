@@ -24,6 +24,8 @@ export interface Translation {
   breadcrumb: {
     /** First crumb linking to `/dashboard` on nested pages */
     root: string;
+    new: string;
+    edit: string;
   };
   table: {
     emptyTitle: string;
@@ -43,6 +45,9 @@ export interface Translation {
     logOut: string;
     fallbackName: string;
     noEmail: string;
+    emailVerified: string;
+    emailNotVerified: string;
+    resendVerification: string;
   };
   settings: {
     title: string;
@@ -91,6 +96,7 @@ export interface Translation {
       photoPick: string;
       photoChange: string;
       photoClear: string;
+      noChanges: string;
       sectionReadonly: string;
       emailLabel: string;
       rolesHeading: string;
@@ -630,6 +636,8 @@ const translation: Translation = {
   },
   breadcrumb: {
     root: "Dashboard",
+    new: "New",
+    edit: "Edit",
   },
   table: {
     emptyTitle: "No records found",
@@ -649,6 +657,9 @@ const translation: Translation = {
     logOut: "Log out",
     fallbackName: "User",
     noEmail: "No email on file",
+    emailVerified: "Your Email is Verified",
+    emailNotVerified: "Your Email is not Verified",
+    resendVerification: "Tap to resend verification email",
   },
   settings: {
     title: "Settings",
@@ -656,47 +667,48 @@ const translation: Translation = {
   },
   profile: {
     changePassword: {
-      title: "Change password",
-      lead: "Update your password. Use a strong, unique password you don't reuse elsewhere.",
-      currentPassword: "Current password",
-      currentPasswordPh: "Enter your current password",
-      newPassword: "New password",
-      newPasswordPh: "At least 8 characters",
-      confirmPassword: "Confirm new password",
-      confirmPasswordPh: "Re-enter your new password",
-      submit: "Update password",
+      title: "Change Password",
+      lead: "Update Your Password. Use A Strong, Unique Password You Don't Reuse Elsewhere.",
+      currentPassword: "Current Password",
+      currentPasswordPh: "Enter Your Current Password",
+      newPassword: "New Password",
+      newPasswordPh: "At Least 8 Characters",
+      confirmPassword: "Confirm New Password",
+      confirmPasswordPh: "Re-Enter Your New Password",
+      submit: "Update Password",
       submitting: "Updating…",
-      successTitle: "Password updated",
-      successFallback: "Your password has been changed.",
-      errorTitle: "Could not update password",
-      errorFallback: "Something went wrong. Try again.",
-      valRequired: "This field is required.",
-      valMin: "Use at least 8 characters.",
-      valMatch: "Passwords do not match.",
+      successTitle: "Password Updated",
+      successFallback: "Your Password Has Been Changed.",
+      errorTitle: "Could Not Update Password",
+      errorFallback: "Something Went Wrong. Try Again.",
+      valRequired: "This Field Is Required.",
+      valMin: "Use At Least 8 Characters.",
+      valMatch: "Passwords Do Not Match.",
       cancel: "Cancel",
     },
     edit: {
-      breadcrumbTitle: "Edit profile",
-      title: "Your profile",
-      lead: "Update your display name and photo. Other account details are read-only.",
-      loading: "Loading profile…",
-      loadErrorTitle: "Could not load profile",
-      loadErrorBody: "Check your connection and try again.",
+      breadcrumbTitle: "Edit Profile",
+      title: "Your Profile",
+      lead: "Update Your Display Name And Photo. Email Cannot Be Changed Here.",
+      loading: "Loading Profile…",
+      loadErrorTitle: "Could Not Load Profile",
+      loadErrorBody: "Check Your Connection And Try Again.",
       saving: "Saving…",
-      save: "Save changes",
-      successTitle: "Profile updated",
-      successFallback: "Your changes were saved.",
-      errorTitle: "Could not save profile",
-      errorFallback: "Something went wrong. Try again.",
-      nameLabel: "Display name",
-      namePh: "Your name",
-      valRequired: "This field is required.",
-      valMin: "Use at least 2 characters.",
-      photoLabel: "Profile photo",
-      photoHint: "PNG or JPG, a few MB max.",
-      photoPick: "Upload photo",
-      photoChange: "Change photo",
-      photoClear: "Remove new photo",
+      save: "Save Changes",
+      successTitle: "Profile Updated",
+      successFallback: "Your Changes Were Saved.",
+      errorTitle: "Could Not Save Profile",
+      errorFallback: "Something Went Wrong. Try Again.",
+      nameLabel: "Display Name",
+      namePh: "Your Name",
+      valRequired: "This Field Is Required.",
+      valMin: "Use At Least 2 Characters.",
+      photoLabel: "Profile Photo",
+      photoHint: "JPG, PNG, WEBP, Or GIF. Max 5 MB.",
+      photoPick: "Upload Photo",
+      photoChange: "Change Photo",
+      photoClear: "Remove New Photo",
+      noChanges: "No Profile Changes To Save.",
       sectionReadonly: "Account details",
       emailLabel: "Email",
       rolesHeading: "Roles",

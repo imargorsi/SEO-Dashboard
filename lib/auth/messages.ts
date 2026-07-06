@@ -1,16 +1,12 @@
 export const authMessages = {
   failed: "These credentials do not match our records.",
   throttle: (seconds: number) => `Too many login attempts. Please try again in ${seconds} seconds.`,
-  pendingCompany: "Your company registration is pending admin approval.",
-  rejectedCompany: "This company registration was not approved.",
-  disabledCompany: "This company account is disabled.",
   authenticated: "Authenticated.",
   loggedOut: "Logged out.",
   unauthenticated: "Unauthenticated.",
   unverifiedEmail: "Your email address is not verified.",
   alreadyVerified: "Already verified.",
   verificationSent: "Verification link sent.",
-  registrationReceived: "Registration received. Your account is pending admin approval.",
   registrationSuccess:
     "Account created. Check your email for a verification link, then sign in to continue.",
   registrationUnableToSend: "We could not send the verification email. Please try again later.",
@@ -23,5 +19,8 @@ export const authMessages = {
   passwordResetSuccess: "Your password has been reset. You can sign in with your new password.",
   passwordResetInvalidToken: "This password reset link is invalid or has expired. Request a new link and try again.",
   passwordResetUnable: "We could not reset your password. Please request a new reset link and try again.",
-  onlyPendingCanApprove: "Only pending companies can be approved.",
+  changePasswordSuccess: "Your password has been changed.",
+  passwordChangeInvalidCurrentPassword: "The current password is incorrect.",
+  profileUpdateSuccess: "Profile updated.",
+  profileEmptyUpdate: "Provide a name or profile image to update.",
 };

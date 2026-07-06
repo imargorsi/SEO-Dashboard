@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "shadcn/tailwind.css";
+@import "sonner/dist/styles.css";
 @import "@fontsource-variable/geist";
 
 /* Class-based dark mode for Tailwind `dark:` utilities */
@@ -448,4 +449,37 @@ code {
     opacity: 1;
     transform: none;
   }
+}
+
+/* Compact pill toasts */
+[data-sonner-toaster].app-toaster [data-sonner-toast][data-styled="true"] {
+  width: max-content;
+  max-width: min(calc(100vw - 2rem), 24rem);
+  padding: 0.4375rem 0.875rem;
+  border-radius: 9999px;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  flex-wrap: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+[data-sonner-toaster].app-toaster [data-sonner-toast] [data-content] {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+[data-sonner-toaster].app-toaster [data-sonner-toast] [data-title] {
+  line-height: 1.25;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+[data-sonner-toaster].app-toaster [data-sonner-toast] [data-icon] {
+  height: 0.875rem;
+  width: 0.875rem;
+  flex-shrink: 0;
 }

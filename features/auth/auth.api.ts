@@ -3,7 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { baseQuery } from "@/lib/frontend/api/base";
 import { ApiError } from "@/lib/frontend/api/errors";
-import { clearAuthSession, getAccessToken, getStoredAuthUser, persistAuthSession } from "@/lib/frontend/auth/session";
+import { clearAuthSession, getAccessToken, getStoredAuthUser, persistAuthSession, setStoredAuthUser } from "@/lib/frontend/auth/session";
 import {
   normalizeAuthUser,
   type AuthMessageResult,
@@ -14,6 +14,9 @@ import {
   type LoginResult,
   type RegisterRequest,
   type ResetPasswordRequest,
+  type ChangePasswordRequest,
+  type UpdateProfileRequest,
+  type UpdateProfileResult,
 } from "@/lib/frontend/auth/types";
 
 const authApi = {
@@ -89,6 +92,25 @@ async function resendEmailVerification(): Promise<AuthMessageResult> {
   return { message: envelope.message };
 }
 
+async function changePassword(input: ChangePasswordRequest): Promise<AuthMessageResult> {
+  const envelope = await baseQuery.put<null>("me/password", input);
+  return { message: envelope.message };
+}
+
+async function updateProfile(input: UpdateProfileRequest): Promise<UpdateProfileResult> {
+  const formData = new FormData();
+  if (input.name !== undefined) formData.append("name", input.name);
+  if (input.profile_image_file) formData.append("profile_image", input.profile_image_file);
+
+  const envelope = await baseQuery.post<AuthUser>("me/profile", formData);
+  const user = normalizeAuthUser(envelope.data);
+  if (!user) {
+    throw new ApiError("Invalid user payload", 500, {}, envelope);
+  }
+
+  return { user, message: envelope.message };
+}
+
 export function useAuthUserQuery(options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: authKeys.user(),
@@ -132,6 +154,22 @@ export function useForgotPasswordMutation() {
 
 export function useResetPasswordMutation() {
   return useMutation({ mutationFn: submitPasswordReset });
+}
+
+export function useChangePasswordMutation() {
+  return useMutation({ mutationFn: changePassword });
+}
+
+export function useUpdateProfileMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateProfile,
+    onSuccess: (result) => {
+      setStoredAuthUser(result.user);
+      queryClient.setQueryData(authKeys.user(), result.user);
+    },
+  });
 }
 
 export function useResendEmailVerificationMutation() {

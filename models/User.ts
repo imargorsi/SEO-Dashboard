@@ -1,13 +1,13 @@
-import mongoose, { Schema, type InferSchemaType, type Model, type Types } from "mongoose";
+import mongoose, { Schema, type InferSchemaType, type Model } from "mongoose";
 
 const userSchema = new Schema(
   {
-    companyId: { type: Schema.Types.ObjectId, ref: "Company", default: null },
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true, lowercase: true },
     profileImage: { type: String, default: null },
     password: { type: String, required: true },
     emailVerifiedAt: { type: Date, default: null },
+    roles: { type: [String], default: [] },
   },
   { timestamps: true }
 );
@@ -26,7 +26,7 @@ userSchema.methods.getEmailForPasswordReset = function getEmailForPasswordReset(
 
 export type UserDocument = InferSchemaType<typeof userSchema> &
   mongoose.Document & {
-    companyId: Types.ObjectId | null;
+    roles: string[];
     hasVerifiedEmail(): boolean;
     getEmailForVerification(): string;
     getEmailForPasswordReset(): string;

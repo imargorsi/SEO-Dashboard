@@ -25,6 +25,8 @@ const translation: Translation = {
   },
   breadcrumb: {
     root: "لوحة التحكم",
+    new: "جديد",
+    edit: "تعديل",
   },
   table: {
     emptyTitle: "لا توجد سجلات",
@@ -44,6 +46,9 @@ const translation: Translation = {
     logOut: "تسجيل الخروج",
     fallbackName: "مستخدم",
     noEmail: "لا يوجد بريد محفوظ",
+    emailVerified: "تم التحقق من بريدك الإلكتروني",
+    emailNotVerified: "لم يتم التحقق من بريدك الإلكتروني",
+    resendVerification: "اضغط لإعادة إرسال بريد التحقق",
   },
   settings: {
     title: "الإعدادات",
@@ -92,6 +97,7 @@ const translation: Translation = {
       photoPick: "رفع صورة",
       photoChange: "تغيير الصورة",
       photoClear: "إلغاء الصورة الجديدة",
+      noChanges: "لا توجد تغييرات على الملف الشخصي للحفظ.",
       sectionReadonly: "تفاصيل الحساب",
       emailLabel: "البريد الإلكتروني",
       rolesHeading: "الأدوار",

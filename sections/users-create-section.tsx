@@ -1,21 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { IoAlertCircle, IoCheckmarkCircle } from "react-icons/io5";
 
 import { FormTextField } from "@/components/form/form-text-field";
-import { DashboardModuleBreadcrumbSection } from "@/components/layout/dashboard-module-breadcrumb-section";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { useCreateUserMutation } from "@/features/users/users.api";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
 import { userCanCreate } from "@/lib/frontend/users/acl";
 import { ApiError } from "@/lib/frontend/api/errors";
+import { notify } from "@/lib/frontend/feedback/notify";
+
 type CreateUserFormValues = {
   name: string;
   email: string;
@@ -25,13 +24,7 @@ export function UsersCreateSection() {
   const router = useRouter();
   const { data: authUser } = useAuthUserQuery();
   const { t } = useTranslation("translation", { keyPrefix: "modules.users" });
-  const { t: tCrumb } = useTranslation("translation", { keyPrefix: "breadcrumb" });
   const createMutation = useCreateUserMutation();
-  const [formAlert, setFormAlert] = useState<{
-    variant: "default" | "destructive";
-    title: string;
-    description?: string;
-  } | null>(null);
 
   const canCreate = useMemo(() => userCanCreate(authUser?.permissions), [authUser]);
 
@@ -49,7 +42,6 @@ export function UsersCreateSection() {
   if (!canCreate) return null;
 
   async function onSubmit(values: CreateUserFormValues) {
-    setFormAlert(null);
     try {
       await createMutation.mutateAsync({
         name: values.name.trim(),
@@ -57,48 +49,21 @@ export function UsersCreateSection() {
         company_id: authUser?.company_id ?? null,
         company_name: null,
       });
-      setFormAlert({
-        variant: "default",
-        title: t("createForm.successTitle"),
-        description: t("createForm.successFallback"),
-      });
+      notify.success(t("createForm.successFallback"));
       reset();
     } catch (e) {
-      setFormAlert({
-        variant: "destructive",
-        title: t("createForm.errorTitle"),
-        description: ApiError.messageFrom(e, t("createForm.errorFallback")),
-      });
+      notify.error(ApiError.messageFrom(e, t("createForm.errorFallback")));
     }
   }
 
   return (
     <div className="w-full min-w-0">
-      <DashboardModuleBreadcrumbSection
-        items={[
-          { id: "root", label: tCrumb("root"), href: "/dashboard" },
-          { id: "users", label: t("title"), href: "/users" },
-          { id: "create-user", label: t("createUserTitle") },
-        ]}
-      />
       <div className="px-4 py-6 sm:px-6">
         <div className="mx-auto w-full max-w-xl rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-6 shadow-[var(--shadow)] sm:p-8">
           <div className="mb-6 space-y-1">
             <h2 className="text-lg font-semibold text-[var(--text-h)]">{t("createForm.title")}</h2>
             <p className="text-sm text-[var(--text-muted)]">{t("createForm.lead")}</p>
           </div>
-
-          {formAlert ? (
-            <Alert variant={formAlert.variant} className="mb-6">
-              {formAlert.variant === "destructive" ? (
-                <IoAlertCircle className="size-4 shrink-0" aria-hidden />
-              ) : (
-                <IoCheckmarkCircle className="size-4 shrink-0 text-emerald-600 dark:text-emerald-400" aria-hidden />
-              )}
-              <AlertTitle>{formAlert.title}</AlertTitle>
-              {formAlert.description ? <AlertDescription>{formAlert.description}</AlertDescription> : null}
-            </Alert>
-          ) : null}
 
           <form className="space-y-5" onSubmit={handleSubmit(onSubmit)} noValidate>
             <FormTextField

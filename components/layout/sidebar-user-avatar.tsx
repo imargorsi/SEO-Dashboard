@@ -1,9 +1,11 @@
-import { IoCheckmark, IoPerson } from "react-icons/io5";
+import { IoAlertCircle, IoCheckmark, IoPerson } from "react-icons/io5";
 import { cn } from "@/lib/utils";
 
 type SidebarUserAvatarProps = {
   name: string;
+  imageUrl?: string | null;
   verified?: boolean;
+  showVerificationBadge?: boolean;
   size?: "sm" | "md";
   className?: string;
 };
@@ -17,17 +19,18 @@ function initialsFromName(name: string): string {
 
 export function SidebarUserAvatar({
   name,
+  imageUrl,
   verified = false,
+  showVerificationBadge = false,
   size = "md",
   className,
 }: SidebarUserAvatarProps) {
   const initials = initialsFromName(name);
-
   const box =
     size === "sm" ? "size-8 rounded-md text-[0.5625rem]" : "size-10 rounded-lg text-[0.6875rem]";
   const userIcon = size === "sm" ? "size-4" : "size-5";
   const badgeWrap = size === "sm" ? "size-3.5 -end-px -bottom-px" : "size-4 -end-0.5 -bottom-0.5";
-  const checkIcon = size === "sm" ? "size-2" : "size-2.5";
+  const badgeIcon = size === "sm" ? "size-2" : "size-2.5";
 
   return (
     <div
@@ -38,21 +41,35 @@ export function SidebarUserAvatar({
       )}
       aria-hidden
     >
-      {initials.length > 0 && initials !== "?" ? (
+      {imageUrl ? (
+        <img src={imageUrl} alt="" className="size-full object-cover" />
+      ) : initials.length > 0 && initials !== "?" ? (
         <span className="select-none">{initials}</span>
       ) : (
         <IoPerson className={cn(userIcon, "opacity-90")} aria-hidden />
       )}
-      {verified ? (
-        <span
-          className={cn(
-            "absolute flex items-center justify-center rounded-full border border-[var(--social-bg)] bg-[var(--bg-elevated)] text-[var(--text-h)]",
-            badgeWrap
-          )}
-          aria-hidden
-        >
-          <IoCheckmark className={cn(checkIcon, "stroke-[2.5]")} aria-hidden />
-        </span>
+      {showVerificationBadge ? (
+        verified ? (
+          <span
+            className={cn(
+              "absolute flex items-center justify-center rounded-full border border-[var(--social-bg)] bg-[var(--bg-elevated)] text-emerald-600 dark:text-emerald-400",
+              badgeWrap
+            )}
+            aria-hidden
+          >
+            <IoCheckmark className={cn(badgeIcon, "stroke-[2.5]")} aria-hidden />
+          </span>
+        ) : (
+          <span
+            className={cn(
+              "absolute flex items-center justify-center rounded-full border border-[var(--social-bg)] bg-[var(--bg-elevated)] text-amber-600 dark:text-amber-400",
+              badgeWrap
+            )}
+            aria-hidden
+          >
+            <IoAlertCircle className={badgeIcon} aria-hidden />
+          </span>
+        )
       ) : null}
     </div>
   );

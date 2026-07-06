@@ -27,8 +27,8 @@ export async function registerUser(input: RegisterUserInput): Promise<{ user: Us
     name: input.name.trim(),
     email,
     password: await hashPassword(input.password),
-    companyId: null,
     emailVerifiedAt: null,
+    roles: [],
   });
 
   try {
@@ -43,7 +43,7 @@ export async function registerUser(input: RegisterUserInput): Promise<{ user: Us
 }
 
 export async function buildRegisterResponse(user: UserDocument): Promise<NextResponse> {
-  const authData = await loadUserAuthData(user._id);
+  const authData = loadUserAuthData(user);
 
   return ApiResponse.success(
     serializeUser(user, {

@@ -2,19 +2,16 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Fragment, useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import {
   IoAdd,
-  IoAlertCircle,
   IoBusiness,
-  IoCheckmarkCircle,
   IoEllipsisVertical,
   IoMail,
   IoPencil,
 } from "react-icons/io5";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -48,6 +45,7 @@ import {
   companyCanView,
 } from "@/lib/frontend/companies/acl";
 import { companyProjectsCanCreate } from "@/lib/frontend/companies/projects-acl";
+import { notify } from "@/lib/frontend/feedback/notify";
 import type { CompanyRegistrationStatus } from "@/lib/dummy-data";
 
 export type CompanyTableRow = {
@@ -57,12 +55,6 @@ export type CompanyTableRow = {
   pocEmail: string | null;
   statusActive: boolean;
   registrationStatus: CompanyRegistrationStatus;
-};
-
-export type TableFeedback = {
-  variant: "default" | "destructive";
-  title: string;
-  description: string;
 };
 
 function statusActiveFromItem(isActive?: boolean): boolean {
@@ -107,20 +99,8 @@ export function CompaniesTable() {
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [deleteTarget, setDeleteTarget] = useState<CompanyTableRow | null>(null);
-  const [feedback, setFeedback] = useState<TableFeedback | null>(null);
   const [detailRow, setDetailRow] = useState<CompanyTableRow | null>(null);
   const [approvingId, setApprovingId] = useState<string | null>(null);
-
-  useEffect(() => {
-    const raw = sessionStorage.getItem("companies-list-feedback");
-    if (!raw) return;
-    sessionStorage.removeItem("companies-list-feedback");
-    try {
-      setFeedback(JSON.parse(raw) as TableFeedback);
-    } catch {
-      /* ignore malformed feedback */
-    }
-  }, []);
 
   const { data, error, isLoading, isFetching } = useCompaniesQuery({
     page: pageIndex + 1,
@@ -129,6 +109,13 @@ export function CompaniesTable() {
 
   const deleteMutation = useDeleteCompanyMutation();
   const approveMutation = useApproveCompanyMutation();
+  const loadErrorNotified = useRef(false);
+
+  useEffect(() => {
+    if (!error || loadErrorNotified.current) return;
+    loadErrorNotified.current = true;
+    notify.error(error instanceof Error ? error.message : t("table.loadErrorBody"));
+  }, [error, t]);
 
   useEffect(() => {
     if (!data) return;
@@ -154,17 +141,9 @@ export function CompaniesTable() {
       setApprovingId(row.id);
       try {
         await approveMutation.mutateAsync(row.id);
-        setFeedback({
-          variant: "default",
-          title: t("table.approveSuccessTitle"),
-          description: t("table.approveSuccessFallback"),
-        });
+        notify.success(t("table.approveSuccessFallback"));
       } catch (e) {
-        setFeedback({
-          variant: "destructive",
-          title: t("table.approveErrorTitle"),
-          description: e instanceof Error ? e.message : t("table.loadErrorBody"),
-        });
+        notify.error(e instanceof Error ? e.message : t("table.loadErrorBody"));
       } finally {
         setApprovingId(null);
       }
@@ -191,18 +170,10 @@ export function CompaniesTable() {
     try {
       await deleteMutation.mutateAsync(deleteTarget.id);
       setDeleteTarget(null);
-      setFeedback({
-        variant: "default",
-        title: t("table.deleteSuccessTitle"),
-        description: t("table.deleteSuccessFallback"),
-      });
+      notify.success(t("table.deleteSuccessFallback"));
     } catch (e) {
       setDeleteTarget(null);
-      setFeedback({
-        variant: "destructive",
-        title: t("table.deleteErrorTitle"),
-        description: e instanceof Error ? e.message : t("table.loadErrorBody"),
-      });
+      notify.error(e instanceof Error ? e.message : t("table.loadErrorBody"));
     }
   }, [deleteTarget, deleteMutation, t]);
 
@@ -384,37 +355,6 @@ export function CompaniesTable() {
   return (
     <Fragment>
       <div className="flex w-full min-w-0 flex-col gap-3">
-        {error ? (
-          <Alert variant="destructive">
-            <IoAlertCircle className="size-4" aria-hidden />
-            <AlertTitle>{t("table.loadErrorTitle")}</AlertTitle>
-            <AlertDescription>
-              {error instanceof Error ? error.message : t("table.loadErrorBody")}
-            </AlertDescription>
-          </Alert>
-        ) : null}
-        {feedback ? (
-          <Alert variant={feedback.variant}>
-            {feedback.variant === "destructive" ? (
-              <IoAlertCircle className="size-4" aria-hidden />
-            ) : (
-              <IoCheckmarkCircle className="size-4 text-emerald-600 dark:text-emerald-400" aria-hidden />
-            )}
-            <AlertTitle>{feedback.title}</AlertTitle>
-            <AlertDescription className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-              <span className="min-w-0 flex-1">{feedback.description}</span>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="shrink-0 self-start sm:self-auto"
-                onClick={() => setFeedback(null)}
-              >
-                {t("table.dismiss")}
-              </Button>
-            </AlertDescription>
-          </Alert>
-        ) : null}
         <DataTable
           columns={columns}
           data={rows}

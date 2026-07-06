@@ -20,20 +20,6 @@ export const registerSchema = z
     path: ["password_confirmation"],
   });
 
-/** @deprecated Legacy company sign-up — use `registerSchema` for user-only registration. */
-export const registerCompanySchema = z
-  .object({
-    company_name: z.string().min(1).max(255),
-    poc_name: z.string().min(1).max(255),
-    poc_email: emailSchema.transform((v) => v.toLowerCase()),
-    password: passwordSchema,
-    password_confirmation: z.string().min(1),
-  })
-  .refine((data) => data.password === data.password_confirmation, {
-    message: "The password confirmation does not match.",
-    path: ["password_confirmation"],
-  });
-
 export const forgotPasswordSchema = z.object({
   email: emailSchema.transform((v) => v.toLowerCase()),
 });
@@ -49,3 +35,13 @@ export const resetPasswordSchema = z
     message: "The password confirmation does not match.",
     path: ["password_confirmation"],
   });
+
+
+export const changePasswordSchema = z.object({
+  current_password: z.string().min(1), 
+  new_password: passwordSchema,
+  new_password_confirmation: z.string().min(1),
+}).refine((data) => data.new_password === data.new_password_confirmation, {
+  message: "The new password confirmation does not match.",
+  path: ["new_password_confirmation"],
+})

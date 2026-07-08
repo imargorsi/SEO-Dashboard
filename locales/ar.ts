@@ -2,17 +2,20 @@ import type { Translation } from "./en";
 
 const translation: Translation = {
   layout: {
-    appName: "لوحة تحكم السيو",
+    appName: "RankRadar",
   },
   projectSelector: {
     triggerLabel: "المشروع المحدد: {{name}}",
     listLabel: "تبديل المشروع",
     listHeading: "مشاريعك",
+    cardLabel: "المشروع",
   },
   nav: {
     aria: "التنقل الرئيسي",
     openMenu: "فتح القائمة",
     closeMenu: "إغلاق القائمة",
+    sectionGeneral: "عام",
+    sectionMySpace: "مساحتي",
     dashboard: "لوحة التحكم",
     users: "المستخدمون",
     rolesPermissions: "الأدوار والصلاحيات",

@@ -21,8 +21,8 @@ function ProjectLogo({
   return (
     <span
       className={cn(
-        "inline-flex shrink-0 items-center justify-center rounded-md font-semibold text-white",
-        size === "sm" ? "size-7 text-[10px]" : "size-8 text-[11px]"
+        "inline-flex shrink-0 items-center justify-center rounded-lg font-semibold text-text-on-brand",
+        size === "sm" ? "size-7 text-[10px]" : "size-9 text-[11px]"
       )}
       style={{
         background: `linear-gradient(135deg, ${project.logoGradientFrom} 0%, ${project.logoGradientTo} 100%)`,
@@ -49,17 +49,17 @@ function ProjectOption({
       role="option"
       aria-selected={isSelected}
       onClick={onSelect}
-      className="flex w-full items-center gap-2.5 rounded-lg px-2 py-2 text-start transition-colors hover:bg-[var(--accent-bg)]"
+      className="flex w-full items-center gap-2.5 rounded-lg px-2 py-2 text-start transition-colors hover:bg-bg-hover"
     >
       <ProjectLogo project={project} size="sm" />
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-[13px] font-medium text-[var(--text-h)]">{project.name}</span>
-        <span className="block truncate text-[11px] text-[var(--text-muted)]">
+        <span className="block truncate text-[13px] font-medium text-text-primary">{project.name} 22</span>
+        <span className="block truncate text-[11px] text-text-muted">
           {formatProjectHostname(project.url)}
         </span>
       </span>
       {isSelected ? (
-        <IoCheckmark className="size-4 shrink-0 text-[var(--brand)]" aria-hidden />
+        <IoCheckmark className="size-4 shrink-0 text-brand" aria-hidden />
       ) : (
         <span className="size-4 shrink-0" aria-hidden />
       )}
@@ -83,11 +83,10 @@ export function ProjectSelector() {
   }, [open]);
 
   return (
-    <div className="shrink-0 px-3 pt-5 pb-4">
+    <div className="shrink-0 px-4 pb-3 pt-1">
       <div
         className={cn(
-          "overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--social-bg)] transition-[border-color] duration-200",
-          "dark:border-white/20 dark:bg-[rgba(0,0,0,0.22)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]",
+          "overflow-hidden rounded-xl border border-border bg-bg-card transition-[border-color] duration-200",
           open && "border-[var(--accent-border)]"
         )}
       >
@@ -98,20 +97,20 @@ export function ProjectSelector() {
           aria-controls={listId}
           aria-label={t("triggerLabel", { name: selectedProject.name })}
           onClick={() => setOpen((v) => !v)}
-          className="flex w-full items-center gap-2.5 px-2.5 py-2.5 text-start transition-colors hover:bg-[color-mix(in_srgb,var(--accent-bg)_50%,transparent)]"
+          className="flex w-full items-center gap-2.5 px-2.5 py-2.5 text-start transition-colors hover:bg-bg-hover/60"
         >
           <ProjectLogo project={selectedProject} />
           <span className="min-w-0 flex-1">
-            <span className="block truncate text-[13px] font-semibold leading-tight text-[var(--text-h)]">
-              {selectedProject.name}
+            <span className="block truncate text-[10px] font-semibold uppercase tracking-[0.12em] text-text-muted">
+              {t("cardLabel")}
             </span>
-            <span className="block truncate text-[11px] leading-tight text-[var(--text-muted)]">
-              {formatProjectHostname(selectedProject.url)}
+            <span className="block truncate text-[13px] font-semibold leading-tight text-text-primary">
+              {selectedProject.name}
             </span>
           </span>
           <IoChevronDown
             className={cn(
-              "size-4 shrink-0 text-[var(--text-muted)] transition-transform duration-300 ease-out",
+              "size-4 shrink-0 text-text-muted transition-transform duration-300 ease-out",
               open && "rotate-180"
             )}
             aria-hidden
@@ -129,9 +128,9 @@ export function ProjectSelector() {
               id={listId}
               role="listbox"
               aria-label={t("listLabel")}
-              className="border-t border-[var(--border)] px-1.5 pb-1.5 pt-1 dark:border-white/10"
+              className="border-t border-border px-1.5 pb-1.5 pt-1"
             >
-              <p className="px-2 pb-1 pt-1 text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+              <p className="px-2 pb-1 pt-1 text-[10px] font-semibold uppercase tracking-wider text-text-muted">
                 {t("listHeading")}
               </p>
               <div className="flex flex-col gap-0.5">

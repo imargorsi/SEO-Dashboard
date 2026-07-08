@@ -94,10 +94,10 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
 
   const showError = Boolean(error);
   const baseClasses =
-    "w-full rounded-lg border bg-[var(--bg)] px-3 py-2.5 text-[var(--text-h)] outline-none transition placeholder:text-[var(--text)]/60 focus:border-[var(--accent-border)] focus:ring-2 focus:ring-[var(--brand)]/25 disabled:cursor-not-allowed disabled:opacity-60 read-only:cursor-default read-only:opacity-80";
+    "w-full rounded-xl border bg-bg-input px-3 py-2.5 text-text-primary outline-none transition placeholder:text-text-placeholder focus:border-[var(--accent-border)] focus:ring-2 focus:ring-brand/25 disabled:cursor-not-allowed disabled:opacity-60 disabled:text-text-disabled read-only:cursor-default read-only:opacity-80";
   const borderClass = showError
     ? "border-[color-mix(in_srgb,var(--destructive)_68%,transparent)]"
-    : "border-[var(--border)]";
+    : "border-border";
 
   const handleBlur = (e: FocusEvent<ControlElement>) => {
     onBlur?.(e);
@@ -113,9 +113,9 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
         <label
           htmlFor={id}
           className={cn(
-            "text-sm font-medium text-[var(--text-h)]",
-            required ? 'after:ms-0.5 after:text-[var(--destructive)] after:content-["*"]' : "",
-            showError ? "text-[var(--destructive)]" : ""
+            "text-sm font-medium text-text-primary",
+            required ? 'after:ms-0.5 after:text-destructive after:content-["*"]' : "",
+            showError ? "text-destructive" : ""
           )}
         >
           {label}
@@ -154,8 +154,8 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
             ref={setControlRef}
             className={cn(
               controlClassName,
-              "appearance-none bg-[var(--bg)] pe-10",
-              value === "" ? "text-[var(--text)]/60" : ""
+              "appearance-none bg-bg-input pe-10",
+              value === "" ? "text-text-placeholder" : ""
             )}
             {...valueProps}
           >
@@ -199,7 +199,7 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
               disabled={disabled}
               aria-label={passwordVisible ? t("hidePassword") : t("showPassword")}
               aria-pressed={passwordVisible}
-              className="absolute inset-y-0 end-0 flex items-center justify-center px-3 text-[var(--text-muted)] transition-colors hover:text-[var(--text-h)] focus-visible:text-[var(--text-h)] focus-visible:outline-none disabled:pointer-events-none disabled:opacity-60"
+              className="absolute inset-y-0 end-0 flex items-center justify-center px-3 text-text-muted transition-colors hover:text-text-primary focus-visible:text-text-primary focus-visible:outline-none disabled:pointer-events-none disabled:opacity-60"
             >
               {passwordVisible ? (
                 <IoEyeOff className="size-4" aria-hidden />
@@ -212,7 +212,7 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
       )}
 
       {showError ? (
-        <p id={`${id}-error`} className="text-sm text-[var(--destructive)]" role="alert">
+        <p id={`${id}-error`} className="text-sm text-destructive" role="alert">
           {error}
         </p>
       ) : null}

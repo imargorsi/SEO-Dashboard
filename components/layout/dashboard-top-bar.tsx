@@ -34,7 +34,7 @@ export function DashboardTopBar() {
     overrideItems ?? breadcrumbsFromPathname(pathname, (key) => String(t(key as never)));
 
   return (
-    <header className="relative z-10 w-full shrink-0 bg-[var(--bg-elevated)]">
+    <header className="relative z-10 w-full shrink-0 bg-bg-card">
       <div className={cn(dashboardHeaderRowClass, "px-4 sm:px-6")}>
         <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
           {sidebar && !sidebar.isSidebarOpen ? (

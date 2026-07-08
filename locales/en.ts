@@ -6,11 +6,14 @@ export interface Translation {
     triggerLabel: string;
     listLabel: string;
     listHeading: string;
+    cardLabel: string;
   };
   nav: {
     aria: string;
     openMenu: string;
     closeMenu: string;
+    sectionGeneral: string;
+    sectionMySpace: string;
     dashboard: string;
     users: string;
     rolesPermissions: string;
@@ -474,17 +477,20 @@ export interface Translation {
 
 const translation: Translation = {
   layout: {
-    appName: "SEO Dashboard",
+    appName: "RankRadar",
   },
   projectSelector: {
-    triggerLabel: "Selected project: {{name}}",
-    listLabel: "Switch project",
-    listHeading: "Your projects",
+    triggerLabel: "Selected Project: {{name}}",
+    listLabel: "Switch Project",
+    listHeading: "Your Projects",
+    cardLabel: "Project",
   },
   nav: {
-    aria: "Main navigation",
-    openMenu: "Open menu",
-    closeMenu: "Close menu",
+    aria: "Main Navigation",
+    openMenu: "Open Menu",
+    closeMenu: "Close Menu",
+    sectionGeneral: "General",
+    sectionMySpace: "My Space",
     dashboard: "Dashboard",
     users: "Users",
     rolesPermissions: "Roles & Permissions",

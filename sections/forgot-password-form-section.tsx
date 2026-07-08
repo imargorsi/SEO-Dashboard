@@ -43,12 +43,12 @@ export function ForgotPasswordFormSection({
       <Heading id="forgot-password-heading" pageTitle>
         {t("title")}
       </Heading>
-      <Paragraph className="mt-2 text-sm leading-relaxed">{t("subtitle")}</Paragraph>
+      <Paragraph className="mt-2 text-sm font-normal leading-relaxed text-text-secondary">{t("subtitle")}</Paragraph>
 
       {requestSent ? (
-        <Paragraph className="mt-8 text-sm leading-relaxed">{t("submitSuccess")}</Paragraph>
+        <Paragraph className="mt-7 text-sm font-normal leading-relaxed text-text-secondary">{t("submitSuccess")}</Paragraph>
       ) : (
-        <form className="mt-8 flex flex-col gap-5" onSubmit={onValidSubmit} noValidate>
+        <form className="mt-7 flex flex-col gap-4.5" onSubmit={onValidSubmit} noValidate>
           <Input
             id="forgot-password-email"
             label={t("email")}
@@ -73,8 +73,8 @@ export function ForgotPasswordFormSection({
         </form>
       )}
 
-      <Paragraph moreSmaller className="!mt-6 text-center">
-        <Link href="/" className="text-[var(--brand)] hover:underline">
+      <Paragraph moreSmaller className="mt-6! text-center">
+        <Link href="/" className="font-semibold text-brand-orange transition-colors hover:text-brand-magenta hover:underline">
           {t("backToSignIn")}
         </Link>
       </Paragraph>

@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/input";
 import { Spinner } from "@/components/ui/spinner";
 import { useChangePasswordForm } from "@/components/forms/hooks/use-change-password-form";
+import { Heading } from "@/components/heading";
+import { Paragraph } from "@/components/paragraph";
 
 export function ChangePasswordForm() {
   const { t } = useTranslation("translation", { keyPrefix: "profile.changePassword" });
@@ -13,11 +15,13 @@ export function ChangePasswordForm() {
   const newPassword = watch("new_password");
 
   return (
-    <section className="rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-5 sm:p-6">
+    <section className="rounded-xl border border-border bg-bg-card p-5 sm:p-6">
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="mb-5">
-          <h2 className="text-xl font-semibold text-[var(--text-h)]">{t("title")}</h2>
-          <p className="mt-1 text-sm text-[var(--text-muted)]">{t("lead")}</p>
+          <Heading id="change-password-heading" SmallTitle customHeadingTag="h2">
+            {t("title")}
+          </Heading>
+          <Paragraph className="mt-1 text-text-muted">{t("lead")}</Paragraph>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
@@ -61,7 +65,7 @@ export function ChangePasswordForm() {
         </div>
 
         <div className="mt-5 flex justify-end">
-          <Button variant="outline" type="submit" disabled={isSubmitting} aria-busy={isSubmitting}>
+          <Button variant="outlined" size="md" type="submit" disabled={isSubmitting} aria-busy={isSubmitting}>
             <span className="inline-flex items-center gap-2">
               {isSubmitting ? <Spinner className="size-4 shrink-0" /> : null}
               {isSubmitting ? t("submitting") : t("submit")}

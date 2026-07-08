@@ -2,17 +2,20 @@ import type { Translation } from "./en";
 
 const translation: Translation = {
   layout: {
-    appName: "لوحة تحكم السيو",
+    appName: "RankRadar",
   },
   projectSelector: {
     triggerLabel: "المشروع المحدد: {{name}}",
     listLabel: "تبديل المشروع",
     listHeading: "مشاريعك",
+    cardLabel: "المشروع",
   },
   nav: {
     aria: "التنقل الرئيسي",
     openMenu: "فتح القائمة",
     closeMenu: "إغلاق القائمة",
+    sectionGeneral: "عام",
+    sectionMySpace: "مساحتي",
     dashboard: "لوحة التحكم",
     users: "المستخدمون",
     rolesPermissions: "الأدوار والصلاحيات",
@@ -387,17 +390,21 @@ const translation: Translation = {
   },
   auth: {
     signIn: {
-      title: "تسجيل الدخول",
-      subtitle: "مرحبًا بعودتك. أدخل بياناتك للمتابعة.",
+      title: "مرحبًا بعودتك",
+      subtitle: "سجّل الدخول إلى مساحة العمل لديك. لوحة SEO جاهزة.",
       email: "البريد الإلكتروني",
       password: "كلمة المرور",
       submit: "تسجيل الدخول",
       forgotPassword: "هل نسيت كلمة المرور؟",
-      heroTitle: "وضوح السيو لكل عميل",
+      heroTitleStart: "وضوح السيو لكل",
+      heroTitleAccent: "عميل",
       heroLead: "تابع الترتيب، واكتشف الفرص، وحافظ على توافق أصحاب المصلحة من مساحة عمل واحدة منظمة.",
       heroPoint1: "لوحات متعددة العملاء دون فوضى الجداول",
       heroPoint2: "فحوصات مجدولة وسجل يمكن الاعتماد عليه",
       heroPoint3: "مصمم للفرق التي تهتم بالدقة",
+      continueWith: "أو المتابعة عبر",
+      continueGoogle: "جوجل",
+      continueSso: "SSO",
       emailInvalid: "أدخل بريدًا إلكترونيًا صالحًا.",
       passwordMin: "استخدم 8 أحرف على الأقل.",
       fieldRequired: "هذا الحقل مطلوب.",
@@ -406,8 +413,8 @@ const translation: Translation = {
       emailVerifiedSuccess: "تم التحقق من بريدك الإلكتروني. يمكنك تسجيل الدخول الآن.",
       registrationSuccess:
         "تم إنشاء الحساب. تحقق من بريدك للحصول على رابط التحقق، ثم سجّل الدخول للمتابعة.",
-      noAccountPrompt: "جديد على Rank Radar؟",
-      registerCta: "إنشاء حساب",
+      noAccountPrompt: "جديد هنا؟",
+      registerCta: "ابدأ رحلتك",
     },
     forgotPassword: {
       title: "نسيت كلمة المرور",
@@ -436,8 +443,8 @@ const translation: Translation = {
       invalidLinkBody: "ينقص هذا الرابط معلومات مطلوبة. اطلب بريد إعادة تعيين جديدًا من صفحة تسجيل الدخول.",
     },
     register: {
-      title: "إنشاء حسابك",
-      subtitle: "سجّل باسمك وبريدك الإلكتروني. يمكنك إعداد مشروعك الأول بعد تسجيل الدخول.",
+      title: "ابدأ رحلتك",
+      subtitle: "سجّل باسمك وبريدك الإلكتروني. جهّز مشروعك الأول بعد تسجيل الدخول.",
       fullName: "الاسم الكامل",
       fullNamePh: "جين دو",
       fullNameMin: "أدخل حرفين على الأقل.",

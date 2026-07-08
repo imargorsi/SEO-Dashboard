@@ -9,6 +9,8 @@ import { useTranslation } from "react-i18next";
 import { FormTextField } from "@/components/form/form-text-field";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { Heading } from "@/components/heading";
+import { Paragraph } from "@/components/paragraph";
 import { useCreateUserMutation } from "@/features/users/users.api";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
 import { userCanCreate } from "@/lib/frontend/users/acl";
@@ -57,10 +59,12 @@ export function UsersCreateSection() {
   return (
     <div className="w-full min-w-0">
       <div className="px-4 py-6 sm:px-6">
-        <div className="mx-auto w-full max-w-xl rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-6 shadow-[var(--shadow)] sm:p-8">
+        <div className="mx-auto w-full max-w-xl rounded-2xl border border-border bg-bg-card p-6 shadow-(--shadow) sm:p-8">
           <div className="mb-6 space-y-1">
-            <h2 className="text-lg font-semibold text-[var(--text-h)]">{t("createForm.title")}</h2>
-            <p className="text-sm text-[var(--text-muted)]">{t("createForm.lead")}</p>
+            <Heading id="users-create-title" SmallTitle customHeadingTag="h2">
+              {t("createForm.title")}
+            </Heading>
+            <Paragraph className="text-text-muted">{t("createForm.lead")}</Paragraph>
           </div>
 
           <form className="space-y-5" onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -86,19 +90,21 @@ export function UsersCreateSection() {
                 },
               }}
             />
-            <div className="flex flex-col gap-4 border-t border-[var(--border)] pt-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
               <Button
                 type="submit"
+                variant="primary"
+                size="lg"
                 disabled={createMutation.isPending}
                 aria-busy={createMutation.isPending}
-                className="h-11 w-full sm:w-auto sm:min-w-[11rem]"
+                className="w-full sm:min-w-44 sm:w-auto"
               >
                 <span className="inline-flex items-center justify-center gap-2 px-1">
                   {createMutation.isPending ? <Spinner className="size-4 shrink-0" /> : null}
                   {createMutation.isPending ? t("createForm.submitting") : t("createForm.submit")}
                 </span>
               </Button>
-              <Link href="/users" className="text-center text-sm font-medium text-[var(--brand)] hover:underline">
+              <Link href="/users" className="text-center type-body-strong text-brand transition-colors hover:text-brand-orange hover:underline">
                 {t("createForm.backToList")}
               </Link>
             </div>

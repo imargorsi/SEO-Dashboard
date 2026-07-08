@@ -74,7 +74,10 @@ export function ThemeToggle({
   const { t } = useTranslation("translation", { keyPrefix: "theme" });
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   const isDark = resolvedTheme === "dark";
   const label = isDark ? t("switchToLight") : t("switchToDark");
@@ -89,15 +92,35 @@ export function ThemeToggle({
       type="button"
       onClick={() => setTheme(isDark ? "light" : "dark")}
       className={cn(
-        "inline-flex shrink-0 items-center justify-center border transition-[border-color,background-color,transform,box-shadow,color] duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.96]",
+        "group relative inline-flex shrink-0 items-center justify-center overflow-hidden border transition-[border-color,background-color,transform,box-shadow,color] duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.96] before:pointer-events-none before:absolute before:inset-0 before:opacity-0 before:transition-opacity before:duration-200 before:bg-gradient-primary",
         sizeClass[size],
         toneClass[tone],
+        isDark ? "before:opacity-70" : "before:opacity-0",
         className
       )}
       aria-label={label}
       title={label}
     >
-      {isDark ? <IconSun className={iconCls} /> : <IconMoon className={iconCls} />}
+      <span className={cn("relative inline-flex", iconCls)}>
+        <span
+          className={cn(
+            "absolute inset-0 transition-all duration-200",
+            isDark ? "opacity-100 translate-y-0 scale-100 rotate-0" : "opacity-0 translate-y-1 scale-75 -rotate-15"
+          )}
+          aria-hidden
+        >
+          <IconSun className={iconCls} />
+        </span>
+        <span
+          className={cn(
+            "absolute inset-0 transition-all duration-200",
+            isDark ? "opacity-0 translate-y-1 scale-75 rotate-15" : "opacity-100 translate-y-0 scale-100 rotate-0"
+          )}
+          aria-hidden
+        >
+          <IconMoon className={iconCls} />
+        </span>
+      </span>
     </button>
   );
 }

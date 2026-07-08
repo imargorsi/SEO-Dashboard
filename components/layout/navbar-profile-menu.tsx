@@ -14,14 +14,18 @@ import { notify } from "@/lib/frontend/feedback/notify";
 import { cn } from "@/lib/utils";
 
 const menuItemClass =
-  "flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-start text-sm font-medium text-[var(--text-h)] transition hover:bg-[var(--accent-bg)]";
+  "flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-start type-body-strong text-text-primary transition hover:bg-bg-hover";
+
+type NavbarProfileMenuProps = {
+  placement?: "topbar" | "sidebar";
+};
 
 function formatRolesForDisplay(roles: string[]): string {
   if (roles.length === 0) return "";
   return roles.map((r) => r.replace(/_/g, " ")).join(" · ");
 }
 
-export function NavbarProfileMenu() {
+export function NavbarProfileMenu({ placement = "topbar" }: NavbarProfileMenuProps) {
   const { t } = useTranslation("translation", { keyPrefix: "userMenu" });
   const { t: tVerification } = useTranslation("translation", { keyPrefix: "auth.verification" });
   const router = useRouter();
@@ -37,6 +41,7 @@ export function NavbarProfileMenu() {
   const verified = Boolean(user?.email_verified_at);
   const roleLine = user ? formatRolesForDisplay(user.roles) : "";
   const isProfileActive = pathname === "/edit-profile" || pathname.startsWith("/edit-profile/");
+  const isSidebarPlacement = placement === "sidebar";
 
   const close = useCallback(() => setOpen(false), []);
 
@@ -81,14 +86,17 @@ export function NavbarProfileMenu() {
   }
 
   return (
-    <div ref={rootRef} className="relative">
+    <div ref={rootRef} className={cn("relative", isSidebarPlacement && "w-full")}>
       <button
         type="button"
         className={cn(
-          "inline-flex h-9 items-center gap-2 rounded-lg px-1.5 pe-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-border)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-elevated)]",
-          isProfileActive || open
-            ? "bg-[var(--accent-bg)] text-[var(--text-h)]"
-            : "bg-transparent text-[var(--text-h)] hover:bg-[var(--accent-bg)]"
+          isSidebarPlacement
+            ? "inline-flex h-12 w-full items-center gap-2.5 rounded-xl border border-border bg-bg-card px-2.5 pe-3 text-text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-border) focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar hover:bg-bg-hover"
+            : "inline-flex h-9 items-center gap-2 rounded-lg px-1.5 pe-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-border) focus-visible:ring-offset-2 focus-visible:ring-offset-bg-card",
+          !isSidebarPlacement &&
+            (isProfileActive || open
+              ? "bg-bg-hover text-text-primary"
+              : "bg-transparent text-text-primary hover:bg-bg-hover")
         )}
         aria-expanded={open}
         aria-haspopup="menu"
@@ -100,48 +108,56 @@ export function NavbarProfileMenu() {
           imageUrl={user?.profile_image ?? null}
           verified={verified}
           showVerificationBadge
-          size="sm"
+          size={isSidebarPlacement ? "md" : "sm"}
         />
-        <span className="hidden max-w-[7rem] truncate text-xs font-medium text-[var(--text-h)] sm:inline">
-          {displayName}
+        <span className={cn("min-w-0 flex-1 text-start", !isSidebarPlacement && "hidden sm:block")}>
+          <span className={cn("block truncate text-text-primary", isSidebarPlacement ? "type-body-strong" : "type-caption")}>
+            {displayName}
+          </span>
+          {isSidebarPlacement && roleLine ? (
+            <span className="block truncate type-caption-xs text-text-muted">{roleLine}</span>
+          ) : null}
         </span>
         <IoChevronDown
-          className={cn("size-3.5 shrink-0 text-[var(--text-muted)] transition-transform", open && "rotate-180")}
+          className={cn("size-3.5 shrink-0 text-text-muted transition-transform", open && "rotate-180")}
           aria-hidden
         />
       </button>
 
       {open ? (
         <div
-          className="absolute end-0 top-full z-50 mt-3 w-60 overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] shadow-[var(--shadow)]"
+          className={cn(
+            "absolute z-50 overflow-hidden rounded-xl border border-border bg-bg-card shadow-(--shadow)",
+            isSidebarPlacement ? "inset-x-0 bottom-full mb-2 w-full" : "inset-e-0 top-full mt-3 w-60"
+          )}
           role="menu"
           aria-label={t("menuLabel")}
         >
-          <div className="border-b border-[var(--border)] px-3 py-3">
+          <div className="border-b border-border px-3 py-3">
             <div className="flex items-center gap-2.5">
               <SidebarUserAvatar
                 name={displayName}
                 imageUrl={user?.profile_image ?? null}
                 verified={verified}
                 showVerificationBadge
-                size="sm"
+                size={isSidebarPlacement ? "md" : "sm"}
               />
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-semibold text-[var(--text-h)]">{displayName}</p>
+                <p className="truncate type-body-strong text-text-primary">{displayName}</p>
                 {email ? (
-                  <p className="truncate text-xs text-[var(--text-muted)]">{email}</p>
+                  <p className="truncate type-caption text-text-muted">{email}</p>
                 ) : (
-                  <p className="truncate text-xs text-[var(--text-muted)]">{t("noEmail")}</p>
+                  <p className="truncate type-caption text-text-muted">{t("noEmail")}</p>
                 )}
                 {roleLine ? (
-                  <p className="truncate text-[11px] font-medium capitalize text-[var(--text-muted)]">{roleLine}</p>
+                  <p className="truncate type-caption-xs capitalize text-text-muted">{roleLine}</p>
                 ) : null}
               </div>
             </div>
           </div>
 
           {verified ? (
-            <div className="flex items-center gap-2 border-b border-[var(--border)] px-3 py-2.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">
+            <div className="flex items-center gap-2 border-b border-border px-3 py-2.5 type-caption text-success">
               <IoCheckmarkCircle className="size-4 shrink-0" aria-hidden />
               <span>{t("emailVerified")}</span>
             </div>
@@ -150,17 +166,17 @@ export function NavbarProfileMenu() {
               type="button"
               disabled={resendMutation.isPending}
               aria-busy={resendMutation.isPending}
-              className="flex w-full items-start gap-2 border-b border-[var(--border)] px-3 py-2.5 text-start transition hover:bg-amber-500/10 disabled:opacity-70"
+              className="flex w-full items-start gap-2 border-b border-border px-3 py-2.5 text-start transition hover:bg-warning/10 disabled:opacity-70"
               onClick={() => void onResendVerification()}
             >
               {resendMutation.isPending ? (
-                <Spinner className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-400" aria-hidden />
+                <Spinner className="mt-0.5 size-4 shrink-0 text-warning" aria-hidden />
               ) : (
-                <IoAlertCircle className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-400" aria-hidden />
+                <IoAlertCircle className="mt-0.5 size-4 shrink-0 text-warning" aria-hidden />
               )}
               <span className="min-w-0 flex-1">
-                <span className="block text-xs font-medium text-amber-700 dark:text-amber-300">{t("emailNotVerified")}</span>
-                <span className="mt-0.5 block text-[11px] text-[var(--text-muted)]">{t("resendVerification")}</span>
+                <span className="block type-caption text-warning">{t("emailNotVerified")}</span>
+                <span className="mt-0.5 block type-caption-xs text-text-muted">{t("resendVerification")}</span>
               </span>
             </button>
           )}
@@ -177,7 +193,7 @@ export function NavbarProfileMenu() {
               aria-busy={logoutMutation.isPending}
               className={cn(
                 menuItemClass,
-                "text-[var(--destructive-muted)]",
+                "text-destructive",
                 logoutMutation.isPending && "pointer-events-none opacity-90"
               )}
               onClick={() => void onLogout()}

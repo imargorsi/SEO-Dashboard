@@ -35,7 +35,7 @@ export function SidebarUserAvatar({
   return (
     <div
       className={cn(
-        "relative flex shrink-0 items-center justify-center overflow-hidden bg-gradient-to-br from-[var(--brand)] via-[#6366f1] to-[#1e3a8a] font-semibold text-[var(--text-on-strong)] shadow-sm",
+        "relative flex shrink-0 items-center justify-center overflow-hidden bg-gradient-primary font-semibold text-text-on-brand shadow-sm",
         box,
         className
       )}
@@ -52,7 +52,7 @@ export function SidebarUserAvatar({
         verified ? (
           <span
             className={cn(
-              "absolute flex items-center justify-center rounded-full border border-[var(--social-bg)] bg-[var(--bg-elevated)] text-emerald-600 dark:text-emerald-400",
+              "absolute flex items-center justify-center rounded-full border border-[var(--social-bg)] bg-bg-card text-success",
               badgeWrap
             )}
             aria-hidden
@@ -62,7 +62,7 @@ export function SidebarUserAvatar({
         ) : (
           <span
             className={cn(
-              "absolute flex items-center justify-center rounded-full border border-[var(--social-bg)] bg-[var(--bg-elevated)] text-amber-600 dark:text-amber-400",
+              "absolute flex items-center justify-center rounded-full border border-[var(--social-bg)] bg-bg-card text-warning",
               badgeWrap
             )}
             aria-hidden

@@ -173,8 +173,8 @@ export function DataTable<T>({
         {primaryAction ? (
           <Button
             type="button"
-            variant="outline"
-            size="sm"
+            variant="outlined"
+            size="small"
             className="shrink-0 border-[var(--border)] bg-[var(--bg)] text-[var(--text-h)] hover:bg-[var(--accent-bg)]"
             onClick={primaryAction.onClick}
           >
@@ -281,7 +281,7 @@ export function DataTable<T>({
           <div className="flex items-center gap-0.5">
             <Button
               type="button"
-              variant="outline"
+              variant="outlined"
               size="icon-sm"
               className="border-[var(--border)]"
               aria-label={firstPageLabel}
@@ -292,7 +292,7 @@ export function DataTable<T>({
             </Button>
             <Button
               type="button"
-              variant="outline"
+              variant="outlined"
               size="icon-sm"
               className="border-[var(--border)]"
               aria-label={previousPageLabel}
@@ -303,7 +303,7 @@ export function DataTable<T>({
             </Button>
             <Button
               type="button"
-              variant="outline"
+              variant="outlined"
               size="icon-sm"
               className="border-[var(--border)]"
               aria-label={nextPageLabel}
@@ -314,7 +314,7 @@ export function DataTable<T>({
             </Button>
             <Button
               type="button"
-              variant="outline"
+              variant="outlined"
               size="icon-sm"
               className="border-[var(--border)]"
               aria-label={lastPageLabel}

@@ -139,7 +139,7 @@ function AlertDialogCancel({ className, ...props }: React.ComponentProps<"button
   return (
     <button
       type="button"
-      className={cn(buttonVariants({ variant: "outline" }), className)}
+      className={cn(buttonVariants({ variant: "outlined", size: "md" }), className)}
       onClick={(e) => {
         props.onClick?.(e);
         if (!e.defaultPrevented) setOpen(false);

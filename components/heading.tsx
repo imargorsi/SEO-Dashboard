@@ -11,7 +11,6 @@ interface IHeading {
   mediumTitle?: boolean;
   SmallTitle?: boolean;
   invertColors?: boolean;
-  font?: string;
   bold?: string;
   isMainHeading?: boolean;
   /** Compact h1 for auth / app pages (uses theme tokens). */
@@ -29,7 +28,6 @@ export const Heading: FC<IHeading> = (props) => {
     heroTitle,
     mediumTitle,
     invertColors,
-    font,
     bold,
     isMainHeading,
     SmallTitle,
@@ -40,16 +38,16 @@ export const Heading: FC<IHeading> = (props) => {
 
   const getTextSizes = () => {
     if (pageTitle) {
-      return "text-2xl font-semibold tracking-tight text-[var(--text-h)] sm:text-[1.75rem] leading-snug";
+      return "type-h1";
     }
     if (sectionTitle) {
-      return "text-xl font-semibold tracking-tight text-[var(--text-h)] sm:text-2xl leading-snug";
+      return "type-h2";
     }
-    if (isMainHeading) return "text-2xl lg:text-[3.5rem]  !font-bold leading-[1.1] lg:leading-[4.5rem]";
-    if (heroTitle) return "text-2xl lg:text-[3.5rem]  !font-bold leading-[1.1] lg:leading-[4.5rem]";
-    if (mediumTitle) return "text-[1.375rem] lg:text-[2.625rem] font-semibold leading-[3.5rem] ";
-    if (SmallTitle) return "text-[1.375rem] lg:text-[1.875rem] font-semibold leading-[2.75rem]";
-    return "text-[22px] lg:text-3xl font-bold capitalize";
+    if (isMainHeading) return "type-display !font-bold";
+    if (heroTitle) return "type-display !font-bold";
+    if (mediumTitle) return "type-h2";
+    if (SmallTitle) return "type-title";
+    return "type-title";
   };
 
   const HeadingTag =
@@ -60,10 +58,10 @@ export const Heading: FC<IHeading> = (props) => {
     <HeadingTag
       id={id}
       className={cn(
-        font || "font-sans",
+        "font-sans",
         pageTitle || sectionTitle ? null : bold || "font-semibold",
         getTextSizes(),
-        invertColors ? "text-[var(--text-on-strong)]" : "text-[var(--text-h)]",
+        invertColors ? "text-text-on-brand" : "text-text-primary",
         className
       )}
     >

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Nunito } from "next/font/google";
 import { AppProviders } from "@/components/providers/app-providers";
 import "./globals.css";
 
@@ -10,6 +11,12 @@ export const metadata: Metadata = {
   },
 };
 
+const nunito = Nunito({
+  subsets: ["latin"],
+  display: "swap",
+  fallback: ["Nunito Fallback", "sans-serif"],
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -17,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="min-h-svh antialiased">
+      <body className={`${nunito.className} min-h-svh antialiased`}>
         <AppProviders>{children}</AppProviders>
       </body>
     </html>

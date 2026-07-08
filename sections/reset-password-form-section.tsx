@@ -48,23 +48,23 @@ export function ResetPasswordFormSection({
 
       {invalidLink ? (
         <>
-          <Paragraph className="mt-5 text-sm leading-relaxed text-[var(--destructive-muted)]">
+          <Paragraph className="mt-5 text-sm leading-relaxed text-destructive">
             {t("invalidLinkBody")}
           </Paragraph>
-          <Paragraph moreSmaller className="!mt-6 text-center">
-            <Link href="/" className="text-[var(--brand)] hover:underline">
+          <Paragraph moreSmaller className="mt-6! text-center">
+            <Link href="/" className="font-semibold text-brand-orange transition-colors hover:text-brand-magenta hover:underline">
               {t("backToSignIn")}
             </Link>
           </Paragraph>
         </>
       ) : (
         <>
-          <Paragraph className="mt-2 text-sm leading-relaxed">{t("subtitle")}</Paragraph>
+          <Paragraph className="mt-2 text-sm font-normal leading-relaxed text-text-secondary">{t("subtitle")}</Paragraph>
 
           {resetComplete ? (
-            <Paragraph className="mt-8 text-sm leading-relaxed">{t("submitSuccess")}</Paragraph>
+            <Paragraph className="mt-7 text-sm font-normal leading-relaxed text-text-secondary">{t("submitSuccess")}</Paragraph>
           ) : (
-            <form className="mt-8 flex flex-col gap-5" onSubmit={onValidSubmit} noValidate>
+            <form className="mt-7 flex flex-col gap-4.5" onSubmit={onValidSubmit} noValidate>
               <Input
                 id="reset-password-new"
                 label={t("password")}
@@ -100,8 +100,8 @@ export function ResetPasswordFormSection({
             </form>
           )}
 
-          <Paragraph moreSmaller className="!mt-6 text-center">
-            <Link href="/" className="text-[var(--brand)] hover:underline">
+          <Paragraph moreSmaller className="mt-6! text-center">
+            <Link href="/" className="font-semibold text-brand-orange transition-colors hover:text-brand-magenta hover:underline">
               {t("backToSignIn")}
             </Link>
           </Paragraph>

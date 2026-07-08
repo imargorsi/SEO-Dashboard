@@ -12,16 +12,16 @@ const Checkbox = React.forwardRef<HTMLInputElement, React.ComponentProps<"input"
         data-slot="checkbox"
         checked={checked}
         className={cn(
-          "peer size-4 shrink-0 appearance-none rounded border border-[var(--border)] bg-[var(--bg)] shadow-xs outline-none transition-[border-color,box-shadow,background-color]",
-          "focus-visible:border-[var(--accent-border)] focus-visible:ring-2 focus-visible:ring-[var(--brand)]/25",
-          "checked:border-[color-mix(in_srgb,var(--brand)_55%,var(--border))] checked:bg-[color-mix(in_srgb,var(--brand)_18%,var(--bg-elevated))]",
+          "peer size-4 shrink-0 appearance-none rounded border border-border bg-bg-input shadow-xs outline-none transition-[border-color,box-shadow,background-color]",
+          "focus-visible:border-[var(--accent-border)] focus-visible:ring-2 focus-visible:ring-brand/25",
+          "checked:border-[color-mix(in_srgb,var(--brand)_55%,var(--border))] checked:bg-bg-selected",
           "disabled:cursor-not-allowed disabled:opacity-50",
           className
         )}
         {...props}
       />
       <IoCheckmark
-        className="pointer-events-none absolute size-3 text-[var(--text-h)] opacity-0 peer-checked:opacity-100"
+        className="pointer-events-none absolute size-3 text-text-primary opacity-0 peer-checked:opacity-100"
         aria-hidden
       />
     </span>

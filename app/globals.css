@@ -1,50 +1,101 @@
 @import "tailwindcss";
 @import "shadcn/tailwind.css";
 @import "sonner/dist/styles.css";
-@import "@fontsource-variable/geist";
+
+@font-face {
+  font-family: "Nunito Fallback";
+  src: local("Arial");
+}
 
 /* Class-based dark mode for Tailwind `dark:` utilities */
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: Inter, "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-sans: "Nunito", "Nunito Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
 }
 
-/* Light theme (default) */
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --text-muted: color-mix(in srgb, var(--text) 85%, var(--text-h) 15%);
-  --text-on-strong: #f8f7fa;
-  --bg: #faf9fc;
-  --bg-elevated: #ffffff;
-  --border: oklch(0.922 0 0);
-  --code-bg: #f0eef6;
-  /* App marketing purple (shadcn reserves `--accent` for muted surfaces) */
-  --brand: #aa3bff;
-  --accent: oklch(0.97 0 0);
-  --accent-muted: color-mix(in srgb, var(--brand) 55%, var(--text-h) 45%);
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.45);
-  --social-bg: rgba(244, 243, 236, 0.55);
-  --shadow: rgba(15, 13, 20, 0.06) 0 10px 15px -3px, rgba(15, 13, 20, 0.04) 0 4px 6px -2px;
-  --hero-mesh-opacity: 0.4;
-  --motion-orbit-color: var(--brand);
-  --motion-btn-bg: color-mix(in srgb, var(--text-h) 92%, var(--brand) 8%);
-  --motion-btn-fg: var(--text-on-strong);
-  --motion-btn-border: color-mix(in srgb, var(--text-h) 22%, var(--border) 78%);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-muted: #ef4444;
+/*
+  Design tokens — style guide source of truth.
+  Hex / rgba live only here. Components must use CSS vars or theme utilities.
+*/
 
-  --sans: Inter, "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
-  --heading: Inter, "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+:root {
+  /* Brand */
+  --brand-purple: #8204ff;
+  --brand-orange: #ff7952;
+  --brand-magenta: #c64bff;
+  --brand: var(--brand-purple);
+
+  /* Light surfaces (compatible light mode; style guide is dark-first) */
+  --bg-main: #f6f4fb;
+  --bg-sidebar: #f0ecf8;
+  --bg-card: #ffffff;
+  --bg-card-elevated: #ffffff;
+  --bg-input: #f3f0fa;
+  --bg-hover: #ebe6f6;
+  --bg-selected: rgba(130, 4, 255, 0.1);
+  --bg-divider: rgba(36, 32, 55, 0.08);
+
+  /* Text */
+  --text-primary: #181522;
+  --text-secondary: rgba(24, 21, 34, 0.72);
+  --text-muted: rgba(24, 21, 34, 0.5);
+  --text-placeholder: rgba(24, 21, 34, 0.35);
+  --text-disabled: rgba(24, 21, 34, 0.2);
+  --text-on-brand: #ffffff;
+
+  /* Gradients / glows */
+  --gradient-primary: linear-gradient(135deg, var(--brand-orange), var(--brand-magenta), var(--brand-purple));
+  --gradient-button: linear-gradient(90deg, var(--brand-orange), var(--brand-purple));
+  --gradient-button-hover: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--brand-orange) 88%, white 12%),
+    color-mix(in srgb, var(--brand-purple) 88%, white 12%)
+  );
+  --gradient-chart-fill: linear-gradient(180deg, color-mix(in srgb, var(--brand-orange) 55%, transparent), transparent);
+  --glow-purple: rgba(130, 4, 255, 0.25);
+  --glow-orange: rgba(255, 121, 82, 0.2);
+
+  /* Button secondary / disabled */
+  --btn-secondary-bg: #e8e3f2;
+  --btn-secondary-bg-hover: #ddd6ec;
+  --btn-secondary-fg: rgba(24, 21, 34, 0.82);
+  --btn-disabled-bg: rgba(36, 32, 55, 0.12);
+  --btn-disabled-fg: var(--text-disabled);
+
+  /* App aliases (existing components) */
+  --text: var(--text-secondary);
+  --text-h: var(--text-primary);
+  --text-on-strong: var(--text-on-brand);
+  --bg: var(--bg-main);
+  --bg-elevated: var(--bg-card);
+  --border: var(--bg-divider);
+  --code-bg: color-mix(in srgb, var(--bg-input) 92%, var(--brand-purple) 8%);
+  --accent: var(--bg-hover);
+  --accent-muted: color-mix(in srgb, var(--brand-purple) 55%, var(--text-primary) 45%);
+  --accent-bg: var(--bg-selected);
+  --accent-border: color-mix(in srgb, var(--brand-purple) 45%, transparent);
+  --social-bg: color-mix(in srgb, var(--bg-sidebar) 70%, transparent);
+  --shadow: rgba(36, 32, 55, 0.08) 0 10px 15px -3px, rgba(36, 32, 55, 0.05) 0 4px 6px -2px;
+  --hero-mesh-opacity: 0.35;
+  --motion-orbit-color: var(--brand-purple);
+  --motion-btn-bg: var(--gradient-button);
+  --motion-btn-fg: var(--text-on-brand);
+  --motion-btn-border: transparent;
+  --destructive: #e5484d;
+  --destructive-muted: #ef4444;
+  --success: #10b981;
+  --warning: #f59e0b;
+
+  --sans: "Nunito", "Nunito Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+  --heading: "Nunito", "Nunito Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
   --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
 
   font: 16px/150% var(--sans);
   letter-spacing: -0.011em;
   color-scheme: light;
-  color: var(--text);
-  background: var(--bg);
+  color: var(--text-secondary);
+  background: var(--bg-main);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -55,152 +106,111 @@
     letter-spacing: 0;
   }
 
-  --background: oklch(1 0 0);
-
-  --foreground: oklch(0.145 0 0);
-
-  --card: oklch(1 0 0);
-
-  --card-foreground: oklch(0.145 0 0);
-
-  --popover: oklch(1 0 0);
-
-  --popover-foreground: oklch(0.145 0 0);
-
-  --primary: oklch(0.205 0 0);
-
-  --primary-foreground: oklch(0.985 0 0);
-
-  --secondary: oklch(0.97 0 0);
-
-  --secondary-foreground: oklch(0.205 0 0);
-
-  --muted: oklch(0.97 0 0);
-
-  --muted-foreground: oklch(0.556 0 0);
-
-  --accent-foreground: oklch(0.205 0 0);
-
-  --input: oklch(0.922 0 0);
-
-  --ring: oklch(0.708 0 0);
-
-  --chart-1: oklch(0.87 0 0);
-
-  --chart-2: oklch(0.556 0 0);
-
-  --chart-3: oklch(0.439 0 0);
-
-  --chart-4: oklch(0.371 0 0);
-
-  --chart-5: oklch(0.269 0 0);
-
-  --radius: 0.625rem;
-
-  --sidebar: oklch(0.985 0 0);
-
-  --sidebar-foreground: oklch(0.145 0 0);
-
-  --sidebar-primary: oklch(0.205 0 0);
-
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-
-  --sidebar-accent: oklch(0.97 0 0);
-
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-
-  --sidebar-border: oklch(0.922 0 0);
-
-  --sidebar-ring: oklch(0.708 0 0);
+  /* shadcn semantic tokens → style guide */
+  --background: var(--bg-main);
+  --foreground: var(--text-primary);
+  --card: var(--bg-card);
+  --card-foreground: var(--text-primary);
+  --popover: var(--bg-card-elevated);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--brand-purple);
+  --primary-foreground: var(--text-on-brand);
+  --secondary: var(--btn-secondary-bg);
+  --secondary-foreground: var(--btn-secondary-fg);
+  --muted: var(--bg-hover);
+  --muted-foreground: var(--text-muted);
+  --accent-foreground: var(--text-primary);
+  --input: var(--bg-input);
+  --ring: var(--brand-purple);
+  --chart-1: var(--brand-orange);
+  --chart-2: var(--brand-magenta);
+  --chart-3: var(--brand-purple);
+  --chart-4: color-mix(in srgb, var(--brand-orange) 70%, white 30%);
+  --chart-5: color-mix(in srgb, var(--brand-purple) 70%, white 30%);
+  --radius: 0.75rem;
+  --sidebar: var(--bg-sidebar);
+  --sidebar-foreground: var(--text-primary);
+  --sidebar-primary: var(--brand-purple);
+  --sidebar-primary-foreground: var(--text-on-brand);
+  --sidebar-accent: var(--bg-hover);
+  --sidebar-accent-foreground: var(--text-primary);
+  --sidebar-border: var(--bg-divider);
+  --sidebar-ring: var(--brand-purple);
 }
 
 .dark {
-  --text: #9ca3af;
-  --text-h: #f3f4f6;
-  --text-muted: #8b9099;
-  --text-on-strong: #f9fafb;
-  --bg: #12131a;
-  --bg-elevated: #1a1b24;
-  --border: oklch(1 0 0 / 10%);
-  --code-bg: #1e1f2a;
-  --brand: #c084fc;
-  --accent: oklch(0.269 0 0);
-  --accent-muted: color-mix(in srgb, var(--brand) 70%, white 30%);
-  --accent-bg: rgba(192, 132, 252, 0.12);
-  --accent-border: rgba(192, 132, 252, 0.45);
-  --social-bg: rgba(36, 38, 50, 0.72);
+  /* Style guide dark surfaces */
+  --bg-main: #1a1628;
+  --bg-sidebar: #211d34;
+  --bg-card: #2c2745;
+  --bg-card-elevated: #322c4d;
+  --bg-input: #2e2948;
+  --bg-hover: #383255;
+  --bg-selected: rgba(130, 4, 255, 0.15);
+  --bg-divider: rgba(255, 255, 255, 0.06);
+
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.72);
+  --text-muted: rgba(255, 255, 255, 0.5);
+  --text-placeholder: rgba(255, 255, 255, 0.35);
+  --text-disabled: rgba(255, 255, 255, 0.2);
+  --text-on-brand: #ffffff;
+
+  --glow-purple: rgba(130, 4, 255, 0.25);
+  --glow-orange: rgba(255, 121, 82, 0.2);
+
+  --btn-secondary-bg: #353245;
+  --btn-secondary-bg-hover: var(--bg-hover);
+  --btn-secondary-fg: #d1d1d1;
+  --btn-disabled-bg: rgba(56, 50, 85, 0.55);
+  --btn-disabled-fg: var(--text-disabled);
+
+  --border: var(--bg-divider);
+  --code-bg: color-mix(in srgb, var(--bg-input) 88%, black 12%);
+  --accent: var(--bg-hover);
+  --accent-muted: color-mix(in srgb, var(--brand-purple) 70%, white 30%);
+  --accent-bg: var(--bg-selected);
+  --accent-border: color-mix(in srgb, var(--brand-purple) 45%, transparent);
+  --social-bg: color-mix(in srgb, var(--bg-sidebar) 72%, transparent);
   --shadow: rgba(0, 0, 0, 0.45) 0 12px 18px -4px, rgba(0, 0, 0, 0.28) 0 6px 8px -3px;
   --hero-mesh-opacity: 0.22;
-  --motion-orbit-color: color-mix(in srgb, var(--brand) 90%, white 10%);
-  --motion-btn-bg: color-mix(in srgb, var(--bg-elevated) 82%, var(--brand) 18%);
-  --motion-btn-fg: var(--text-h);
-  --motion-btn-border: var(--accent-border);
-  --destructive: oklch(0.704 0.191 22.216);
+  --motion-orbit-color: color-mix(in srgb, var(--brand-purple) 90%, white 10%);
+  --destructive: #f87171;
   --destructive-muted: #fca5a5;
+  --success: #34d399;
+  --warning: #fbbf24;
 
   color-scheme: dark;
 
-  --background: oklch(0.145 0 0);
-
-  --foreground: oklch(0.985 0 0);
-
-  --card: oklch(0.205 0 0);
-
-  --card-foreground: oklch(0.985 0 0);
-
-  --popover: oklch(0.205 0 0);
-
-  --popover-foreground: oklch(0.985 0 0);
-
-  --primary: oklch(0.922 0 0);
-
-  --primary-foreground: oklch(0.205 0 0);
-
-  --secondary: oklch(0.269 0 0);
-
-  --secondary-foreground: oklch(0.985 0 0);
-
-  --muted: oklch(0.269 0 0);
-
-  --muted-foreground: oklch(0.708 0 0);
-
-  --accent-foreground: oklch(0.985 0 0);
-
-  --input: oklch(1 0 0 / 15%);
-
-  --ring: oklch(0.556 0 0);
-
-  --chart-1: oklch(0.87 0 0);
-
-  --chart-2: oklch(0.556 0 0);
-
-  --chart-3: oklch(0.439 0 0);
-
-  --chart-4: oklch(0.371 0 0);
-
-  --chart-5: oklch(0.269 0 0);
-
-  --sidebar: oklch(0.205 0 0);
-
-  --sidebar-foreground: oklch(0.985 0 0);
-
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-
-  --sidebar-accent: oklch(0.269 0 0);
-
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-
-  --sidebar-border: oklch(1 0 0 / 10%);
-
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: var(--bg-main);
+  --foreground: var(--text-primary);
+  --card: var(--bg-card);
+  --card-foreground: var(--text-primary);
+  --popover: var(--bg-card-elevated);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--brand-purple);
+  --primary-foreground: var(--text-on-brand);
+  --secondary: var(--btn-secondary-bg);
+  --secondary-foreground: var(--btn-secondary-fg);
+  --muted: var(--bg-hover);
+  --muted-foreground: var(--text-muted);
+  --accent-foreground: var(--text-primary);
+  --input: var(--bg-input);
+  --ring: var(--brand-purple);
+  --sidebar: var(--bg-sidebar);
+  --sidebar-foreground: var(--text-primary);
+  --sidebar-primary: var(--brand-purple);
+  --sidebar-primary-foreground: var(--text-on-brand);
+  --sidebar-accent: var(--bg-hover);
+  --sidebar-accent-foreground: var(--text-primary);
+  --sidebar-border: var(--bg-divider);
+  --sidebar-ring: var(--brand-purple);
 }
 
 html[dir="rtl"] {
-  --font-sans: "Noto Sans Arabic", Inter, ui-sans-serif, system-ui, "Segoe UI", Tahoma, sans-serif;
-  --sans: "Noto Sans Arabic", Inter, ui-sans-serif, system-ui, "Segoe UI", Tahoma, sans-serif;
-  --heading: "Noto Sans Arabic", Inter, ui-sans-serif, system-ui, "Segoe UI", Tahoma, sans-serif;
+  --font-sans: "Nunito", "Nunito Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Tahoma, sans-serif;
+  --sans: "Nunito", "Nunito Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Tahoma, sans-serif;
+  --heading: "Nunito", "Nunito Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Tahoma, sans-serif;
   letter-spacing: 0.01em;
 }
 
@@ -218,7 +228,7 @@ h1,
 h2 {
   font-family: var(--heading);
   font-weight: 500;
-  color: var(--text-h);
+  color: var(--text-primary);
 }
 
 h2 {
@@ -238,7 +248,7 @@ code {
   font-family: var(--mono);
   display: inline-flex;
   border-radius: 4px;
-  color: var(--text-h);
+  color: var(--text-primary);
   font-size: 0.8125rem;
   line-height: 1.45;
   padding: 4px 8px;
@@ -247,7 +257,32 @@ code {
 
 @theme inline {
   --font-heading: var(--font-sans);
-  --font-sans: "Geist Variable", sans-serif;
+
+  /* Style-guide colors as Tailwind utilities: bg-brand-purple, text-text-muted, etc. */
+  --color-brand-purple: var(--brand-purple);
+  --color-brand-orange: var(--brand-orange);
+  --color-brand-magenta: var(--brand-magenta);
+  --color-brand: var(--brand);
+
+  --color-bg-main: var(--bg-main);
+  --color-bg-sidebar: var(--bg-sidebar);
+  --color-bg-card: var(--bg-card);
+  --color-bg-card-elevated: var(--bg-card-elevated);
+  --color-bg-input: var(--bg-input);
+  --color-bg-hover: var(--bg-hover);
+  --color-bg-selected: var(--bg-selected);
+  --color-bg-divider: var(--bg-divider);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-text-placeholder: var(--text-placeholder);
+  --color-text-disabled: var(--text-disabled);
+  --color-text-on-brand: var(--text-on-brand);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -279,10 +314,11 @@ code {
   --color-card: var(--card);
   --color-foreground: var(--foreground);
   --color-background: var(--background);
+
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-xl: calc(var(--radius) * 1.35);
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
@@ -297,6 +333,89 @@ code {
   }
   html {
     @apply font-sans;
+  }
+}
+
+@layer utilities {
+  .type-display {
+    @apply text-3xl font-semibold leading-tight tracking-tight sm:text-4xl;
+  }
+
+  .type-h1 {
+    @apply text-xl font-semibold leading-tight tracking-tight sm:text-2xl;
+  }
+
+  .type-h2 {
+    @apply text-lg font-semibold leading-snug tracking-tight sm:text-xl;
+  }
+
+  .type-title {
+    @apply text-base font-semibold leading-snug;
+  }
+
+  .type-body {
+    @apply text-sm font-normal leading-relaxed;
+  }
+
+  .type-body-strong {
+    @apply text-sm font-medium leading-relaxed;
+  }
+
+  .type-label {
+    @apply text-sm font-medium leading-tight;
+  }
+
+  .type-caption {
+    @apply text-xs font-medium leading-tight;
+  }
+
+  .type-caption-xs {
+    font-size: 0.625rem;
+    line-height: 1.15;
+    font-weight: 500;
+  }
+
+  .type-overline {
+    font-size: 0.625rem;
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .bg-gradient-primary {
+    background-image: var(--gradient-primary);
+  }
+
+  .bg-gradient-button {
+    background-image: var(--gradient-button);
+  }
+
+  .bg-gradient-button-hover {
+    background-image: var(--gradient-button-hover);
+  }
+
+  .bg-gradient-chart-fill {
+    background-image: var(--gradient-chart-fill);
+  }
+
+  .text-gradient-primary {
+    background-image: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .shadow-glow-purple {
+    box-shadow: 0 0 24px var(--glow-purple);
+  }
+
+  .shadow-glow-orange {
+    box-shadow: 0 0 24px var(--glow-orange);
+  }
+
+  .ring-glow-purple {
+    box-shadow: 0 0 0 3px var(--glow-purple);
   }
 }
 
@@ -369,6 +488,27 @@ code {
   }
 }
 
+@keyframes auth-icon-float {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -14px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.auth-icon-float {
+  animation: auth-icon-float 7s ease-in-out infinite;
+}
+
+.auth-icon-float svg,
+.auth-icon-float img {
+  filter: drop-shadow(0 10px 24px color-mix(in srgb, var(--brand-purple) 20%, transparent));
+}
+
 .auth-reveal-overlay {
   position: fixed;
   inset: 0;
@@ -381,7 +521,7 @@ code {
   position: absolute;
   overflow: hidden;
   will-change: transform, opacity;
-  box-shadow: 0 0 28px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 0 28px color-mix(in srgb, var(--text-primary) 18%, transparent);
   display: flex;
   flex-direction: column;
 }

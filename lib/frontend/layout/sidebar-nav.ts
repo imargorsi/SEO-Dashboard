@@ -22,10 +22,13 @@ export type SidebarNavLabelKey =
   | "rolesPermissions"
   | "settings";
 
+export type SidebarNavGroup = "general" | "mySpace";
+
 export type SidebarNavItem = {
   path: string;
   labelKey: SidebarNavLabelKey;
   icon: IconType;
+  group: SidebarNavGroup;
   badge?: number;
   /** Extra path prefixes that mark this item active (e.g. `/permissions` for roles module). */
   matchPaths?: string[];
@@ -43,6 +46,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
     path: "/dashboard",
     labelKey: "dashboard",
     icon: IoGridOutline,
+    group: "general",
     viewPermission: "dashboard.view",
     permissionScope: "project",
   },
@@ -50,6 +54,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
     path: "/projects",
     labelKey: "projects",
     icon: IoFolderOpenOutline,
+    group: "general",
     viewPermission: "projects.view",
     permissionScope: "project",
   },
@@ -57,6 +62,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
     path: "/analytics",
     labelKey: "analytics",
     icon: IoBarChartOutline,
+    group: "general",
     viewPermission: "analytics.view",
     permissionScope: "project",
   },
@@ -64,6 +70,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
     path: "/seo-activities",
     labelKey: "seoActivities",
     icon: IoSearchOutline,
+    group: "general",
     viewPermission: "seo_activities.view",
     permissionScope: "project",
   },
@@ -71,6 +78,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
     path: "/leads",
     labelKey: "leads",
     icon: IoPeopleOutline,
+    group: "general",
     viewPermission: "leads.view",
     permissionScope: "project",
   },
@@ -78,6 +86,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
     path: "/reports",
     labelKey: "reports",
     icon: IoDocumentTextOutline,
+    group: "general",
     viewPermission: "reports.view",
     permissionScope: "project",
   },
@@ -85,6 +94,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
     path: "/users",
     labelKey: "users",
     icon: IoPeopleCircleOutline,
+    group: "mySpace",
     viewPermission: "admin.users.view",
     permissionScope: "platform",
   },
@@ -92,6 +102,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
     path: "/roles",
     labelKey: "rolesPermissions",
     icon: IoShieldOutline,
+    group: "mySpace",
     viewPermission: "admin.roles.view",
     permissionScope: "platform",
   },
@@ -99,10 +110,13 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
     path: "/settings",
     labelKey: "settings",
     icon: IoSettingsOutline,
+    group: "mySpace",
     viewPermission: null,
     permissionScope: "platform",
   },
 ];
+
+export const SIDEBAR_NAV_GROUP_ORDER: readonly SidebarNavGroup[] = ["general", "mySpace"];
 
 export function isSidebarNavItemActive(
   pathname: string,

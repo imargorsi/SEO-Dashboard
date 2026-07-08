@@ -40,7 +40,7 @@ function AuthRevealFormPanel() {
   return (
     <section className="flex h-full flex-1 flex-col justify-center bg-[var(--bg)] px-6 py-10 sm:px-10 lg:px-14 lg:py-12">
       <div className="mx-auto w-full max-w-[26rem]">
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-7 shadow-sm sm:p-8">
+        <div className="rounded-xl border border-[var(--border)] bg-transparent p-7 shadow-sm sm:p-8">
           <div className="h-8 w-32 rounded-md bg-[var(--border)]/60" aria-hidden />
           <div className="mt-2 h-4 w-56 max-w-full rounded-md bg-[var(--border)]/40" aria-hidden />
           <div className="mt-8 space-y-5">

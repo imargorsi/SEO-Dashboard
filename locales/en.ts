@@ -6,11 +6,14 @@ export interface Translation {
     triggerLabel: string;
     listLabel: string;
     listHeading: string;
+    cardLabel: string;
   };
   nav: {
     aria: string;
     openMenu: string;
     closeMenu: string;
+    sectionGeneral: string;
+    sectionMySpace: string;
     dashboard: string;
     users: string;
     rolesPermissions: string;
@@ -391,11 +394,15 @@ export interface Translation {
       password: string;
       submit: string;
       forgotPassword: string;
-      heroTitle: string;
+      heroTitleStart: string;
+      heroTitleAccent: string;
       heroLead: string;
       heroPoint1: string;
       heroPoint2: string;
       heroPoint3: string;
+      continueWith: string;
+      continueGoogle: string;
+      continueSso: string;
       emailInvalid: string;
       passwordMin: string;
       fieldRequired: string;
@@ -474,17 +481,20 @@ export interface Translation {
 
 const translation: Translation = {
   layout: {
-    appName: "SEO Dashboard",
+    appName: "RankRadar",
   },
   projectSelector: {
-    triggerLabel: "Selected project: {{name}}",
-    listLabel: "Switch project",
-    listHeading: "Your projects",
+    triggerLabel: "Selected Project: {{name}}",
+    listLabel: "Switch Project",
+    listHeading: "Your Projects",
+    cardLabel: "Project",
   },
   nav: {
-    aria: "Main navigation",
-    openMenu: "Open menu",
-    closeMenu: "Close menu",
+    aria: "Main Navigation",
+    openMenu: "Open Menu",
+    closeMenu: "Close Menu",
+    sectionGeneral: "General",
+    sectionMySpace: "My Space",
     dashboard: "Dashboard",
     users: "Users",
     rolesPermissions: "Roles & Permissions",
@@ -860,17 +870,21 @@ const translation: Translation = {
   },
   auth: {
     signIn: {
-      title: "Sign in",
-      subtitle: "Welcome back. Enter your details to continue.",
+      title: "Welcome Back",
+      subtitle: "Log in to your workspace. Your SEO dashboard is ready.",
       email: "Email",
       password: "Password",
-      submit: "Sign in",
-      forgotPassword: "Forgot password?",
-      heroTitle: "SEO clarity for every client",
+      submit: "Log In",
+      forgotPassword: "Forgot Password?",
+      heroTitleStart: "SEO Clarity For",
+      heroTitleAccent: "Every Client",
       heroLead: "Track rankings, spot opportunities, and keep stakeholders aligned from one calm workspace.",
       heroPoint1: "Multi-client dashboards without the spreadsheet chaos",
       heroPoint2: "Scheduled checks and history you can trust",
       heroPoint3: "Built for teams who care about accuracy",
+      continueWith: "Continue With",
+      continueGoogle: "Google",
+      continueSso: "SSO",
       emailInvalid: "Enter a valid email address.",
       passwordMin: "Use at least 6 characters.",
       fieldRequired: "This field is required.",
@@ -879,8 +893,8 @@ const translation: Translation = {
       emailVerifiedSuccess: "Your email address has been verified. You can sign in now.",
       registrationSuccess:
         "Account created. Check your email for a verification link, then sign in to continue.",
-      noAccountPrompt: "New to Rank Radar?",
-      registerCta: "Create an account",
+      noAccountPrompt: "New here?",
+      registerCta: "Start Your Journey",
     },
     forgotPassword: {
       title: "Forgot password",
@@ -909,8 +923,8 @@ const translation: Translation = {
       invalidLinkBody: "This link is missing required information. Request a new reset email from the sign-in page.",
     },
     register: {
-      title: "Create your account",
-      subtitle: "Sign up with your name and email. You can set up your first project after you sign in.",
+      title: "Create An Account",
+      subtitle: "Create an account to get started with Rank Radar",
       fullName: "Full name",
       fullNamePh: "Jane Doe",
       fullNameMin: "Enter at least 2 characters.",
@@ -919,9 +933,9 @@ const translation: Translation = {
       confirmPassword: "Confirm password",
       passwordMin: "Use at least 8 characters.",
       passwordMismatch: "Passwords do not match.",
-      submit: "Create account",
+      submit: "Create Account",
       hasAccount: "Already have an account?",
-      signInLink: "Sign in",
+      signInLink: "Log In",
       fieldRequired: "This field is required.",
       emailInvalid: "Enter a valid email address.",
       submitSuccess: "Account created. Check your email for a verification link, then sign in.",

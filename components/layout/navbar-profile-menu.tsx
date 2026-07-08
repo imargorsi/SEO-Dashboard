@@ -14,7 +14,7 @@ import { notify } from "@/lib/frontend/feedback/notify";
 import { cn } from "@/lib/utils";
 
 const menuItemClass =
-  "flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-start text-sm font-medium text-text-primary transition hover:bg-bg-hover";
+  "flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-start type-body-strong text-text-primary transition hover:bg-bg-hover";
 
 type NavbarProfileMenuProps = {
   placement?: "topbar" | "sidebar";
@@ -111,11 +111,11 @@ export function NavbarProfileMenu({ placement = "topbar" }: NavbarProfileMenuPro
           size={isSidebarPlacement ? "md" : "sm"}
         />
         <span className={cn("min-w-0 flex-1 text-start", !isSidebarPlacement && "hidden sm:block")}>
-          <span className={cn("block truncate font-medium text-text-primary", isSidebarPlacement ? "text-sm" : "text-xs")}>
+          <span className={cn("block truncate text-text-primary", isSidebarPlacement ? "type-body-strong" : "type-caption")}>
             {displayName}
           </span>
           {isSidebarPlacement && roleLine ? (
-            <span className="block truncate text-[11px] text-text-muted">{roleLine}</span>
+            <span className="block truncate type-caption-xs text-text-muted">{roleLine}</span>
           ) : null}
         </span>
         <IoChevronDown
@@ -143,21 +143,21 @@ export function NavbarProfileMenu({ placement = "topbar" }: NavbarProfileMenuPro
                 size={isSidebarPlacement ? "md" : "sm"}
               />
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-semibold text-text-primary">{displayName}</p>
+                <p className="truncate type-body-strong text-text-primary">{displayName}</p>
                 {email ? (
-                  <p className="truncate text-xs text-text-muted">{email}</p>
+                  <p className="truncate type-caption text-text-muted">{email}</p>
                 ) : (
-                  <p className="truncate text-xs text-text-muted">{t("noEmail")}</p>
+                  <p className="truncate type-caption text-text-muted">{t("noEmail")}</p>
                 )}
                 {roleLine ? (
-                  <p className="truncate text-[11px] font-medium capitalize text-text-muted">{roleLine}</p>
+                  <p className="truncate type-caption-xs capitalize text-text-muted">{roleLine}</p>
                 ) : null}
               </div>
             </div>
           </div>
 
           {verified ? (
-            <div className="flex items-center gap-2 border-b border-border px-3 py-2.5 text-xs font-medium text-success">
+            <div className="flex items-center gap-2 border-b border-border px-3 py-2.5 type-caption text-success">
               <IoCheckmarkCircle className="size-4 shrink-0" aria-hidden />
               <span>{t("emailVerified")}</span>
             </div>
@@ -175,8 +175,8 @@ export function NavbarProfileMenu({ placement = "topbar" }: NavbarProfileMenuPro
                 <IoAlertCircle className="mt-0.5 size-4 shrink-0 text-warning" aria-hidden />
               )}
               <span className="min-w-0 flex-1">
-                <span className="block text-xs font-medium text-warning">{t("emailNotVerified")}</span>
-                <span className="mt-0.5 block text-[11px] text-text-muted">{t("resendVerification")}</span>
+                <span className="block type-caption text-warning">{t("emailNotVerified")}</span>
+                <span className="mt-0.5 block type-caption-xs text-text-muted">{t("resendVerification")}</span>
               </span>
             </button>
           )}

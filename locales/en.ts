@@ -394,11 +394,15 @@ export interface Translation {
       password: string;
       submit: string;
       forgotPassword: string;
-      heroTitle: string;
+      heroTitleStart: string;
+      heroTitleAccent: string;
       heroLead: string;
       heroPoint1: string;
       heroPoint2: string;
       heroPoint3: string;
+      continueWith: string;
+      continueGoogle: string;
+      continueSso: string;
       emailInvalid: string;
       passwordMin: string;
       fieldRequired: string;
@@ -872,11 +876,15 @@ const translation: Translation = {
       password: "Password",
       submit: "Sign in",
       forgotPassword: "Forgot password?",
-      heroTitle: "SEO clarity for every client",
+      heroTitleStart: "SEO Clarity For",
+      heroTitleAccent: "Every Client",
       heroLead: "Track rankings, spot opportunities, and keep stakeholders aligned from one calm workspace.",
       heroPoint1: "Multi-client dashboards without the spreadsheet chaos",
       heroPoint2: "Scheduled checks and history you can trust",
       heroPoint3: "Built for teams who care about accuracy",
+      continueWith: "Continue With",
+      continueGoogle: "Google",
+      continueSso: "SSO",
       emailInvalid: "Enter a valid email address.",
       passwordMin: "Use at least 6 characters.",
       fieldRequired: "This field is required.",

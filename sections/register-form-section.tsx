@@ -41,9 +41,9 @@ export function RegisterFormSection({
       <Heading id="register-heading" pageTitle>
         {t("title")}
       </Heading>
-      <Paragraph className="mt-2 text-sm leading-relaxed">{t("subtitle")}</Paragraph>
+      <Paragraph className="mt-2 text-sm font-normal leading-relaxed text-text-secondary">{t("subtitle")}</Paragraph>
 
-      <form className="mt-8 flex flex-col gap-5" onSubmit={onValidSubmit} noValidate>
+      <form className="mt-7 flex flex-col gap-4.5" onSubmit={onValidSubmit} noValidate>
         <Input
           id="register-name"
           label={t("fullName")}
@@ -109,9 +109,9 @@ export function RegisterFormSection({
         </AuthSubmitButton>
       </form>
 
-      <Paragraph moreSmaller className="!mt-6 text-center">
-        <span className="text-[var(--text-muted)]">{t("hasAccount")} </span>
-        <Link href="/" className="text-[var(--brand)] hover:underline">
+      <Paragraph moreSmaller className="mt-6! text-center">
+        <span className="text-text-muted">{t("hasAccount")} </span>
+        <Link href="/" className="font-semibold text-brand-orange transition-colors hover:text-brand-magenta hover:underline">
           {t("signInLink")}
         </Link>
       </Paragraph>

@@ -3,6 +3,7 @@
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
+import { FcGoogle } from "react-icons/fc";
 import { SignInAuthCardShell } from "@/components/sign-in-auth-card-shell";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -38,12 +39,12 @@ export function SignInFormSection({
         </>
       }
     >
-      <Heading id="sign-in-heading" pageTitle>
+      <Heading id="sign-in-heading" heroTitle >
         {t("title")}
       </Heading>
-      <Paragraph className="mt-2 text-sm leading-relaxed">{t("subtitle")}</Paragraph>
+      <Paragraph className="mt-2 text-sm font-normal leading-relaxed text-text-secondary">{t("subtitle")}</Paragraph>
 
-      <form className="mt-8 flex flex-col gap-5" onSubmit={onValidSubmit} noValidate>
+      <form className="mt-7 flex flex-col gap-4.5" onSubmit={onValidSubmit} noValidate>
         <Input
           id="sign-in-email"
           label={t("email")}
@@ -75,22 +76,43 @@ export function SignInFormSection({
           })}
         />
 
-        <AuthSubmitButton disabled={isSubmitting} className="mt-1">
+        <div className="-mt-1 flex justify-end">
+          <Link href="/forgot-password" className="type-caption text-text-secondary transition-colors hover:text-text-primary hover:underline">
+            {t("forgotPassword")}
+          </Link>
+        </div>
+
+        <AuthSubmitButton disabled={isSubmitting} className="mt-0.5">
           {isSubmitting ? <Spinner className="size-4 shrink-0 text-white" /> : null}
           {t("submit")}
         </AuthSubmitButton>
       </form>
 
-      <div className="mt-2 flex flex-col gap-3">
-        <Paragraph moreSmaller className="text-right">
-          <Link href="/forgot-password" className="text-[var(--brand)] hover:underline">
-            {t("forgotPassword")}
-          </Link>
-        </Paragraph>
+      <div className="mt-6">
+        <div className="flex items-center gap-3 type-overline text-text-muted">
+          <span className="h-px flex-1 bg-border" aria-hidden />
+          <span>{t("continueWith")}</span>
+          <span className="h-px flex-1 bg-border" aria-hidden />
+        </div>
 
-        <Paragraph moreSmaller className="border-t border-[var(--border)] pt-4 text-center leading-relaxed">
-          <span className="text-[var(--text-muted)]">{t("noAccountPrompt")} </span>
-          <Link href="/register" className="font-medium text-[var(--brand)] hover:underline">
+        <div className="mt-4">
+          <button
+            type="button"
+            className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-border bg-bg-card px-3 text-sm font-medium text-text-primary transition-colors hover:bg-bg-hover"
+          >
+            <FcGoogle className="size-4 shrink-0" aria-hidden />
+            <span>{t("continueGoogle")}</span>
+          </button>
+        </div>
+      </div>
+
+      <div className="mt-6 pt-2">
+        <Paragraph moreSmaller className="text-center leading-relaxed">
+          <span className="text-text-muted">{t("noAccountPrompt")} </span>
+          <Link
+            href="/register"
+            className="font-semibold text-brand-orange transition-colors hover:text-brand-magenta hover:underline"
+          >
             {t("registerCta")}
           </Link>
         </Paragraph>

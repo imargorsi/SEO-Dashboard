@@ -22,7 +22,7 @@ function ProjectLogo({
     <span
       className={cn(
         "inline-flex shrink-0 items-center justify-center rounded-lg font-semibold text-text-on-brand",
-        size === "sm" ? "size-7 text-[10px]" : "size-9 text-[11px]"
+        size === "sm" ? "size-7 type-overline" : "size-9 type-caption-xs"
       )}
       style={{
         background: `linear-gradient(135deg, ${project.logoGradientFrom} 0%, ${project.logoGradientTo} 100%)`,
@@ -53,8 +53,8 @@ function ProjectOption({
     >
       <ProjectLogo project={project} size="sm" />
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-[13px] font-medium text-text-primary">{project.name} 22</span>
-        <span className="block truncate text-[11px] text-text-muted">
+        <span className="block truncate type-body-strong text-text-primary">{project.name}</span>
+        <span className="block truncate type-caption-xs text-text-muted">
           {formatProjectHostname(project.url)}
         </span>
       </span>
@@ -87,7 +87,7 @@ export function ProjectSelector() {
       <div
         className={cn(
           "overflow-hidden rounded-xl border border-border bg-bg-card transition-[border-color] duration-200",
-          open && "border-[var(--accent-border)]"
+          open && "border-(--accent-border)"
         )}
       >
         <button
@@ -101,10 +101,10 @@ export function ProjectSelector() {
         >
           <ProjectLogo project={selectedProject} />
           <span className="min-w-0 flex-1">
-            <span className="block truncate text-[10px] font-semibold uppercase tracking-[0.12em] text-text-muted">
+            <span className="block truncate type-overline text-text-muted">
               {t("cardLabel")}
             </span>
-            <span className="block truncate text-[13px] font-semibold leading-tight text-text-primary">
+            <span className="block truncate type-body-strong text-text-primary">
               {selectedProject.name}
             </span>
           </span>
@@ -130,7 +130,7 @@ export function ProjectSelector() {
               aria-label={t("listLabel")}
               className="border-t border-border px-1.5 pb-1.5 pt-1"
             >
-              <p className="px-2 pb-1 pt-1 text-[10px] font-semibold uppercase tracking-wider text-text-muted">
+              <p className="px-2 pb-1 pt-1 type-overline text-text-muted">
                 {t("listHeading")}
               </p>
               <div className="flex flex-col gap-0.5">

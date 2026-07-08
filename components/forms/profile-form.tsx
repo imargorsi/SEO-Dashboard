@@ -8,6 +8,7 @@ import { Input } from "@/components/input";
 import { Spinner } from "@/components/ui/spinner";
 import { useProfileForm } from "@/components/forms/hooks/use-profile-form";
 import type { AuthUser } from "@/lib/frontend/auth/types";
+import { Heading } from "../heading";
 
 type ProfileFormProps = {
   user: AuthUser;
@@ -30,16 +31,18 @@ export function ProfileForm({ user }: ProfileFormProps) {
   } = useProfileForm(user);
 
   return (
-    <section className="rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-5 sm:p-6">
+    <section className="rounded-xl border border-border bg-bg-card p-5 sm:p-6">
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="mb-5">
-          <h1 className="text-xl font-semibold text-[var(--text-h)]">{t("title")}</h1>
-          <p className="mt-1 text-sm text-[var(--text-muted)]">{t("lead")}</p>
+          <Heading id="profile-heading" SmallTitle customHeadingTag="h2">
+            {t("title")}
+          </Heading>
+          <p className="mt-1 type-body text-text-muted">{t("lead")}</p>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="sm:col-span-2">
-            <span className="mb-2 block text-sm font-medium text-[var(--text-h)]">{t("photoLabel")}</span>
+            <span className="mb-2 block type-label text-text-primary">{t("photoLabel")}</span>
             <div className="flex flex-wrap items-start gap-4">
               <SidebarUserAvatar
                 name={name || user.name}
@@ -51,7 +54,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
                 <Button type="button" variant="outline" size="sm" className="w-fit" onClick={openFilePicker}>
                   {hasPhoto ? t("photoChange") : t("photoPick")}
                 </Button>
-                <p className="text-xs text-[var(--text-muted)]">{t("photoHint")}</p>
+                <p className="type-caption text-text-muted">{t("photoHint")}</p>
                 <input
                   ref={fileInputRef}
                   type="file"

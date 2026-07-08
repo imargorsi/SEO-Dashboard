@@ -17,10 +17,10 @@ export const sidebarBrandRowClass =
 
 /** Nav link: gradient pill for active / hover. */
 export const sidebarNavLinkClass =
-  "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-medium transition-[background-image,background-color,color,filter] duration-200";
+  "group relative flex items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 type-body-strong transition-[border-color,background-color,box-shadow,transform,color] duration-200 before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:border before:border-border before:opacity-0 before:transition-opacity before:duration-200 hover:before:opacity-100 hover:shadow-[inset_0_1px_0_var(--bg-hover)] active:translate-y-px active:shadow-[inset_0_2px_0_var(--bg-hover)]";
 
 export const sidebarNavLinkActiveClass =
-  "bg-gradient-button font-semibold text-text-on-brand shadow-[0_0_20px_var(--glow-purple)]";
+  "border-border bg-bg-card text-text-primary shadow-[inset_0_1px_0_var(--bg-hover)]";
 
 export const sidebarNavLinkInactiveClass =
-  "text-text-muted hover:bg-gradient-button hover:font-semibold hover:text-text-on-brand hover:shadow-[0_0_16px_var(--glow-purple)]";
+  "text-text-secondary hover:border-border hover:bg-bg-card hover:text-text-primary";

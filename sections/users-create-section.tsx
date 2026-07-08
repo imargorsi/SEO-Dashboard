@@ -93,9 +93,11 @@ export function UsersCreateSection() {
             <div className="flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
               <Button
                 type="submit"
+                variant="primary"
+                size="lg"
                 disabled={createMutation.isPending}
                 aria-busy={createMutation.isPending}
-                className="h-11 w-full sm:min-w-44 sm:w-auto"
+                className="w-full sm:min-w-44 sm:w-auto"
               >
                 <span className="inline-flex items-center justify-center gap-2 px-1">
                   {createMutation.isPending ? <Spinner className="size-4 shrink-0" /> : null}

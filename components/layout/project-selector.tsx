@@ -53,13 +53,13 @@ function ProjectOption({
     >
       <ProjectLogo project={project} size="sm" />
       <span className="min-w-0 flex-1">
-        <span className="block truncate type-body-strong text-text-primary">{project.name}</span>
+        <span className="block truncate type-body text-text-primary">{project.name}</span>
         <span className="block truncate type-caption-xs text-text-muted">
           {formatProjectHostname(project.url)}
         </span>
       </span>
       {isSelected ? (
-        <IoCheckmark className="size-4 shrink-0 text-brand" aria-hidden />
+        <IoCheckmark className="size-4 shrink-0 text-brand-orange" aria-hidden />
       ) : (
         <span className="size-4 shrink-0" aria-hidden />
       )}
@@ -101,10 +101,10 @@ export function ProjectSelector() {
         >
           <ProjectLogo project={selectedProject} />
           <span className="min-w-0 flex-1">
-            <span className="block truncate type-overline text-text-muted">
+            <span className="block truncate type-caption-xs text-text-muted">
               {t("cardLabel")}
             </span>
-            <span className="block truncate type-body-strong text-text-primary">
+            <span className="block truncate type-body text-text-primary">
               {selectedProject.name}
             </span>
           </span>
@@ -130,7 +130,7 @@ export function ProjectSelector() {
               aria-label={t("listLabel")}
               className="border-t border-border px-1.5 pb-1.5 pt-1"
             >
-              <p className="px-2 pb-1 pt-1 type-overline text-text-muted">
+              <p className="px-2 pb-1 pt-1 type-caption-xs text-text-muted">
                 {t("listHeading")}
               </p>
               <div className="flex flex-col gap-0.5">

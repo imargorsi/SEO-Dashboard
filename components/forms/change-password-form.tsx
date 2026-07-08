@@ -65,7 +65,7 @@ export function ChangePasswordForm() {
         </div>
 
         <div className="mt-5 flex justify-end">
-          <Button variant="outline" type="submit" disabled={isSubmitting} aria-busy={isSubmitting}>
+          <Button variant="outlined" size="md" type="submit" disabled={isSubmitting} aria-busy={isSubmitting}>
             <span className="inline-flex items-center gap-2">
               {isSubmitting ? <Spinner className="size-4 shrink-0" /> : null}
               {isSubmitting ? t("submitting") : t("submit")}

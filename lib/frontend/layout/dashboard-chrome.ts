@@ -20,7 +20,7 @@ export const sidebarNavLinkClass =
   "group relative flex items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 type-body-strong transition-[border-color,background-color,box-shadow,transform,color] duration-200 before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:border before:border-border before:opacity-0 before:transition-opacity before:duration-200 hover:before:opacity-100 hover:shadow-[inset_0_1px_0_var(--bg-hover)] active:translate-y-px active:shadow-[inset_0_2px_0_var(--bg-hover)]";
 
 export const sidebarNavLinkActiveClass =
-  "border-border bg-bg-card text-text-primary shadow-[inset_0_1px_0_var(--bg-hover)]";
+  "border-0 bg-gradient-button text-text-on-brand shadow-none before:opacity-0 hover:before:opacity-0";
 
 export const sidebarNavLinkInactiveClass =
   "text-text-secondary hover:border-border hover:bg-bg-card hover:text-text-primary";

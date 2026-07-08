@@ -51,7 +51,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
                 className="size-16 rounded-xl text-sm"
               />
               <div className="flex min-w-0 flex-1 flex-col gap-2">
-                <Button type="button" variant="outline" size="sm" className="w-fit" onClick={openFilePicker}>
+                <Button type="button" variant="outlined" size="small" className="w-fit" onClick={openFilePicker}>
                   {hasPhoto ? t("photoChange") : t("photoPick")}
                 </Button>
                 <p className="type-caption text-text-muted">{t("photoHint")}</p>
@@ -88,7 +88,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
         </div>
 
         <div className="mt-5 flex justify-end">
-          <Button variant="outline" type="submit" disabled={isSubmitting} aria-busy={isSubmitting}>
+          <Button variant="outlined" size="md" type="submit" disabled={isSubmitting} aria-busy={isSubmitting}>
             <span className="inline-flex items-center gap-2">
               {isSubmitting ? <Spinner className="size-4 shrink-0" /> : null}
               {isSubmitting ? t("saving") : t("save")}

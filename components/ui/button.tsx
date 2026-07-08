@@ -8,10 +8,16 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        gradient:
+          "bg-gradient-button text-text-on-brand shadow-xs hover:bg-gradient-button-hover hover:brightness-105",
         default:
           "bg-gradient-button text-text-on-brand shadow-xs hover:bg-gradient-button-hover hover:brightness-105",
+        primary:
+          "bg-brand text-text-on-brand shadow-xs hover:brightness-105",
         destructive:
           "bg-destructive text-text-on-brand hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40",
+        outlined:
+          "border border-text-on-brand/80 bg-transparent text-text-primary shadow-xs hover:bg-bg-hover",
         outline:
           "border border-border bg-bg-card text-text-primary shadow-xs hover:bg-bg-hover",
         secondary:
@@ -20,6 +26,10 @@ const buttonVariants = cva(
         link: "rounded-md text-brand underline-offset-4 hover:underline",
       },
       size: {
+        small: "h-8 gap-1 rounded-lg px-3 text-xs has-[>svg]:px-2.5",
+        md: "h-9 px-4 py-2 text-sm has-[>svg]:px-3",
+        lg: "h-10 px-5 py-2.5 text-sm has-[>svg]:px-4",
+        xl: "h-11 px-6 py-3 text-base has-[>svg]:px-5",
         default: "h-9 px-4 py-2 text-sm has-[>svg]:px-3",
         sm: "h-8 gap-1 rounded-lg px-3 text-xs has-[>svg]:px-2.5",
         xs: "h-7 rounded-lg px-2.5 text-[11px] has-[>svg]:px-2",
@@ -28,8 +38,8 @@ const buttonVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "default",
-      size: "default",
+      variant: "primary",
+      size: "md",
     },
   }
 );

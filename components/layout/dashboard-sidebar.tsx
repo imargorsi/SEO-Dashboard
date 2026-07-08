@@ -55,8 +55,8 @@ export function DashboardSidebar({ onClose }: DashboardSidebarProps) {
           <Image
             src="/logo.svg"
             alt=""
-            width={80}
-            height={32}
+            width={60}
+            height={24}
             priority
             className="h-8 w-auto shrink-0"
             aria-hidden

@@ -488,6 +488,27 @@ code {
   }
 }
 
+@keyframes auth-icon-float {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -14px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.auth-icon-float {
+  animation: auth-icon-float 7s ease-in-out infinite;
+}
+
+.auth-icon-float svg,
+.auth-icon-float img {
+  filter: drop-shadow(0 10px 24px color-mix(in srgb, var(--brand-purple) 20%, transparent));
+}
+
 .auth-reveal-overlay {
   position: fixed;
   inset: 0;

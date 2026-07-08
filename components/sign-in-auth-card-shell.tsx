@@ -19,7 +19,7 @@ export function SignInAuthCardShell({ ariaLabelledBy, children, topToolbar }: Si
         </div>
       ) : null}
       <div className="mx-auto w-full max-w-104">
-        <div className="rounded-2xl border border-border bg-bg-card p-7 shadow-sm sm:p-8">
+        <div className="rounded-2xl bg-transparent p-7 sm:p-8">
           {children}
         </div>
       </div>

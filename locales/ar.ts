@@ -390,8 +390,8 @@ const translation: Translation = {
   },
   auth: {
     signIn: {
-      title: "تسجيل الدخول",
-      subtitle: "مرحبًا بعودتك. أدخل بياناتك للمتابعة.",
+      title: "مرحبًا بعودتك",
+      subtitle: "سجّل الدخول إلى مساحة العمل لديك. لوحة SEO جاهزة.",
       email: "البريد الإلكتروني",
       password: "كلمة المرور",
       submit: "تسجيل الدخول",
@@ -413,8 +413,8 @@ const translation: Translation = {
       emailVerifiedSuccess: "تم التحقق من بريدك الإلكتروني. يمكنك تسجيل الدخول الآن.",
       registrationSuccess:
         "تم إنشاء الحساب. تحقق من بريدك للحصول على رابط التحقق، ثم سجّل الدخول للمتابعة.",
-      noAccountPrompt: "جديد على Rank Radar؟",
-      registerCta: "إنشاء حساب",
+      noAccountPrompt: "جديد هنا؟",
+      registerCta: "ابدأ رحلتك",
     },
     forgotPassword: {
       title: "نسيت كلمة المرور",
@@ -443,8 +443,8 @@ const translation: Translation = {
       invalidLinkBody: "ينقص هذا الرابط معلومات مطلوبة. اطلب بريد إعادة تعيين جديدًا من صفحة تسجيل الدخول.",
     },
     register: {
-      title: "إنشاء حسابك",
-      subtitle: "سجّل باسمك وبريدك الإلكتروني. يمكنك إعداد مشروعك الأول بعد تسجيل الدخول.",
+      title: "ابدأ رحلتك",
+      subtitle: "سجّل باسمك وبريدك الإلكتروني. جهّز مشروعك الأول بعد تسجيل الدخول.",
       fullName: "الاسم الكامل",
       fullNamePh: "جين دو",
       fullNameMin: "أدخل حرفين على الأقل.",

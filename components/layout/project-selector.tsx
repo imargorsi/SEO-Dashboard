@@ -49,7 +49,7 @@ function ProjectOption({
       role="option"
       aria-selected={isSelected}
       onClick={onSelect}
-      className="flex w-full items-center gap-2.5 rounded-lg px-2 py-2 text-start transition-colors hover:bg-bg-hover"
+      className="flex w-full items-center gap-2.5 rounded-lg px-2 py-1.5 text-start transition-colors hover:bg-bg-hover"
     >
       <ProjectLogo project={project} size="sm" />
       <span className="min-w-0 flex-1">
@@ -83,7 +83,7 @@ export function ProjectSelector() {
   }, [open]);
 
   return (
-    <div className="shrink-0 px-4 pb-3 pt-1">
+    <div className="shrink-0 px-3 pb-3 pt-1">
       <div
         className={cn(
           "overflow-hidden rounded-xl border border-border bg-bg-card transition-[border-color] duration-200",
@@ -97,13 +97,10 @@ export function ProjectSelector() {
           aria-controls={listId}
           aria-label={t("triggerLabel", { name: selectedProject.name })}
           onClick={() => setOpen((v) => !v)}
-          className="flex w-full items-center gap-2.5 px-2.5 py-2.5 text-start transition-colors hover:bg-bg-hover/60"
+          className="flex w-full items-center gap-2.5 px-2.5 py-2 text-start transition-colors hover:bg-bg-hover/60"
         >
           <ProjectLogo project={selectedProject} />
           <span className="min-w-0 flex-1">
-            <span className="block truncate type-caption-xs text-text-muted">
-              {t("cardLabel")}
-            </span>
             <span className="block truncate type-body text-text-primary">
               {selectedProject.name}
             </span>

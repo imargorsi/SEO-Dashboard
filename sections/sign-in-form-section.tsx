@@ -11,6 +11,7 @@ import { Heading } from "@/components/heading";
 import { Input } from "@/components/input";
 import { Paragraph } from "@/components/paragraph";
 import { AuthSubmitButton } from "@/components/auth/auth-submit-button";
+import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import type { SignInValues } from "@/sections/sign-in.types";
 
@@ -96,13 +97,10 @@ export function SignInFormSection({
         </div>
 
         <div className="mt-4">
-          <button
-            type="button"
-            className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-border bg-bg-card px-3 text-sm font-medium text-text-primary transition-colors hover:bg-bg-hover"
-          >
+          <Button type="button" variant="outlined" size="lg" className="w-full">
             <FcGoogle className="size-4 shrink-0" aria-hidden />
             <span>{t("continueGoogle")}</span>
-          </button>
+          </Button>
         </div>
       </div>
 

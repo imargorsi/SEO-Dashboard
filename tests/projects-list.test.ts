@@ -56,7 +56,7 @@ describe("GET /projects — listProjects", () => {
     const projects = await listProjects(authContextFor(user));
 
     expect(projects).toHaveLength(1);
-    expect(projects[0]!._id.toString()).toBe(mine.project._id.toString());
+    expect(projects[0]!.id).toBe(mine.project._id.toString());
   });
 
   it("returns all projects for super_admin", async () => {
@@ -98,7 +98,10 @@ describe("GET /projects — listProjects", () => {
     const projects = await listProjects(authContextFor(admin));
 
     expect(projects).toHaveLength(2);
-    expect(projects.map((p) => p.businessName).sort()).toEqual(["Admin Project", "User Project"]);
+    expect(projects.map((project) => project.businessName).sort()).toEqual([
+      "Admin Project",
+      "User Project",
+    ]);
   });
 
   it("excludes projects where membership is not active", async () => {
@@ -166,11 +169,72 @@ describe("GET /projects — listProjects", () => {
     expect(body.success).toBe(true);
     expect(body.data.items).toHaveLength(1);
     expect(body.data.items[0]).toEqual({
-      id: projects[0]!._id.toString(),
+      id: projects[0]!.id,
       businessName: "List Co",
       websiteUrl: "https://list.example.com",
       status: "pending",
+      imageUrl: null,
+      owner: {
+        id: user._id.toString(),
+        name: "Lister",
+        profileImage: null,
+      },
     });
+  });
+
+  it("serializes owner profile image as a public URL for local storage", async () => {
+    await seedSystemRoles();
+
+    const user = await User.create({
+      name: "Photo Owner",
+      email: "photo-owner@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+      profileImage: "profile-images/abc/avatar.jpg",
+    });
+
+    await createProject(authContextFor(user), {
+      businessName: "Photo Co",
+      websiteUrl: "https://photo.example.com",
+      servicesOffered: [],
+      targetLocations: [],
+      competitorUrls: [],
+    });
+
+    const projects = await listProjects(authContextFor(user));
+
+    expect(projects).toHaveLength(1);
+    expect(projects[0]!.owner?.profileImage).toBe(
+      "http://localhost:3000/storage/profile-images/abc/avatar.jpg",
+    );
+  });
+
+  it("serializes owner profile image as a signed URL for blob storage", async () => {
+    await seedSystemRoles();
+
+    const user = await User.create({
+      name: "Blob Owner",
+      email: "blob-owner@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+      profileImage: "blob:profile-images/abc/avatar.jpg",
+    });
+
+    await createProject(authContextFor(user), {
+      businessName: "Blob Co",
+      websiteUrl: "https://blob.example.com",
+      servicesOffered: [],
+      targetLocations: [],
+      competitorUrls: [],
+    });
+
+    const projects = await listProjects(authContextFor(user));
+
+    expect(projects).toHaveLength(1);
+    expect(projects[0]!.owner?.profileImage).toContain("/api/v1/me/profile-image?pathname=");
+    expect(projects[0]!.owner?.profileImage).toContain("signature=");
   });
 
   it("returns an empty list when the user has no projects", async () => {

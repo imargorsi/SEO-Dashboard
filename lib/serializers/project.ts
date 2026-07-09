@@ -1,12 +1,30 @@
 import type { ProjectDocument } from "@/models/Project";
 
+export type ProjectListItemDto = {
+  id: string;
+  businessName: string;
+  websiteUrl: string;
+  status: ProjectDocument["status"];
+  imageUrl: string | null;
+  owner: {
+    id: string;
+    name: string;
+    profileImage: string | null;
+  } | null;
+};
+
 /** Compact shape for project selector / list views. */
-export function serializeProjectListItem(project: ProjectDocument) {
+export function serializeProjectListItem(
+  project: ProjectDocument,
+  owner?: { id: string; name: string; profileImage: string | null } | null,
+): ProjectListItemDto {
   return {
     id: project._id.toString(),
     businessName: project.businessName,
     websiteUrl: project.websiteUrl,
     status: project.status,
+    imageUrl: null,
+    owner: owner ?? null,
   };
 }
 

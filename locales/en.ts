@@ -731,7 +731,7 @@ const translation: Translation = {
         colWebsite: "Website",
         colBusinessType: "Business type",
         colActions: "Actions",
-        createProject: "Create project",
+        createProject: "Create Project",
         noBusinessType: "No business type",
         businessTypeB2b: "B2B",
         businessTypeB2c: "B2C",

@@ -1,6 +1,7 @@
 "use client";
 
 import { Input } from "@/components/input";
+import { ImageUploadAvatar } from "@/components/ui/image-upload-avatar";
 import type { AuthUser } from "@/lib/frontend/auth/types";
 import type { TUseProjectCreateFormResult } from "@/components/forms/hooks/use-project-create-form.hook";
 
@@ -18,6 +19,9 @@ export function ProjectCreateStepContent({ hook, authUser }: StepProps) {
     },
     currentStep,
     isAdmin,
+    logoPreviewUrl,
+    onLogoPicked,
+    businessName,
   } = hook;
 
   const contactEmail = authUser.email;
@@ -29,6 +33,14 @@ export function ProjectCreateStepContent({ hook, authUser }: StepProps) {
           <h2 className="type-title text-text-primary">{t("sectionBusinessTitle")}</h2>
           <p className="type-body text-text-muted">{t("sectionBusinessLead")}</p>
         </div>
+        <ImageUploadAvatar
+          name={businessName || t("businessName")}
+          imageUrl={logoPreviewUrl}
+          onFilePicked={onLogoPicked}
+          label={t("companyLogo")}
+          hint={t("companyLogoHint")}
+          className="sm:col-span-2"
+        />
         <div className="grid gap-4 sm:grid-cols-2">
           <Input
             id="businessName"

@@ -273,10 +273,10 @@ describe("Auth API parity", () => {
     const body = await response.json();
 
     expect(response.status).toBe(200);
-    expect(body.data.profile_image).toContain("/storage/profile-images/");
+    expect(body.data.profile_image).toContain("/api/v1/storage/image?pathname=");
 
     const fresh = await User.findById(user._id);
-    expect(fresh?.profileImage).toMatch(/^profile-images\//);
+    expect(fresh?.profileImage).toMatch(/^blob:profile-images\//);
   });
 
   it("rejects empty profile update", async () => {

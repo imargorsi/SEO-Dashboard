@@ -9,6 +9,8 @@ beforeAll(async () => {
   mongo = await MongoMemoryServer.create();
   process.env.MONGODB_URI = `${mongo.getUri()}seo-dashboard?retryWrites=false`;
   process.env.APP_KEY = "base64:dGVzdC1hcHAta2V5LWZvci1sb2NhbC1kZXYtMDEyMzQ1Njc4";
+  process.env.APP_URL = "http://localhost:3000";
+  process.env.BLOB_READ_WRITE_TOKEN = "test-blob-token";
   process.env.MAIL_MAILER = "log";
   await mongoose.connect(process.env.MONGODB_URI);
 });

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -96,6 +96,8 @@ export function useProjectCreateForm(authUser: AuthUser) {
   const { t } = useTranslation("translation", { keyPrefix: "modules.projects.createForm" });
   const createMutation = useCreateProjectMutation();
   const [currentStep, setCurrentStep] = useState(0);
+  const logoFileRef = useRef<File | null>(null);
+  const [logoPreviewUrl, setLogoPreviewUrl] = useState<string | null>(null);
   const isAdmin = authUser.roles.includes("super_admin");
   const steps = useMemo(() => stepFields(isAdmin), [isAdmin]);
   const indexMap = useMemo(() => fieldStepIndex(isAdmin), [isAdmin]);
@@ -163,6 +165,12 @@ export function useProjectCreateForm(authUser: AuthUser) {
     if (step != null) setCurrentStep(step);
   }
 
+  function onLogoPicked(file: File) {
+    if (logoPreviewUrl) URL.revokeObjectURL(logoPreviewUrl);
+    logoFileRef.current = file;
+    setLogoPreviewUrl(URL.createObjectURL(file));
+  }
+
   async function onSubmit(values: TProjectCreateFormValues) {
     if (!isLastStep) {
       await goToNextStep();
@@ -170,7 +178,10 @@ export function useProjectCreateForm(authUser: AuthUser) {
     }
 
     try {
-      await createMutation.mutateAsync(toCreatePayload(values, isAdmin));
+      await createMutation.mutateAsync({
+        payload: toCreatePayload(values, isAdmin),
+        companyLogoFile: logoFileRef.current,
+      });
       notify.success(t("successFallback"));
       router.push("/projects");
     } catch (error) {
@@ -209,6 +220,9 @@ export function useProjectCreateForm(authUser: AuthUser) {
     onSubmit: handleSubmit(onSubmit),
     goToNextStep,
     goToPreviousStep,
+    logoPreviewUrl,
+    onLogoPicked,
+    businessName: form.watch("businessName"),
   };
 }
 

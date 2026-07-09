@@ -1,4 +1,5 @@
 import type { ProjectDocument } from "@/models/Project";
+import { serializeStoredImageUrl } from "@/lib/serializers/stored-image";
 
 export type ProjectListItemDto = {
   id: string;
@@ -23,7 +24,7 @@ export function serializeProjectListItem(
     businessName: project.businessName,
     websiteUrl: project.websiteUrl,
     status: project.status,
-    imageUrl: null,
+    imageUrl: serializeStoredImageUrl(project.logoImage),
     owner: owner ?? null,
   };
 }
@@ -34,6 +35,7 @@ export function serializeProject(project: ProjectDocument) {
     businessName: project.businessName,
     websiteUrl: project.websiteUrl,
     businessAddress: project.businessAddress,
+    logoImage: serializeStoredImageUrl(project.logoImage),
     pocContactNumber: project.pocContactNumber,
     pocEmail: project.pocEmail,
     servicesOffered: project.servicesOffered,

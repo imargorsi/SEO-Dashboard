@@ -100,6 +100,7 @@ async function resolveCreateActors(auth: AuthContext, input: CreateProjectInput)
 export async function createProject(
   auth: AuthContext,
   input: CreateProjectInput,
+  options?: { logoImage?: string | null },
 ): Promise<{ project: ProjectDocument }> {
   await seedSystemRoles();
 
@@ -109,6 +110,7 @@ export async function createProject(
 
   const project = await Project.create({
     ...onboarding,
+    logoImage: options?.logoImage ?? null,
     pocEmail,
     status: isAdmin ? "approved" : "pending",
     createdByUserId: auth.user._id,

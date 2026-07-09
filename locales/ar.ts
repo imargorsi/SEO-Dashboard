@@ -39,6 +39,8 @@ const translation: Translation = {
   form: {
     showPassword: "إظهار كلمة المرور",
     hidePassword: "إخفاء كلمة المرور",
+    pickImage: "رفع صورة",
+    changeImage: "تغيير الصورة",
   },
   userMenu: {
     openMenu: "قائمة الحساب",
@@ -192,6 +194,8 @@ const translation: Translation = {
         websiteUrlPh: "https://www.saudiamarketing.sa",
         businessAddress: "عنوان النشاط",
         businessAddressPh: "King Fahd Road, Al Olaya, Riyadh, Saudi Arabia",
+        companyLogo: "شعار الشركة",
+        companyLogoHint: "JPG أو PNG أو WEBP أو GIF. بحد أقصى 5 ميجابايت.",
         pocContactNumber: "رقم التواصل",
         pocContactNumberPh: "+966 55 123 4567",
         pocEmail: "بريد التواصل",

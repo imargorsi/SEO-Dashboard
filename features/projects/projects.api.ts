@@ -37,6 +37,12 @@ type CreateProjectResponse = {
   businessName: string;
   websiteUrl: string;
   status: "pending" | "approved" | "rejected";
+  logoImage: string | null;
+};
+
+export type TCreateProjectMutationInput = {
+  payload: TCreateProjectPayload;
+  companyLogoFile?: File | null;
 };
 
 export type TCreateProjectPayload = {
@@ -81,8 +87,14 @@ export function useCreateProjectMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (payload: TCreateProjectPayload) => {
-      const envelope = await baseQuery.post<CreateProjectResponse>("projects", payload);
+    mutationFn: async ({ payload, companyLogoFile }: TCreateProjectMutationInput) => {
+      const formData = new FormData();
+      formData.append("data", JSON.stringify(payload));
+      if (companyLogoFile) {
+        formData.append("company_logo", companyLogoFile);
+      }
+
+      const envelope = await baseQuery.post<CreateProjectResponse>("projects", formData);
       return envelope.data;
     },
     onSuccess: () => {

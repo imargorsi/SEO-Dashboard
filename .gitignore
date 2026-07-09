@@ -31,9 +31,6 @@ next-env.d.ts
 
 # user uploads (runtime data)
 /public/profile-images/
-/public/storage/*
-!/public/storage/.gitkeep
-
 # internal documentation & agent context (local only — not pushed)
 /doc/
 /docs/

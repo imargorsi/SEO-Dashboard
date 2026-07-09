@@ -182,7 +182,7 @@ describe("GET /projects — listProjects", () => {
     });
   });
 
-  it("serializes owner profile image as a public URL for local storage", async () => {
+  it("returns null for legacy local profile image paths", async () => {
     await seedSystemRoles();
 
     const user = await User.create({
@@ -205,9 +205,7 @@ describe("GET /projects — listProjects", () => {
     const projects = await listProjects(authContextFor(user));
 
     expect(projects).toHaveLength(1);
-    expect(projects[0]!.owner?.profileImage).toBe(
-      "http://localhost:3000/storage/profile-images/abc/avatar.jpg",
-    );
+    expect(projects[0]!.owner?.profileImage).toBeNull();
   });
 
   it("serializes owner profile image as a signed URL for blob storage", async () => {
@@ -233,7 +231,7 @@ describe("GET /projects — listProjects", () => {
     const projects = await listProjects(authContextFor(user));
 
     expect(projects).toHaveLength(1);
-    expect(projects[0]!.owner?.profileImage).toContain("/api/v1/me/profile-image?pathname=");
+    expect(projects[0]!.owner?.profileImage).toContain("/api/v1/storage/image?pathname=");
     expect(projects[0]!.owner?.profileImage).toContain("signature=");
   });
 

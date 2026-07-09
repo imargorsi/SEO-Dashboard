@@ -38,6 +38,8 @@ export interface Translation {
   form: {
     showPassword: string;
     hidePassword: string;
+    pickImage: string;
+    changeImage: string;
   };
   userMenu: {
     openMenu: string;
@@ -191,6 +193,8 @@ export interface Translation {
         websiteUrlPh: string;
         businessAddress: string;
         businessAddressPh: string;
+        companyLogo: string;
+        companyLogoHint: string;
         pocContactNumber: string;
         pocContactNumberPh: string;
         pocEmail: string;
@@ -563,6 +567,8 @@ const translation: Translation = {
   form: {
     showPassword: "Show password",
     hidePassword: "Hide password",
+    pickImage: "Upload Image",
+    changeImage: "Change Image",
   },
   userMenu: {
     openMenu: "Account menu",
@@ -716,6 +722,8 @@ const translation: Translation = {
         websiteUrlPh: "https://www.saudiamarketing.sa",
         businessAddress: "Business Address",
         businessAddressPh: "King Fahd Road, Al Olaya, Riyadh, Saudi Arabia",
+        companyLogo: "Company Logo",
+        companyLogoHint: "JPG, PNG, WEBP, Or GIF. Max 5 MB.",
         pocContactNumber: "Contact Number",
         pocContactNumberPh: "+966 55 123 4567",
         pocEmail: "Contact Email",

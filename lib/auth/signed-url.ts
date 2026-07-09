@@ -57,12 +57,12 @@ export function emailVerificationHash(email: string): string {
   return crypto.createHash("sha1").update(email).digest("hex");
 }
 
-const PROFILE_IMAGE_URL_TTL_SECONDS = 10 * 60;
+const IMAGE_URL_TTL_SECONDS = 10 * 60;
 
-export function createSignedProfileImageUrl(blobPathname: string): string {
+export function createSignedImageUrl(blobPathname: string): string {
   const origin = env.appUrl().replace(/\/$/, "");
-  const pathname = "/api/v1/me/profile-image";
-  const expires = Math.floor(Date.now() / 1000) + PROFILE_IMAGE_URL_TTL_SECONDS;
+  const pathname = "/api/v1/storage/image";
+  const expires = Math.floor(Date.now() / 1000) + IMAGE_URL_TTL_SECONDS;
   const params = new URLSearchParams({
     pathname: blobPathname,
     expires: String(expires),
@@ -72,6 +72,15 @@ export function createSignedProfileImageUrl(blobPathname: string): string {
   return `${canonical}&signature=${signature}`;
 }
 
-export function hasValidProfileImageSignature(requestUrl: string): boolean {
+/** @deprecated Use createSignedImageUrl */
+export function createSignedProfileImageUrl(blobPathname: string): string {
+  return createSignedImageUrl(blobPathname);
+}
+
+export function hasValidImageSignature(requestUrl: string): boolean {
   return hasValidSignature(requestUrl);
+}
+
+export function hasValidProfileImageSignature(requestUrl: string): boolean {
+  return hasValidImageSignature(requestUrl);
 }

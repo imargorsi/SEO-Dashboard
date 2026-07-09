@@ -10,6 +10,14 @@ type UserSerializeOptions = {
 
 function profileImageUrl(profileImage: string | null | undefined): string | null {
   if (!profileImage) return null;
+  if (profileImage.startsWith("blob:")) {
+    const base = env.appUrl().replace(/\/$/, "");
+    const pathname = encodeURIComponent(profileImage.slice("blob:".length));
+    return `${base}/api/v1/me/profile-image?pathname=${pathname}`;
+  }
+  if (profileImage.startsWith("http://") || profileImage.startsWith("https://")) {
+    return profileImage;
+  }
 
   const base = env.appUrl().replace(/\/$/, "");
   return `${base}/storage/${profileImage.replace(/^\//, "")}`;

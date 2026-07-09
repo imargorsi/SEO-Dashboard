@@ -53,7 +53,7 @@ export function DashboardSidebar({ onClose }: DashboardSidebarProps) {
           aria-label={tLayout("appName")}
         >
           <Image
-            src="/logo.svg"
+            src="/Logo.svg"
             alt=""
             width={60}
             height={24}

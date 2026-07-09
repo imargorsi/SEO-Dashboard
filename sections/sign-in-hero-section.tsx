@@ -25,7 +25,7 @@ export function SignInHeroSection() {
       />
       <div className="relative z-10 mx-auto w-full max-w-xl text-text-primary">
         <Image
-          src="/logo.svg"
+          src="/Logo.svg"
           alt={tLayout("appName")}
           className="mb-12 block h-auto w-56 max-w-full"
           width={176}

@@ -1,8 +1,10 @@
 import fs from "fs/promises";
 import path from "path";
 import crypto from "crypto";
+import { del, put } from "@vercel/blob";
 
 const STORAGE_ROOT = path.join(process.cwd(), "public", "storage");
+const BLOB_ENABLED = Boolean(process.env.BLOB_READ_WRITE_TOKEN);
 
 const MIME_TO_EXTENSION: Record<string, string> = {
   "image/jpeg": "jpg",
@@ -57,19 +59,38 @@ export async function storeProfileImageFile(userId: string, file: File): Promise
     throw new Error("Unsupported profile image type.");
   }
 
-  const relativeDir = `profile-images/${userId}`;
-  const absoluteDir = path.join(STORAGE_ROOT, relativeDir);
-  await fs.mkdir(absoluteDir, { recursive: true });
-
   const filename = `${crypto.randomUUID()}.${extension}`;
+  const relativePath = `profile-images/${userId}/${filename}`;
+
+  if (BLOB_ENABLED) {
+    const uploaded = await put(relativePath, file, {
+      access: "private",
+      addRandomSuffix: false,
+    });
+    return `blob:${uploaded.pathname}`;
+  }
+
+  const absoluteDir = path.join(STORAGE_ROOT, `profile-images/${userId}`);
+  await fs.mkdir(absoluteDir, { recursive: true });
   const buffer = Buffer.from(await file.arrayBuffer());
   await fs.writeFile(path.join(absoluteDir, filename), buffer);
-
-  return `${relativeDir}/${filename}`.replace(/\\/g, "/");
+  return relativePath.replace(/\\/g, "/");
 }
 
 export async function deleteStoredProfileImage(storedPath: string | null | undefined): Promise<void> {
   if (!storedPath) return;
+
+  if (storedPath.startsWith("blob:")) {
+    if (!BLOB_ENABLED) return;
+    await del(storedPath.slice("blob:".length)).catch(() => undefined);
+    return;
+  }
+
+  if (storedPath.startsWith("http://") || storedPath.startsWith("https://")) {
+    if (!BLOB_ENABLED) return;
+    await del(storedPath).catch(() => undefined);
+    return;
+  }
 
   const absolutePath = path.join(STORAGE_ROOT, storedPath.replace(/^\//, ""));
   await fs.unlink(absolutePath).catch(() => undefined);

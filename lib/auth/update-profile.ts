@@ -26,21 +26,33 @@ export async function updateProfile(
     });
   }
 
+  let nextProfileImagePath: string | null = null;
+
   if (input.profile_image_file) {
     const validationMessage = validateProfileImageFile(input.profile_image_file);
     if (validationMessage) {
       return ApiResponse.validation(validationMessage, { profile_image: [validationMessage] });
     }
 
-    if (user.profileImage) {
-      await deleteStoredProfileImage(user.profileImage);
+    try {
+      nextProfileImagePath = await storeProfileImageFile(user._id.toString(), input.profile_image_file);
+    } catch (error) {
+      console.error("Profile Image Upload Failed", error);
+      const message = "Profile image upload is currently unavailable on this deployment.";
+      return ApiResponse.error(message, { profile_image: [message] }, 503);
     }
-
-    user.profileImage = await storeProfileImageFile(user._id.toString(), input.profile_image_file);
   }
 
   if (input.name !== undefined) {
     user.name = input.name;
+  }
+
+  if (nextProfileImagePath) {
+    const previousProfileImage = user.profileImage;
+    user.profileImage = nextProfileImagePath;
+    if (previousProfileImage) {
+      await deleteStoredProfileImage(previousProfileImage).catch(() => undefined);
+    }
   }
 
   await user.save();

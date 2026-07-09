@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { baseQuery } from "@/lib/frontend/api/base";
 
@@ -32,6 +32,38 @@ type ProjectsListEnvelope = {
   items: TProjectListItem[];
 };
 
+type CreateProjectResponse = {
+  id: string;
+  businessName: string;
+  websiteUrl: string;
+  status: "pending" | "approved" | "rejected";
+};
+
+export type TCreateProjectPayload = {
+  businessName: string;
+  websiteUrl: string;
+  businessAddress?: string | null;
+  pocContactNumber?: string | null;
+  servicesOffered?: string[];
+  primaryServiceToPromote?: string | null;
+  idealCustomerProfile?: string | null;
+  targetLocations?: string[];
+  businessHours?: {
+    opensAt?: string | null;
+    closesAt?: string | null;
+  } | null;
+  seoGoals?: string[];
+  marketingAccess?: {
+    websiteLogin?: string | null;
+    websiteHosting?: string | null;
+    googleAnalytics?: string | null;
+    googleSearchConsole?: string | null;
+    googleBusinessProfile?: string | null;
+  } | null;
+  competitorUrls?: string[];
+  ownerUserId?: string;
+};
+
 async function fetchProjects(): Promise<TProjectListItem[]> {
   const envelope = await baseQuery.get<ProjectsListEnvelope>("projects");
   return envelope.data.items ?? [];
@@ -41,6 +73,20 @@ export function useProjectsQuery() {
   return useQuery({
     queryKey: projectKeys.list(),
     queryFn: fetchProjects,
+  });
+}
+
+export function useCreateProjectMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (payload: TCreateProjectPayload) => {
+      const envelope = await baseQuery.post<CreateProjectResponse>("projects", payload);
+      return envelope.data;
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: projectKeys.all });
+    },
   });
 }
 

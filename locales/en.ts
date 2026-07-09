@@ -181,8 +181,46 @@ export interface Translation {
         sectionCmsLead: string;
         businessName: string;
         businessNamePh: string;
+        ownerUserId: string;
+        ownerUserIdPh: string;
         websiteUrl: string;
         websiteUrlPh: string;
+        businessAddress: string;
+        businessAddressPh: string;
+        pocContactNumber: string;
+        pocContactNumberPh: string;
+        pocEmail: string;
+        sectionServiceTitle: string;
+        sectionServiceLead: string;
+        servicesOffered: string;
+        servicesOfferedPh: string;
+        primaryServiceToPromote: string;
+        primaryServiceToPromotePh: string;
+        idealCustomerProfile: string;
+        idealCustomerProfilePh: string;
+        sectionOperationsTitle: string;
+        sectionOperationsLead: string;
+        opensAt: string;
+        closesAt: string;
+        valTime: string;
+        seoGoalsInput: string;
+        seoGoalsInputPh: string;
+        sectionMarketingTitle: string;
+        sectionMarketingLead: string;
+        websiteLogin: string;
+        websiteLoginPh: string;
+        websiteHosting: string;
+        websiteHostingPh: string;
+        googleAnalytics: string;
+        googleAnalyticsPh: string;
+        googleSearchConsole: string;
+        googleSearchConsolePh: string;
+        googleBusinessProfile: string;
+        googleBusinessProfilePh: string;
+        sectionCompetitorsTitle: string;
+        sectionCompetitorsLead: string;
+        competitorUrls: string;
+        competitorUrlsPh: string;
         industryNiche: string;
         industryNichePh: string;
         industryNicheLoading: string;
@@ -235,6 +273,9 @@ export interface Translation {
         editErrorTitle: string;
         editErrorFallback: string;
         missingProjectAccess: string;
+        nextStep: string;
+        previousStep: string;
+        stepValidationError: string;
         valRequired: string;
         valMin: string;
         valUrl: string;
@@ -643,9 +684,9 @@ const translation: Translation = {
       title: "Projects",
       subtitle: "Manage SEO projects in your workspace.",
       listTitle: "Projects",
-      createProjectTitle: "New project",
+      createProjectTitle: "Create A New Project",
       editProjectTitle: "Edit project",
-      createLead: "Capture the project brief, SEO goals, and access details in one place.",
+      createLead: "Add Your Business Information To Start This Project.",
       createForm: {
         title: "Project details",
         lead: "Fill in the business basics, SEO goals, and access information for this project.",
@@ -660,15 +701,53 @@ const translation: Translation = {
         sectionCmsTitle: "CMS access",
         sectionCmsLead: "Optional login details so we can deploy SEO changes.",
         businessName: "Business name",
-        businessNamePh: "Acme Ltd",
+        businessNamePh: "Saudia Marketing",
+        ownerUserId: "Owner User ID",
+        ownerUserIdPh: "6a451c72711bf69f27e57cd5",
         websiteUrl: "Website URL",
-        websiteUrlPh: "https://acme.example.com",
+        websiteUrlPh: "https://www.saudiamarketing.sa",
+        businessAddress: "Business Address",
+        businessAddressPh: "King Fahd Road, Al Olaya, Riyadh, Saudi Arabia",
+        pocContactNumber: "Contact Number",
+        pocContactNumberPh: "+966 55 123 4567",
+        pocEmail: "Contact Email",
+        sectionServiceTitle: "Service Information",
+        sectionServiceLead: "Add Services And Customer Profile Details.",
+        servicesOffered: "Services Offered",
+        servicesOfferedPh: "SEO, Content Marketing, Google Ads",
+        primaryServiceToPromote: "Primary Service To Promote",
+        primaryServiceToPromotePh: "Google Maps SEO",
+        idealCustomerProfile: "Ideal Customer Profile",
+        idealCustomerProfilePh: "SMEs In Riyadh And Jeddah",
+        sectionOperationsTitle: "Operations",
+        sectionOperationsLead: "Add Locations And Optional Business Hours.",
+        opensAt: "Business Opens At",
+        closesAt: "Business Closes At",
+        valTime: "Use 24-Hour Time (HH:mm).",
+        seoGoalsInput: "SEO Goals (Comma Separated Slugs)",
+        seoGoalsInputPh: "more_leads, more_website_traffic",
+        sectionMarketingTitle: "Marketing Access",
+        sectionMarketingLead: "Add Optional Access Notes For Channels.",
+        websiteLogin: "Website Login",
+        websiteLoginPh: "https://portal.saudiamarketing.sa",
+        websiteHosting: "Website Hosting",
+        websiteHostingPh: "AWS Riyadh Region Account",
+        googleAnalytics: "Google Analytics",
+        googleAnalyticsPh: "https://analytics.google.com/",
+        googleSearchConsole: "Google Search Console",
+        googleSearchConsolePh: "https://search.google.com/search-console",
+        googleBusinessProfile: "Google Business Profile",
+        googleBusinessProfilePh: "https://business.google.com/",
+        sectionCompetitorsTitle: "Competitors",
+        sectionCompetitorsLead: "Add Competitor URLs As A Comma Separated List.",
+        competitorUrls: "Competitor URLs",
+        competitorUrlsPh: "https://competitor-riyadh.sa, https://competitor-jeddah.sa",
         industryNiche: "Industry niche",
         industryNichePh: "Select an industry",
         industryNicheLoading: "Loading industries…",
         industryNicheLoadError: "Could not load industries. Try again later.",
         targetLocations: "Target locations",
-        targetLocationsPh: "Type a city and press Enter",
+        targetLocationsPh: "Riyadh, Jeddah, Dammam",
         targetLocationsHelp: "Press Enter or comma to add. Backspace removes the last tag.",
         isB2b: "B2B",
         isB2bDesc: "Sells to other businesses.",
@@ -716,6 +795,9 @@ const translation: Translation = {
         editErrorFallback: "Something went wrong. Try again.",
         missingProjectAccess:
           "You are not a member of any project yet. Complete onboarding or ask a project owner to invite you.",
+        nextStep: "Next Step",
+        previousStep: "Back",
+        stepValidationError: "Fix Required Fields Before Moving To The Next Step.",
         valRequired: "This field is required.",
         valMin: "Use at least 2 characters.",
         valUrl: "Enter a valid URL (https://…).",

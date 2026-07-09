@@ -14,7 +14,7 @@ import { IoEye, IoEyeOff } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 import SelectDropdownArrowIcon from "@/components/icons/input-select-dropdown-arrow";
 
-export type InputType = "text" | "number" | "email" | "password" | "textarea" | "select";
+export type InputType = "text" | "number" | "email" | "password" | "textarea" | "select" | "time";
 
 export interface Option {
   label: string;
@@ -168,7 +168,7 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
               </option>
             ))}
           </select>
-          <span className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2">
+          <span className="pointer-events-none absolute inset-e-3 top-1/2 -translate-y-1/2">
             <SelectDropdownArrowIcon />
           </span>
         </div>
@@ -199,7 +199,7 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
               disabled={disabled}
               aria-label={passwordVisible ? t("hidePassword") : t("showPassword")}
               aria-pressed={passwordVisible}
-              className="absolute inset-y-0 end-0 flex items-center justify-center px-3 text-text-muted transition-colors hover:text-text-primary focus-visible:text-text-primary focus-visible:outline-none disabled:pointer-events-none disabled:opacity-60"
+              className="absolute inset-e-0 inset-y-0 flex items-center justify-center px-3 text-text-muted transition-colors hover:text-text-primary focus-visible:text-text-primary focus-visible:outline-none disabled:pointer-events-none disabled:opacity-60"
             >
               {passwordVisible ? (
                 <IoEyeOff className="size-4" aria-hidden />

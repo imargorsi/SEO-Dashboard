@@ -1,5 +1,6 @@
 import { env } from "@/lib/config/env";
 import { homeApiPathForRoles } from "@/lib/auth/rbac";
+import { createSignedProfileImageUrl } from "@/lib/auth/signed-url";
 import type { UserDocument } from "@/models/User";
 
 type UserSerializeOptions = {
@@ -11,9 +12,7 @@ type UserSerializeOptions = {
 function profileImageUrl(profileImage: string | null | undefined): string | null {
   if (!profileImage) return null;
   if (profileImage.startsWith("blob:")) {
-    const base = env.appUrl().replace(/\/$/, "");
-    const pathname = encodeURIComponent(profileImage.slice("blob:".length));
-    return `${base}/api/v1/me/profile-image?pathname=${pathname}`;
+    return createSignedProfileImageUrl(profileImage.slice("blob:".length));
   }
   if (profileImage.startsWith("http://") || profileImage.startsWith("https://")) {
     return profileImage;

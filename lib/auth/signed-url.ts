@@ -56,3 +56,22 @@ export function hasValidSignature(requestUrl: string): boolean {
 export function emailVerificationHash(email: string): string {
   return crypto.createHash("sha1").update(email).digest("hex");
 }
+
+const PROFILE_IMAGE_URL_TTL_SECONDS = 10 * 60;
+
+export function createSignedProfileImageUrl(blobPathname: string): string {
+  const origin = env.appUrl().replace(/\/$/, "");
+  const pathname = "/api/v1/me/profile-image";
+  const expires = Math.floor(Date.now() / 1000) + PROFILE_IMAGE_URL_TTL_SECONDS;
+  const params = new URLSearchParams({
+    pathname: blobPathname,
+    expires: String(expires),
+  });
+  const canonical = buildCanonicalUrl(origin, pathname, params);
+  const signature = crypto.createHmac("sha256", appKeyBytes()).update(canonical).digest("hex");
+  return `${canonical}&signature=${signature}`;
+}
+
+export function hasValidProfileImageSignature(requestUrl: string): boolean {
+  return hasValidSignature(requestUrl);
+}

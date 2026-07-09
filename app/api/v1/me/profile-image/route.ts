@@ -1,14 +1,13 @@
 import { get } from "@vercel/blob";
 import { NextResponse } from "next/server";
 import { withApiHandler } from "@/lib/api/handler";
-import { requireAuth } from "@/lib/auth/guards";
 import { ApiResponse } from "@/lib/api/response";
-import { connectDb } from "@/lib/db/mongoose";
+import { hasValidProfileImageSignature } from "@/lib/auth/signed-url";
 
 export const GET = withApiHandler(async (request) => {
-  await connectDb();
-  const auth = await requireAuth(request);
-  if (auth instanceof Response) return auth;
+  if (!hasValidProfileImageSignature(request.url)) {
+    return ApiResponse.error("Invalid Or Expired Profile Image URL.", {}, 403);
+  }
 
   const { searchParams } = new URL(request.url);
   const pathname = searchParams.get("pathname");

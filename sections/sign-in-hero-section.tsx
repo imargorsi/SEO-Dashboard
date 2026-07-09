@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { useTranslation } from "react-i18next";
+import Image from "next/image";
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
@@ -15,6 +15,14 @@ export function SignInHeroSection() {
       className="relative hidden flex-1 flex-col justify-center overflow-hidden px-8 py-12 lg:flex lg:px-14 lg:py-16"
       aria-labelledby="sign-in-hero-heading"
     >
+      <Image
+        src="/auth-bg.png"
+        alt=""
+        fill
+        priority
+        className="object-cover object-center"
+        aria-hidden
+      />
       <div className="relative z-10 mx-auto w-full max-w-xl text-text-primary">
         <Image
           src="/logo.svg"

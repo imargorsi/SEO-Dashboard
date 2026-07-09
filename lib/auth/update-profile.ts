@@ -57,7 +57,7 @@ export async function updateProfile(
 
   await user.save();
 
-  const authData = loadUserAuthData(user);
+  const authData = await loadUserAuthData(user);
   const payload = serializeUser(user, { ...authData, includeHomeApiPath: true });
 
   return ApiResponse.success(payload, authMessages.profileUpdateSuccess);

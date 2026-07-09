@@ -8,5 +8,7 @@ export function permissionsForScope(
   roles: readonly string[],
 ): readonly string[] {
   if (isSuperAdmin(roles)) return platformPermissions;
-  return scope === "platform" ? platformPermissions : projectPermissions;
+  if (scope === "platform") return platformPermissions;
+  if (projectPermissions.length > 0) return projectPermissions;
+  return platformPermissions;
 }

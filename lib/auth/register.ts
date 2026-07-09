@@ -43,7 +43,7 @@ export async function registerUser(input: RegisterUserInput): Promise<{ user: Us
 }
 
 export async function buildRegisterResponse(user: UserDocument): Promise<NextResponse> {
-  const authData = loadUserAuthData(user);
+  const authData = await loadUserAuthData(user);
 
   return ApiResponse.success(
     serializeUser(user, {

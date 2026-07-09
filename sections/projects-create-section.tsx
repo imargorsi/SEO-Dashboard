@@ -10,6 +10,7 @@ import { ProjectCreateForm } from "@/components/forms/project-create-form";
 import { LoadingState } from "@/components/ui/loading-state";
 import { useProjectAccess } from "@/context/project-access-context";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
+import { useProjectsQuery } from "@/features/projects/projects.api";
 import { hasPermission, mergePermissions } from "@/lib/rbac/access";
 
 export function ProjectsCreateSection() {
@@ -17,22 +18,33 @@ export function ProjectsCreateSection() {
   const { t } = useTranslation("translation", { keyPrefix: "modules.projects" });
   const { data: authUser, isLoading } = useAuthUserQuery();
   const { projectPermissions } = useProjectAccess();
+  const { data: projects, isPending: isProjectsPending } = useProjectsQuery({ enabled: Boolean(authUser) });
+  const hasProjects = (projects?.length ?? 0) > 0;
+  const isVerified = Boolean(authUser?.email_verified_at);
 
   const canCreate = useMemo(
-    () => hasPermission(mergePermissions(authUser?.permissions ?? [], projectPermissions), "projects.create"),
-    [authUser?.permissions, projectPermissions],
+    () =>
+      isVerified &&
+      (hasPermission(mergePermissions(authUser?.permissions ?? [], projectPermissions), "projects.create") ||
+        !hasProjects),
+    [authUser?.permissions, hasProjects, isVerified, projectPermissions],
   );
 
   useEffect(() => {
-    if (!isLoading && !canCreate) {
+    if (!isLoading && authUser && !isVerified) {
+      router.replace("/email-verification");
+      return;
+    }
+    if (!isLoading && !isProjectsPending && !canCreate) {
       router.replace("/projects");
     }
-  }, [canCreate, isLoading, router]);
+  }, [authUser, canCreate, isLoading, isProjectsPending, isVerified, router]);
 
-  if (isLoading || !authUser) {
+  if (isLoading || isProjectsPending || !authUser) {
     return <LoadingState className="m-6" />;
   }
 
+  if (!isVerified) return null;
   if (!canCreate) return null;
 
   return (

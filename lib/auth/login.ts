@@ -36,7 +36,7 @@ export async function authenticateLogin(
 }
 
 export async function buildLoginResponse(user: UserDocument): Promise<NextResponse> {
-  const authData = loadUserAuthData(user);
+  const authData = await loadUserAuthData(user);
   const token = await createAccessToken(user._id, "api");
 
   return ApiResponse.success(

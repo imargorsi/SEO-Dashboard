@@ -108,7 +108,7 @@ describe("Access control", () => {
 
     expect(resolveDefaultAccessiblePath(adminPermissions, [], [SUPER_ADMIN_ROLE])).toBe("/dashboard");
     expect(resolveDefaultAccessiblePath([], projectPermissions, [])).toBe("/dashboard");
-    expect(resolveDefaultAccessiblePath([], [], [])).toBe("/edit-profile");
+    expect(resolveDefaultAccessiblePath([], [], [])).toBe("/projects");
   });
 
   it("builds the same sidebar shape for super_admin and project owners", () => {
@@ -136,6 +136,6 @@ describe("Access control", () => {
     expect(projectNav.map((item) => item.path)).not.toContain("/companies");
 
     const plainNav = buildSidebarNavItems([], [], []);
-    expect(plainNav.map((item) => item.path)).toEqual(["/settings"]);
+    expect(plainNav.map((item) => item.path)).toEqual(["/projects", "/settings"]);
   });
 });

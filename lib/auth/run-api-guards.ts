@@ -26,7 +26,7 @@ async function requirePlatformPermission(
   auth: AuthContext,
   permission: string,
 ): Promise<NextResponse | null> {
-  const { permissions } = loadUserAuthData(auth.user);
+  const { permissions } = await loadUserAuthData(auth.user);
   if (!permissions.includes(permission)) {
     return ApiResponse.error("Forbidden.", {}, 403);
   }
@@ -37,7 +37,7 @@ async function requireAnyPlatformPermission(
   auth: AuthContext,
   candidates: readonly string[],
 ): Promise<NextResponse | null> {
-  const { permissions } = loadUserAuthData(auth.user);
+  const { permissions } = await loadUserAuthData(auth.user);
   if (!hasAnyPermission(permissions, candidates)) {
     return ApiResponse.error("Forbidden.", {}, 403);
   }

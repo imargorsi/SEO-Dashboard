@@ -162,6 +162,10 @@ export interface Translation {
     projects: {
       title: string;
       subtitle: string;
+      emptyTitle: string;
+      emptyBody: string;
+      verifyEmailTooltip: string;
+      verifyEmailCta: string;
       listTitle: string;
       createProjectTitle: string;
       editProjectTitle: string;
@@ -683,6 +687,10 @@ const translation: Translation = {
     projects: {
       title: "Projects",
       subtitle: "Manage SEO projects in your workspace.",
+      emptyTitle: "No Projects Assigned Or Created Yet",
+      emptyBody: "Create Your First Project To Complete Onboarding Or Ask An Admin To Assign You To A Project.",
+      verifyEmailTooltip: "Verify Your Email Before Creating A Project.",
+      verifyEmailCta: "Verify Email",
       listTitle: "Projects",
       createProjectTitle: "Create A New Project",
       editProjectTitle: "Edit project",

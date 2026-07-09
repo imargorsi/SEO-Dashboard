@@ -55,7 +55,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
     labelKey: "projects",
     icon: IoFolderOpenOutline,
     group: "general",
-    viewPermission: "projects.view",
+    viewPermission: null,
     permissionScope: "project",
   },
   {

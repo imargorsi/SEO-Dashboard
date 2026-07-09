@@ -168,7 +168,7 @@ describe("Auth API parity", () => {
       roles: [SUPER_ADMIN_ROLE],
     });
 
-    const authData = loadUserAuthData(user);
+    const authData = await loadUserAuthData(user);
     expect(authData.roles).toContain(SUPER_ADMIN_ROLE);
     expect(authData.permissions).toContain("admin.dashboard.view");
     expect(authData.permissions).toContain("admin.users.view");
@@ -185,7 +185,7 @@ describe("Auth API parity", () => {
       roles: [],
     });
 
-    const authData = loadUserAuthData(user);
+    const authData = await loadUserAuthData(user);
     expect(authData.roles).toEqual([]);
     expect(authData.permissions).toEqual([]);
   });

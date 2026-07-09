@@ -69,10 +69,11 @@ async function fetchProjects(): Promise<TProjectListItem[]> {
   return envelope.data.items ?? [];
 }
 
-export function useProjectsQuery() {
+export function useProjectsQuery(options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: projectKeys.list(),
     queryFn: fetchProjects,
+    enabled: options?.enabled ?? true,
   });
 }
 

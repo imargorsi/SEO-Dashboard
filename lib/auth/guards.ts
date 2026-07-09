@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { findAccessToken } from "@/lib/auth/tokens";
-import { permissionsForRoles } from "@/lib/auth/rbac";
 import { hasAnyPermission, hasPermission } from "@/lib/rbac/access";
+import { loadEffectiveUserAuthData } from "@/lib/auth/effective-user-auth";
 import { SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
 import { User, type UserDocument } from "@/models";
 import type { Types } from "mongoose";
@@ -49,7 +49,8 @@ export async function requireVerifiedEmail(auth: AuthContext): Promise<NextRespo
 }
 
 export async function requireRole(auth: AuthContext, ...roles: string[]): Promise<NextResponse | null> {
-  const allowed = roles.some((role) => auth.user.roles.includes(role));
+  const authData = await loadUserAuthData(auth.user);
+  const allowed = roles.some((role) => authData.roles.includes(role));
   if (!allowed) {
     return ApiResponse.error("Forbidden.", {}, 403);
   }
@@ -64,7 +65,7 @@ export async function requirePermission(
   auth: AuthContext,
   permission: string,
 ): Promise<NextResponse | null> {
-  const { permissions } = loadUserAuthData(auth.user);
+  const { permissions } = await loadUserAuthData(auth.user);
   if (!hasPermission(permissions, permission)) {
     return ApiResponse.error("Forbidden.", {}, 403);
   }
@@ -75,17 +76,16 @@ export async function requireAnyPermission(
   auth: AuthContext,
   candidates: readonly string[],
 ): Promise<NextResponse | null> {
-  const { permissions } = loadUserAuthData(auth.user);
+  const { permissions } = await loadUserAuthData(auth.user);
   if (!hasAnyPermission(permissions, candidates)) {
     return ApiResponse.error("Forbidden.", {}, 403);
   }
   return null;
 }
 
-export function loadUserAuthData(user: UserDocument): {
+export async function loadUserAuthData(user: UserDocument): Promise<{
   roles: string[];
   permissions: string[];
-} {
-  const roles = user.roles ?? [];
-  return { roles, permissions: permissionsForRoles(roles) };
+}> {
+  return loadEffectiveUserAuthData(user);
 }

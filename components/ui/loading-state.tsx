@@ -1,6 +1,7 @@
 "use client";
 
 import { Spinner } from "@/components/ui/spinner";
+import { elevatedCardSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
 type LoadingStateProps = {
@@ -17,7 +18,7 @@ export function LoadingState({
 }: LoadingStateProps) {
   const content = (
     <div
-      className="flex items-center justify-center gap-2 type-body text-text-muted"
+      className="flex items-center justify-center gap-2 type-body text-(--text-on-elevated-muted)"
       role="status"
       aria-live="polite"
     >
@@ -32,10 +33,7 @@ export function LoadingState({
 
   return (
     <div
-      className={cn(
-        "rounded-2xl border border-border bg-bg-card px-4 py-8 text-center",
-        className,
-      )}
+      className={cn(elevatedCardSurfaceClass, "rounded-2xl px-4 py-8 text-center", className)}
     >
       {content}
     </div>

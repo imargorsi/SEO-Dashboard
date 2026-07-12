@@ -2,9 +2,10 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
+import { BADGE_TONE_CLASSES } from "@/lib/frontend/theme/status-colors";
 
 const badgeVariants = cva(
-  "inline-flex w-fit shrink-0 items-center justify-center gap-0.5 overflow-hidden whitespace-nowrap rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:size-2.5 [&>svg]:pointer-events-none",
+  "inline-flex w-fit shrink-0 items-center justify-center gap-0.5 overflow-hidden whitespace-nowrap rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/30 [&>svg]:size-2.5 [&>svg]:pointer-events-none",
   {
     variants: {
       variant: {
@@ -12,7 +13,7 @@ const badgeVariants = cva(
         secondary:
           "border-transparent bg-[var(--btn-secondary-bg)] text-[var(--btn-secondary-fg)] [a&]:hover:bg-[var(--btn-secondary-bg-hover)]",
         outline: "border-border bg-bg-hover text-text-primary",
-        success: "border-success/35 bg-success/12 text-success",
+        success: BADGE_TONE_CLASSES.success,
         muted: "border-transparent bg-muted text-muted-foreground [a&]:hover:bg-muted/80",
       },
     },

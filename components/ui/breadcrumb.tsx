@@ -2,10 +2,15 @@ import * as React from "react";
 import { IoChevronForward, IoEllipsisHorizontal } from "react-icons/io5";
 
 import { cn } from "@/lib/utils";
+import {
+  breadcrumbChromeMutedClass,
+  breadcrumbPageClass,
+} from "@/lib/frontend/theme/chrome-tones";
+
 export const breadcrumbLinkClassName = cn(
-  "rounded-lg px-2 py-1 font-medium text-[var(--text)] underline-offset-4 transition-[color,background-color] duration-200",
-  "hover:bg-[var(--accent-bg)] hover:text-[var(--text-h)] hover:underline",
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-border)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-elevated)]"
+  "rounded-lg px-2 py-1 font-medium text-text-secondary underline-offset-4 transition-[color,background-color] duration-200",
+  "hover:bg-accent-bg hover:text-text-primary hover:underline",
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-border focus-visible:ring-offset-2 focus-visible:ring-offset-bg-elevated",
 );
 
 function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {
@@ -24,7 +29,7 @@ function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">) {
     <ol
       data-slot="breadcrumb-list"
       className={cn(
-        "relative z-[1] flex flex-wrap items-center gap-x-1 gap-y-1.5 break-words text-sm text-[var(--text-h)] sm:gap-x-1.5",
+        "relative z-[1] flex flex-wrap items-center gap-x-1 gap-y-1.5 break-words text-sm text-text-primary sm:gap-x-1.5",
         className
       )}
       {...props}
@@ -58,8 +63,8 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
       data-slot="breadcrumb-page"
       aria-current="page"
       className={cn(
-        "inline-flex max-w-[min(100%,18rem)] items-center truncate rounded-lg border border-[var(--border)] bg-[var(--social-bg)] px-2.5 py-1 text-sm font-semibold leading-none text-[var(--text-h)] sm:max-w-md",
-        "dark:border-white/35 dark:bg-[rgba(0,0,0,0.22)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]",
+        "inline-flex max-w-[min(100%,18rem)] items-center truncate rounded-lg border px-2.5 py-1 text-sm font-semibold leading-none text-text-primary sm:max-w-md",
+        breadcrumbPageClass,
         className
       )}
       {...props}
@@ -74,8 +79,8 @@ function BreadcrumbSeparator({ children, className, ...props }: React.ComponentP
       role="presentation"
       aria-hidden="true"
       className={cn(
-        "inline-flex select-none text-[var(--text-muted)] [&>svg]:size-3.5 [&>svg]:shrink-0 [&>svg]:text-[var(--text-muted)]",
-        "dark:text-white/45 dark:[&>svg]:text-white/55",
+        "inline-flex select-none text-text-muted [&>svg]:size-3.5 [&>svg]:shrink-0 [&>svg]:text-(--text-chrome-muted)",
+        breadcrumbChromeMutedClass,
         className
       )}
       {...props}
@@ -92,7 +97,7 @@ function BreadcrumbEllipsis({ className, ...props }: React.ComponentProps<"span"
       role="presentation"
       aria-hidden="true"
       className={cn(
-        "flex size-8 items-center justify-center text-[var(--text-muted)] dark:text-white/55",
+        "flex size-8 items-center justify-center text-(--text-chrome-muted)",
         className
       )}
       {...props}

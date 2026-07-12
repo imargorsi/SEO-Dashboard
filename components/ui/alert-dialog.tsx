@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { overlayStrongClass } from "@/lib/frontend/theme/chrome-tones";
 
 type AlertDialogContextValue = {
   open: boolean;
@@ -74,7 +75,7 @@ function AlertDialogContent({
   return createPortal(
     <>
       <div
-        className="fixed inset-0 z-50 bg-black/55 backdrop-blur-[1px]"
+        className={cn("fixed inset-0 z-50 backdrop-blur-[1px]", overlayStrongClass)}
         aria-hidden
         onClick={() => setOpen(false)}
       />
@@ -83,7 +84,7 @@ function AlertDialogContent({
         aria-modal="true"
         data-slot="alert-dialog-content"
         className={cn(
-          "fixed top-1/2 left-1/2 z-50 grid w-[min(100%-1.5rem,26rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-6 text-[var(--text)] shadow-[var(--shadow)] outline-none",
+          "fixed top-1/2 left-1/2 z-50 grid w-[min(100%-1.5rem,26rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl border border-border bg-bg-card p-6 text-text-primary shadow-(--shadow) outline-none",
           className
         )}
       >
@@ -118,7 +119,7 @@ function AlertDialogTitle({ className, ...props }: React.ComponentProps<"h2">) {
   return (
     <h2
       data-slot="alert-dialog-title"
-      className={cn("text-base font-semibold tracking-tight text-[var(--text-h)]", className)}
+      className={cn("text-base font-semibold tracking-tight text-text-primary", className)}
       {...props}
     />
   );
@@ -128,7 +129,7 @@ function AlertDialogDescription({ className, ...props }: React.ComponentProps<"p
   return (
     <p
       data-slot="alert-dialog-description"
-      className={cn("text-sm leading-relaxed text-[var(--text-muted)]", className)}
+      className={cn("text-sm leading-relaxed text-text-muted", className)}
       {...props}
     />
   );

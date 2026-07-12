@@ -1,3 +1,4 @@
+/** National flag SVGs — hardcoded fills are intentional for accurate flag colors. */
 export function FlagUnitedKingdom({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 20 14" className={className} aria-hidden>

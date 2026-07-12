@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { IoClose } from "react-icons/io5";
 
 import { cn } from "@/lib/utils";
+import { overlayClass, surfacePanelHeaderClass } from "@/lib/frontend/theme/chrome-tones";
 
 type SheetContextValue = {
   open: boolean;
@@ -73,12 +74,12 @@ function SheetContent({
 
   return createPortal(
     <>
-      <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-[1px]" aria-hidden onClick={() => setOpen(false)} />
+      <div className={cn("fixed inset-0 z-50 backdrop-blur-[1px]", overlayClass)} aria-hidden onClick={() => setOpen(false)} />
       <div
         role="dialog"
         aria-modal="true"
         className={cn(
-          "fixed z-50 flex h-full w-[min(100%,24rem)] flex-col gap-0 border-[var(--border)] bg-[var(--bg-elevated)] shadow-[var(--shadow)] sm:max-w-md",
+          "fixed z-50 flex h-full w-[min(100%,24rem)] flex-col gap-0 border-border bg-bg-card shadow-(--shadow) sm:max-w-md",
           sideClass,
           className
         )}
@@ -86,7 +87,7 @@ function SheetContent({
         {children}
         <button
           type="button"
-          className="absolute end-3 top-3 rounded-md p-1.5 text-[var(--text-muted)] opacity-80 outline-none transition-opacity hover:bg-[var(--accent-bg)] hover:text-[var(--text-h)] hover:opacity-100 focus-visible:ring-2 focus-visible:ring-[var(--accent-border)]"
+          className="absolute end-3 top-3 rounded-md p-1.5 text-text-muted opacity-80 outline-none transition-opacity hover:bg-bg-hover hover:text-text-primary hover:opacity-100 focus-visible:ring-2 focus-visible:ring-accent-border"
           onClick={() => setOpen(false)}
         >
           <IoClose className="size-4" aria-hidden />
@@ -102,7 +103,8 @@ function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       className={cn(
-        "flex flex-col gap-1 border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--social-bg)_40%,var(--bg-elevated))] px-5 py-4 pe-12 text-start dark:bg-white/[0.04]",
+        "flex flex-col gap-1 border-b border-border px-5 py-4 pe-12 text-start",
+        surfacePanelHeaderClass,
         className
       )}
       {...props}
@@ -114,7 +116,7 @@ function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       className={cn(
-        "mt-auto flex flex-col gap-2 border-t border-[var(--border)] px-5 py-4 sm:flex-row sm:justify-end",
+        "mt-auto flex flex-col gap-2 border-t border-border px-5 py-4 sm:flex-row sm:justify-end",
         className
       )}
       {...props}
@@ -123,11 +125,11 @@ function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 function SheetTitle({ className, ...props }: React.ComponentProps<"h2">) {
-  return <h2 className={cn("text-base font-semibold text-[var(--text-h)]", className)} {...props} />;
+  return <h2 className={cn("text-base font-semibold text-text-primary", className)} {...props} />;
 }
 
 function SheetDescription({ className, ...props }: React.ComponentProps<"p">) {
-  return <p className={cn("text-xs text-[var(--text-muted)]", className)} {...props} />;
+  return <p className={cn("text-xs text-text-muted", className)} {...props} />;
 }
 
 const SheetTrigger = () => null;

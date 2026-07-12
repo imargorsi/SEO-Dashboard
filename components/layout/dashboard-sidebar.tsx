@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
@@ -8,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { IoClose } from "react-icons/io5";
 
 import { NavbarProfileMenu } from "@/components/layout/navbar-profile-menu";
+import { AppLogo } from "@/components/layout/app-logo";
 import { ProjectSelector } from "@/components/layout/project-selector";
 import { useProjectAccess } from "@/context/project-access-context";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
@@ -52,15 +52,7 @@ export function DashboardSidebar({ onClose }: DashboardSidebarProps) {
           className="flex w-full min-w-0 items-center justify-start rounded-lg px-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-border) focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar"
           aria-label={tLayout("appName")}
         >
-          <Image
-            src="/Logo.svg"
-            alt=""
-            width={60}
-            height={24}
-            priority
-            className="h-8 w-auto shrink-0"
-            aria-hidden
-          />
+          <AppLogo priority className="h-8 w-auto shrink-0" width={60} height={24} />
 
         </Link>
         {onClose ? (

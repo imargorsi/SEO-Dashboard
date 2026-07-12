@@ -10,7 +10,6 @@ import { Paragraph } from "@/components/paragraph";
 import { AuthSubmitButton } from "@/components/auth/auth-submit-button";
 import { Spinner } from "@/components/ui/spinner";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { ThemeToggle } from "@/components/theme-toggle";
 import type { ForgotPasswordValues } from "@/sections/forgot-password.types";
 
 type ForgotPasswordFormSectionProps = {
@@ -33,12 +32,7 @@ export function ForgotPasswordFormSection({
   return (
     <SignInAuthCardShell
       ariaLabelledBy="forgot-password-heading"
-      topToolbar={
-        <>
-          <ThemeToggle tone="ghost" size="sm" />
-          <LanguageSwitcher tone="ghost" size="sm" />
-        </>
-      }
+      topToolbar={<LanguageSwitcher tone="ghost" size="sm" />}
     >
       <Heading id="forgot-password-heading" pageTitle>
         {t("title")}
@@ -67,14 +61,14 @@ export function ForgotPasswordFormSection({
           />
 
           <AuthSubmitButton disabled={isSubmitting} className="mt-1">
-            {isSubmitting ? <Spinner className="size-4 shrink-0 text-white" /> : null}
+            {isSubmitting ? <Spinner className="size-4 shrink-0 text-text-on-brand" /> : null}
             {t("submit")}
           </AuthSubmitButton>
         </form>
       )}
 
       <Paragraph moreSmaller className="mt-6! text-center">
-        <Link href="/" className="font-semibold text-brand-orange transition-colors hover:text-brand-magenta hover:underline">
+        <Link href="/" className="font-semibold text-brand transition-colors hover:brightness-110 hover:underline">
           {t("backToSignIn")}
         </Link>
       </Paragraph>

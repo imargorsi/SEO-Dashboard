@@ -8,6 +8,12 @@ import { Spinner } from "@/components/ui/spinner";
 import { useChangePasswordForm } from "@/components/forms/hooks/use-change-password-form";
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
+import {
+  elevatedCardMutedClass,
+  elevatedCardSurfaceClass,
+  elevatedCardTitleClass,
+} from "@/lib/frontend/layout/dashboard-chrome";
+import { cn } from "@/lib/utils";
 
 export function ChangePasswordForm() {
   const { t } = useTranslation("translation", { keyPrefix: "profile.changePassword" });
@@ -15,13 +21,13 @@ export function ChangePasswordForm() {
   const newPassword = watch("new_password");
 
   return (
-    <section className="rounded-xl border border-border bg-bg-card p-5 sm:p-6">
+    <section className={cn(elevatedCardSurfaceClass, "rounded-xl p-5 sm:p-6")}>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="mb-5">
-          <Heading id="change-password-heading" SmallTitle customHeadingTag="h2">
+          <Heading id="change-password-heading" SmallTitle customHeadingTag="h2" className={elevatedCardTitleClass}>
             {t("title")}
           </Heading>
-          <Paragraph className="mt-1 text-text-muted">{t("lead")}</Paragraph>
+          <Paragraph className={cn("mt-1", elevatedCardMutedClass)}>{t("lead")}</Paragraph>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">

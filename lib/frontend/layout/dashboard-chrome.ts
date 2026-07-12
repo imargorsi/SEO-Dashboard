@@ -7,6 +7,16 @@ export const dashboardHeaderTitleClass = "text-sm font-semibold leading-none tex
 export const dashboardNavIconClass =
   "inline-flex size-9 shrink-0 items-center justify-center rounded-lg border-0 bg-transparent p-0 text-text-muted transition-colors hover:bg-bg-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-border)] focus-visible:ring-offset-2 focus-visible:ring-offset-bg-card active:scale-[0.98]";
 
+/** Elevated card/panel surface — tuned in globals.css (`--bg-card-elevated`, `--border-elevated`, `--shadow-elevated`). */
+export const elevatedCardSurfaceClass =
+  "border border-(--border-elevated) bg-bg-card-elevated text-(--text-on-elevated) shadow-(--shadow-elevated)";
+
+export const elevatedCardTitleClass = "text-(--text-on-elevated)";
+
+export const elevatedCardBodyClass = "text-(--text-on-elevated-secondary)";
+
+export const elevatedCardMutedClass = "text-(--text-on-elevated-muted)";
+
 /** Sidebar shell — wider than content chrome, distinct surface from main modules. */
 export const sidebarShellClass =
   "flex w-full shrink-0 flex-col border-b border-border bg-bg-sidebar md:min-h-svh md:w-60 md:border-b-0 md:border-e";

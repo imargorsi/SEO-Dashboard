@@ -3,16 +3,8 @@
 import { useTranslation } from "react-i18next";
 
 import { FlagSaudiArabia, FlagUnitedKingdom } from "@/components/flag-icons";
+import { chromeControlToneClass } from "@/lib/frontend/theme/chrome-tones";
 import { cn } from "@/lib/utils";
-
-const toneClass = {
-  default:
-    "border-[var(--border)] bg-[var(--social-bg)] text-[var(--text-h)] shadow-[var(--shadow)] hover:border-[var(--accent-border)] hover:bg-[var(--accent-bg)] hover:text-[var(--text-h)] focus-visible:ring-[var(--accent-border)] focus-visible:ring-offset-[var(--bg)]",
-  inverse:
-    "border-0 bg-black/25 text-white shadow-none hover:bg-white/15 hover:text-white focus-visible:ring-white/60 focus-visible:ring-offset-0",
-  ghost:
-    "border-transparent bg-transparent text-[var(--text-h)]/65 shadow-none hover:bg-[color-mix(in_srgb,var(--text-h)_10%,transparent)] hover:text-[var(--text-h)] dark:text-white/55 dark:hover:bg-white/[0.08] dark:hover:text-white/90 focus-visible:ring-[var(--text-h)]/25 focus-visible:ring-offset-0 dark:focus-visible:ring-white/35",
-} as const;
 
 const sizeClass = {
   default: "h-10 w-10 rounded-xl",
@@ -31,7 +23,7 @@ export function LanguageSwitcher({
   size = "default",
   className,
 }: {
-  tone?: keyof typeof toneClass;
+  tone?: keyof typeof chromeControlToneClass;
   size?: keyof typeof sizeClass;
   className?: string;
 }) {
@@ -50,7 +42,7 @@ export function LanguageSwitcher({
       className={cn(
         "inline-flex shrink-0 items-center justify-center overflow-hidden border transition-[border-color,background-color,transform,box-shadow] duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.96]",
         sizeClass[size],
-        toneClass[tone],
+        chromeControlToneClass[tone],
         className
       )}
       aria-label={label}

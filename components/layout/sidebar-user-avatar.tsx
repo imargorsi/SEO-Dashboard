@@ -1,5 +1,6 @@
 import { IoAlertCircle, IoCheckmark } from "react-icons/io5";
 import { UserAvatar } from "@/components/ui/user-avatar";
+import { getStatusTextClassName } from "@/lib/frontend/theme/status-colors";
 import { cn } from "@/lib/utils";
 
 type SidebarUserAvatarProps = {
@@ -35,7 +36,8 @@ export function SidebarUserAvatar({
         verified ? (
           <span
             className={cn(
-              "absolute flex items-center justify-center rounded-full border border-(--social-bg) bg-bg-card text-success",
+              "absolute flex items-center justify-center rounded-full border border-(--social-bg) bg-bg-card",
+              getStatusTextClassName("active"),
               badgeWrap
             )}
             aria-hidden
@@ -45,7 +47,8 @@ export function SidebarUserAvatar({
         ) : (
           <span
             className={cn(
-              "absolute flex items-center justify-center rounded-full border border-(--social-bg) bg-bg-card text-warning",
+              "absolute flex items-center justify-center rounded-full border border-(--social-bg) bg-bg-card",
+              getStatusTextClassName("pending"),
               badgeWrap
             )}
             aria-hidden

@@ -8,6 +8,12 @@ import { Input } from "@/components/input";
 import { Spinner } from "@/components/ui/spinner";
 import { useProfileForm } from "@/components/forms/hooks/use-profile-form";
 import type { AuthUser } from "@/lib/frontend/auth/types";
+import {
+  elevatedCardMutedClass,
+  elevatedCardSurfaceClass,
+  elevatedCardTitleClass,
+} from "@/lib/frontend/layout/dashboard-chrome";
+import { cn } from "@/lib/utils";
 import { Heading } from "../heading";
 
 type ProfileFormProps = {
@@ -31,13 +37,13 @@ export function ProfileForm({ user }: ProfileFormProps) {
   } = useProfileForm(user);
 
   return (
-    <section className="rounded-xl border border-border bg-bg-card p-5 sm:p-6">
+    <section className={cn(elevatedCardSurfaceClass, "rounded-xl p-5 sm:p-6")}>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="mb-5">
-          <Heading id="profile-heading" SmallTitle customHeadingTag="h2">
+          <Heading id="profile-heading" SmallTitle customHeadingTag="h2" className={elevatedCardTitleClass}>
             {t("title")}
           </Heading>
-          <p className="mt-1 type-body text-text-muted">{t("lead")}</p>
+          <p className={cn("mt-1 type-body", elevatedCardMutedClass)}>{t("lead")}</p>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">

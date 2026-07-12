@@ -11,6 +11,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { useAuthUserQuery, useLogoutMutation, useResendEmailVerificationMutation } from "@/features/auth/auth.api";
 import { ApiError } from "@/lib/frontend/api/errors";
 import { notify } from "@/lib/frontend/feedback/notify";
+import { getStatusTextClassName } from "@/lib/frontend/theme/status-colors";
 import { cn } from "@/lib/utils";
 
 const menuItemClass =
@@ -157,7 +158,7 @@ export function NavbarProfileMenu({ placement = "topbar" }: NavbarProfileMenuPro
           </div>
 
           {verified ? (
-            <div className="flex items-center gap-2 border-b border-border px-3 py-2.5 type-caption text-success">
+            <div className={cn("flex items-center gap-2 border-b border-border px-3 py-2.5 type-caption", getStatusTextClassName("active"))}>
               <IoCheckmarkCircle className="size-4 shrink-0" aria-hidden />
               <span>{t("emailVerified")}</span>
             </div>
@@ -166,16 +167,16 @@ export function NavbarProfileMenu({ placement = "topbar" }: NavbarProfileMenuPro
               type="button"
               disabled={resendMutation.isPending}
               aria-busy={resendMutation.isPending}
-              className="flex w-full items-start gap-2 border-b border-border px-3 py-2.5 text-start transition hover:bg-warning/10 disabled:opacity-70"
+              className="flex w-full items-start gap-2 border-b border-border px-3 py-2.5 text-start transition hover:bg-status-pending/10 disabled:opacity-70"
               onClick={() => void onResendVerification()}
             >
               {resendMutation.isPending ? (
-                <Spinner className="mt-0.5 size-4 shrink-0 text-warning" aria-hidden />
+                <Spinner className={cn("mt-0.5 size-4 shrink-0", getStatusTextClassName("pending"))} aria-hidden />
               ) : (
-                <IoAlertCircle className="mt-0.5 size-4 shrink-0 text-warning" aria-hidden />
+                <IoAlertCircle className={cn("mt-0.5 size-4 shrink-0", getStatusTextClassName("pending"))} aria-hidden />
               )}
               <span className="min-w-0 flex-1">
-                <span className="block type-caption text-warning">{t("emailNotVerified")}</span>
+                <span className={cn("block type-caption", getStatusTextClassName("pending"))}>{t("emailNotVerified")}</span>
                 <span className="mt-0.5 block type-caption-xs text-text-muted">{t("resendVerification")}</span>
               </span>
             </button>

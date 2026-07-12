@@ -27,6 +27,7 @@ import {
   canViewProjectCard,
 } from "@/lib/projects/project-card-access.utils";
 import { hasPermission, isSuperAdmin, mergePermissions } from "@/lib/rbac/access";
+import { elevatedCardSurfaceClass, elevatedCardMutedClass, elevatedCardTitleClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
 export function ProjectsListSection() {
@@ -129,11 +130,11 @@ export function ProjectsListSection() {
             isVerifyEmailPending={resendMutation.isPending}
           />
         ) : !hasFilteredResults ? (
-          <div className="rounded-3xl border border-border bg-bg-card px-6 py-10 text-center">
-            <Heading sectionTitle className="text-text-primary">
+          <div className={cn(elevatedCardSurfaceClass, "rounded-3xl px-6 py-10 text-center")}>
+            <Heading sectionTitle className={elevatedCardTitleClass}>
               {t("statusFilter.emptyTitle")}
             </Heading>
-            <Paragraph className="mt-2 text-text-muted">{t("statusFilter.emptyBody")}</Paragraph>
+            <Paragraph className={cn("mt-2", elevatedCardMutedClass)}>{t("statusFilter.emptyBody")}</Paragraph>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">

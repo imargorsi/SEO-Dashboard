@@ -8,7 +8,9 @@ import { RoleScopeBadge } from "@/components/roles/role-scope-badge";
 import type { TAppTableColumn } from "@/components/table/app-table";
 import { TableRowIconActions } from "@/components/table/table-row-icon-actions";
 import { Badge } from "@/components/ui/badge";
+import { getBadgeToneClassName } from "@/lib/frontend/theme/status-colors";
 import type { TAdminRoleListItem } from "@/types/admin-role.types";
+import { cn } from "@/lib/utils";
 
 export type TRoleTableRow = TAdminRoleListItem & Record<string, unknown>;
 
@@ -66,7 +68,7 @@ export function useRolesTableColumns({
         label: t("colSystem"),
         render: (item) =>
           item.is_system ? (
-            <Badge variant="outline" className="border-warning/35 bg-warning/12 text-warning type-caption-xs">
+            <Badge variant="outline" className={cn(getBadgeToneClassName("warning"), "type-caption-xs")}>
               {t("systemYes")}
             </Badge>
           ) : (

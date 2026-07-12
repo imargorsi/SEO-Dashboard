@@ -24,6 +24,11 @@ import {
   type TProjectCardActionTone,
   type TProjectStatusAction,
 } from "@/lib/projects/project-card-actions.utils";
+import {
+  getStatusChipClassName,
+  getStatusTextClassName,
+  type TStatusColorKey,
+} from "@/lib/frontend/theme/status-colors";
 import { cn } from "@/lib/utils";
 
 type ProjectCardActionsProps = {
@@ -33,11 +38,24 @@ type ProjectCardActionsProps = {
   canEditProject: boolean;
 };
 
+const ACTION_TONE_STATUS: Partial<Record<TProjectCardActionTone, TStatusColorKey>> = {
+  success: "active",
+  warning: "pending",
+  destructive: "rejected",
+  muted: "inactive",
+};
+
+function getCurrentStateChipClass(action: TProjectCardActionConfig): string {
+  if (action.id === "activeState") return getStatusChipClassName("active");
+  if (action.id === "inactiveState") return getStatusChipClassName("inactive");
+  return getStatusChipClassName(ACTION_TONE_STATUS[action.tone] ?? "active");
+}
+
 const TONE_ICON_CLASS: Record<TProjectCardActionTone, string> = {
-  success: "text-success",
-  warning: "text-warning",
-  destructive: "text-destructive",
-  muted: "text-text-muted",
+  success: getStatusTextClassName("active"),
+  warning: getStatusTextClassName("pending"),
+  destructive: getStatusTextClassName("rejected"),
+  muted: getStatusTextClassName("inactive"),
   brand: "text-brand",
   default: "text-text-primary",
 };
@@ -90,7 +108,7 @@ function ProjectCardActionButton({
   const className = cn(
     "flex min-w-[4.5rem] flex-1 flex-col items-center justify-center gap-1.5 rounded-xl border px-2 py-2.5 transition-colors",
     action.isCurrentState
-      ? "border-success/40 bg-success/10"
+      ? getCurrentStateChipClass(action)
       : "border-border bg-bg-input hover:bg-bg-hover",
     isDisabled && "cursor-not-allowed opacity-60 hover:bg-bg-input",
   );

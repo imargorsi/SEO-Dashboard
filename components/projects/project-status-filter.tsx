@@ -6,21 +6,25 @@ import { useTranslation } from "react-i18next";
 
 import type { ProjectStatus } from "@/lib/projects/constants";
 import type { TProjectStatusCounts, TProjectStatusFilter, TProjectStatusFilterLabelKey } from "@/lib/projects/project-status-filter.utils";
+import {
+  getStatusDotClassName,
+  type TStatusColorKey,
+} from "@/lib/frontend/theme/status-colors";
 import { cn } from "@/lib/utils";
 
 type TStatusFilterOption = {
   id: TProjectStatusFilter;
   labelKey: TProjectStatusFilterLabelKey;
   icon?: IconType;
-  dotClassName?: string;
+  statusColorKey?: TStatusColorKey;
 };
 
 const FILTER_OPTIONS: TStatusFilterOption[] = [
   { id: "all", labelKey: "all", icon: IoGridOutline },
-  { id: "active", labelKey: "active", dotClassName: "bg-success" },
-  { id: "pending", labelKey: "pending", dotClassName: "bg-warning" },
-  { id: "rejected", labelKey: "rejected", dotClassName: "bg-destructive" },
-  { id: "inactive", labelKey: "inactive", dotClassName: "bg-destructive" },
+  { id: "active", labelKey: "active", statusColorKey: "active" },
+  { id: "pending", labelKey: "pending", statusColorKey: "pending" },
+  { id: "rejected", labelKey: "rejected", statusColorKey: "rejected" },
+  { id: "inactive", labelKey: "inactive", statusColorKey: "inactive" },
 ];
 
 type ProjectStatusFilterProps = {
@@ -62,6 +66,8 @@ export function ProjectStatusFilter({
       {FILTER_OPTIONS.map((option) => {
         const isActive = selectedFilter === option.id;
         const Icon = option.icon;
+        const dotClassName =
+          option.statusColorKey != null ? getStatusDotClassName(option.statusColorKey) : undefined;
 
         return (
           <button
@@ -78,8 +84,8 @@ export function ProjectStatusFilter({
           >
             {Icon ? (
               <Icon className="size-4 shrink-0" aria-hidden />
-            ) : option.dotClassName ? (
-              <span className={cn("size-2 shrink-0 rounded-full", option.dotClassName)} aria-hidden />
+            ) : dotClassName ? (
+              <span className={cn("size-2 shrink-0 rounded-full", dotClassName)} aria-hidden />
             ) : null}
             <span>{t(option.labelKey)}</span>
             <span

@@ -8,6 +8,8 @@ import { Spinner } from "@/components/ui/spinner";
 import { ProjectCreateStepper } from "@/components/forms/project-create-stepper";
 import { ProjectCreateStepContent } from "@/components/forms/project-create-steps";
 import { useProjectCreateForm } from "@/components/forms/hooks/use-project-create-form.hook";
+import { elevatedCardSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
+import { cn } from "@/lib/utils";
 
 export function ProjectCreateForm({ authUser }: { authUser: AuthUser }) {
   const hook = useProjectCreateForm(authUser);
@@ -15,7 +17,7 @@ export function ProjectCreateForm({ authUser }: { authUser: AuthUser }) {
 
   return (
     <form className="space-y-5" onSubmit={onSubmit} noValidate>
-      <section className="rounded-2xl border border-border bg-bg-card p-6 shadow-(--shadow) sm:p-8">
+      <section className={cn(elevatedCardSurfaceClass, "rounded-2xl p-6 shadow-(--shadow) sm:p-8")}>
         <div className="space-y-6">
           <ProjectCreateStepper total={steps.length} current={currentStep} />
           <ProjectCreateStepContent hook={hook} authUser={authUser} />

@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 import { FcGoogle } from "react-icons/fc";
 import { SignInAuthCardShell } from "@/components/sign-in-auth-card-shell";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { Heading } from "@/components/heading";
 import { Input } from "@/components/input";
 import { Paragraph } from "@/components/paragraph";
@@ -33,12 +32,7 @@ export function SignInFormSection({
   return (
     <SignInAuthCardShell
       ariaLabelledBy="sign-in-heading"
-      topToolbar={
-        <>
-          <ThemeToggle tone="ghost" size="sm" />
-          <LanguageSwitcher tone="ghost" size="sm" />
-        </>
-      }
+      topToolbar={<LanguageSwitcher tone="ghost" size="sm" />}
     >
       <Heading id="sign-in-heading" heroTitle >
         {t("title")}
@@ -84,7 +78,7 @@ export function SignInFormSection({
         </div>
 
         <AuthSubmitButton disabled={isSubmitting} className="mt-0.5">
-          {isSubmitting ? <Spinner className="size-4 shrink-0 text-white" /> : null}
+          {isSubmitting ? <Spinner className="size-4 shrink-0 text-text-on-brand" /> : null}
           {t("submit")}
         </AuthSubmitButton>
       </form>
@@ -109,7 +103,7 @@ export function SignInFormSection({
           <span className="text-text-muted">{t("noAccountPrompt")} </span>
           <Link
             href="/register"
-            className="font-semibold text-brand-orange transition-colors hover:text-brand-magenta hover:underline"
+            className="font-semibold text-brand transition-colors hover:brightness-110 hover:underline"
           >
             {t("registerCta")}
           </Link>

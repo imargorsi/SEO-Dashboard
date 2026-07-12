@@ -2,6 +2,7 @@
 
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
+import { AppLogo } from "@/components/layout/app-logo";
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
@@ -24,8 +25,7 @@ export function SignInHeroSection() {
         aria-hidden
       />
       <div className="relative z-10 mx-auto w-full max-w-xl text-text-primary">
-        <Image
-          src="/Logo.svg"
+        <AppLogo
           alt={tLayout("appName")}
           className="mb-12 block h-auto w-56 max-w-full"
           width={176}

@@ -6,6 +6,13 @@ import { ProjectCardActions } from "@/components/projects/project-card-actions";
 import { ProjectStatusChip } from "@/components/projects/project-status-chip";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import type { TProjectListItem } from "@/features/projects/projects.api";
+import {
+  elevatedCardBodyClass,
+  elevatedCardMutedClass,
+  elevatedCardSurfaceClass,
+  elevatedCardTitleClass,
+} from "@/lib/frontend/layout/dashboard-chrome";
+import { cn } from "@/lib/utils";
 
 type ProjectCardProps = {
   project: TProjectListItem;
@@ -30,22 +37,22 @@ export function ProjectCard({ project, canViewDetails, canEditProject, isSuperAd
   const ownerName = project.owner?.name?.trim() || "Project Owner";
 
   return (
-    <article className="rounded-3xl border border-border bg-bg-card p-5 sm:p-6">
+    <article className={cn(elevatedCardSurfaceClass, "rounded-3xl p-5 sm:p-6")}>
       <div className="flex items-start justify-between gap-3">
         <ProjectImage imageUrl={project.imageUrl} businessName={project.businessName} />
         <ProjectStatusChip status={project.status} />
       </div>
 
       <div className="mt-4 space-y-1.5">
-        <h3 className="type-h2 text-text-primary">{project.businessName}</h3>
-        <p className="flex items-center gap-1.5 type-body text-text-secondary">
+        <h3 className={cn("type-h2", elevatedCardTitleClass)}>{project.businessName}</h3>
+        <p className={cn("flex items-center gap-1.5 type-body", elevatedCardBodyClass)}>
           <IoGlobeOutline className="size-3.5 shrink-0" aria-hidden />
           <span className="truncate">{project.websiteUrl}</span>
         </p>
       </div>
 
       <div className="mt-6">
-        <p className="type-caption-xs uppercase tracking-[0.08em] text-text-muted">Project Owner</p>
+        <p className={cn("type-caption-xs uppercase tracking-[0.08em]", elevatedCardMutedClass)}>Project Owner</p>
         <div className="mt-2.5 flex items-center gap-2">
           <UserAvatar
             name={ownerName}
@@ -53,7 +60,7 @@ export function ProjectCard({ project, canViewDetails, canEditProject, isSuperAd
             size="sm"
             roundedClassName="rounded-full"
           />
-          <p className="truncate type-body text-text-primary">{ownerName}</p>
+          <p className={cn("truncate type-body", elevatedCardTitleClass)}>{ownerName}</p>
         </div>
       </div>
 

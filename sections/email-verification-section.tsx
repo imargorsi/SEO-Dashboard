@@ -9,6 +9,12 @@ import { Button } from "@/components/ui/button";
 import { useResendEmailVerificationMutation } from "@/features/auth/auth.api";
 import { ApiError } from "@/lib/frontend/api/errors";
 import { notify } from "@/lib/frontend/feedback/notify";
+import {
+  elevatedCardBodyClass,
+  elevatedCardMutedClass,
+  elevatedCardSurfaceClass,
+} from "@/lib/frontend/layout/dashboard-chrome";
+import { cn } from "@/lib/utils";
 
 export function EmailVerificationSection() {
   const { t } = useTranslation("translation", { keyPrefix: "auth.verification" });
@@ -31,13 +37,13 @@ export function EmailVerificationSection() {
           <Paragraph className="text-text-muted">{t("description")}</Paragraph>
         </div>
 
-        <section className="rounded-2xl border border-border bg-bg-card p-6 shadow-(--shadow)">
+        <section className={cn(elevatedCardSurfaceClass, "rounded-2xl p-6 shadow-(--shadow)")}>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
               <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-bg-hover">
-                <IoMailOutline className="size-4 text-text-primary" aria-hidden />
+                <IoMailOutline className="size-4 text-(--text-on-elevated)" aria-hidden />
               </span>
-              <p className="type-body leading-6 text-text-secondary">{t("description")}</p>
+              <p className={cn("type-body leading-6", elevatedCardBodyClass)}>{t("description")}</p>
             </div>
             <Button
               type="button"

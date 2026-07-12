@@ -8,6 +8,12 @@ import { useSelectedProject } from "@/context/selected-project-context";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import type { TProjectListItem } from "@/features/projects/projects.api";
 import { formatProjectHostname } from "@/lib/frontend/projects/project-selector.utils";
+import {
+  elevatedCardBodyClass,
+  elevatedCardMutedClass,
+  elevatedCardSurfaceClass,
+  elevatedCardTitleClass,
+} from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
 function ProjectLogo({ project, size = "md" }: { project: TProjectListItem; size?: "sm" | "md" }) {
@@ -41,13 +47,13 @@ function ProjectOption({
     >
       <ProjectLogo project={project} size="sm" />
       <span className="min-w-0 flex-1">
-        <span className="block truncate type-body text-text-primary">{project.businessName}</span>
-        <span className="block truncate type-caption-xs text-text-muted">
+        <span className={cn("block truncate type-body", elevatedCardTitleClass)}>{project.businessName}</span>
+        <span className={cn("block truncate type-caption-xs", elevatedCardMutedClass)}>
           {formatProjectHostname(project.websiteUrl)}
         </span>
       </span>
       {isSelected ? (
-        <IoCheckmark className="size-4 shrink-0 text-brand-orange" aria-hidden />
+        <IoCheckmark className="size-4 shrink-0 text-brand" aria-hidden />
       ) : (
         <span className="size-4 shrink-0" aria-hidden />
       )}
@@ -75,8 +81,8 @@ export function ProjectSelector() {
   if (!selectedProject || projects.length === 0) {
     return (
       <div className="shrink-0 px-3 pb-3 pt-1">
-        <div className="rounded-xl border border-border bg-bg-card px-2.5 py-2.5">
-          <p className="type-caption text-text-muted">{t("emptyLabel")}</p>
+        <div className={cn(elevatedCardSurfaceClass, "rounded-xl px-2.5 py-2.5")}>
+          <p className={cn("type-caption", elevatedCardMutedClass)}>{t("emptyLabel")}</p>
         </div>
       </div>
     );
@@ -86,7 +92,8 @@ export function ProjectSelector() {
     <div className="shrink-0 px-3 pb-3 pt-1">
       <div
         className={cn(
-          "overflow-hidden rounded-xl border border-border bg-bg-card transition-[border-color] duration-200",
+          elevatedCardSurfaceClass,
+          "overflow-hidden rounded-xl transition-[border-color] duration-200",
           open && "border-(--accent-border)",
         )}
       >
@@ -101,11 +108,12 @@ export function ProjectSelector() {
         >
           <ProjectLogo project={selectedProject} />
           <span className="min-w-0 flex-1">
-            <span className="block truncate type-body text-text-primary">{selectedProject.businessName}</span>
+            <span className={cn("block truncate type-body", elevatedCardTitleClass)}>{selectedProject.businessName}</span>
           </span>
           <IoChevronDown
             className={cn(
-              "size-4 shrink-0 text-text-muted transition-transform duration-300 ease-out",
+              "size-4 shrink-0 transition-transform duration-300 ease-out",
+              elevatedCardMutedClass,
               open && "rotate-180",
             )}
             aria-hidden
@@ -125,7 +133,7 @@ export function ProjectSelector() {
               aria-label={t("listLabel")}
               className="border-t border-border px-1.5 pb-1.5 pt-1"
             >
-              <p className="px-2 pb-1 pt-1 type-caption-xs text-text-muted">{t("listHeading")}</p>
+              <p className={cn("px-2 pb-1 pt-1 type-caption-xs", elevatedCardMutedClass)}>{t("listHeading")}</p>
               <div className="flex flex-col gap-0.5">
                 {projects.map((project) => (
                   <ProjectOption

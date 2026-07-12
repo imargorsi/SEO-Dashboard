@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import { IoArrowForward, IoGlobeOutline } from "react-icons/io5";
+import { IoGlobeOutline } from "react-icons/io5";
 
+import { ProjectCardActions } from "@/components/projects/project-card-actions";
 import { ProjectStatusChip } from "@/components/projects/project-status-chip";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import type { TProjectListItem } from "@/features/projects/projects.api";
@@ -10,6 +10,8 @@ import type { TProjectListItem } from "@/features/projects/projects.api";
 type ProjectCardProps = {
   project: TProjectListItem;
   canViewDetails: boolean;
+  canEditProject: boolean;
+  isSuperAdmin: boolean;
 };
 
 function ProjectImage({ imageUrl, businessName }: { imageUrl: string | null; businessName: string }) {
@@ -24,7 +26,7 @@ function ProjectImage({ imageUrl, businessName }: { imageUrl: string | null; bus
   );
 }
 
-export function ProjectCard({ project, canViewDetails }: ProjectCardProps) {
+export function ProjectCard({ project, canViewDetails, canEditProject, isSuperAdmin }: ProjectCardProps) {
   const ownerName = project.owner?.name?.trim() || "Project Owner";
 
   return (
@@ -42,30 +44,25 @@ export function ProjectCard({ project, canViewDetails }: ProjectCardProps) {
         </p>
       </div>
 
-      <div className="mt-6 flex items-center justify-between gap-4">
-        <div className="min-w-0">
-          <p className="type-caption-xs uppercase tracking-[0.08em] text-text-muted">Project Owner</p>
-          <div className="mt-2.5 flex items-center gap-2">
-            <UserAvatar
-              name={ownerName}
-              imageUrl={project.owner?.profileImage ?? null}
-              size="sm"
-              roundedClassName="rounded-full"
-            />
-            <p className="truncate type-body text-text-primary">{ownerName}</p>
-          </div>
+      <div className="mt-6">
+        <p className="type-caption-xs uppercase tracking-[0.08em] text-text-muted">Project Owner</p>
+        <div className="mt-2.5 flex items-center gap-2">
+          <UserAvatar
+            name={ownerName}
+            imageUrl={project.owner?.profileImage ?? null}
+            size="sm"
+            roundedClassName="rounded-full"
+          />
+          <p className="truncate type-body text-text-primary">{ownerName}</p>
         </div>
-
-        {canViewDetails ? (
-          <Link
-            href={`/projects/${project.id}`}
-            className="inline-flex items-center gap-1.5 type-body-strong text-text-primary transition-colors hover:text-brand"
-          >
-            View Details
-            <IoArrowForward className="size-4" aria-hidden />
-          </Link>
-        ) : null}
       </div>
+
+      <ProjectCardActions
+        project={project}
+        isSuperAdmin={isSuperAdmin}
+        canViewDetails={canViewDetails}
+        canEditProject={canEditProject}
+      />
     </article>
   );
 }

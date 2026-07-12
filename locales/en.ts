@@ -172,6 +172,33 @@ export interface Translation {
       verifyEmailCta: string;
       listTitle: string;
       createProjectTitle: string;
+      statusFilter: {
+        ariaLabel: string;
+        all: string;
+        active: string;
+        pending: string;
+        inactive: string;
+        rejected: string;
+        emptyTitle: string;
+        emptyBody: string;
+      };
+      cardActions: {
+        approve: string;
+        decline: string;
+        active: string;
+        inactive: string;
+        pending: string;
+        viewDetails: string;
+        editProject: string;
+        moreActions: string;
+        errorFallback: string;
+        success: {
+          approve: string;
+          decline: string;
+          active: string;
+          inactive: string;
+        };
+      };
       editProjectTitle: string;
       createLead: string;
       createForm: {
@@ -703,6 +730,33 @@ const translation: Translation = {
       verifyEmailCta: "Verify Email",
       listTitle: "Projects",
       createProjectTitle: "Create A New Project",
+      statusFilter: {
+        ariaLabel: "Filter Projects By Status",
+        all: "All Projects",
+        active: "Active",
+        pending: "Pending Approval",
+        inactive: "Inactive",
+        rejected: "Rejected",
+        emptyTitle: "No Projects Match This Filter",
+        emptyBody: "Try Another Status Or View All Projects.",
+      },
+      cardActions: {
+        approve: "Approve",
+        decline: "Decline",
+        active: "Active",
+        inactive: "In Active",
+        pending: "Pending",
+        viewDetails: "View Details",
+        editProject: "Edit Project",
+        moreActions: "More Actions",
+        errorFallback: "Could Not Update Project Status.",
+        success: {
+          approve: "Project Approved Successfully.",
+          decline: "Project Rejected Successfully.",
+          active: "Project Activated Successfully.",
+          inactive: "Project Deactivated Successfully.",
+        },
+      },
       editProjectTitle: "Edit project",
       createLead: "Add Your Business Information To Start This Project.",
       createForm: {

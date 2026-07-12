@@ -13,8 +13,8 @@ const STATUS_LABELS: Record<ProjectStatus, string> = {
 const STATUS_CLASSES: Record<ProjectStatus, string> = {
   pending: "border-warning/40 bg-warning/10 text-warning",
   active: "border-success/40 bg-success/10 text-success",
-  inactive: "border-border bg-bg-hover text-text-muted",
-  rejected: "border-border bg-bg-card text-text-muted",
+  inactive: "border-destructive/40 bg-destructive/10 text-destructive",
+  rejected: "border-destructive/40 bg-destructive/10 text-destructive",
 };
 
 type ProjectStatusChipProps = {

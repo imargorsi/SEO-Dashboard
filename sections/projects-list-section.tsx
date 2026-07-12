@@ -8,14 +8,25 @@ import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
 import { NoProjectComponent } from "@/components/projects/no-project-component";
 import { ProjectCard } from "@/components/projects/project-card";
+import { ProjectStatusFilter } from "@/components/projects/project-status-filter";
 import { buttonVariants } from "@/components/ui/button";
 import { LoadingState } from "@/components/ui/loading-state";
 import { useProjectAccess } from "@/context/project-access-context";
 import { useAuthUserQuery, useResendEmailVerificationMutation } from "@/features/auth/auth.api";
 import { type TProjectListItem, useProjectsQuery } from "@/features/projects/projects.api";
+import { useQueryParams } from "@/hooks/use-query-params.hook";
 import { ApiError } from "@/lib/frontend/api/errors";
 import { notify } from "@/lib/frontend/feedback/notify";
-import { hasPermission, mergePermissions } from "@/lib/rbac/access";
+import {
+  countProjectsByStatus,
+  parseProjectStatusFilter,
+} from "@/lib/projects/project-status-filter.utils";
+import type { ProjectStatus } from "@/lib/projects/constants";
+import {
+  canEditProjectCard,
+  canViewProjectCard,
+} from "@/lib/projects/project-card-access.utils";
+import { hasPermission, isSuperAdmin, mergePermissions } from "@/lib/rbac/access";
 import { cn } from "@/lib/utils";
 
 export function ProjectsListSection() {
@@ -25,15 +36,47 @@ export function ProjectsListSection() {
   const router = useRouter();
   const { data: user } = useAuthUserQuery();
   const { projectPermissions } = useProjectAccess();
-  const { data: projects, isPending } = useProjectsQuery();
+  const { queryParams, setQueryParams, deleteQueryParams } = useQueryParams();
+  const statusFilter = parseProjectStatusFilter(queryParams.status);
+  const { data: allProjects = [], isPending: isAllProjectsPending } = useProjectsQuery({ status: null });
+  const { data: filteredProjects = [], isPending: isFilteredProjectsPending } = useProjectsQuery({
+    status: statusFilter ?? null,
+    enabled: Boolean(statusFilter),
+  });
   const resendMutation = useResendEmailVerificationMutation();
-  const projectItems = projects ?? [];
-  const hasProjects = projectItems.length > 0;
+  const projectItems = statusFilter ? filteredProjects : allProjects;
+  const hasProjects = allProjects.length > 0;
+  const hasFilteredResults = projectItems.length > 0;
+  const isPending = statusFilter ? isFilteredProjectsPending : isAllProjectsPending;
+  const statusCounts = countProjectsByStatus(allProjects);
   const isVerified = Boolean(user?.email_verified_at);
 
   const permissions = mergePermissions(user?.permissions ?? [], projectPermissions);
+  const userIsSuperAdmin = isSuperAdmin(user?.roles);
   const canCreateProject = isVerified && (hasPermission(permissions, "projects.create") || !hasProjects);
-  const canViewDetails = hasPermission(permissions, "projects.view");
+
+  function getProjectCardAccess(project: TProjectListItem) {
+    const accessInput = {
+      permissions,
+      userId: user?.id,
+      ownerId: project.owner?.id,
+      isSuperAdmin: userIsSuperAdmin,
+    };
+
+    return {
+      canViewDetails: canViewProjectCard(accessInput),
+      canEditProject: canEditProjectCard(accessInput),
+    };
+  }
+
+  function onStatusFilterChange(nextStatus: ProjectStatus | null) {
+    if (!nextStatus) {
+      deleteQueryParams(["status"]);
+      return;
+    }
+
+    setQueryParams({ status: nextStatus });
+  }
 
   async function onResendVerification() {
     try {
@@ -56,14 +99,24 @@ export function ProjectsListSection() {
             <Paragraph className="text-text-muted">{t("subtitle")}</Paragraph>
           </div>
 
-          {canCreateProject && hasProjects ? (
-            <Link
-              href="/projects/new"
-              className={cn(buttonVariants({ size: "md", variant: "gradient" }))}
-            >
-              {t("table.createProject")}
-            </Link>
-          ) : null}
+          <div className="flex flex-wrap items-center justify-end gap-3">
+            {hasProjects ? (
+              <ProjectStatusFilter
+                activeStatus={statusFilter ?? null}
+                counts={statusCounts}
+                onStatusChange={onStatusFilterChange}
+              />
+            ) : null}
+
+            {canCreateProject && hasProjects ? (
+              <Link
+                href="/projects/new"
+                className={cn(buttonVariants({ size: "md", variant: "gradient" }))}
+              >
+                {t("table.createProject")}
+              </Link>
+            ) : null}
+          </div>
         </div>
 
         {isPending ? (
@@ -75,11 +128,28 @@ export function ProjectsListSection() {
             onVerifyEmail={() => void onResendVerification()}
             isVerifyEmailPending={resendMutation.isPending}
           />
+        ) : !hasFilteredResults ? (
+          <div className="rounded-3xl border border-border bg-bg-card px-6 py-10 text-center">
+            <Heading sectionTitle className="text-text-primary">
+              {t("statusFilter.emptyTitle")}
+            </Heading>
+            <Paragraph className="mt-2 text-text-muted">{t("statusFilter.emptyBody")}</Paragraph>
+          </div>
         ) : (
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">
-            {projectItems.map((project: TProjectListItem) => (
-              <ProjectCard key={project.id} project={project} canViewDetails={canViewDetails} />
-            ))}
+            {projectItems.map((project: TProjectListItem) => {
+              const { canViewDetails, canEditProject } = getProjectCardAccess(project);
+
+              return (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  canViewDetails={canViewDetails}
+                  canEditProject={canEditProject}
+                  isSuperAdmin={userIsSuperAdmin}
+                />
+              );
+            })}
           </div>
         )}
       </div>

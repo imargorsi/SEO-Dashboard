@@ -3,7 +3,7 @@ import type { Types } from "mongoose";
 
 import { ApiResponse } from "@/lib/api/response";
 import type { AuthContext } from "@/lib/auth/guards";
-import { serializeProfileImageUrl } from "@/lib/serializers/profile-image";
+import { serializeStoredImageUrl } from "@/lib/serializers/stored-image";
 import { serializeProjectListItem, type ProjectListItemDto } from "@/lib/serializers/project";
 import type { ProjectStatus } from "@/lib/projects/constants";
 import { PROJECT_OWNER_ROLE, SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
@@ -48,7 +48,7 @@ async function resolveOwnerMap(projects: ProjectDocument[]): Promise<Map<string,
       {
         id: owner._id.toString(),
         name: owner.name,
-        profileImage: serializeProfileImageUrl(owner.profileImage),
+        profileImage: serializeStoredImageUrl(owner.profileImage),
       },
     ]),
   );

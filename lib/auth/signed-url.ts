@@ -72,11 +72,6 @@ export function createSignedImageUrl(blobPathname: string): string {
   return `${canonical}&signature=${signature}`;
 }
 
-/** @deprecated Use createSignedImageUrl */
-export function createSignedProfileImageUrl(blobPathname: string): string {
-  return createSignedImageUrl(blobPathname);
-}
-
 export function hasValidImageSignature(requestUrl: string): boolean {
   return hasValidSignature(requestUrl);
 }

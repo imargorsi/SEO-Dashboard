@@ -10,55 +10,66 @@ import {
   type ReactNode,
 } from "react";
 
-import {
-  DUMMY_WORKSPACE_PROJECTS,
-  getWorkspaceProjectById,
-  type WorkspaceProject,
-} from "@/lib/dummy-data/workspace-projects";
+import { useProjectsQuery, type TProjectListItem } from "@/features/projects/projects.api";
 
 const STORAGE_KEY = "dashboard-selected-project-id";
 
-type SelectedProjectContextValue = {
-  projects: WorkspaceProject[];
-  selectedProject: WorkspaceProject;
+type TSelectedProjectContextValue = {
+  projects: TProjectListItem[];
+  selectedProject: TProjectListItem | null;
   setSelectedProjectId: (id: string) => void;
+  isLoading: boolean;
 };
 
-const SelectedProjectContext = createContext<SelectedProjectContextValue | null>(null);
+const SelectedProjectContext = createContext<TSelectedProjectContextValue | null>(null);
 
-function readStoredProjectId(): string {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored && getWorkspaceProjectById(stored)) return stored;
-  return DUMMY_WORKSPACE_PROJECTS[0].id;
+function resolveSelectedProjectId(projects: TProjectListItem[], storedId: string | null): string | null {
+  if (projects.length === 0) return null;
+  if (storedId && projects.some((project) => project.id === storedId)) return storedId;
+  return projects[0]!.id;
 }
 
 export function SelectedProjectProvider({ children }: { children: ReactNode }) {
-  const [selectedId, setSelectedId] = useState(DUMMY_WORKSPACE_PROJECTS[0].id);
+  const { data: projects = [], isLoading } = useProjectsQuery();
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    setSelectedId(readStoredProjectId());
+    setHydrated(true);
   }, []);
 
-  const setSelectedProjectId = useCallback((id: string) => {
-    if (!getWorkspaceProjectById(id)) return;
-    setSelectedId(id);
-    localStorage.setItem(STORAGE_KEY, id);
-  }, []);
+  useEffect(() => {
+    if (!hydrated || isLoading) return;
 
-  const selectedProject = getWorkspaceProjectById(selectedId) ?? DUMMY_WORKSPACE_PROJECTS[0];
+    const stored = localStorage.getItem(STORAGE_KEY);
+    setSelectedId(resolveSelectedProjectId(projects, stored));
+  }, [hydrated, isLoading, projects]);
+
+  const setSelectedProjectId = useCallback(
+    (id: string) => {
+      if (!projects.some((project) => project.id === id)) return;
+      setSelectedId(id);
+      localStorage.setItem(STORAGE_KEY, id);
+    },
+    [projects],
+  );
+
+  const selectedProject = useMemo(
+    () => projects.find((project) => project.id === selectedId) ?? null,
+    [projects, selectedId],
+  );
 
   const value = useMemo(
     () => ({
-      projects: DUMMY_WORKSPACE_PROJECTS,
+      projects,
       selectedProject,
       setSelectedProjectId,
+      isLoading,
     }),
-    [selectedProject, setSelectedProjectId]
+    [projects, selectedProject, setSelectedProjectId, isLoading],
   );
 
-  return (
-    <SelectedProjectContext.Provider value={value}>{children}</SelectedProjectContext.Provider>
-  );
+  return <SelectedProjectContext.Provider value={value}>{children}</SelectedProjectContext.Provider>;
 }
 
 export function useSelectedProject() {

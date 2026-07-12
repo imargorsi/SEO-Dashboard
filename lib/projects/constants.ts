@@ -27,11 +27,6 @@ export function isActiveProjectStatus(status: string): status is ProjectStatus {
   return status === "active";
 }
 
-/** @deprecated Use isActiveProjectStatus */
-export function isApprovedProjectStatus(status: string): boolean {
-  return isActiveProjectStatus(status);
-}
-
 export function isSeoGoalSlug(value: string): value is SeoGoalSlug {
   return (SEO_GOAL_SLUGS as readonly string[]).includes(value);
 }

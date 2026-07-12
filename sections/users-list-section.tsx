@@ -1,30 +1,25 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { IoAdd } from "react-icons/io5";
 
 import { TableListSearch } from "@/components/table/table-list-search";
 import { TableListSort } from "@/components/table/table-list-sort";
 import { UsersTable } from "@/components/users/users-table";
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
-import { buttonVariants } from "@/components/ui/button";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
 import { useUsersQuery } from "@/features/users/users.api";
 import { useQueryParams } from "@/hooks/use-query-params.hook";
 import { notify } from "@/lib/frontend/feedback/notify";
 import { parseUsersListQuery } from "@/lib/frontend/users/users-list-query.utils";
-import { userCanCreate, userCanView } from "@/lib/frontend/users/acl";
-import { cn } from "@/lib/utils";
+import { userCanView } from "@/lib/frontend/users/acl";
 
 export function UsersListSection() {
   const { t } = useTranslation("translation", { keyPrefix: "modules.users" });
   const { data: authUser, isLoading: isAuthLoading } = useAuthUserQuery();
   const { queryParams, setQueryParams, updateQueryParams, deleteQueryParams } = useQueryParams();
   const listQuery = parseUsersListQuery(queryParams);
-  const canCreate = userCanCreate(authUser?.permissions);
   const canView = useMemo(() => userCanView(authUser?.permissions), [authUser]);
 
   const { data, error, isLoading, isFetching } = useUsersQuery({
@@ -104,13 +99,6 @@ export function UsersListSection() {
             </Heading>
             <Paragraph className="text-text-muted">{t("subtitle")}</Paragraph>
           </div>
-
-          {canCreate ? (
-            <Link href="/users/new" className={cn(buttonVariants({ size: "md", variant: "gradient" }))}>
-              <IoAdd className="size-4" aria-hidden />
-              {t("table.createUser")}
-            </Link>
-          ) : null}
         </div>
 
         {canView ? (

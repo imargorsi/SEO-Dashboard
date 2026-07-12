@@ -1,10 +1,9 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import { baseQuery } from "@/lib/frontend/api/base";
 import type { TAdminUserListItem, TPaginatedList } from "@/types/admin-user.types";
-import { createDummyUser } from "@/lib/dummy-data/users";
 
 const usersApi = {
   reducerPath: "users-api" as const,
@@ -51,19 +50,5 @@ export function useUsersQuery(params: UsersListParams & { enabled?: boolean }) {
     queryKey: usersKeys.list({ page, per_page: perPage, search, newest }),
     queryFn: () => fetchUsers({ page, per_page: perPage, search, newest }),
     enabled: params.enabled ?? true,
-  });
-}
-
-export function useCreateUserMutation() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (payload: { name: string; email: string }) => {
-      await new Promise((r) => setTimeout(r, 300));
-      return createDummyUser(payload);
-    },
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: usersKeys.all });
-    },
   });
 }

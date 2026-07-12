@@ -5,32 +5,20 @@ import { useTranslation } from "react-i18next";
 import { IoCheckmark, IoChevronDown } from "react-icons/io5";
 
 import { useSelectedProject } from "@/context/selected-project-context";
-import {
-  formatProjectHostname,
-  type WorkspaceProject,
-} from "@/lib/dummy-data/workspace-projects";
+import { UserAvatar } from "@/components/ui/user-avatar";
+import type { TProjectListItem } from "@/features/projects/projects.api";
+import { formatProjectHostname } from "@/lib/frontend/projects/project-selector.utils";
 import { cn } from "@/lib/utils";
 
-function ProjectLogo({
-  project,
-  size = "md",
-}: {
-  project: Pick<WorkspaceProject, "logoLabel" | "logoGradientFrom" | "logoGradientTo">;
-  size?: "sm" | "md";
-}) {
+function ProjectLogo({ project, size = "md" }: { project: TProjectListItem; size?: "sm" | "md" }) {
   return (
-    <span
-      className={cn(
-        "inline-flex shrink-0 items-center justify-center rounded-lg font-semibold text-text-on-brand",
-        size === "sm" ? "size-7 type-overline" : "size-9 type-caption-xs"
-      )}
-      style={{
-        background: `linear-gradient(135deg, ${project.logoGradientFrom} 0%, ${project.logoGradientTo} 100%)`,
-      }}
-      aria-hidden
-    >
-      {project.logoLabel}
-    </span>
+    <UserAvatar
+      name={project.businessName}
+      imageUrl={project.imageUrl}
+      size={size === "sm" ? "sm" : "md"}
+      roundedClassName="rounded-lg"
+      className={size === "sm" ? "size-7" : "size-9"}
+    />
   );
 }
 
@@ -39,7 +27,7 @@ function ProjectOption({
   isSelected,
   onSelect,
 }: {
-  project: WorkspaceProject;
+  project: TProjectListItem;
   isSelected: boolean;
   onSelect: () => void;
 }) {
@@ -53,9 +41,9 @@ function ProjectOption({
     >
       <ProjectLogo project={project} size="sm" />
       <span className="min-w-0 flex-1">
-        <span className="block truncate type-body text-text-primary">{project.name}</span>
+        <span className="block truncate type-body text-text-primary">{project.businessName}</span>
         <span className="block truncate type-caption-xs text-text-muted">
-          {formatProjectHostname(project.url)}
+          {formatProjectHostname(project.websiteUrl)}
         </span>
       </span>
       {isSelected ? (
@@ -69,7 +57,7 @@ function ProjectOption({
 
 export function ProjectSelector() {
   const { t } = useTranslation("translation", { keyPrefix: "projectSelector" });
-  const { projects, selectedProject, setSelectedProjectId } = useSelectedProject();
+  const { projects, selectedProject, setSelectedProjectId, isLoading } = useSelectedProject();
   const [open, setOpen] = useState(false);
   const listId = useId();
 
@@ -82,12 +70,24 @@ export function ProjectSelector() {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [open]);
 
+  if (isLoading) return null;
+
+  if (!selectedProject || projects.length === 0) {
+    return (
+      <div className="shrink-0 px-3 pb-3 pt-1">
+        <div className="rounded-xl border border-border bg-bg-card px-2.5 py-2.5">
+          <p className="type-caption text-text-muted">{t("emptyLabel")}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="shrink-0 px-3 pb-3 pt-1">
       <div
         className={cn(
           "overflow-hidden rounded-xl border border-border bg-bg-card transition-[border-color] duration-200",
-          open && "border-(--accent-border)"
+          open && "border-(--accent-border)",
         )}
       >
         <button
@@ -95,20 +95,18 @@ export function ProjectSelector() {
           aria-haspopup="listbox"
           aria-expanded={open}
           aria-controls={listId}
-          aria-label={t("triggerLabel", { name: selectedProject.name })}
-          onClick={() => setOpen((v) => !v)}
+          aria-label={t("triggerLabel", { name: selectedProject.businessName })}
+          onClick={() => setOpen((value) => !value)}
           className="flex w-full items-center gap-2.5 px-2.5 py-2 text-start transition-colors hover:bg-bg-hover/60"
         >
           <ProjectLogo project={selectedProject} />
           <span className="min-w-0 flex-1">
-            <span className="block truncate type-body text-text-primary">
-              {selectedProject.name}
-            </span>
+            <span className="block truncate type-body text-text-primary">{selectedProject.businessName}</span>
           </span>
           <IoChevronDown
             className={cn(
               "size-4 shrink-0 text-text-muted transition-transform duration-300 ease-out",
-              open && "rotate-180"
+              open && "rotate-180",
             )}
             aria-hidden
           />
@@ -117,7 +115,7 @@ export function ProjectSelector() {
         <div
           className={cn(
             "grid transition-[grid-template-rows] duration-300 ease-in-out",
-            open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+            open ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
           )}
         >
           <div className="min-h-0 overflow-hidden">
@@ -127,9 +125,7 @@ export function ProjectSelector() {
               aria-label={t("listLabel")}
               className="border-t border-border px-1.5 pb-1.5 pt-1"
             >
-              <p className="px-2 pb-1 pt-1 type-caption-xs text-text-muted">
-                {t("listHeading")}
-              </p>
+              <p className="px-2 pb-1 pt-1 type-caption-xs text-text-muted">{t("listHeading")}</p>
               <div className="flex flex-col gap-0.5">
                 {projects.map((project) => (
                   <ProjectOption

@@ -24,7 +24,7 @@ export function ProjectAccessProvider({ children }: { children: ReactNode }) {
       projectPermissions: [],
       isLoading: false,
     }),
-    [selectedProject.id],
+    [selectedProject?.id],
   );
 
   return (

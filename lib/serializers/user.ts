@@ -1,7 +1,7 @@
 
 
 import { homeApiPathForRoles } from "@/lib/auth/rbac";
-import { serializeProfileImageUrl } from "@/lib/serializers/profile-image";
+import { serializeStoredImageUrl } from "@/lib/serializers/stored-image";
 import type { UserDocument } from "@/models/User";
 
 type UserSerializeOptions = {
@@ -15,7 +15,7 @@ export function serializeUser(user: UserDocument, options: UserSerializeOptions)
     id: user._id.toString(),
     name: user.name,
     email: user.email,
-    profile_image: serializeProfileImageUrl(user.profileImage),
+    profile_image: serializeStoredImageUrl(user.profileImage),
     email_verified_at: user.emailVerifiedAt,
     roles: options.roles,
     permissions: options.permissions,

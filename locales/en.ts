@@ -7,6 +7,7 @@ export interface Translation {
     listLabel: string;
     listHeading: string;
     cardLabel: string;
+    emptyLabel: string;
   };
   nav: {
     aria: string;
@@ -120,24 +121,6 @@ export interface Translation {
       title: string;
       subtitle: string;
       createUserTitle: string;
-      createComingSoon: string;
-      createForm: {
-        title: string;
-        lead: string;
-        name: string;
-        namePh: string;
-        email: string;
-        emailPh: string;
-        submit: string;
-        submitting: string;
-        successTitle: string;
-        successFallback: string;
-        errorTitle: string;
-        errorFallback: string;
-        valRequired: string;
-        valEmail: string;
-        backToList: string;
-      };
       table: {
         searchPlaceholder: string;
         sortLabel: string;
@@ -575,6 +558,7 @@ const translation: Translation = {
     listLabel: "Switch Project",
     listHeading: "Your Projects",
     cardLabel: "Project",
+    emptyLabel: "No Projects Available",
   },
   nav: {
     aria: "Main Navigation",
@@ -686,25 +670,7 @@ const translation: Translation = {
     users: {
       title: "Users",
       subtitle: "Manage Users And Their Access In Your Workspace.",
-      createUserTitle: "Create user",
-      createComingSoon: "User creation form will be added here.",
-      createForm: {
-        title: "New user",
-        lead: "Add a team member to the workspace. They will receive an invitation email when the API is connected.",
-        name: "Full name",
-        namePh: "Jane Cooper",
-        email: "Email address",
-        emailPh: "jane@company.example",
-        submit: "Create user",
-        submitting: "Creating…",
-        successTitle: "User created",
-        successFallback: "The user was added to the list (dummy data).",
-        errorTitle: "Could not create user",
-        errorFallback: "Something went wrong. Try again.",
-        valRequired: "This field is required.",
-        valEmail: "Enter a valid email address.",
-        backToList: "Back to users",
-      },
+      createUserTitle: "Create User",
       table: {
         searchPlaceholder: "Search Users...",
         sortLabel: "Sort",

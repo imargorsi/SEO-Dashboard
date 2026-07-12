@@ -5,6 +5,7 @@ import { ApiResponse } from "@/lib/api/response";
 import type { AuthContext } from "@/lib/auth/guards";
 import { serializeProfileImageUrl } from "@/lib/serializers/profile-image";
 import { serializeProjectListItem, type ProjectListItemDto } from "@/lib/serializers/project";
+import type { ProjectStatus } from "@/lib/projects/constants";
 import { PROJECT_OWNER_ROLE, SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
 import { Project, ProjectMember, Role, User, type ProjectDocument } from "@/models";
 
@@ -63,12 +64,20 @@ async function resolveOwnerMap(projects: ProjectDocument[]): Promise<Map<string,
   return ownerMap;
 }
 
-export async function listProjects(auth: AuthContext): Promise<ProjectListItemDto[]> {
+export type ListProjectsOptions = {
+  status?: ProjectStatus;
+};
+
+export async function listProjects(
+  auth: AuthContext,
+  options: ListProjectsOptions = {},
+): Promise<ProjectListItemDto[]> {
   const isAdmin = auth.user.roles.includes(SUPER_ADMIN_ROLE);
+  const statusFilter = options.status ? { status: options.status } : {};
 
   let projects: ProjectDocument[];
   if (isAdmin) {
-    projects = await Project.find().sort({ createdAt: -1 });
+    projects = await Project.find(statusFilter).sort({ createdAt: -1 });
   } else {
     const memberships = await ProjectMember.find({
       userId: auth.user._id,
@@ -80,7 +89,7 @@ export async function listProjects(auth: AuthContext): Promise<ProjectListItemDt
       return [];
     }
 
-    projects = await Project.find({ _id: { $in: projectIds } }).sort({ createdAt: -1 });
+    projects = await Project.find({ _id: { $in: projectIds }, ...statusFilter }).sort({ createdAt: -1 });
   }
 
   const ownerMap = await resolveOwnerMap(projects);

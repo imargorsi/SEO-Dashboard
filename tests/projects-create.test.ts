@@ -2,20 +2,12 @@ import { describe, expect, it } from "vitest";
 import mongoose from "mongoose";
 
 import { hashPassword } from "@/lib/auth/password";
-import type { AuthContext } from "@/lib/auth/guards";
 import { buildCreateProjectResponse, createProject } from "@/lib/projects/create-project";
 import { PROJECT_OWNER_ROLE, SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
 import { seedSystemRoles } from "@/lib/rbac/seed-roles";
 import { Project, ProjectMember, User } from "@/models";
 import { createProjectSchema } from "@/schemas/project";
-
-function authContextFor(user: Awaited<ReturnType<typeof User.create>>): AuthContext {
-  return {
-    user,
-    token: "test-token",
-    tokenId: user._id,
-  };
-}
+import { authContextFor, projectInput } from "@/tests/helpers/project-test-utils";
 
 describe("POST /projects — createProject", () => {
   it("creates a pending project for a regular user and assigns project_owner", async () => {
@@ -29,14 +21,14 @@ describe("POST /projects — createProject", () => {
       roles: [],
     });
 
-    const { project } = await createProject(authContextFor(user), {
-      businessName: "Acme SEO",
-      websiteUrl: "https://acme.example.com",
-      seoGoals: ["more_leads"],
-      servicesOffered: [],
-      targetLocations: [],
-      competitorUrls: [],
-    });
+    const { project } = await createProject(
+      authContextFor(user),
+      projectInput({
+        businessName: "Acme SEO",
+        websiteUrl: "https://acme.example.com",
+        seoGoals: ["more_leads"],
+      }),
+    );
 
     expect(project.status).toBe("pending");
     expect(project.pocEmail).toBe("creator@example.com");
@@ -63,13 +55,13 @@ describe("POST /projects — createProject", () => {
       roles: [],
     });
 
-    const { project } = await createProject(authContextFor(user), {
-      businessName: "Response Co",
-      websiteUrl: "https://response.example.com",
-      servicesOffered: [],
-      targetLocations: [],
-      competitorUrls: [],
-    });
+    const { project } = await createProject(
+      authContextFor(user),
+      projectInput({
+        businessName: "Response Co",
+        websiteUrl: "https://response.example.com",
+      }),
+    );
 
     const response = buildCreateProjectResponse(project);
     const body = await response.json();
@@ -100,14 +92,14 @@ describe("POST /projects — createProject", () => {
       roles: [],
     });
 
-    const { project } = await createProject(authContextFor(admin), {
-      businessName: "Admin Created",
-      websiteUrl: "https://admin-created.example.com",
-      ownerUserId: owner._id.toString(),
-      servicesOffered: [],
-      targetLocations: [],
-      competitorUrls: [],
-    });
+    const { project } = await createProject(
+      authContextFor(admin),
+      projectInput({
+        businessName: "Admin Created",
+        websiteUrl: "https://admin-created.example.com",
+        ownerUserId: owner._id.toString(),
+      }),
+    );
 
     expect(project.status).toBe("active");
     expect(project.approvedByUserId?.toString()).toBe(admin._id.toString());
@@ -131,14 +123,14 @@ describe("POST /projects — createProject", () => {
     const otherId = new mongoose.Types.ObjectId();
 
     await expect(
-      createProject(authContextFor(user), {
-        businessName: "Blocked",
-        websiteUrl: "https://blocked.example.com",
-        ownerUserId: otherId.toString(),
-        servicesOffered: [],
-        targetLocations: [],
-        competitorUrls: [],
-      }),
+      createProject(
+        authContextFor(user),
+        projectInput({
+          businessName: "Blocked",
+          websiteUrl: "https://blocked.example.com",
+          ownerUserId: otherId.toString(),
+        }),
+      ),
     ).rejects.toMatchObject({
       errors: {
         ownerUserId: expect.arrayContaining([expect.stringContaining("admin")]),

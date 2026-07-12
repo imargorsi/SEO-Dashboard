@@ -1,21 +1,13 @@
 import { describe, expect, it } from "vitest";
 
 import { hashPassword } from "@/lib/auth/password";
-import type { AuthContext } from "@/lib/auth/guards";
 import { createProject } from "@/lib/projects/create-project";
 import { buildListProjectsResponse, listProjects } from "@/lib/projects/list-projects";
 import { assignProjectMember } from "@/lib/projects/assign-member";
 import { PROJECT_USER_ROLE, SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
 import { seedSystemRoles } from "@/lib/rbac/seed-roles";
 import { Project, User } from "@/models";
-
-function authContextFor(user: Awaited<ReturnType<typeof User.create>>): AuthContext {
-  return {
-    user,
-    token: "test-token",
-    tokenId: user._id,
-  };
-}
+import { authContextFor, projectInput } from "@/tests/helpers/project-test-utils";
 
 describe("GET /projects — listProjects", () => {
   it("returns only projects the user belongs to", async () => {
@@ -246,5 +238,57 @@ describe("GET /projects — listProjects", () => {
 
     const projects = await listProjects(authContextFor(user));
     expect(projects).toEqual([]);
+  });
+
+  it("filters projects by status for members", async () => {
+    await seedSystemRoles();
+
+    const user = await User.create({
+      name: "Filter User",
+      email: "filter-user@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+    });
+
+    const pending = await createProject(authContextFor(user), {
+      businessName: "Pending Co",
+      websiteUrl: "https://pending-filter.example.com",
+      servicesOffered: [],
+      targetLocations: [],
+      competitorUrls: [],
+      seoGoals: [],
+    });
+
+    const admin = await User.create({
+      name: "Admin",
+      email: "filter-admin@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [SUPER_ADMIN_ROLE],
+    });
+
+    const active = await createProject(authContextFor(admin), {
+      businessName: "Active Co",
+      websiteUrl: "https://active-filter.example.com",
+      servicesOffered: [],
+      targetLocations: [],
+      competitorUrls: [],
+      seoGoals: [],
+      ownerUserId: user._id.toString(),
+    });
+
+    await Project.findByIdAndUpdate(active.project._id, { status: "inactive" });
+
+    const pendingOnly = await listProjects(authContextFor(user), { status: "pending" });
+    expect(pendingOnly).toHaveLength(1);
+    expect(pendingOnly[0]!.id).toBe(pending.project._id.toString());
+
+    const inactiveOnly = await listProjects(authContextFor(user), { status: "inactive" });
+    expect(inactiveOnly).toHaveLength(1);
+    expect(inactiveOnly[0]!.id).toBe(active.project._id.toString());
+
+    const activeOnly = await listProjects(authContextFor(user), { status: "active" });
+    expect(activeOnly).toHaveLength(0);
   });
 });

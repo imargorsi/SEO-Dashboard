@@ -1,20 +1,12 @@
 import { describe, expect, it } from "vitest";
 
 import { hashPassword } from "@/lib/auth/password";
-import type { AuthContext } from "@/lib/auth/guards";
 import { createProject } from "@/lib/projects/create-project";
 import { buildGetProjectResponse, getProjectForUser } from "@/lib/projects/get-project";
 import { SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
 import { seedSystemRoles } from "@/lib/rbac/seed-roles";
 import { Project, User } from "@/models";
-
-function authContextFor(user: Awaited<ReturnType<typeof User.create>>): AuthContext {
-  return {
-    user,
-    token: "test-token",
-    tokenId: user._id,
-  };
-}
+import { authContextFor, projectInput } from "@/tests/helpers/project-test-utils";
 
 describe("GET /projects/{id} — getProjectForUser", () => {
   it("returns a project when the user has active membership", async () => {

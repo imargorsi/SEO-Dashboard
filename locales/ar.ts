@@ -165,7 +165,7 @@ const translation: Translation = {
     projects: {
       title: "المشاريع",
       subtitle: "إدارة مشاريع SEO في مساحة العمل.",
-      emptyTitle: "لا توجد مشاريع مسندة أو منشأة بعد",
+      emptyTitle: "لم يتم العثور على مشاريع",
       emptyBody: "أنشئ مشروعك الأول لإكمال الإعداد أو اطلب من المشرف إسنادك إلى مشروع.",
       verifyEmailTooltip: "تحقق من بريدك الإلكتروني قبل إنشاء مشروع.",
       verifyEmailCta: "تحقق من البريد",

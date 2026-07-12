@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { IoAlertCircle, IoInformationCircle } from "react-icons/io5";
+import { IoAlertCircle } from "react-icons/io5";
 
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
+import { NoProjectComponent } from "@/components/projects/no-project-component";
 import { ProjectCard } from "@/components/projects/project-card";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { LoadingState } from "@/components/ui/loading-state";
@@ -74,19 +75,9 @@ export function ProjectsListSection() {
                 </Button>
               </div>
             ) : null}
-            {!isPending && isVerified && !hasProjects ? (
-              <div
-                className="mt-3 inline-flex items-center gap-2 rounded-xl border border-brand/40 bg-brand/10 px-3 py-2"
-                role="status"
-                aria-live="polite"
-              >
-                <IoInformationCircle className="size-4 shrink-0 text-brand" aria-hidden />
-                <p className="type-caption text-text-primary">{t("emptyBody")}</p>
-              </div>
-            ) : null}
           </div>
 
-          {canCreateProject ? (
+          {canCreateProject && hasProjects ? (
             <Link
               href="/projects/new"
               className={cn(buttonVariants({ size: "md", variant: "gradient" }))}
@@ -99,7 +90,7 @@ export function ProjectsListSection() {
         {isPending ? (
           <LoadingState label={tTable("loading")} />
         ) : !hasProjects ? (
-          <div className="h-2" aria-hidden />
+          <NoProjectComponent canCreateProject={canCreateProject} />
         ) : (
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">
             {projectItems.map((project: TProjectListItem) => (

@@ -693,7 +693,7 @@ const translation: Translation = {
     projects: {
       title: "Projects",
       subtitle: "Manage SEO projects in your workspace.",
-      emptyTitle: "No Projects Assigned Or Created Yet",
+      emptyTitle: "No Projects Found",
       emptyBody: "Create Your First Project To Complete Onboarding Or Ask An Admin To Assign You To A Project.",
       verifyEmailTooltip: "Verify Your Email Before Creating A Project.",
       verifyEmailCta: "Verify Email",

@@ -166,6 +166,8 @@ export interface Translation {
       subtitle: string;
       emptyTitle: string;
       emptyBody: string;
+      emailNotVerifiedTitle: string;
+      emailNotVerifiedBody: string;
       verifyEmailTooltip: string;
       verifyEmailCta: string;
       listTitle: string;
@@ -695,6 +697,8 @@ const translation: Translation = {
       subtitle: "Manage SEO projects in your workspace.",
       emptyTitle: "No Projects Found",
       emptyBody: "Create Your First Project To Complete Onboarding Or Ask An Admin To Assign You To A Project.",
+      emailNotVerifiedTitle: "Email Not Verified",
+      emailNotVerifiedBody: "Verify Your Email Before Creating A Project.",
       verifyEmailTooltip: "Verify Your Email Before Creating A Project.",
       verifyEmailCta: "Verify Email",
       listTitle: "Projects",

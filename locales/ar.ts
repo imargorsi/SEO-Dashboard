@@ -167,6 +167,8 @@ const translation: Translation = {
       subtitle: "إدارة مشاريع SEO في مساحة العمل.",
       emptyTitle: "لم يتم العثور على مشاريع",
       emptyBody: "أنشئ مشروعك الأول لإكمال الإعداد أو اطلب من المشرف إسنادك إلى مشروع.",
+      emailNotVerifiedTitle: "البريد الإلكتروني غير مُحقق",
+      emailNotVerifiedBody: "تحقق من بريدك الإلكتروني قبل إنشاء مشروع.",
       verifyEmailTooltip: "تحقق من بريدك الإلكتروني قبل إنشاء مشروع.",
       verifyEmailCta: "تحقق من البريد",
       listTitle: "المشاريع",

@@ -2,19 +2,31 @@
 
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
-import { IoFolderOpenOutline } from "react-icons/io5";
+import { IoFolderOpenOutline, IoMailOutline } from "react-icons/io5";
 
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+export type NoProjectComponentVariant = "no-projects" | "email-not-verified";
+
 type NoProjectComponentProps = {
+  variant?: NoProjectComponentVariant;
   canCreateProject?: boolean;
+  onVerifyEmail?: () => void;
+  isVerifyEmailPending?: boolean;
 };
 
-export function NoProjectComponent({ canCreateProject = false }: NoProjectComponentProps) {
+export function NoProjectComponent({
+  variant = "no-projects",
+  canCreateProject = false,
+  onVerifyEmail,
+  isVerifyEmailPending = false,
+}: NoProjectComponentProps) {
   const { t } = useTranslation("translation", { keyPrefix: "modules.projects" });
+  const isEmailNotVerified = variant === "email-not-verified";
+  const Icon = isEmailNotVerified ? IoMailOutline : IoFolderOpenOutline;
 
   return (
     <div
@@ -26,22 +38,38 @@ export function NoProjectComponent({ canCreateProject = false }: NoProjectCompon
         className="mb-6 flex size-16 items-center justify-center rounded-2xl border border-border bg-bg-card/60 shadow-sm backdrop-blur-sm"
         aria-hidden
       >
-        <IoFolderOpenOutline className="size-8 shrink-0 text-brand" />
+        <Icon className="size-8 shrink-0 text-brand" />
       </div>
 
       <Heading sectionTitle className="text-text-primary">
-        {t("emptyTitle")}
+        {isEmailNotVerified ? t("emailNotVerifiedTitle") : t("emptyTitle")}
       </Heading>
 
-      <Paragraph className="mt-3 max-w-md text-text-muted">{t("emptyBody")}</Paragraph>
+      <Paragraph className="mt-3 max-w-md text-text-muted">
+        {isEmailNotVerified ? t("emailNotVerifiedBody") : t("emptyBody")}
+      </Paragraph>
 
-      {canCreateProject ? (
-        <Link
-          href="/projects/new"
-          className={cn(buttonVariants({ size: "md", variant: "gradient" }), "mt-8")}
-        >
-          {t("table.createProject")}
-        </Link>
+      {(isEmailNotVerified || canCreateProject) ? (
+        isEmailNotVerified ? (
+          <Button
+            type="button"
+            variant="gradient"
+            size="md"
+            className="mt-8"
+            disabled={isVerifyEmailPending}
+            aria-busy={isVerifyEmailPending}
+            onClick={onVerifyEmail}
+          >
+            {t("verifyEmailCta")}
+          </Button>
+        ) : (
+          <Link
+            href="/projects/new"
+            className={cn(buttonVariants({ size: "md", variant: "gradient" }), "mt-8")}
+          >
+            {t("table.createProject")}
+          </Link>
+        )
       ) : null}
     </div>
   );

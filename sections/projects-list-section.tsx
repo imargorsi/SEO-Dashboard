@@ -3,13 +3,12 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { IoAlertCircle } from "react-icons/io5";
 
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
 import { NoProjectComponent } from "@/components/projects/no-project-component";
 import { ProjectCard } from "@/components/projects/project-card";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { LoadingState } from "@/components/ui/loading-state";
 import { useProjectAccess } from "@/context/project-access-context";
 import { useAuthUserQuery, useResendEmailVerificationMutation } from "@/features/auth/auth.api";
@@ -55,26 +54,6 @@ export function ProjectsListSection() {
               {t("title")}
             </Heading>
             <Paragraph className="text-text-muted">{t("subtitle")}</Paragraph>
-            {!isPending && !isVerified ? (
-              <div
-                className="mt-3 inline-flex flex-wrap items-center gap-2 rounded-xl border border-warning/40 bg-warning/10 px-3 py-2"
-                role="status"
-                aria-live="polite"
-              >
-                <IoAlertCircle className="size-4 shrink-0 text-warning" aria-hidden />
-                <p className="type-caption text-text-primary">{t("verifyEmailTooltip")}</p>
-                <Button
-                  type="button"
-                  size="small"
-                  variant="outlined"
-                  disabled={resendMutation.isPending}
-                  aria-busy={resendMutation.isPending}
-                  onClick={() => void onResendVerification()}
-                >
-                  {t("verifyEmailCta")}
-                </Button>
-              </div>
-            ) : null}
           </div>
 
           {canCreateProject && hasProjects ? (
@@ -90,7 +69,12 @@ export function ProjectsListSection() {
         {isPending ? (
           <LoadingState label={tTable("loading")} />
         ) : !hasProjects ? (
-          <NoProjectComponent canCreateProject={canCreateProject} />
+          <NoProjectComponent
+            variant={isVerified ? "no-projects" : "email-not-verified"}
+            canCreateProject={canCreateProject}
+            onVerifyEmail={() => void onResendVerification()}
+            isVerifyEmailPending={resendMutation.isPending}
+          />
         ) : (
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">
             {projectItems.map((project: TProjectListItem) => (

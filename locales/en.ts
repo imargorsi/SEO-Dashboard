@@ -139,21 +139,31 @@ export interface Translation {
         backToList: string;
       };
       table: {
-        toolbarHint: string;
-        colName: string;
-        colEmail: string;
-        colRoles: string;
-        colVerified: string;
-        verifiedYes: string;
-        verifiedNo: string;
+        searchPlaceholder: string;
+        sortLabel: string;
+        sortToggle: string;
+        sortNewest: string;
+        sortOldest: string;
+        colUser: string;
+        colRole: string;
+        colStatus: string;
+        colLastAction: string;
+        colActions: string;
+        statusActive: string;
+        statusInvited: string;
+        noRoles: string;
+        lastActionVerified: string;
+        lastActionCreated: string;
+        showingUsers: string;
+        pageNumber: string;
+        loading: string;
+        emptyTitle: string;
+        emptyBody: string;
+        viewUser: string;
+        editUser: string;
         createUser: string;
-        rowsSelected: string;
-        rowsPerPage: string;
-        pageOf: string;
-        firstPage: string;
         previousPage: string;
         nextPage: string;
-        lastPage: string;
         updating: string;
         loadErrorTitle: string;
         loadErrorBody: string;
@@ -589,8 +599,8 @@ const translation: Translation = {
     edit: "Edit",
   },
   table: {
-    emptyTitle: "No records found",
-    emptyBody: "There is nothing to show here yet. Create a new entry or check back later.",
+    emptyTitle: "No Records Found",
+    emptyBody: "There Is Nothing To Show Here Yet. Create A New Entry Or Check Back Later.",
     loading: "Loading…",
   },
   form: {
@@ -676,7 +686,7 @@ const translation: Translation = {
   modules: {
     users: {
       title: "Users",
-      subtitle: "Manage team members and permissions.",
+      subtitle: "Manage Users And Their Access In Your Workspace.",
       createUserTitle: "Create user",
       createComingSoon: "User creation form will be added here.",
       createForm: {
@@ -697,26 +707,36 @@ const translation: Translation = {
         backToList: "Back to users",
       },
       table: {
-        toolbarHint: "Team members in your workspace.",
-        colName: "Name",
-        colEmail: "Email",
-        colRoles: "Roles",
-        colVerified: "Verified",
-        verifiedYes: "Verified",
-        verifiedNo: "Pending",
-        createUser: "Create user",
-        rowsSelected: "{{selected}} of {{total}} row(s) selected",
-        rowsPerPage: "Rows per page",
-        pageOf: "Page {{page}} of {{count}}",
-        firstPage: "First page",
-        previousPage: "Previous page",
-        nextPage: "Next page",
-        lastPage: "Last page",
+        searchPlaceholder: "Search Users...",
+        sortLabel: "Sort",
+        sortToggle: "Sort By {{direction}}",
+        sortNewest: "Newest",
+        sortOldest: "Oldest",
+        colUser: "User",
+        colRole: "Role",
+        colStatus: "Status",
+        colLastAction: "Last Action",
+        colActions: "Actions",
+        statusActive: "Active",
+        statusInvited: "Invited",
+        noRoles: "No Role",
+        lastActionVerified: "Email Verified",
+        lastActionCreated: "Account Created",
+        showingUsers: "Showing {{from}} To {{to}} Of {{total}} Users",
+        pageNumber: "Page {{page}}",
+        loading: "Loading Users...",
+        emptyTitle: "No Users Found",
+        emptyBody: "Try Another Search Or Clear Filters To View All Users.",
+        viewUser: "View {{name}}",
+        editUser: "Edit {{name}}",
+        createUser: "Add User",
+        previousPage: "Previous Page",
+        nextPage: "Next Page",
         updating: "Updating…",
-        loadErrorTitle: "Could not load users",
-        loadErrorBody: "Check your connection and try again.",
-        accessDeniedTitle: "No access",
-        accessDeniedBody: "You don't have permission to view users. Ask an administrator if you need access.",
+        loadErrorTitle: "Could Not Load Users",
+        loadErrorBody: "Check Your Connection And Try Again.",
+        accessDeniedTitle: "No Access",
+        accessDeniedBody: "You Don't Have Permission To View Users. Ask An Administrator If You Need Access.",
       },
     },
     projects: {

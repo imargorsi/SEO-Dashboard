@@ -81,10 +81,12 @@ export function listDummyUsers(params: {
   page?: number;
   per_page?: number;
   search?: string | null;
+  newest?: boolean;
 }): PaginatedList<AdminUserItem> {
   const page = params.page ?? 1;
   const perPage = params.per_page ?? 15;
   const search = params.search?.trim().toLowerCase() ?? "";
+  const newest = params.newest !== false;
 
   let filtered = [...users];
   if (search) {
@@ -95,6 +97,12 @@ export function listDummyUsers(params: {
     );
   }
 
+  filtered.sort((left, right) => {
+    const leftTime = new Date(left.created_at).getTime();
+    const rightTime = new Date(right.created_at).getTime();
+    return newest ? rightTime - leftTime : leftTime - rightTime;
+  });
+
   const pagination = buildPagination(filtered.length, page, perPage);
   const start = (pagination.current_page - 1) * perPage;
   const items = filtered.slice(start, start + perPage);
@@ -104,10 +112,7 @@ export function listDummyUsers(params: {
     pagination,
     filters: {
       search: params.search ?? null,
-      sort: "created_at",
-      direction: "desc",
-      page: pagination.current_page,
-      per_page: perPage,
+      newest: params.newest ?? true,
     },
   };
 }

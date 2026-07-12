@@ -1,5 +1,5 @@
-import { PlaceholderPage } from "@/components/migration/placeholder-page";
+import { RolesListSection } from "@/sections/roles-list-section";
 
 export default function RolesPage() {
-  return <PlaceholderPage title="Roles" />;
+  return <RolesListSection />;
 }

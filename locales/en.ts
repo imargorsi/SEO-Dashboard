@@ -439,36 +439,35 @@ export interface Translation {
         backToList: string;
       };
       table: {
-        toolbarHint: string;
-        colId: string;
-        colName: string;
+        searchPlaceholder: string;
+        sortLabel: string;
+        sortToggle: string;
+        sortNewest: string;
+        sortOldest: string;
+        colRole: string;
+        colScope: string;
         colPermissions: string;
+        colMembers: string;
+        colSystem: string;
         colActions: string;
+        scopePlatform: string;
+        scopeProject: string;
+        permissionsCount: string;
+        systemYes: string;
+        systemNo: string;
+        showingRoles: string;
+        pageNumber: string;
+        loading: string;
+        emptyTitle: string;
+        emptyBody: string;
+        viewRole: string;
+        editRole: string;
         createRole: string;
-        rowsSelected: string;
-        rowsPerPage: string;
-        pageOf: string;
-        firstPage: string;
         previousPage: string;
         nextPage: string;
-        lastPage: string;
         updating: string;
         loadErrorTitle: string;
         loadErrorBody: string;
-        edit: string;
-        delete: string;
-        more: string;
-        moreView: string;
-        deleteConfirmTitle: string;
-        deleteConfirmDescription: string;
-        deleteConfirmCancel: string;
-        deleteConfirmAction: string;
-        deleteInProgress: string;
-        deleteSuccessTitle: string;
-        deleteSuccessFallback: string;
-        deleteErrorTitle: string;
-        dismiss: string;
-        detailSheetLead: string;
         accessDeniedTitle: string;
         accessDeniedBody: string;
       };
@@ -973,8 +972,8 @@ const translation: Translation = {
       title: "Reports",
     },
     roles: {
-      title: "Roles",
-      subtitle: "Manage roles and their permissions.",
+      title: "Roles & Permissions",
+      subtitle: "Manage Role Templates And Their Permission Sets.",
       createRoleTitle: "Create role",
       editRoleTitle: "Edit role",
       createForm: {
@@ -1008,39 +1007,37 @@ const translation: Translation = {
         backToList: "Back to roles",
       },
       table: {
-        toolbarHint: "Roles from your workspace API.",
-        colId: "ID",
-        colName: "Name",
+        searchPlaceholder: "Search Roles...",
+        sortLabel: "Sort",
+        sortToggle: "Sort By {{direction}}",
+        sortNewest: "Newest",
+        sortOldest: "Oldest",
+        colRole: "Role",
+        colScope: "Scope",
         colPermissions: "Permissions",
+        colMembers: "Members",
+        colSystem: "System",
         colActions: "Actions",
-        createRole: "Create role",
-        rowsSelected: "{{selected}} of {{total}} row(s) selected",
-        rowsPerPage: "Rows per page",
-        pageOf: "Page {{page}} of {{count}}",
-        firstPage: "First page",
-        previousPage: "Previous page",
-        nextPage: "Next page",
-        lastPage: "Last page",
-        updating: "Refreshing…",
-        loadErrorTitle: "Could not load roles",
-        loadErrorBody: "Check your connection and try again.",
-        edit: "Edit",
-        delete: "Delete",
-        more: "More actions",
-        moreView: "View details",
-        deleteConfirmTitle: "Delete this role?",
-        deleteConfirmDescription:
-          "This will remove “{{name}}” and detach it from related users. This action cannot be undone.",
-        deleteConfirmCancel: "Cancel",
-        deleteConfirmAction: "Delete role",
-        deleteInProgress: "Deleting…",
-        deleteSuccessTitle: "Role deleted",
-        deleteSuccessFallback: "The role was removed.",
-        deleteErrorTitle: "Could not delete role",
-        dismiss: "Dismiss",
-        detailSheetLead: "Details from the current page — refresh the list after edits elsewhere.",
-        accessDeniedTitle: "No access",
-        accessDeniedBody: "You don't have permission to view roles. Ask an administrator if you need access.",
+        scopePlatform: "Platform",
+        scopeProject: "Project",
+        permissionsCount: "{{count}} Permissions",
+        systemYes: "System",
+        systemNo: "Custom",
+        showingRoles: "Showing {{from}} To {{to}} Of {{total}} Roles",
+        pageNumber: "Page {{page}}",
+        loading: "Loading Roles...",
+        emptyTitle: "No Roles Found",
+        emptyBody: "Try Another Search Or Clear Filters To View All Roles.",
+        viewRole: "View {{name}}",
+        editRole: "Edit {{name}}",
+        createRole: "Add Role",
+        previousPage: "Previous Page",
+        nextPage: "Next Page",
+        updating: "Updating…",
+        loadErrorTitle: "Could Not Load Roles",
+        loadErrorBody: "Check Your Connection And Try Again.",
+        accessDeniedTitle: "No Access",
+        accessDeniedBody: "You Don't Have Permission To View Roles. Ask An Administrator If You Need Access.",
       },
     },
   },

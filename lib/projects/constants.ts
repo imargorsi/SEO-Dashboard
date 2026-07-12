@@ -1,4 +1,4 @@
-export const PROJECT_STATUSES = ["pending", "approved", "rejected"] as const;
+export const PROJECT_STATUSES = ["pending", "active", "inactive", "rejected"] as const;
 export type ProjectStatus = (typeof PROJECT_STATUSES)[number];
 
 export const PROJECT_MEMBER_STATUSES = ["active", "invited", "removed"] as const;
@@ -22,8 +22,14 @@ export const SEO_GOAL_LABELS: Record<SeoGoalSlug, string> = {
   more_website_traffic: "More website traffic",
 };
 
+/** Only `active` projects grant module permissions to members. */
+export function isActiveProjectStatus(status: string): status is ProjectStatus {
+  return status === "active";
+}
+
+/** @deprecated Use isActiveProjectStatus */
 export function isApprovedProjectStatus(status: string): boolean {
-  return status === "approved";
+  return isActiveProjectStatus(status);
 }
 
 export function isSeoGoalSlug(value: string): value is SeoGoalSlug {

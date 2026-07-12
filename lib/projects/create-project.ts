@@ -112,7 +112,7 @@ export async function createProject(
     ...onboarding,
     logoImage: options?.logoImage ?? null,
     pocEmail,
-    status: isAdmin ? "approved" : "pending",
+    status: isAdmin ? "active" : "pending",
     createdByUserId: auth.user._id,
     approvedAt: isAdmin ? new Date() : null,
     approvedByUserId: isAdmin ? auth.user._id : null,

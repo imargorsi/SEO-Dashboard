@@ -56,6 +56,8 @@ export function serializeProject(project: ProjectDocument) {
     createdByUserId: project.createdByUserId.toString(),
     approvedAt: project.approvedAt,
     approvedByUserId: project.approvedByUserId?.toString() ?? null,
+    rejectedAt: project.rejectedAt,
+    rejectedByUserId: project.rejectedByUserId?.toString() ?? null,
     createdAt: project.createdAt,
     updatedAt: project.updatedAt,
   };

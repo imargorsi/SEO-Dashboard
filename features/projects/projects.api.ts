@@ -3,14 +3,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { baseQuery } from "@/lib/frontend/api/base";
-
-export type TProjectCardStatus = "pending_approval" | "active" | "deactive";
+import type { ProjectStatus } from "@/lib/projects/constants";
 
 export type TProjectListItem = {
   id: string;
   businessName: string;
   websiteUrl: string;
-  status: "pending" | "approved" | "rejected";
+  status: ProjectStatus;
   imageUrl: string | null;
   owner: {
     id: string;
@@ -36,7 +35,7 @@ type CreateProjectResponse = {
   id: string;
   businessName: string;
   websiteUrl: string;
-  status: "pending" | "approved" | "rejected";
+  status: ProjectStatus;
   logoImage: string | null;
 };
 
@@ -101,10 +100,4 @@ export function useCreateProjectMutation() {
       void queryClient.invalidateQueries({ queryKey: projectKeys.all });
     },
   });
-}
-
-export function mapProjectStatusToCardStatus(status: TProjectListItem["status"]): TProjectCardStatus {
-  if (status === "pending") return "pending_approval";
-  if (status === "approved") return "active";
-  return "deactive";
 }

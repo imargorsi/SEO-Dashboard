@@ -81,7 +81,7 @@ describe("POST /projects — createProject", () => {
     expect(body.data.status).toBe("pending");
   });
 
-  it("creates an approved project for super_admin with a selected owner", async () => {
+  it("creates an active project for super_admin with a selected owner", async () => {
     await seedSystemRoles();
 
     const admin = await User.create({
@@ -109,7 +109,7 @@ describe("POST /projects — createProject", () => {
       competitorUrls: [],
     });
 
-    expect(project.status).toBe("approved");
+    expect(project.status).toBe("active");
     expect(project.approvedByUserId?.toString()).toBe(admin._id.toString());
     expect(project.pocEmail).toBe("owner@example.com");
 

@@ -1,22 +1,24 @@
 "use client";
 
-import type { TProjectCardStatus } from "@/features/projects/projects.api";
+import type { ProjectStatus } from "@/lib/projects/constants";
 import { cn } from "@/lib/utils";
 
-const STATUS_LABELS: Record<TProjectCardStatus, string> = {
-  pending_approval: "Pending Approval",
+const STATUS_LABELS: Record<ProjectStatus, string> = {
+  pending: "Pending Approval",
   active: "Active",
-  deactive: "Deactive",
+  inactive: "Inactive",
+  rejected: "Rejected",
 };
 
-const STATUS_CLASSES: Record<TProjectCardStatus, string> = {
-  pending_approval: "border-warning/40 bg-warning/10 text-warning",
+const STATUS_CLASSES: Record<ProjectStatus, string> = {
+  pending: "border-warning/40 bg-warning/10 text-warning",
   active: "border-success/40 bg-success/10 text-success",
-  deactive: "border-destructive/40 bg-destructive/10 text-destructive",
+  inactive: "border-border bg-bg-hover text-text-muted",
+  rejected: "border-border bg-bg-card text-text-muted",
 };
 
 type ProjectStatusChipProps = {
-  status: TProjectCardStatus;
+  status: ProjectStatus;
   className?: string;
 };
 

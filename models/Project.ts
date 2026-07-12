@@ -63,6 +63,8 @@ const projectSchema = new Schema(
     createdByUserId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     approvedAt: { type: Date, default: null },
     approvedByUserId: { type: Schema.Types.ObjectId, ref: "User", default: null },
+    rejectedAt: { type: Date, default: null },
+    rejectedByUserId: { type: Schema.Types.ObjectId, ref: "User", default: null },
   },
   { timestamps: true },
 );
@@ -93,6 +95,8 @@ export type ProjectDocument = InferSchemaType<typeof projectSchema> &
     createdByUserId: Types.ObjectId;
     approvedAt: Date | null;
     approvedByUserId: Types.ObjectId | null;
+    rejectedAt: Date | null;
+    rejectedByUserId: Types.ObjectId | null;
   };
 
 export const Project: Model<ProjectDocument> =

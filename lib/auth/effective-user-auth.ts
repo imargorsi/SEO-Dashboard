@@ -24,17 +24,17 @@ export async function loadEffectiveUserAuthData(user: UserDocument): Promise<Eff
   }
 
   const projectIds = memberships.map((membership) => membership.projectId);
-  const approvedProjects = await Project.find({
+  const activeProjects = await Project.find({
     _id: { $in: projectIds },
-    status: "approved",
+    status: "active",
   }).select("_id");
-  const approvedProjectIds = new Set(approvedProjects.map((project) => project._id.toString()));
+  const activeProjectIds = new Set(activeProjects.map((project) => project._id.toString()));
 
-  const approvedRoleIds = memberships
-    .filter((membership) => approvedProjectIds.has(membership.projectId.toString()))
+  const activeRoleIds = memberships
+    .filter((membership) => activeProjectIds.has(membership.projectId.toString()))
     .map((membership) => membership.roleId);
 
-  if (approvedRoleIds.length === 0) {
+  if (activeRoleIds.length === 0) {
     return {
       roles: [...new Set(platformRoles)].sort(),
       permissions: [...new Set(platformPermissions)].sort(),
@@ -42,7 +42,7 @@ export async function loadEffectiveUserAuthData(user: UserDocument): Promise<Eff
   }
 
   const projectRoles = await Role.find({
-    _id: { $in: approvedRoleIds },
+    _id: { $in: activeRoleIds },
     scope: "project",
   }).select("slug permissions");
 

@@ -5,7 +5,7 @@ import { IoArrowForward, IoGlobeOutline } from "react-icons/io5";
 
 import { ProjectStatusChip } from "@/components/projects/project-status-chip";
 import { UserAvatar } from "@/components/ui/user-avatar";
-import { mapProjectStatusToCardStatus, type TProjectListItem } from "@/features/projects/projects.api";
+import type { TProjectListItem } from "@/features/projects/projects.api";
 
 type ProjectCardProps = {
   project: TProjectListItem;
@@ -31,7 +31,7 @@ export function ProjectCard({ project, canViewDetails }: ProjectCardProps) {
     <article className="rounded-3xl border border-border bg-bg-card p-5 sm:p-6">
       <div className="flex items-start justify-between gap-3">
         <ProjectImage imageUrl={project.imageUrl} businessName={project.businessName} />
-        <ProjectStatusChip status={mapProjectStatusToCardStatus(project.status)} />
+        <ProjectStatusChip status={project.status} />
       </div>
 
       <div className="mt-4 space-y-1.5">

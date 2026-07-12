@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { hashPassword } from "@/lib/auth/password";
 import { assignProjectMember } from "@/lib/projects/assign-member";
-import { isApprovedProjectStatus } from "@/lib/projects/constants";
+import { isActiveProjectStatus } from "@/lib/projects/constants";
 import { resolveProjectRoleBySlug } from "@/lib/projects/resolve-role";
 import { PROJECT_OWNER_ROLE, PROJECT_USER_ROLE } from "@/lib/rbac/roles";
 import { seedSystemRoles } from "@/lib/rbac/seed-roles";
@@ -25,7 +25,28 @@ describe("Projects foundation", () => {
     });
 
     expect(project.status).toBe("pending");
-    expect(isApprovedProjectStatus(project.status)).toBe(false);
+    expect(isActiveProjectStatus(project.status)).toBe(false);
+  });
+
+  it("accepts active, inactive, and rejected status values", async () => {
+    const user = await User.create({
+      name: "Statuses",
+      email: "statuses@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+    });
+
+    for (const status of ["active", "inactive", "rejected"] as const) {
+      const project = await Project.create({
+        businessName: `Project ${status}`,
+        websiteUrl: `https://${status}.example.com`,
+        createdByUserId: user._id,
+        status,
+      });
+      expect(project.status).toBe(status);
+      expect(isActiveProjectStatus(project.status)).toBe(status === "active");
+    }
   });
 
   it("resolves seeded project roles by slug", async () => {
@@ -53,7 +74,7 @@ describe("Projects foundation", () => {
     const project = await Project.create({
       businessName: "Northwind",
       websiteUrl: "https://northwind.example.com",
-      status: "approved",
+      status: "active",
       createdByUserId: user._id,
       approvedAt: new Date(),
       approvedByUserId: user._id,

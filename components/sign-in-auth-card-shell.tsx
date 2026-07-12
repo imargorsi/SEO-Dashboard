@@ -1,9 +1,12 @@
 import type { ReactNode } from "react";
 
+import { authFormCardSurfaceClass } from "@/lib/frontend/layout/auth-chrome";
+import { cn } from "@/lib/utils";
+
 type SignInAuthCardShellProps = {
   ariaLabelledBy: string;
   children: ReactNode;
-  /** Theme + language — fixed top-end of the auth column (above the card) */
+  /** Language switcher — top-end inside the auth card */
   topToolbar?: ReactNode;
 };
 
@@ -13,13 +16,9 @@ export function SignInAuthCardShell({ ariaLabelledBy, children, topToolbar }: Si
       className="relative flex flex-1 flex-col justify-center bg-transparent px-6 py-10 sm:px-10 lg:px-14 lg:py-12"
       aria-labelledby={ariaLabelledBy}
     >
-      {topToolbar ? (
-        <div className="pointer-events-auto absolute inset-e-3 top-3 z-10 flex items-center gap-1 sm:inset-e-5 sm:top-5">
-          {topToolbar}
-        </div>
-      ) : null}
       <div className="mx-auto w-full max-w-104">
-        <div className="rounded-2xl bg-transparent p-7 sm:p-8">
+        <div className={cn(authFormCardSurfaceClass, "p-7 sm:p-8")}>
+          {topToolbar ? <div className="-mt-1 mb-5 flex justify-end">{topToolbar}</div> : null}
           {children}
         </div>
       </div>

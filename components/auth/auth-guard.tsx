@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { AuthSessionLoading } from "@/components/auth/auth-session-loading";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
 import { getAccessToken, resolvePostLoginPath } from "@/lib/frontend/auth/session";
-import { useIsAuthRevealActive } from "@/context/auth-reveal-transition";
+import { useIsAuthRevealActive, useIsAuthRevealing } from "@/context/auth-reveal-transition";
 
 function useIsClient() {
   return useSyncExternalStore(
@@ -44,6 +44,7 @@ export function GuestOnly({ children }: { children: ReactNode }) {
 export function RequireAuth({ children }: { children: ReactNode }) {
   const router = useRouter();
   const isClient = useIsClient();
+  const isRevealing = useIsAuthRevealing();
   const hasToken = isClient && Boolean(getAccessToken());
   const { data: user, isPending, isError } = useAuthUserQuery({ enabled: hasToken });
 
@@ -53,7 +54,15 @@ export function RequireAuth({ children }: { children: ReactNode }) {
     }
   }, [hasToken, isClient, isError, router]);
 
-  if (!isClient || !hasToken || isPending || !user || isError) {
+  if (!isClient || !hasToken || isError) {
+    return <AuthSessionLoading />;
+  }
+
+  if (isRevealing) {
+    return children;
+  }
+
+  if (isPending || !user) {
     return <AuthSessionLoading />;
   }
 

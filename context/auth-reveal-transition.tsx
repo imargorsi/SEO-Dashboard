@@ -14,7 +14,10 @@ import {
 import { createPortal, flushSync } from "react-dom";
 import { useRouter } from "next/navigation";
 import { AUTH_REVEAL_TOTAL_MS } from "@/lib/frontend/auth/auth-reveal-timing";
+import { AuthVideoBackground } from "@/components/auth/auth-video-background";
+import { authFormCardSurfaceClass, authFormPanelClass } from "@/lib/frontend/layout/auth-chrome";
 import { SignInHeroSection } from "@/sections/sign-in-hero-section";
+import { cn } from "@/lib/utils";
 
 type AuthRevealContextValue = {
   isRevealing: boolean;
@@ -38,15 +41,15 @@ function useCanUseDomPortal() {
 
 function AuthRevealFormPanel() {
   return (
-    <section className="flex h-full flex-1 flex-col justify-center bg-[var(--bg)] px-6 py-10 sm:px-10 lg:px-14 lg:py-12">
+    <section className={cn(authFormPanelClass, "relative z-10 justify-center px-6 py-10 sm:px-10 lg:px-14 lg:py-12")}>
       <div className="mx-auto w-full max-w-[26rem]">
-        <div className="rounded-xl border border-[var(--border)] bg-transparent p-7 shadow-sm sm:p-8">
-          <div className="h-8 w-32 rounded-md bg-[var(--border)]/60" aria-hidden />
-          <div className="mt-2 h-4 w-56 max-w-full rounded-md bg-[var(--border)]/40" aria-hidden />
+        <div className={cn(authFormCardSurfaceClass, "p-7 sm:p-8")}>
+          <div className="h-8 w-32 rounded-md bg-border/60" aria-hidden />
+          <div className="mt-2 h-4 w-56 max-w-full rounded-md bg-border/40" aria-hidden />
           <div className="mt-8 space-y-5">
-            <div className="h-10 rounded-md border border-[var(--border)] bg-[var(--bg)]" aria-hidden />
-            <div className="h-10 rounded-md border border-[var(--border)] bg-[var(--bg)]" aria-hidden />
-            <div className="h-10 rounded-md bg-[var(--brand)]/90" aria-hidden />
+            <div className="h-10 rounded-md border border-border bg-bg-main" aria-hidden />
+            <div className="h-10 rounded-md border border-border bg-bg-main" aria-hidden />
+            <div className="h-10 rounded-md bg-brand/90" aria-hidden />
           </div>
         </div>
       </div>
@@ -58,9 +61,11 @@ function AuthRevealOverlay() {
   return (
     <div className="auth-reveal-overlay" aria-hidden>
       <div className="auth-reveal-panel auth-reveal-panel--hero">
+        <AuthVideoBackground variant="viewport" anchor="start" />
         <SignInHeroSection />
       </div>
       <div className="auth-reveal-panel auth-reveal-panel--form">
+        <AuthVideoBackground variant="viewport" anchor="end" />
         <AuthRevealFormPanel />
       </div>
     </div>
@@ -73,12 +78,10 @@ export function AuthRevealProvider({ children }: { children: ReactNode }) {
   const [isRevealing, setIsRevealing] = useState(false);
   const [isRevealArmed, setIsRevealArmed] = useState(false);
   const endTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const navFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
     return () => {
       if (endTimerRef.current) clearTimeout(endTimerRef.current);
-      if (navFrameRef.current !== null) cancelAnimationFrame(navFrameRef.current);
     };
   }, []);
 
@@ -95,7 +98,6 @@ export function AuthRevealProvider({ children }: { children: ReactNode }) {
       if (!path) return;
 
       if (endTimerRef.current) clearTimeout(endTimerRef.current);
-      if (navFrameRef.current !== null) cancelAnimationFrame(navFrameRef.current);
 
       setIsRevealArmed(false);
 
@@ -112,10 +114,7 @@ export function AuthRevealProvider({ children }: { children: ReactNode }) {
         setIsRevealing(true);
       });
 
-      navFrameRef.current = requestAnimationFrame(() => {
-        navFrameRef.current = null;
-        router.push(path);
-      });
+      router.push(path);
 
       endTimerRef.current = setTimeout(() => {
         setIsRevealing(false);

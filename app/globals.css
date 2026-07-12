@@ -126,6 +126,14 @@
   --text-chrome-muted: var(--text-muted);
   --surface-panel-header: color-mix(in srgb, var(--social-bg) 40%, var(--bg-elevated));
 
+  /* Auth — full-screen video scrim + form card uses standard dark surfaces */
+  --auth-video-scrim: color-mix(in srgb, var(--color-contrast) 30%, transparent);
+  --auth-form-bg: var(--bg-card);
+  --auth-form-border: var(--border);
+  --auth-form-ring: transparent;
+  --auth-form-shadow: var(--shadow-elevated);
+  --auth-form-highlight: var(--gradient-button);
+
   --sans: "Nunito", "Nunito Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
   --heading: "Nunito", "Nunito Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
   --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
@@ -236,6 +244,13 @@
   --shadow-chrome-pill: inset 0 1px 0 color-mix(in srgb, var(--text-on-brand) 12%, transparent);
   --text-chrome-muted: color-mix(in srgb, var(--text-on-brand) 45%, transparent);
   --surface-panel-header: color-mix(in srgb, var(--text-on-brand) 4%, var(--bg-elevated));
+
+  --auth-video-scrim: color-mix(in srgb, var(--color-contrast) 36%, transparent);
+  --auth-form-bg: var(--bg-card);
+  --auth-form-border: var(--border);
+  --auth-form-ring: transparent;
+  --auth-form-shadow: var(--shadow-elevated);
+  --auth-form-highlight: var(--gradient-button);
 
   color-scheme: dark;
 
@@ -482,58 +497,38 @@ code {
 /* Post-login: auth panels slide apart to reveal the dashboard.
    Timing constants: lib/frontend/auth/auth-reveal-timing.ts */
 @keyframes auth-reveal-exit-start {
-  0% {
+  from {
     transform: translate3d(0, 0, 0);
-    opacity: 1;
   }
-  70% {
-    opacity: 1;
-  }
-  100% {
+  to {
     transform: translate3d(0, -100%, 0);
-    opacity: 0.75;
   }
 }
 
 @keyframes auth-reveal-exit-end {
-  0% {
+  from {
     transform: translate3d(0, 0, 0);
-    opacity: 1;
   }
-  70% {
-    opacity: 1;
-  }
-  100% {
+  to {
     transform: translate3d(0, 100%, 0);
-    opacity: 0.75;
   }
 }
 
 @keyframes auth-reveal-exit-hero-desktop {
-  0% {
+  from {
     transform: translate3d(0, 0, 0);
-    opacity: 1;
   }
-  65% {
-    opacity: 1;
-  }
-  100% {
+  to {
     transform: translate3d(-100%, 0, 0);
-    opacity: 0.7;
   }
 }
 
 @keyframes auth-reveal-exit-form-desktop {
-  0% {
+  from {
     transform: translate3d(0, 0, 0);
-    opacity: 1;
   }
-  65% {
-    opacity: 1;
-  }
-  100% {
+  to {
     transform: translate3d(100%, 0, 0);
-    opacity: 0.7;
   }
 }
 
@@ -575,15 +570,17 @@ code {
   z-index: 10000;
   pointer-events: none;
   overflow: hidden;
+  background: transparent;
 }
 
 .auth-reveal-panel {
   position: absolute;
+  z-index: 1;
   overflow: hidden;
-  will-change: transform, opacity;
-  box-shadow: 0 0 28px color-mix(in srgb, var(--text-primary) 18%, transparent);
+  will-change: transform;
   display: flex;
   flex-direction: column;
+  background: transparent;
 }
 
 .auth-reveal-panel--hero {
@@ -626,15 +623,15 @@ code {
 }
 
 .dashboard-auth-reveal-enter .dashboard-enter-sidebar {
-  animation-delay: 0.45s;
+  animation-delay: 0.12s;
 }
 
 .dashboard-auth-reveal-enter .dashboard-enter-topbar {
-  animation-delay: 0.62s;
+  animation-delay: 0.22s;
 }
 
 .dashboard-auth-reveal-enter .dashboard-enter-content {
-  animation-delay: 0.78s;
+  animation-delay: 0.32s;
 }
 
 @media (prefers-reduced-motion: reduce) {

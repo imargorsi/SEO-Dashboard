@@ -9,7 +9,6 @@ import { UserAvatar } from "@/components/ui/user-avatar";
 import type { TProjectListItem } from "@/features/projects/projects.api";
 import { formatProjectHostname } from "@/lib/frontend/projects/project-selector.utils";
 import {
-  elevatedCardBodyClass,
   elevatedCardMutedClass,
   elevatedCardSurfaceClass,
   elevatedCardTitleClass,
@@ -78,11 +77,78 @@ export function ProjectSelector() {
 
   if (isLoading) return null;
 
-  if (!selectedProject || projects.length === 0) {
+  if (projects.length === 0) {
     return (
       <div className="shrink-0 px-3 pb-3 pt-1">
         <div className={cn(elevatedCardSurfaceClass, "rounded-xl px-2.5 py-2.5")}>
           <p className={cn("type-caption", elevatedCardMutedClass)}>{t("emptyLabel")}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!selectedProject) {
+    return (
+      <div className="shrink-0 px-3 pb-3 pt-1">
+        <div
+          className={cn(
+            elevatedCardSurfaceClass,
+            "overflow-hidden rounded-xl transition-[border-color] duration-200",
+            open && "border-(--accent-border)",
+          )}
+        >
+          <button
+            type="button"
+            aria-haspopup="listbox"
+            aria-expanded={open}
+            aria-controls={listId}
+            aria-label={t("selectPrompt")}
+            onClick={() => setOpen((value) => !value)}
+            className="flex w-full items-center gap-2.5 px-2.5 py-2 text-start transition-colors hover:bg-bg-hover/60"
+          >
+            <span className="min-w-0 flex-1">
+              <span className={cn("block truncate type-body", elevatedCardMutedClass)}>{t("selectPrompt")}</span>
+            </span>
+            <IoChevronDown
+              className={cn(
+                "size-4 shrink-0 transition-transform duration-300 ease-out",
+                elevatedCardMutedClass,
+                open && "rotate-180",
+              )}
+              aria-hidden
+            />
+          </button>
+
+          <div
+            className={cn(
+              "grid transition-[grid-template-rows] duration-300 ease-in-out",
+              open ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+            )}
+          >
+            <div className="min-h-0 overflow-hidden">
+              <div
+                id={listId}
+                role="listbox"
+                aria-label={t("listLabel")}
+                className="border-t border-border px-1.5 pb-1.5 pt-1"
+              >
+                <p className={cn("px-2 pb-1 pt-1 type-caption-xs", elevatedCardMutedClass)}>{t("listHeading")}</p>
+                <div className="flex flex-col gap-0.5">
+                  {projects.map((project) => (
+                    <ProjectOption
+                      key={project.id}
+                      project={project}
+                      isSelected={false}
+                      onSelect={() => {
+                        setSelectedProjectId(project.id);
+                        setOpen(false);
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );

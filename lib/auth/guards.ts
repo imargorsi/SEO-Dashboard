@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { findAccessToken } from "@/lib/auth/tokens";
 import { hasAnyPermission, hasPermission } from "@/lib/rbac/access";
-import { loadEffectiveUserAuthData } from "@/lib/auth/effective-user-auth";
+import { loadPlatformUserAuthData } from "@/lib/auth/effective-user-auth";
 import { SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
 import { User, type UserDocument } from "@/models";
 import type { Types } from "mongoose";
@@ -87,5 +87,5 @@ export async function loadUserAuthData(user: UserDocument): Promise<{
   roles: string[];
   permissions: string[];
 }> {
-  return loadEffectiveUserAuthData(user);
+  return loadPlatformUserAuthData(user);
 }

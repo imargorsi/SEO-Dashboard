@@ -8,6 +8,7 @@ export interface Translation {
     listHeading: string;
     cardLabel: string;
     emptyLabel: string;
+    selectPrompt: string;
   };
   nav: {
     aria: string;
@@ -630,6 +631,7 @@ const translation: Translation = {
     listHeading: "Your Projects",
     cardLabel: "Project",
     emptyLabel: "No Projects Available",
+    selectPrompt: "Select A Project To Continue",
   },
   nav: {
     aria: "Main Navigation",

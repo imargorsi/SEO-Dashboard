@@ -26,7 +26,7 @@ const SelectedProjectContext = createContext<TSelectedProjectContextValue | null
 function resolveSelectedProjectId(projects: TProjectListItem[], storedId: string | null): string | null {
   if (projects.length === 0) return null;
   if (storedId && projects.some((project) => project.id === storedId)) return storedId;
-  return projects[0]!.id;
+  return null;
 }
 
 export function SelectedProjectProvider({ children }: { children: ReactNode }) {

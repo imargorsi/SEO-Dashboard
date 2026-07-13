@@ -5,12 +5,15 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { AuthSessionLoading } from "@/components/auth/auth-session-loading";
 import { useProjectAccess } from "@/context/project-access-context";
+import { useSelectedProject } from "@/context/selected-project-context";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
 import { getAccessToken } from "@/lib/frontend/auth/session";
 import {
   canAccessRoute,
+  isAuthOnlyRoute,
   resolveDefaultAccessiblePath,
 } from "@/lib/frontend/layout/route-access";
+import { isSuperAdmin } from "@/lib/rbac/access";
 
 function useIsClient() {
   return useSyncExternalStore(
@@ -27,10 +30,16 @@ export function RequireRouteAccess({ children }: { children: ReactNode }) {
   const isClient = useIsClient();
   const hasToken = isClient && Boolean(getAccessToken());
   const { data: user, isPending, isError } = useAuthUserQuery({ enabled: hasToken });
-  const { projectPermissions } = useProjectAccess();
+  const { selectedProject } = useSelectedProject();
+  const { projectPermissions, isLoading: isProjectAccessLoading } = useProjectAccess();
+
+  const isPlatformAdmin = user ? isSuperAdmin(user.roles) : false;
+  const awaitingProjectAccess =
+    Boolean(selectedProject?.id) && !isPlatformAdmin && isProjectAccessLoading;
 
   const allowed =
     user &&
+    !awaitingProjectAccess &&
     canAccessRoute(pathname, user.permissions, projectPermissions, user.roles);
 
   const fallbackPath = user
@@ -38,17 +47,25 @@ export function RequireRouteAccess({ children }: { children: ReactNode }) {
     : "/edit-profile";
 
   useEffect(() => {
-    if (!user || allowed) return;
+    if (!user || allowed || awaitingProjectAccess) return;
     if (pathname !== fallbackPath) {
       router.replace(fallbackPath);
     }
-  }, [allowed, fallbackPath, pathname, router, user]);
+  }, [allowed, awaitingProjectAccess, fallbackPath, pathname, router, user]);
 
   if (!isClient || !hasToken || isPending || !user || isError) {
     return <AuthSessionLoading />;
   }
 
+  if (awaitingProjectAccess) {
+    return <AuthSessionLoading />;
+  }
+
   if (!allowed && pathname !== fallbackPath) {
+    return <AuthSessionLoading />;
+  }
+
+  if (!isAuthOnlyRoute(pathname) && !isPlatformAdmin && !selectedProject) {
     return <AuthSessionLoading />;
   }
 

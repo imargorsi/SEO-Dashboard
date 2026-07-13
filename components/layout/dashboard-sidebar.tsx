@@ -10,8 +10,9 @@ import { NavbarProfileMenu } from "@/components/layout/navbar-profile-menu";
 import { AppLogo } from "@/components/layout/app-logo";
 import { ProjectSelector } from "@/components/layout/project-selector";
 import { useProjectAccess } from "@/context/project-access-context";
+import { useSelectedProject } from "@/context/selected-project-context";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
-import { buildSidebarNavItems, hasProjectWorkspace } from "@/lib/frontend/layout/build-sidebar-nav";
+import { buildSidebarNavItems } from "@/lib/frontend/layout/build-sidebar-nav";
 import {
   isSidebarNavItemActive,
 } from "@/lib/frontend/layout/sidebar-nav";
@@ -22,6 +23,7 @@ import {
   sidebarNavLinkInactiveClass,
   sidebarShellClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
+import { isSuperAdmin } from "@/lib/rbac/access";
 import { cn } from "@/lib/utils";
 
 type DashboardSidebarProps = {
@@ -33,16 +35,22 @@ export function DashboardSidebar({ onClose }: DashboardSidebarProps) {
   const { t: tLayout } = useTranslation("translation", { keyPrefix: "layout" });
   const pathname = usePathname();
   const { data: user } = useAuthUserQuery();
-  const { projectPermissions } = useProjectAccess();
+  const { projects } = useSelectedProject();
+  const { projectPermissions, hasProjectContext, isLoading: isProjectAccessLoading } = useProjectAccess();
+
+  const isPlatformAdmin = user ? isSuperAdmin(user.roles) : false;
+  const showProjectSelector = Boolean(user && (projects.length > 0 || isPlatformAdmin));
+
+  const canRenderNav = useMemo(() => {
+    if (!user) return false;
+    if (isPlatformAdmin) return true;
+    return hasProjectContext && !isProjectAccessLoading;
+  }, [hasProjectContext, isPlatformAdmin, isProjectAccessLoading, user]);
 
   const navItems = useMemo(() => {
-    if (!user) return [];
+    if (!user || !canRenderNav) return [];
     return buildSidebarNavItems(user.permissions, projectPermissions, user.roles);
-  }, [projectPermissions, user]);
-
-  const showProjectSelector = user
-    ? hasProjectWorkspace(user.permissions, projectPermissions, user.roles)
-    : false;
+  }, [canRenderNav, projectPermissions, user]);
 
   return (
     <aside className={sidebarShellClass} aria-label={tNav("aria")}>

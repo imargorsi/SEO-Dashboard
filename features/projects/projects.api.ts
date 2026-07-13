@@ -22,6 +22,13 @@ const projectKeys = {
   all: [projectsApi.reducerPath] as const,
   list: (status?: ProjectStatus | null) => [...projectKeys.all, "list", status ?? "all"] as const,
   detail: (projectId: string) => [...projectKeys.all, "detail", projectId] as const,
+  access: (projectId: string) => [...projectKeys.all, "access", projectId] as const,
+};
+
+export type TProjectAccess = {
+  projectId: string;
+  roles: string[];
+  permissions: string[];
 };
 
 type ProjectsListEnvelope = {
@@ -115,6 +122,26 @@ export function useProjectQuery(projectId: string, options?: TUseProjectQueryOpt
   return useQuery({
     queryKey: projectKeys.detail(projectId),
     queryFn: () => fetchProject(projectId),
+    enabled: (options?.enabled ?? true) && Boolean(projectId),
+  });
+}
+
+async function fetchProjectAccess(projectId: string): Promise<TProjectAccess> {
+  const envelope = await baseQuery.get<TProjectAccess>(`projects/${projectId}/access`);
+  if (!envelope.data?.projectId) {
+    throw new Error("Invalid project access payload");
+  }
+  return envelope.data;
+}
+
+type TUseProjectAccessQueryOptions = {
+  enabled?: boolean;
+};
+
+export function useProjectAccessQuery(projectId: string, options?: TUseProjectAccessQueryOptions) {
+  return useQuery({
+    queryKey: projectKeys.access(projectId),
+    queryFn: () => fetchProjectAccess(projectId),
     enabled: (options?.enabled ?? true) && Boolean(projectId),
   });
 }

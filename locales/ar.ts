@@ -10,6 +10,7 @@ const translation: Translation = {
     listHeading: "مشاريعك",
     cardLabel: "المشروع",
     emptyLabel: "لا توجد مشاريع متاحة",
+    selectPrompt: "اختر مشروعًا للمتابعة",
   },
   nav: {
     aria: "التنقل الرئيسي",

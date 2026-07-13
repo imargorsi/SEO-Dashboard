@@ -2,36 +2,35 @@
 
 import { useTranslation } from "react-i18next";
 
-import { FlagSaudiArabia, FlagUnitedKingdom } from "@/components/flag-icons";
-import { chromeControlToneClass } from "@/lib/frontend/theme/chrome-tones";
 import { cn } from "@/lib/utils";
 
 const sizeClass = {
-  default: "h-10 w-10 rounded-xl",
-  sm: "h-8 w-8 rounded-lg",
-  xs: "h-7 w-7 rounded-lg",
+  default: "h-8 min-w-6 rounded-md px-2",
+  sm: "h-7 min-w-10 rounded px-2.5",
+  xs: "h-6 min-w-9 rounded px-2",
 } as const;
 
-const flagClass = {
-  default: "h-3.5 w-5 rounded-[2px]",
-  sm: "h-3 w-[18px] rounded-[1.5px]",
-  xs: "h-2.5 w-4 rounded-[1.5px]",
+const labelClass = {
+  default: "type-caption-xs",
+  sm: "type-caption-xs",
+  xs: "text-[10px] font-semibold leading-none",
 } as const;
 
 export function LanguageSwitcher({
-  tone = "default",
   size = "default",
   className,
 }: {
-  tone?: keyof typeof chromeControlToneClass;
+  /** @deprecated Tone is ignored — language pill always uses brand border. */
+  tone?: "default" | "inverse" | "ghost";
   size?: keyof typeof sizeClass;
   className?: string;
 }) {
   const { i18n, t } = useTranslation("translation", { keyPrefix: "lang" });
-  const base = (i18n.resolvedLanguage ?? "en").split(/[-_]/)[0] ?? "en";
-  const isArabic = base === "ar";
+  const current = (i18n.resolvedLanguage ?? "en").split(/[-_]/)[0] ?? "en";
+  const isArabic = current === "ar";
   const nextLang = isArabic ? "en" : "ar";
   const label = isArabic ? t("switchToEnglish") : t("switchToArabic");
+  const displayLang = nextLang.toUpperCase();
 
   return (
     <button
@@ -40,19 +39,15 @@ export function LanguageSwitcher({
         void i18n.changeLanguage(nextLang);
       }}
       className={cn(
-        "inline-flex shrink-0 items-center justify-center overflow-hidden border transition-[border-color,background-color,transform,box-shadow] duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.96]",
+        "inline-flex shrink-0 items-center justify-center border border-brand bg-transparent font-semibold uppercase tracking-wide text-brand transition-[color,background-color,transform] duration-200 hover:bg-bg-hover focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-bg-card focus-visible:outline-none active:scale-[0.96]",
         sizeClass[size],
-        chromeControlToneClass[tone],
-        className
+        labelClass[size],
+        className,
       )}
       aria-label={label}
       title={label}
     >
-      {isArabic ? (
-        <FlagSaudiArabia className={flagClass[size]} />
-      ) : (
-        <FlagUnitedKingdom className={flagClass[size]} />
-      )}
+      {displayLang}
     </button>
   );
 }

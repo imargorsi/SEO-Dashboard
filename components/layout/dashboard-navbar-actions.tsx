@@ -8,7 +8,7 @@ export function DashboardNavbarActions() {
   return (
     <div className="flex shrink-0 items-center gap-1.5">
       <ThemeToggle tone="ghost" size="sm" className={dashboardNavIconClass} />
-      <LanguageSwitcher tone="ghost" size="sm" className={dashboardNavIconClass} />
+      <LanguageSwitcher tone="ghost" size="sm" />
     </div>
   );
 }

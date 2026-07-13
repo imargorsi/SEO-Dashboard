@@ -1,4 +1,4 @@
-"use client";
+import type { TSeoGoal } from "@/lib/projects/constants";
 
 export type TProjectCreateFormValues = {
   ownerUserId: string;
@@ -12,11 +12,6 @@ export type TProjectCreateFormValues = {
   targetLocations: string;
   opensAt: string;
   closesAt: string;
-  seoGoals: string;
-  websiteLogin: string;
-  websiteHosting: string;
-  googleAnalytics: string;
-  googleSearchConsole: string;
-  googleBusinessProfile: string;
+  seoGoals: TSeoGoal[];
   competitorUrls: string;
 };

@@ -24,7 +24,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             <RequireRouteAccess>
               <div
                 className={cn(
-                  "flex min-h-svh flex-col bg-bg-main md:flex-row",
+                  "flex h-svh flex-col overflow-hidden bg-bg-main md:flex-row",
                   isAuthRevealing && "dashboard-auth-reveal-enter"
                 )}
               >
@@ -33,11 +33,11 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                     <DashboardSidebar onClose={() => setIsSidebarOpen(false)} />
                   </div>
                 ) : null}
-                <div className="relative flex min-w-0 flex-1 flex-col bg-bg-main">
-                  <div className="dashboard-enter-item dashboard-enter-topbar">
+                <div className="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-bg-main">
+                  <div className="dashboard-enter-item dashboard-enter-topbar shrink-0">
                     <DashboardTopBar />
                   </div>
-                  <main className="dashboard-enter-item dashboard-enter-content flex min-h-0 min-w-0 flex-1 flex-col">
+                  <main className="dashboard-enter-item dashboard-enter-content min-h-0 min-w-0 flex-1 overflow-y-auto">
                     {children}
                   </main>
                 </div>

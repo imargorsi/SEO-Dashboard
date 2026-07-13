@@ -273,7 +273,9 @@ describe("Auth API parity", () => {
     const body = await response.json();
 
     expect(response.status).toBe(200);
-    expect(body.data.profile_image).toContain("/api/v1/storage/image?pathname=");
+    expect(body.data.profile_image).toContain("/api/v1/storage/image");
+    expect(body.data.profile_image).toContain("pathname=");
+    expect(body.data.profile_image).toContain("signature=");
 
     const fresh = await User.findById(user._id);
     expect(fresh?.profileImage).toMatch(/^blob:profile-images\//);

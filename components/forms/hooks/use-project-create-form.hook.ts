@@ -40,14 +40,7 @@ function toCreatePayload(values: TProjectCreateFormValues, isAdmin: boolean): TC
     idealCustomerProfile: optionalText(values.idealCustomerProfile),
     targetLocations: splitCommaSeparated(values.targetLocations),
     businessHours: opensAt || closesAt ? { opensAt, closesAt } : null,
-    seoGoals: splitCommaSeparated(values.seoGoals),
-    marketingAccess: {
-      websiteLogin: optionalText(values.websiteLogin),
-      websiteHosting: optionalText(values.websiteHosting),
-      googleAnalytics: optionalText(values.googleAnalytics),
-      googleSearchConsole: optionalText(values.googleSearchConsole),
-      googleBusinessProfile: optionalText(values.googleBusinessProfile),
-    },
+    seoGoals: values.seoGoals,
     competitorUrls: splitCommaSeparated(values.competitorUrls),
   };
 }
@@ -66,11 +59,6 @@ function fieldStepIndex(isAdmin: boolean): Record<keyof TProjectCreateFormValues
     opensAt: 2,
     closesAt: 2,
     seoGoals: 3,
-    websiteLogin: 3,
-    websiteHosting: 3,
-    googleAnalytics: 3,
-    googleSearchConsole: 3,
-    googleBusinessProfile: 3,
     competitorUrls: 4,
   };
 }
@@ -86,7 +74,7 @@ function stepFields(isAdmin: boolean): Array<Array<keyof TProjectCreateFormValue
     ],
     ["servicesOffered", "primaryServiceToPromote", "idealCustomerProfile"],
     ["targetLocations", "opensAt", "closesAt"],
-    ["seoGoals", "websiteLogin", "websiteHosting", "googleAnalytics", "googleSearchConsole", "googleBusinessProfile"],
+    ["seoGoals"],
     ["competitorUrls"],
   ];
 }
@@ -115,12 +103,7 @@ export function useProjectCreateForm(authUser: AuthUser) {
       targetLocations: "",
       opensAt: "",
       closesAt: "",
-      seoGoals: "",
-      websiteLogin: "",
-      websiteHosting: "",
-      googleAnalytics: "",
-      googleSearchConsole: "",
-      googleBusinessProfile: "",
+      seoGoals: [],
       competitorUrls: "",
     },
     mode: "onSubmit",
@@ -129,23 +112,42 @@ export function useProjectCreateForm(authUser: AuthUser) {
   const {
     handleSubmit,
     setError,
+    clearErrors,
     trigger,
     setFocus,
+    watch,
+    setValue,
     formState: { errors },
   } = form;
 
   const isSubmitting = createMutation.isPending;
   const isLastStep = currentStep === steps.length - 1;
+  const selectedSeoGoals = watch("seoGoals");
+
+  function toggleSeoGoal(goal: TProjectCreateFormValues["seoGoals"][number]) {
+    const current = watch("seoGoals");
+    const next = current.includes(goal) ? current.filter((item) => item !== goal) : [...current, goal];
+    setValue("seoGoals", next, { shouldDirty: true, shouldValidate: true });
+    if (next.length > 0) clearErrors("seoGoals");
+  }
 
   async function goToNextStep() {
     const fields = steps[currentStep];
     const isValid = await trigger(fields);
+
     if (!isValid) {
       const firstInvalidField = fields.find((field) => Boolean(errors[field]));
       if (firstInvalidField) setFocus(firstInvalidField);
       notify.error(t("stepValidationError"));
       return;
     }
+
+    if (currentStep === 3 && watch("seoGoals").length === 0) {
+      setError("seoGoals", { type: "manual", message: t("valSeoGoals") });
+      notify.error(t("valSeoGoals"));
+      return;
+    }
+
     setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
   }
 
@@ -157,6 +159,7 @@ export function useProjectCreateForm(authUser: AuthUser) {
     const keys = Object.keys(error.errors);
     const matched = keys.find((key) => {
       const flat = key.includes(".") ? (key.split(".").at(-1) ?? key) : key;
+      if (flat === "seoGoals") return true;
       return flat in indexMap;
     });
     if (!matched) return;
@@ -177,6 +180,13 @@ export function useProjectCreateForm(authUser: AuthUser) {
       return;
     }
 
+    if (values.seoGoals.length === 0) {
+      setError("seoGoals", { type: "manual", message: t("valSeoGoals") });
+      setCurrentStep(3);
+      notify.error(t("valSeoGoals"));
+      return;
+    }
+
     try {
       await createMutation.mutateAsync({
         payload: toCreatePayload(values, isAdmin),
@@ -192,6 +202,7 @@ export function useProjectCreateForm(authUser: AuthUser) {
           websiteUrl: error.errors.websiteUrl?.[0],
           opensAt: error.errors["businessHours.opensAt"]?.[0],
           closesAt: error.errors["businessHours.closesAt"]?.[0],
+          seoGoals: error.errors["seoGoals.0"]?.[0] ?? error.errors.seoGoals?.[0],
         };
 
         (Object.keys(fieldMap) as Array<keyof TProjectCreateFormValues>).forEach((key) => {
@@ -223,6 +234,8 @@ export function useProjectCreateForm(authUser: AuthUser) {
     logoPreviewUrl,
     onLogoPicked,
     businessName: form.watch("businessName"),
+    selectedSeoGoals,
+    toggleSeoGoal,
   };
 }
 

@@ -34,13 +34,6 @@ function mapOnboardingFields(input: CreateProjectInput) {
         }
       : null,
     seoGoals: input.seoGoals ?? [],
-    marketingAccess: {
-      websiteLogin: emptyToNull(input.marketingAccess?.websiteLogin),
-      websiteHosting: emptyToNull(input.marketingAccess?.websiteHosting),
-      googleAnalytics: emptyToNull(input.marketingAccess?.googleAnalytics),
-      googleSearchConsole: emptyToNull(input.marketingAccess?.googleSearchConsole),
-      googleBusinessProfile: emptyToNull(input.marketingAccess?.googleBusinessProfile),
-    },
     competitorUrls: input.competitorUrls ?? [],
   };
 }

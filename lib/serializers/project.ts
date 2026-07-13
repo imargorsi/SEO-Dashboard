@@ -44,13 +44,6 @@ export function serializeProject(project: ProjectDocument) {
     targetLocations: project.targetLocations,
     businessHours: project.businessHours,
     seoGoals: project.seoGoals,
-    marketingAccess: {
-      websiteLogin: project.marketingAccess.websiteLogin,
-      websiteHosting: project.marketingAccess.websiteHosting,
-      googleAnalytics: project.marketingAccess.googleAnalytics,
-      googleSearchConsole: project.marketingAccess.googleSearchConsole,
-      googleBusinessProfile: project.marketingAccess.googleBusinessProfile,
-    },
     competitorUrls: project.competitorUrls,
     status: project.status,
     createdByUserId: project.createdByUserId.toString(),

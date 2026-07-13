@@ -1,9 +1,15 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
+
 import { Input } from "@/components/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { ImageUploadAvatar } from "@/components/ui/image-upload-avatar";
 import type { AuthUser } from "@/lib/frontend/auth/types";
 import type { TUseProjectCreateFormResult } from "@/components/forms/hooks/use-project-create-form.hook";
+import { SEO_GOALS } from "@/lib/projects/constants";
+import { SEO_GOAL_ICONS } from "@/lib/frontend/projects/seo-goal-icons";
+import { cn } from "@/lib/utils";
 
 type StepProps = {
   hook: TUseProjectCreateFormResult;
@@ -11,6 +17,7 @@ type StepProps = {
 };
 
 export function ProjectCreateStepContent({ hook, authUser }: StepProps) {
+  const { t: tSeoGoals } = useTranslation("translation", { keyPrefix: "modules.projects.seoGoals" });
   const {
     t,
     form: {
@@ -22,6 +29,8 @@ export function ProjectCreateStepContent({ hook, authUser }: StepProps) {
     logoPreviewUrl,
     onLogoPicked,
     businessName,
+    selectedSeoGoals,
+    toggleSeoGoal,
   } = hook;
 
   const contactEmail = authUser.email;
@@ -179,59 +188,53 @@ export function ProjectCreateStepContent({ hook, authUser }: StepProps) {
 
   if (currentStep === 3) {
     return (
-      <div className="space-y-6">
-        <div className="space-y-4">
-          <div className="space-y-1">
-            <h3 className="type-title text-text-primary">{t("sectionSeoTitle")}</h3>
-            <p className="type-body text-text-muted">{t("sectionSeoLead")}</p>
-          </div>
-          <Input
-            id="seoGoals"
-            label={t("seoGoalsInput")}
-            placeholder={t("seoGoalsInputPh")}
-            {...register("seoGoals")}
-          />
+      <div className="space-y-4">
+        <div className="space-y-1">
+          <h3 className="type-title text-text-primary">{t("sectionSeoTitle")}</h3>
+          <p className="type-body text-text-muted">{t("sectionSeoLead")}</p>
         </div>
 
-        <div className="space-y-4">
-          <div className="space-y-1">
-            <h3 className="type-title text-text-primary">{t("sectionMarketingTitle")}</h3>
-            <p className="type-body text-text-muted">{t("sectionMarketingLead")}</p>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Input
-              id="websiteLogin"
-              label={t("websiteLogin")}
-              placeholder={t("websiteLoginPh")}
-              {...register("websiteLogin")}
-            />
-            <Input
-              id="websiteHosting"
-              label={t("websiteHosting")}
-              placeholder={t("websiteHostingPh")}
-              {...register("websiteHosting")}
-            />
-            <Input
-              id="googleAnalytics"
-              label={t("googleAnalytics")}
-              placeholder={t("googleAnalyticsPh")}
-              {...register("googleAnalytics")}
-            />
-            <Input
-              id="googleSearchConsole"
-              label={t("googleSearchConsole")}
-              placeholder={t("googleSearchConsolePh")}
-              {...register("googleSearchConsole")}
-            />
-            <Input
-              id="googleBusinessProfile"
-              label={t("googleBusinessProfile")}
-              placeholder={t("googleBusinessProfilePh")}
-              className="sm:col-span-2"
-              {...register("googleBusinessProfile")}
-            />
-          </div>
+        <div className="space-y-2">
+          {SEO_GOALS.map((goal) => {
+            const checked = selectedSeoGoals.includes(goal);
+            const inputId = `seo-goal-${goal}`;
+            const Icon = SEO_GOAL_ICONS[goal];
+
+            return (
+              <label
+                key={goal}
+                htmlFor={inputId}
+                className={cn(
+                  "flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 transition-colors",
+                  checked
+                    ? "border-[color-mix(in_srgb,var(--brand)_55%,var(--border))] bg-bg-selected"
+                    : "border-border bg-bg-input hover:bg-bg-hover",
+                )}
+              >
+                <Checkbox
+                  id={inputId}
+                  checked={checked}
+                  onChange={() => toggleSeoGoal(goal)}
+                  className="shrink-0"
+                />
+                <span
+                  className={cn(
+                    "flex size-9 shrink-0 items-center justify-center rounded-lg",
+                    checked ? "bg-brand/15 text-brand" : "bg-bg-card text-text-muted",
+                  )}
+                  aria-hidden
+                >
+                  <Icon className="size-5" />
+                </span>
+                <span className="type-body-strong text-text-primary">{tSeoGoals(goal)}</span>
+              </label>
+            );
+          })}
         </div>
+
+        {errors.seoGoals?.message ? (
+          <p className="type-caption text-status-rejected">{errors.seoGoals.message}</p>
+        ) : null}
       </div>
     );
   }

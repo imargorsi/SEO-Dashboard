@@ -20,7 +20,8 @@ describe("serializeStoredImageUrl", () => {
 
   it("returns a signed storage route for blob references", () => {
     const result = serializeStoredImageUrl("blob:profile-images/user-1/avatar.jpg");
-    expect(result).toContain("/api/v1/storage/image?pathname=profile-images%2Fuser-1%2Favatar.jpg");
+    expect(result).toContain("/api/v1/storage/image");
+    expect(result).toContain("pathname=profile-images%2Fuser-1%2Favatar.jpg");
     expect(result).toContain("signature=");
   });
 });

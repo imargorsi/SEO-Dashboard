@@ -26,7 +26,7 @@ describe("POST /projects — createProject", () => {
       projectInput({
         businessName: "Acme SEO",
         websiteUrl: "https://acme.example.com",
-        seoGoals: ["more_leads"],
+        seoGoals: ["get_more_calls"],
       }),
     );
 
@@ -140,12 +140,12 @@ describe("POST /projects — createProject", () => {
     expect(await Project.countDocuments()).toBe(0);
   });
 
-  it("rejects invalid seo goal slugs in the schema", () => {
+  it("rejects invalid seo goals in the schema", () => {
     expect(() =>
       createProjectSchema.parse({
         businessName: "Bad Goals",
         websiteUrl: "https://bad.example.com",
-        seoGoals: ["more_leads", "invalid_goal"],
+        seoGoals: ["get_more_calls", "invalid_goal"],
       }),
     ).toThrow();
   });

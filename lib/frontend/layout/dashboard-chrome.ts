@@ -19,7 +19,7 @@ export const elevatedCardMutedClass = "text-(--text-on-elevated-muted)";
 
 /** Sidebar shell — wider than content chrome, distinct surface from main modules. */
 export const sidebarShellClass =
-  "flex w-full shrink-0 flex-col border-b border-border bg-bg-sidebar md:min-h-svh md:w-60 md:border-b-0 md:border-e";
+  "flex h-full max-h-svh w-full shrink-0 flex-col border-b border-border bg-bg-sidebar md:w-60 md:border-b-0 md:border-e";
 
 /** RankRadar logo mark + wordmark in the sidebar header. */
 export const sidebarBrandRowClass =

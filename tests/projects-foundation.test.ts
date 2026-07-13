@@ -118,22 +118,18 @@ describe("Projects foundation", () => {
       idealCustomerProfile: "Small businesses in retail",
       targetLocations: ["Austin", "Dallas"],
       businessHours: { opensAt: "09:00", closesAt: "17:00" },
-      seoGoals: ["more_leads", "more_website_traffic"],
-      marketingAccess: {
-        websiteLogin: "yes — shared 1Password vault",
-        googleAnalytics: "https://analytics.google.com/...",
-      },
+      seoGoals: ["grow_brand_awareness", "improve_local_visibility"],
       competitorUrls: ["https://competitor.example.com"],
     });
 
     expect(project.pocEmail).toBe("onboard@example.com");
     expect(project.servicesOffered).toEqual(["SEO audits", "Content marketing"]);
-    expect(project.seoGoals).toEqual(["more_leads", "more_website_traffic"]);
+    expect(project.seoGoals).toEqual(["grow_brand_awareness", "improve_local_visibility"]);
     expect(project.businessHours?.opensAt).toBe("09:00");
     expect(project.competitorUrls).toHaveLength(1);
   });
 
-  it("rejects invalid seo goal slugs", async () => {
+  it("rejects invalid seo goals", async () => {
     const user = await User.create({
       name: "Creator",
       email: "bad-goals@example.com",
@@ -147,7 +143,8 @@ describe("Projects foundation", () => {
         businessName: "Bad Goals Co",
         websiteUrl: "https://bad.example.com",
         createdByUserId: user._id,
-        seoGoals: ["more_leads", "invalid_goal"],
+        // @ts-expect-error — runtime enum validation for invalid SEO goal values
+        seoGoals: ["grow_brand_awareness", "invalid_goal"],
       }),
     ).rejects.toThrow();
   });

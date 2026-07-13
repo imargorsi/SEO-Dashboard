@@ -2,7 +2,7 @@ import type { ProjectStatus } from "@/lib/projects/constants";
 
 export type TProjectStatusAction = "approve" | "reject" | "activate" | "deactivate";
 
-export type TProjectCardActionId = TProjectStatusAction | "viewDetails" | "edit" | "activeState" | "inactiveState" | "pendingState";
+export type TProjectCardActionId = TProjectStatusAction | "viewDetails" | "edit";
 
 export type TProjectCardActionTone = "success" | "warning" | "destructive" | "muted" | "brand" | "default";
 
@@ -13,8 +13,6 @@ export type TProjectCardActionConfig = {
   labelKey: TProjectCardActionLabelKey;
   action?: TProjectStatusAction;
   href?: string;
-  isCurrentState?: boolean;
-  disabled?: boolean;
 };
 
 export type TProjectCardActionLabelKey =
@@ -60,14 +58,6 @@ function buildStatusActions(status: ProjectStatus, isSuperAdmin: boolean): TProj
   if (status === "active") {
     return [
       {
-        id: "activeState",
-        group: "status",
-        tone: "success",
-        labelKey: "active",
-        isCurrentState: true,
-        disabled: true,
-      },
-      {
         id: "deactivate",
         group: "status",
         tone: "muted",
@@ -79,14 +69,6 @@ function buildStatusActions(status: ProjectStatus, isSuperAdmin: boolean): TProj
 
   if (status === "inactive") {
     return [
-      {
-        id: "inactiveState",
-        group: "status",
-        tone: "muted",
-        labelKey: "inactive",
-        isCurrentState: true,
-        disabled: true,
-      },
       {
         id: "activate",
         group: "status",

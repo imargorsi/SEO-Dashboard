@@ -1,6 +1,6 @@
 import mongoose, { Schema, type InferSchemaType, type Model, type Types } from "mongoose";
 
-import { PROJECT_STATUSES, SEO_GOAL_SLUGS } from "@/lib/projects/constants";
+import { PROJECT_STATUSES, SEO_GOALS } from "@/lib/projects/constants";
 
 const businessHoursSchema = new Schema(
   {
@@ -8,17 +8,6 @@ const businessHoursSchema = new Schema(
     opensAt: { type: String, default: null, trim: true },
     /** Local time, e.g. `17:00` (24h). */
     closesAt: { type: String, default: null, trim: true },
-  },
-  { _id: false },
-);
-
-const marketingAccessSchema = new Schema(
-  {
-    websiteLogin: { type: String, default: null, trim: true },
-    websiteHosting: { type: String, default: null, trim: true },
-    googleAnalytics: { type: String, default: null, trim: true },
-    googleSearchConsole: { type: String, default: null, trim: true },
-    googleBusinessProfile: { type: String, default: null, trim: true },
   },
   { _id: false },
 );
@@ -48,12 +37,9 @@ const projectSchema = new Schema(
     // --- Business goals (multi-select enum) ---
     seoGoals: {
       type: [String],
-      enum: SEO_GOAL_SLUGS,
+      enum: [...SEO_GOALS],
       default: [],
     },
-
-    // --- Website & marketing access (optional free-text / URLs) ---
-    marketingAccess: { type: marketingAccessSchema, default: () => ({}) },
 
     // --- Competitors (URLs or names) ---
     competitorUrls: { type: [String], default: [] },
@@ -73,7 +59,6 @@ projectSchema.index({ status: 1, createdAt: -1 });
 projectSchema.index({ createdByUserId: 1 });
 
 export type ProjectBusinessHours = InferSchemaType<typeof businessHoursSchema>;
-export type ProjectMarketingAccess = InferSchemaType<typeof marketingAccessSchema>;
 
 export type ProjectDocument = InferSchemaType<typeof projectSchema> &
   mongoose.Document & {
@@ -88,8 +73,7 @@ export type ProjectDocument = InferSchemaType<typeof projectSchema> &
     idealCustomerProfile: string | null;
     targetLocations: string[];
     businessHours: ProjectBusinessHours | null;
-    seoGoals: (typeof SEO_GOAL_SLUGS)[number][];
-    marketingAccess: ProjectMarketingAccess;
+    seoGoals: (typeof SEO_GOALS)[number][];
     competitorUrls: string[];
     status: (typeof PROJECT_STATUSES)[number];
     createdByUserId: Types.ObjectId;
@@ -99,5 +83,14 @@ export type ProjectDocument = InferSchemaType<typeof projectSchema> &
     rejectedByUserId: Types.ObjectId | null;
   };
 
-export const Project: Model<ProjectDocument> =
-  mongoose.models.Project ?? mongoose.model<ProjectDocument>("Project", projectSchema);
+const PROJECT_MODEL_NAME = "Project";
+
+/** Next.js dev hot reload keeps the first registered schema — refresh when this module reloads. */
+if (mongoose.models[PROJECT_MODEL_NAME]) {
+  mongoose.deleteModel(PROJECT_MODEL_NAME);
+}
+
+export const Project: Model<ProjectDocument> = mongoose.model<ProjectDocument>(
+  PROJECT_MODEL_NAME,
+  projectSchema,
+);

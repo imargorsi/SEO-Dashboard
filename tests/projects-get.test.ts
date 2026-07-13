@@ -20,13 +20,13 @@ describe("GET /projects/{id} — getProjectForUser", () => {
       roles: [],
     });
 
-    const { project } = await createProject(authContextFor(user), {
-      businessName: "My Project",
-      websiteUrl: "https://mine.example.com",
-      servicesOffered: [],
-      targetLocations: [],
-      competitorUrls: [],
-    });
+    const { project } = await createProject(
+      authContextFor(user),
+      projectInput({
+        businessName: "My Project",
+        websiteUrl: "https://mine.example.com",
+      }),
+    );
 
     const found = await getProjectForUser(authContextFor(user), project._id.toString());
 
@@ -54,13 +54,13 @@ describe("GET /projects/{id} — getProjectForUser", () => {
       roles: [],
     });
 
-    const { project } = await createProject(authContextFor(owner), {
-      businessName: "Owner Project",
-      websiteUrl: "https://owner.example.com",
-      servicesOffered: [],
-      targetLocations: [],
-      competitorUrls: [],
-    });
+    const { project } = await createProject(
+      authContextFor(owner),
+      projectInput({
+        businessName: "Owner Project",
+        websiteUrl: "https://owner.example.com",
+      }),
+    );
 
     const found = await getProjectForUser(authContextFor(other), project._id.toString());
     expect(found).toBeNull();
@@ -85,13 +85,13 @@ describe("GET /projects/{id} — getProjectForUser", () => {
       roles: [SUPER_ADMIN_ROLE],
     });
 
-    const { project } = await createProject(authContextFor(owner), {
-      businessName: "Admin Visible Project",
-      websiteUrl: "https://admin-visible.example.com",
-      servicesOffered: [],
-      targetLocations: [],
-      competitorUrls: [],
-    });
+    const { project } = await createProject(
+      authContextFor(owner),
+      projectInput({
+        businessName: "Admin Visible Project",
+        websiteUrl: "https://admin-visible.example.com",
+      }),
+    );
 
     const found = await getProjectForUser(authContextFor(admin), project._id.toString());
 
@@ -125,14 +125,17 @@ describe("GET /projects/{id} — getProjectForUser", () => {
       roles: [],
     });
 
-    const { project } = await createProject(authContextFor(user), {
-      businessName: "Serialized Project",
-      websiteUrl: "https://serialized.example.com",
-      servicesOffered: ["SEO"],
-      targetLocations: ["NYC"],
-      competitorUrls: ["https://competitor.example.com"],
-      seoGoals: ["more_leads"],
-    });
+    const { project } = await createProject(
+      authContextFor(user),
+      projectInput({
+        businessName: "Serialized Project",
+        websiteUrl: "https://serialized.example.com",
+        servicesOffered: ["SEO"],
+        targetLocations: ["NYC"],
+        competitorUrls: ["https://competitor.example.com"],
+        seoGoals: ["get_more_calls"],
+      }),
+    );
 
     await Project.findByIdAndUpdate(project._id, {
       logoImage: "blob:project-logos/user/logo.png",
@@ -152,9 +155,11 @@ describe("GET /projects/{id} — getProjectForUser", () => {
       servicesOffered: ["SEO"],
       targetLocations: ["NYC"],
       competitorUrls: ["https://competitor.example.com"],
-      seoGoals: ["more_leads"],
+      seoGoals: ["get_more_calls"],
       status: "pending",
     });
-    expect(body.data.logoImage).toContain("/api/v1/storage/image?pathname=");
+    expect(body.data.logoImage).toContain("/api/v1/storage/image");
+    expect(body.data.logoImage).toContain("pathname=");
+    expect(body.data.logoImage).toContain("signature=");
   });
 });

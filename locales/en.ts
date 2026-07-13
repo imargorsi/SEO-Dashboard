@@ -192,7 +192,58 @@ export interface Translation {
           inactive: string;
         };
       };
+      seoGoals: {
+        grow_brand_awareness: string;
+        outrank_competitors: string;
+        get_more_calls: string;
+        increase_online_orders: string;
+        improve_local_visibility: string;
+      };
+      listCard: {
+        projectOwnerLabel: string;
+        projectOwnerFallback: string;
+      };
       editProjectTitle: string;
+      detail: {
+        backToProjects: string;
+        pageLead: string;
+        editProject: string;
+        loading: string;
+        notFoundTitle: string;
+        notFoundBody: string;
+        loadErrorTitle: string;
+        loadErrorBody: string;
+        website: string;
+        contactNumber: string;
+        contactEmail: string;
+        address: string;
+        sectionBusinessTitle: string;
+        sectionBusinessLead: string;
+        sectionServicesTitle: string;
+        sectionServicesLead: string;
+        sectionSeoGoalsTitle: string;
+        sectionSeoGoalsLead: string;
+        sectionIcpTitle: string;
+        sectionIcpLead: string;
+        sectionLocationsTitle: string;
+        sectionLocationsLead: string;
+        sectionCompetitorsTitle: string;
+        sectionCompetitorsLead: string;
+        sidebarSummaryTitle: string;
+        sidebarProjectId: string;
+        sidebarStatus: string;
+        timelineTitle: string;
+        timelineCreated: string;
+        timelineApproved: string;
+        timelineRejected: string;
+        timelineUpdated: string;
+        businessHours: string;
+        noValue: string;
+        noServices: string;
+        noLocations: string;
+        noSeoGoals: string;
+        noCompetitors: string;
+      };
       createLead: string;
       createForm: {
         title: string;
@@ -233,8 +284,6 @@ export interface Translation {
         opensAt: string;
         closesAt: string;
         valTime: string;
-        seoGoalsInput: string;
-        seoGoalsInputPh: string;
         sectionMarketingTitle: string;
         sectionMarketingLead: string;
         websiteLogin: string;
@@ -247,6 +296,16 @@ export interface Translation {
         googleSearchConsolePh: string;
         googleBusinessProfile: string;
         googleBusinessProfilePh: string;
+        websiteLoginShared: string;
+        websiteLoginSharedDesc: string;
+        websiteHostingShared: string;
+        websiteHostingSharedDesc: string;
+        googleAnalyticsShared: string;
+        googleAnalyticsSharedDesc: string;
+        googleSearchConsoleShared: string;
+        googleSearchConsoleSharedDesc: string;
+        googleBusinessProfileShared: string;
+        googleBusinessProfileSharedDesc: string;
         sectionCompetitorsTitle: string;
         sectionCompetitorsLead: string;
         competitorUrls: string;
@@ -728,8 +787,8 @@ const translation: Translation = {
       cardActions: {
         approve: "Approve",
         decline: "Decline",
-        active: "Active",
-        inactive: "In Active",
+        active: "Activate",
+        inactive: "Deactivate",
         pending: "Pending",
         viewDetails: "View Details",
         editProject: "Edit Project",
@@ -742,17 +801,68 @@ const translation: Translation = {
           inactive: "Project Deactivated Successfully.",
         },
       },
-      editProjectTitle: "Edit project",
+      seoGoals: {
+        grow_brand_awareness: "Grow Brand Awareness",
+        outrank_competitors: "Outrank Competitors",
+        get_more_calls: "Get More Calls",
+        increase_online_orders: "Increase Online Orders",
+        improve_local_visibility: "Improve Local Visibility",
+      },
+      listCard: {
+        projectOwnerLabel: "Project Owner",
+        projectOwnerFallback: "Project Owner",
+      },
+      editProjectTitle: "Edit Project",
+      detail: {
+        backToProjects: "Back To Projects",
+        pageLead: "Manage All Information, Integrations, And SEO Settings For This Project.",
+        editProject: "Edit Project",
+        loading: "Loading Project…",
+        notFoundTitle: "Project Not Found",
+        notFoundBody: "This Project May Have Been Removed Or You Do Not Have Access.",
+        loadErrorTitle: "Could Not Load Project",
+        loadErrorBody: "Check Your Connection And Try Again.",
+        website: "Website",
+        contactNumber: "Contact Number",
+        contactEmail: "Contact Email",
+        address: "Address",
+        sectionBusinessTitle: "Business Information",
+        sectionBusinessLead: "Core Business Details Collected During Onboarding.",
+        sectionServicesTitle: "Services Offered",
+        sectionServicesLead: "Services The Business Provides To Clients.",
+        sectionSeoGoalsTitle: "SEO Goals",
+        sectionSeoGoalsLead: "Select The Outcomes This Project Should Drive. Pick All That Apply.",
+        sectionIcpTitle: "Ideal Customer Profile",
+        sectionIcpLead: "Who The Business Wants To Reach.",
+        sectionLocationsTitle: "Target Locations",
+        sectionLocationsLead: "Geographic Areas This Project Focuses On.",
+        sectionCompetitorsTitle: "Competitors",
+        sectionCompetitorsLead: "Competitor Websites Provided For Benchmarking.",
+        sidebarSummaryTitle: "Project Summary",
+        sidebarProjectId: "Project ID",
+        sidebarStatus: "Status",
+        timelineTitle: "Timeline",
+        timelineCreated: "Created",
+        timelineApproved: "Approved",
+        timelineRejected: "Rejected",
+        timelineUpdated: "Last Updated",
+        businessHours: "Business Hours",
+        noValue: "Not Provided",
+        noServices: "No Services Listed.",
+        noLocations: "No Target Locations Listed.",
+        noSeoGoals: "No SEO Goals Selected.",
+        noCompetitors: "No Competitors Listed.",
+      },
       createLead: "Add Your Business Information To Start This Project.",
       createForm: {
         title: "Project details",
         lead: "Fill in the business basics, SEO goals, and access information for this project.",
-        editTitle: "Edit project",
+        editTitle: "Edit Project",
         editLead: "Update the project's business details, SEO goals, and access information.",
         sectionBusinessTitle: "Business basics",
         sectionBusinessLead: "Tell us what the business does and who it serves.",
-        sectionSeoTitle: "SEO goals",
-        sectionSeoLead: "Select the outcomes this project should drive.",
+        sectionSeoTitle: "SEO Goals",
+        sectionSeoLead: "Select The Outcomes This Project Should Drive. Pick All That Apply.",
         sectionGoogleTitle: "Google tools",
         sectionGoogleLead: "Which Google products are connected for this site?",
         sectionCmsTitle: "CMS access",
@@ -783,10 +893,8 @@ const translation: Translation = {
         opensAt: "Business Opens At",
         closesAt: "Business Closes At",
         valTime: "Use 24-Hour Time (HH:mm).",
-        seoGoalsInput: "SEO Goals (Comma Separated Slugs)",
-        seoGoalsInputPh: "more_leads, more_website_traffic",
         sectionMarketingTitle: "Marketing Access",
-        sectionMarketingLead: "Add Optional Access Notes For Channels.",
+        sectionMarketingLead: "Mark Which Channel Access Has Been Shared.",
         websiteLogin: "Website Login",
         websiteLoginPh: "https://portal.saudiamarketing.sa",
         websiteHosting: "Website Hosting",
@@ -797,6 +905,16 @@ const translation: Translation = {
         googleSearchConsolePh: "https://search.google.com/search-console",
         googleBusinessProfile: "Google Business Profile",
         googleBusinessProfilePh: "https://business.google.com/",
+        websiteLoginShared: "Website Login Shared",
+        websiteLoginSharedDesc: "The Client Has Shared Website Login Access.",
+        websiteHostingShared: "Website Hosting Shared",
+        websiteHostingSharedDesc: "The Client Has Shared Website Hosting Access.",
+        googleAnalyticsShared: "Google Analytics Shared",
+        googleAnalyticsSharedDesc: "The Client Has Shared Google Analytics Access.",
+        googleSearchConsoleShared: "Google Search Console Shared",
+        googleSearchConsoleSharedDesc: "The Client Has Shared Google Search Console Access.",
+        googleBusinessProfileShared: "Google Business Profile Shared",
+        googleBusinessProfileSharedDesc: "The Client Has Shared Google Business Profile Access.",
         sectionCompetitorsTitle: "Competitors",
         sectionCompetitorsLead: "Add Competitor URLs As A Comma Separated List.",
         competitorUrls: "Competitor URLs",

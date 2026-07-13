@@ -29,21 +29,21 @@ describe("GET /projects — listProjects", () => {
       roles: [],
     });
 
-    const mine = await createProject(authContextFor(user), {
-      businessName: "My Project",
-      websiteUrl: "https://mine.example.com",
-      servicesOffered: [],
-      targetLocations: [],
-      competitorUrls: [],
-    });
+    const mine = await createProject(
+      authContextFor(user),
+      projectInput({
+        businessName: "My Project",
+        websiteUrl: "https://mine.example.com",
+      }),
+    );
 
-    await createProject(authContextFor(other), {
-      businessName: "Other Project",
-      websiteUrl: "https://other.example.com",
-      servicesOffered: [],
-      targetLocations: [],
-      competitorUrls: [],
-    });
+    await createProject(
+      authContextFor(other),
+      projectInput({
+        businessName: "Other Project",
+        websiteUrl: "https://other.example.com",
+      }),
+    );
 
     const projects = await listProjects(authContextFor(user));
 
@@ -70,22 +70,22 @@ describe("GET /projects — listProjects", () => {
       roles: [],
     });
 
-    await createProject(authContextFor(user), {
-      businessName: "User Project",
-      websiteUrl: "https://user.example.com",
-      servicesOffered: [],
-      targetLocations: [],
-      competitorUrls: [],
-    });
+    await createProject(
+      authContextFor(user),
+      projectInput({
+        businessName: "User Project",
+        websiteUrl: "https://user.example.com",
+      }),
+    );
 
-    await createProject(authContextFor(admin), {
-      businessName: "Admin Project",
-      websiteUrl: "https://admin.example.com",
-      ownerUserId: user._id.toString(),
-      servicesOffered: [],
-      targetLocations: [],
-      competitorUrls: [],
-    });
+    await createProject(
+      authContextFor(admin),
+      projectInput({
+        businessName: "Admin Project",
+        websiteUrl: "https://admin.example.com",
+        ownerUserId: user._id.toString(),
+      }),
+    );
 
     const projects = await listProjects(authContextFor(admin));
 
@@ -115,13 +115,13 @@ describe("GET /projects — listProjects", () => {
       roles: [],
     });
 
-    const { project } = await createProject(authContextFor(owner), {
-      businessName: "Shared Project",
-      websiteUrl: "https://shared.example.com",
-      servicesOffered: [],
-      targetLocations: [],
-      competitorUrls: [],
-    });
+    const { project } = await createProject(
+      authContextFor(owner),
+      projectInput({
+        businessName: "Shared Project",
+        websiteUrl: "https://shared.example.com",
+      }),
+    );
 
     await assignProjectMember({
       projectId: project._id,
@@ -145,13 +145,13 @@ describe("GET /projects — listProjects", () => {
       roles: [],
     });
 
-    await createProject(authContextFor(user), {
-      businessName: "List Co",
-      websiteUrl: "https://list.example.com",
-      servicesOffered: [],
-      targetLocations: [],
-      competitorUrls: [],
-    });
+    await createProject(
+      authContextFor(user),
+      projectInput({
+        businessName: "List Co",
+        websiteUrl: "https://list.example.com",
+      }),
+    );
 
     const projects = await listProjects(authContextFor(user));
     const response = buildListProjectsResponse(projects);
@@ -186,13 +186,13 @@ describe("GET /projects — listProjects", () => {
       profileImage: "profile-images/abc/avatar.jpg",
     });
 
-    await createProject(authContextFor(user), {
-      businessName: "Photo Co",
-      websiteUrl: "https://photo.example.com",
-      servicesOffered: [],
-      targetLocations: [],
-      competitorUrls: [],
-    });
+    await createProject(
+      authContextFor(user),
+      projectInput({
+        businessName: "Photo Co",
+        websiteUrl: "https://photo.example.com",
+      }),
+    );
 
     const projects = await listProjects(authContextFor(user));
 
@@ -212,18 +212,19 @@ describe("GET /projects — listProjects", () => {
       profileImage: "blob:profile-images/abc/avatar.jpg",
     });
 
-    await createProject(authContextFor(user), {
-      businessName: "Blob Co",
-      websiteUrl: "https://blob.example.com",
-      servicesOffered: [],
-      targetLocations: [],
-      competitorUrls: [],
-    });
+    await createProject(
+      authContextFor(user),
+      projectInput({
+        businessName: "Blob Co",
+        websiteUrl: "https://blob.example.com",
+      }),
+    );
 
     const projects = await listProjects(authContextFor(user));
 
     expect(projects).toHaveLength(1);
-    expect(projects[0]!.owner?.profileImage).toContain("/api/v1/storage/image?pathname=");
+    expect(projects[0]!.owner?.profileImage).toContain("/api/v1/storage/image");
+    expect(projects[0]!.owner?.profileImage).toContain("pathname=");
     expect(projects[0]!.owner?.profileImage).toContain("signature=");
   });
 
@@ -251,14 +252,13 @@ describe("GET /projects — listProjects", () => {
       roles: [],
     });
 
-    const pending = await createProject(authContextFor(user), {
-      businessName: "Pending Co",
-      websiteUrl: "https://pending-filter.example.com",
-      servicesOffered: [],
-      targetLocations: [],
-      competitorUrls: [],
-      seoGoals: [],
-    });
+    const pending = await createProject(
+      authContextFor(user),
+      projectInput({
+        businessName: "Pending Co",
+        websiteUrl: "https://pending-filter.example.com",
+      }),
+    );
 
     const admin = await User.create({
       name: "Admin",
@@ -268,15 +268,14 @@ describe("GET /projects — listProjects", () => {
       roles: [SUPER_ADMIN_ROLE],
     });
 
-    const active = await createProject(authContextFor(admin), {
-      businessName: "Active Co",
-      websiteUrl: "https://active-filter.example.com",
-      servicesOffered: [],
-      targetLocations: [],
-      competitorUrls: [],
-      seoGoals: [],
-      ownerUserId: user._id.toString(),
-    });
+    const active = await createProject(
+      authContextFor(admin),
+      projectInput({
+        businessName: "Active Co",
+        websiteUrl: "https://active-filter.example.com",
+        ownerUserId: user._id.toString(),
+      }),
+    );
 
     await Project.findByIdAndUpdate(active.project._id, { status: "inactive" });
 

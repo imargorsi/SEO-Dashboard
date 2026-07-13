@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { SEO_GOAL_SLUGS } from "@/lib/projects/constants";
+import { SEO_GOALS } from "@/lib/projects/constants";
 
 const optionalText = z.string().trim().max(2000).optional().nullable();
 const optionalShortText = z.string().trim().max(255).optional().nullable();
@@ -20,17 +20,6 @@ const businessHoursSchema = z
   .optional()
   .nullable();
 
-const marketingAccessSchema = z
-  .object({
-    websiteLogin: optionalText,
-    websiteHosting: optionalText,
-    googleAnalytics: optionalText,
-    googleSearchConsole: optionalText,
-    googleBusinessProfile: optionalText,
-  })
-  .optional()
-  .nullable();
-
 const stringListSchema = z.array(z.string().trim().min(1).max(255)).optional().default([]);
 
 /** POST /api/v1/projects — request body. */
@@ -44,8 +33,7 @@ export const createProjectSchema = z.object({
   idealCustomerProfile: optionalText,
   targetLocations: stringListSchema,
   businessHours: businessHoursSchema,
-  seoGoals: z.array(z.enum(SEO_GOAL_SLUGS)).optional().default([]),
-  marketingAccess: marketingAccessSchema,
+  seoGoals: z.array(z.enum(SEO_GOALS)).optional().default([]),
   competitorUrls: z.array(z.string().trim().min(1).max(2048)).optional().default([]),
   /** `super_admin` only — regular users must omit this. */
   ownerUserId: z.string().trim().min(1).optional(),

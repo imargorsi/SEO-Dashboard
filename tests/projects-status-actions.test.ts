@@ -95,11 +95,20 @@ describe("Project status actions — admin transitions", () => {
       roles: [SUPER_ADMIN_ROLE],
     });
 
+    const owner = await User.create({
+      name: "Owner",
+      email: "owner-deactivate@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+    });
+
     const { project } = await createProject(
       authContextFor(admin),
       projectInput({
         businessName: "Active Co",
         websiteUrl: "https://active.example.com",
+        ownerUserId: owner._id.toString(),
       }),
     );
 
@@ -118,11 +127,20 @@ describe("Project status actions — admin transitions", () => {
       roles: [SUPER_ADMIN_ROLE],
     });
 
+    const owner = await User.create({
+      name: "Owner",
+      email: "owner-activate@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+    });
+
     const { project } = await createProject(
       authContextFor(admin),
       projectInput({
         businessName: "Inactive Co",
         websiteUrl: "https://inactive.example.com",
+        ownerUserId: owner._id.toString(),
       }),
     );
 

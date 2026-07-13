@@ -40,3 +40,23 @@ export const createProjectSchema = z.object({
 });
 
 export type CreateProjectInput = z.infer<typeof createProjectSchema>;
+
+const updateStringListSchema = z.array(z.string().trim().min(1).max(255)).nullable().optional();
+
+/** PATCH /api/v1/projects/{id} — partial body (business name, owner, and POC email are locked). */
+export const updateProjectSchema = z.object({
+  websiteUrl: z.string().trim().min(1, "Website URL is required.").max(2048).optional(),
+  businessAddress: optionalText,
+  pocContactNumber: optionalShortText,
+  servicesOffered: updateStringListSchema,
+  primaryServiceToPromote: optionalShortText,
+  idealCustomerProfile: optionalText,
+  targetLocations: updateStringListSchema,
+  businessHours: businessHoursSchema,
+  seoGoals: z.array(z.enum(SEO_GOALS)).nullable().optional(),
+  competitorUrls: z.array(z.string().trim().min(1).max(2048)).nullable().optional(),
+});
+
+export type UpdateProjectInput = z.infer<typeof updateProjectSchema>;
+
+export const LOCKED_PROJECT_UPDATE_FIELDS = ["businessName", "pocEmail", "ownerUserId"] as const;

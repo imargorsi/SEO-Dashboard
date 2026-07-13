@@ -9,24 +9,18 @@ import { ProjectDetailHeader } from "@/components/projects/detail/project-detail
 import { ProjectDetailHero } from "@/components/projects/detail/project-detail-hero";
 import { ProjectDetailMainContent } from "@/components/projects/detail/project-detail-main-content";
 import { ProjectDetailSidebar } from "@/components/projects/detail/project-detail-sidebar";
-import { Heading } from "@/components/heading";
-import { Paragraph } from "@/components/paragraph";
 import { LoadingState } from "@/components/ui/loading-state";
+import { StateCard } from "@/components/ui/state-card";
 import { useProjectAccess } from "@/context/project-access-context";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
 import { useProjectQuery } from "@/features/projects/projects.api";
 import { ApiError } from "@/lib/frontend/api/errors";
-import {
-  elevatedCardMutedClass,
-  elevatedCardSurfaceClass,
-  elevatedCardTitleClass,
-} from "@/lib/frontend/layout/dashboard-chrome";
+import { resolveProjectOwnerId } from "@/lib/projects/project-owner-id.utils";
 import {
   canEditProjectCard,
   canViewProjectCard,
 } from "@/lib/projects/project-card-access.utils";
 import { isSuperAdmin, mergePermissions } from "@/lib/rbac/access";
-import { cn } from "@/lib/utils";
 
 export function ProjectDetailSection() {
   const params = useParams<{ id: string }>();
@@ -42,18 +36,13 @@ export function ProjectDetailSection() {
   const permissions = mergePermissions(user?.permissions ?? [], projectPermissions);
   const userIsSuperAdmin = isSuperAdmin(user?.roles);
 
-  const listOwner = useMemo(() => {
-    if (!project) return null;
-    return {
-      id: project.createdByUserId,
-    };
-  }, [project]);
+  const projectOwnerId = project ? resolveProjectOwnerId(project) : null;
 
   const canView = project
     ? canViewProjectCard({
         permissions,
         userId: user?.id,
-        ownerId: listOwner?.id,
+        ownerId: projectOwnerId,
         isSuperAdmin: userIsSuperAdmin,
       })
     : true;
@@ -62,7 +51,7 @@ export function ProjectDetailSection() {
     ? canEditProjectCard({
         permissions,
         userId: user?.id,
-        ownerId: listOwner?.id,
+        ownerId: projectOwnerId,
         isSuperAdmin: userIsSuperAdmin,
       })
     : false;
@@ -132,17 +121,6 @@ export function ProjectDetailSection() {
           <ProjectDetailSidebar project={project} />
         </div>
       </div>
-    </div>
-  );
-}
-
-function StateCard({ title, body }: { title: string; body: string }) {
-  return (
-    <div className={cn(elevatedCardSurfaceClass, "rounded-3xl px-6 py-10 text-center")}>
-      <Heading sectionTitle className={elevatedCardTitleClass}>
-        {title}
-      </Heading>
-      <Paragraph className={cn("mt-2", elevatedCardMutedClass)}>{body}</Paragraph>
     </div>
   );
 }

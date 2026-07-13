@@ -1,51 +1,31 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-import { useCreateProjectMutation, type TCreateProjectPayload } from "@/features/projects/projects.api";
+import type { TUseProjectFormOptions } from "@/components/forms/project-form.types";
+import type { TProjectCreateFormValues } from "@/components/forms/project-create-form.types";
+import { useProjectOwnerOptions } from "@/components/forms/hooks/use-project-owner-options.hook";
+import {
+  useCreateProjectMutation,
+  useUpdateProjectMutation,
+} from "@/features/projects/projects.api";
 import type { AuthUser } from "@/lib/frontend/auth/types";
 import { ApiError } from "@/lib/frontend/api/errors";
 import { notify } from "@/lib/frontend/feedback/notify";
-import type { TProjectCreateFormValues } from "@/components/forms/project-create-form.types";
+import { EMPTY_PROJECT_FORM_VALUES } from "@/lib/frontend/projects/map-project-to-form-values.utils";
+import { PROJECT_ROUTES } from "@/lib/frontend/projects/project-routes.utils";
+import {
+  toCreateProjectPayload,
+  toUpdateProjectPayload,
+} from "@/lib/frontend/projects/project-form-payload.utils";
+import { isSuperAdmin } from "@/lib/rbac/access";
 
 type UseProjectCreateFormResult = ReturnType<typeof useProjectCreateForm>;
 
-function splitCommaSeparated(value: string): string[] {
-  return value
-    .split(",")
-    .map((item) => item.trim())
-    .filter(Boolean);
-}
-
-function optionalText(value: string): string | null {
-  const trimmed = value.trim();
-  return trimmed ? trimmed : null;
-}
-
-function toCreatePayload(values: TProjectCreateFormValues, isAdmin: boolean): TCreateProjectPayload {
-  const opensAt = optionalText(values.opensAt);
-  const closesAt = optionalText(values.closesAt);
-
-  return {
-    ...(isAdmin ? { ownerUserId: optionalText(values.ownerUserId) ?? undefined } : {}),
-    businessName: values.businessName.trim(),
-    websiteUrl: values.websiteUrl.trim(),
-    businessAddress: optionalText(values.businessAddress),
-    pocContactNumber: optionalText(values.pocContactNumber),
-    servicesOffered: splitCommaSeparated(values.servicesOffered),
-    primaryServiceToPromote: optionalText(values.primaryServiceToPromote),
-    idealCustomerProfile: optionalText(values.idealCustomerProfile),
-    targetLocations: splitCommaSeparated(values.targetLocations),
-    businessHours: opensAt || closesAt ? { opensAt, closesAt } : null,
-    seoGoals: values.seoGoals,
-    competitorUrls: splitCommaSeparated(values.competitorUrls),
-  };
-}
-
-function fieldStepIndex(isAdmin: boolean): Record<keyof TProjectCreateFormValues, number> {
+function fieldStepIndex(): Record<keyof TProjectCreateFormValues, number> {
   return {
     ownerUserId: 0,
     businessName: 0,
@@ -63,10 +43,10 @@ function fieldStepIndex(isAdmin: boolean): Record<keyof TProjectCreateFormValues
   };
 }
 
-function stepFields(isAdmin: boolean): Array<Array<keyof TProjectCreateFormValues>> {
+function stepFields(isAdmin: boolean, isEdit: boolean): Array<Array<keyof TProjectCreateFormValues>> {
   return [
     [
-      ...(isAdmin ? (["ownerUserId"] as const) : []),
+      ...(isAdmin && !isEdit ? (["ownerUserId"] as const) : []),
       "businessName",
       "websiteUrl",
       "businessAddress",
@@ -79,33 +59,29 @@ function stepFields(isAdmin: boolean): Array<Array<keyof TProjectCreateFormValue
   ];
 }
 
-export function useProjectCreateForm(authUser: AuthUser) {
+export function useProjectCreateForm(authUser: AuthUser, options: TUseProjectFormOptions = {}) {
+  const {
+    isEdit = false,
+    projectId,
+    initialValues,
+    initialLogoUrl = null,
+    readOnlyContactEmail = null,
+  } = options;
+
   const router = useRouter();
   const { t } = useTranslation("translation", { keyPrefix: "modules.projects.createForm" });
   const createMutation = useCreateProjectMutation();
+  const updateMutation = useUpdateProjectMutation();
   const [currentStep, setCurrentStep] = useState(0);
   const logoFileRef = useRef<File | null>(null);
-  const [logoPreviewUrl, setLogoPreviewUrl] = useState<string | null>(null);
-  const isAdmin = authUser.roles.includes("super_admin");
-  const steps = useMemo(() => stepFields(isAdmin), [isAdmin]);
-  const indexMap = useMemo(() => fieldStepIndex(isAdmin), [isAdmin]);
+  const [logoPreviewUrl, setLogoPreviewUrl] = useState<string | null>(initialLogoUrl);
+  const isAdmin = isSuperAdmin(authUser.roles);
+  const ownerOptionsQuery = useProjectOwnerOptions(isAdmin && !isEdit);
+  const steps = useMemo(() => stepFields(isAdmin, isEdit), [isAdmin, isEdit]);
+  const indexMap = useMemo(() => fieldStepIndex(), []);
 
   const form = useForm<TProjectCreateFormValues>({
-    defaultValues: {
-      ownerUserId: "6a451c72711bf69f27e57cd5",
-      businessName: "",
-      websiteUrl: "",
-      businessAddress: "",
-      pocContactNumber: "",
-      servicesOffered: "",
-      primaryServiceToPromote: "",
-      idealCustomerProfile: "",
-      targetLocations: "",
-      opensAt: "",
-      closesAt: "",
-      seoGoals: [],
-      competitorUrls: "",
-    },
+    defaultValues: initialValues ?? EMPTY_PROJECT_FORM_VALUES,
     mode: "onSubmit",
   });
 
@@ -117,12 +93,23 @@ export function useProjectCreateForm(authUser: AuthUser) {
     setFocus,
     watch,
     setValue,
+    reset,
     formState: { errors },
   } = form;
 
-  const isSubmitting = createMutation.isPending;
+  useEffect(() => {
+    if (!initialValues) return;
+    reset(initialValues);
+  }, [initialValues, reset]);
+
+  useEffect(() => {
+    setLogoPreviewUrl(initialLogoUrl);
+  }, [initialLogoUrl]);
+
+  const isSubmitting = isEdit ? updateMutation.isPending : createMutation.isPending;
   const isLastStep = currentStep === steps.length - 1;
   const selectedSeoGoals = watch("seoGoals");
+  const contactEmail = readOnlyContactEmail ?? authUser.email;
 
   function toggleSeoGoal(goal: TProjectCreateFormValues["seoGoals"][number]) {
     const current = watch("seoGoals");
@@ -169,7 +156,7 @@ export function useProjectCreateForm(authUser: AuthUser) {
   }
 
   function onLogoPicked(file: File) {
-    if (logoPreviewUrl) URL.revokeObjectURL(logoPreviewUrl);
+    if (logoPreviewUrl?.startsWith("blob:")) URL.revokeObjectURL(logoPreviewUrl);
     logoFileRef.current = file;
     setLogoPreviewUrl(URL.createObjectURL(file));
   }
@@ -188,12 +175,28 @@ export function useProjectCreateForm(authUser: AuthUser) {
     }
 
     try {
+      if (isEdit) {
+        if (!projectId) {
+          notify.error(t("editErrorFallback"));
+          return;
+        }
+
+        await updateMutation.mutateAsync({
+          projectId,
+          payload: toUpdateProjectPayload(values),
+          companyLogoFile: logoFileRef.current,
+        });
+        notify.success(t("editSuccessFallback"));
+        router.push(PROJECT_ROUTES.view(projectId));
+        return;
+      }
+
       await createMutation.mutateAsync({
-        payload: toCreatePayload(values, isAdmin),
+        payload: toCreateProjectPayload(values, isAdmin),
         companyLogoFile: logoFileRef.current,
       });
       notify.success(t("successFallback"));
-      router.push("/projects");
+      router.push(PROJECT_ROUTES.list);
     } catch (error) {
       if (error instanceof ApiError) {
         const fieldMap: Partial<Record<keyof TProjectCreateFormValues, string | undefined>> = {
@@ -211,11 +214,11 @@ export function useProjectCreateForm(authUser: AuthUser) {
         });
 
         jumpToServerErrorStep(error);
-        notify.error(ApiError.messageFrom(error, t("errorFallback")));
+        notify.error(ApiError.messageFrom(error, isEdit ? t("editErrorFallback") : t("errorFallback")));
         return;
       }
 
-      notify.error(t("errorFallback"));
+      notify.error(isEdit ? t("editErrorFallback") : t("errorFallback"));
     }
   }
 
@@ -226,6 +229,7 @@ export function useProjectCreateForm(authUser: AuthUser) {
     setCurrentStep,
     steps,
     isAdmin,
+    isEdit,
     isSubmitting,
     isLastStep,
     onSubmit: handleSubmit(onSubmit),
@@ -236,6 +240,12 @@ export function useProjectCreateForm(authUser: AuthUser) {
     businessName: form.watch("businessName"),
     selectedSeoGoals,
     toggleSeoGoal,
+    contactEmail,
+    projectId,
+    ownerOptions: ownerOptionsQuery.options,
+    isOwnerOptionsPending: ownerOptionsQuery.isPending,
+    isOwnerOptionsError: ownerOptionsQuery.isError,
+    isOwnerOptionsEmpty: ownerOptionsQuery.isEmpty,
   };
 }
 

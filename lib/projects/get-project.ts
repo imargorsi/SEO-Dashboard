@@ -3,7 +3,8 @@ import { NextResponse } from "next/server";
 
 import { ApiResponse } from "@/lib/api/response";
 import type { AuthContext } from "@/lib/auth/guards";
-import { serializeProject } from "@/lib/serializers/project";
+import { serializeProject, type ProjectDetailDto } from "@/lib/serializers/project";
+import { resolveOwnerMap } from "@/lib/projects/resolve-project-owner.utils";
 import { SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
 import { Project, ProjectMember, type ProjectDocument } from "@/models";
 
@@ -33,6 +34,19 @@ export async function getProjectForUser(
   return Project.findById(projectId);
 }
 
-export function buildGetProjectResponse(project: ProjectDocument): NextResponse {
-  return ApiResponse.success(serializeProject(project));
+export async function getProjectDetailForUser(
+  auth: AuthContext,
+  projectId: string,
+): Promise<ProjectDetailDto | null> {
+  const project = await getProjectForUser(auth, projectId);
+  if (!project) {
+    return null;
+  }
+
+  const ownerMap = await resolveOwnerMap([project]);
+  return serializeProject(project, ownerMap.get(project._id.toString()));
+}
+
+export function buildGetProjectResponse(project: ProjectDetailDto): NextResponse {
+  return ApiResponse.success(project);
 }

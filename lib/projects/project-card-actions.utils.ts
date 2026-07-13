@@ -1,4 +1,5 @@
 import type { ProjectStatus } from "@/lib/projects/constants";
+import { PROJECT_ROUTES } from "@/lib/frontend/projects/project-routes.utils";
 
 export type TProjectStatusAction = "approve" | "reject" | "activate" | "deactivate";
 
@@ -40,7 +41,7 @@ export function buildProjectCardActions({
   canEditProject,
 }: TBuildProjectCardActionsInput): TProjectCardActionConfig[] {
   const statusActions = buildStatusActions(status, isSuperAdmin);
-  const generalActions = buildGeneralActions(projectId, canViewDetails, canEditProject);
+  const generalActions = buildGeneralActions(projectId, status, canViewDetails, canEditProject);
 
   return [...statusActions, ...generalActions];
 }
@@ -84,6 +85,7 @@ function buildStatusActions(status: ProjectStatus, isSuperAdmin: boolean): TProj
 
 function buildGeneralActions(
   projectId: string,
+  status: ProjectStatus,
   canViewDetails: boolean,
   canEditProject: boolean,
 ): TProjectCardActionConfig[] {
@@ -95,17 +97,17 @@ function buildGeneralActions(
       group: "general",
       tone: "brand",
       labelKey: "viewDetails",
-      href: `/projects/${projectId}`,
+      href: PROJECT_ROUTES.view(projectId),
     });
   }
 
-  if (canEditProject) {
+  if (canEditProject && status !== "rejected") {
     actions.push({
       id: "edit",
       group: "general",
       tone: "default",
       labelKey: "editProject",
-      href: `/projects/${projectId}/edit`,
+      href: PROJECT_ROUTES.edit(projectId),
     });
   }
 

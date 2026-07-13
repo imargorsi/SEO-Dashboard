@@ -261,7 +261,9 @@ export interface Translation {
         businessName: string;
         businessNamePh: string;
         ownerUserId: string;
-        ownerUserIdPh: string;
+        ownerUserPlaceholder: string;
+        ownerUserLoadError: string;
+        ownerUserEmpty: string;
         websiteUrl: string;
         websiteUrlPh: string;
         businessAddress: string;
@@ -371,6 +373,11 @@ export interface Translation {
         valTargetLocations: string;
         valSeoGoals: string;
         backToList: string;
+        backToProject: string;
+        editForbiddenTitle: string;
+        editForbiddenBody: string;
+        editNotAllowedTitle: string;
+        editNotAllowedBody: string;
         remove: string;
       };
       table: {
@@ -858,7 +865,7 @@ const translation: Translation = {
         title: "Project details",
         lead: "Fill in the business basics, SEO goals, and access information for this project.",
         editTitle: "Edit Project",
-        editLead: "Update the project's business details, SEO goals, and access information.",
+        editLead: "Update The Project's Business Details, SEO Goals, And Access Information.",
         sectionBusinessTitle: "Business basics",
         sectionBusinessLead: "Tell us what the business does and who it serves.",
         sectionSeoTitle: "SEO Goals",
@@ -869,8 +876,10 @@ const translation: Translation = {
         sectionCmsLead: "Optional login details so we can deploy SEO changes.",
         businessName: "Business name",
         businessNamePh: "Saudia Marketing",
-        ownerUserId: "Owner User ID",
-        ownerUserIdPh: "6a451c72711bf69f27e57cd5",
+        ownerUserId: "Project Owner",
+        ownerUserPlaceholder: "Select A Project Owner",
+        ownerUserLoadError: "Could Not Load Users. Try Again.",
+        ownerUserEmpty: "No Verified Users Available To Assign.",
         websiteUrl: "Website URL",
         websiteUrlPh: "https://www.saudiamarketing.sa",
         businessAddress: "Business Address",
@@ -960,16 +969,16 @@ const translation: Translation = {
         cmsPasswordEditHelp: "Only enter a value if you want to change the saved password.",
         submit: "Create project",
         submitting: "Creating…",
-        editSubmit: "Save changes",
+        editSubmit: "Save Changes",
         editSubmitting: "Saving…",
-        successTitle: "Project saved",
-        successFallback: "The project was created.",
-        editSuccessTitle: "Project updated",
-        editSuccessFallback: "The project was updated.",
-        errorTitle: "Could not create project",
-        errorFallback: "Something went wrong. Try again.",
-        editErrorTitle: "Could not update project",
-        editErrorFallback: "Something went wrong. Try again.",
+        successTitle: "Project Saved",
+        successFallback: "The Project Was Created.",
+        editSuccessTitle: "Project Updated",
+        editSuccessFallback: "The Project Was Updated.",
+        errorTitle: "Could Not Create Project",
+        errorFallback: "Something Went Wrong. Try Again.",
+        editErrorTitle: "Could Not Update Project",
+        editErrorFallback: "Something Went Wrong. Try Again.",
         missingProjectAccess:
           "You are not a member of any project yet. Complete onboarding or ask a project owner to invite you.",
         nextStep: "Next Step",
@@ -981,6 +990,11 @@ const translation: Translation = {
         valTargetLocations: "Add at least one location.",
         valSeoGoals: "Select at least one SEO goal.",
         backToList: "Back to projects",
+        backToProject: "Back To Project",
+        editForbiddenTitle: "You Cannot Edit This Project",
+        editForbiddenBody: "You Do Not Have Permission To Edit This Project.",
+        editNotAllowedTitle: "Project Cannot Be Edited",
+        editNotAllowedBody: "Rejected Projects Cannot Be Updated.",
         remove: "Remove",
       },
       table: {

@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import { hashPassword } from "@/lib/auth/password";
 import { createProject } from "@/lib/projects/create-project";
-import { buildGetProjectResponse, getProjectForUser } from "@/lib/projects/get-project";
+import { buildGetProjectResponse, getProjectDetailForUser, getProjectForUser } from "@/lib/projects/get-project";
+import { serializeProject } from "@/lib/serializers/project";
 import { SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
 import { seedSystemRoles } from "@/lib/rbac/seed-roles";
 import { Project, User } from "@/models";
@@ -114,6 +115,35 @@ describe("GET /projects/{id} — getProjectForUser", () => {
     expect(found).toBeNull();
   });
 
+  it("includes the project owner on detail responses", async () => {
+    await seedSystemRoles();
+
+    const user = await User.create({
+      name: "Owner Detail",
+      email: "owner-detail@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+    });
+
+    const { project } = await createProject(
+      authContextFor(user),
+      projectInput({
+        businessName: "Owned Detail Project",
+        websiteUrl: "https://owned-detail.example.com",
+      }),
+    );
+
+    const detail = await getProjectDetailForUser(authContextFor(user), project._id.toString());
+
+    expect(detail).not.toBeNull();
+    expect(detail!.owner).toMatchObject({
+      id: user._id.toString(),
+      name: "Owner Detail",
+    });
+    expect(detail!.createdByUserId).toBe(user._id.toString());
+  });
+
   it("serializes the full project shape", async () => {
     await seedSystemRoles();
 
@@ -144,7 +174,7 @@ describe("GET /projects/{id} — getProjectForUser", () => {
     const fresh = await Project.findById(project._id);
     expect(fresh).not.toBeNull();
 
-    const response = buildGetProjectResponse(fresh!);
+    const response = buildGetProjectResponse(serializeProject(fresh!));
     const body = await response.json();
 
     expect(body.success).toBe(true);
@@ -159,6 +189,7 @@ describe("GET /projects/{id} — getProjectForUser", () => {
       status: "pending",
     });
     expect(body.data.logoImage).toContain("/api/v1/storage/image");
+    expect(body.data.owner).toBeNull();
     expect(body.data.logoImage).toContain("pathname=");
     expect(body.data.logoImage).toContain("signature=");
   });

@@ -7,6 +7,7 @@ import { IoFolderOpenOutline, IoMailOutline } from "react-icons/io5";
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { PROJECT_ROUTES } from "@/lib/frontend/projects/project-routes.utils";
 import { cn } from "@/lib/utils";
 
 export type NoProjectComponentVariant = "no-projects" | "email-not-verified";
@@ -64,7 +65,7 @@ export function NoProjectComponent({
           </Button>
         ) : (
           <Link
-            href="/projects/new"
+            href={PROJECT_ROUTES.create}
             className={cn(buttonVariants({ size: "md", variant: "gradient" }), "mt-8")}
           >
             {t("table.createProject")}

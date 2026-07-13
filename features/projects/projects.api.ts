@@ -5,19 +5,14 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { baseQuery } from "@/lib/frontend/api/base";
 import type { ProjectStatus, TSeoGoal } from "@/lib/projects/constants";
 import type { TProjectStatusAction } from "@/lib/projects/project-card-actions.utils";
+import type { TProjectDetail, TProjectListItem } from "@/types/project.types";
 
-export type TProjectListItem = {
-  id: string;
-  businessName: string;
-  websiteUrl: string;
-  status: ProjectStatus;
-  imageUrl: string | null;
-  owner: {
-    id: string;
-    name: string;
-    profileImage: string | null;
-  } | null;
-};
+export type {
+  TProjectBusinessHours,
+  TProjectDetail,
+  TProjectListItem,
+  TProjectOwnerSummary,
+} from "@/types/project.types";
 
 const projectsApi = {
   reducerPath: "projects-api" as const,
@@ -27,36 +22,6 @@ const projectKeys = {
   all: [projectsApi.reducerPath] as const,
   list: (status?: ProjectStatus | null) => [...projectKeys.all, "list", status ?? "all"] as const,
   detail: (projectId: string) => [...projectKeys.all, "detail", projectId] as const,
-};
-
-export type TProjectBusinessHours = {
-  opensAt: string | null;
-  closesAt: string | null;
-} | null;
-
-export type TProjectDetail = {
-  id: string;
-  businessName: string;
-  websiteUrl: string;
-  businessAddress: string | null;
-  logoImage: string | null;
-  pocContactNumber: string | null;
-  pocEmail: string | null;
-  servicesOffered: string[];
-  primaryServiceToPromote: string | null;
-  idealCustomerProfile: string | null;
-  targetLocations: string[];
-  businessHours: TProjectBusinessHours;
-  seoGoals: TSeoGoal[];
-  competitorUrls: string[];
-  status: ProjectStatus;
-  createdByUserId: string;
-  approvedAt: string | null;
-  approvedByUserId: string | null;
-  rejectedAt: string | null;
-  rejectedByUserId: string | null;
-  createdAt: string;
-  updatedAt: string;
 };
 
 type ProjectsListEnvelope = {
@@ -92,6 +57,28 @@ export type TCreateProjectPayload = {
   seoGoals?: TSeoGoal[];
   competitorUrls?: string[];
   ownerUserId?: string;
+};
+
+export type TUpdateProjectPayload = {
+  websiteUrl: string;
+  businessAddress?: string | null;
+  pocContactNumber?: string | null;
+  servicesOffered?: string[];
+  primaryServiceToPromote?: string | null;
+  idealCustomerProfile?: string | null;
+  targetLocations?: string[];
+  businessHours?: {
+    opensAt?: string | null;
+    closesAt?: string | null;
+  } | null;
+  seoGoals?: TSeoGoal[];
+  competitorUrls?: string[];
+};
+
+export type TUpdateProjectMutationInput = {
+  projectId: string;
+  payload: TUpdateProjectPayload;
+  companyLogoFile?: File | null;
 };
 
 async function fetchProjects(status?: ProjectStatus | null): Promise<TProjectListItem[]> {
@@ -148,6 +135,27 @@ export function useCreateProjectMutation() {
     },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: projectKeys.all });
+    },
+  });
+}
+
+export function useUpdateProjectMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ projectId, payload, companyLogoFile }: TUpdateProjectMutationInput) => {
+      const formData = new FormData();
+      formData.append("data", JSON.stringify(payload));
+      if (companyLogoFile) {
+        formData.append("company_logo", companyLogoFile);
+      }
+
+      const envelope = await baseQuery.patch<TProjectDetail>(`projects/${projectId}`, formData);
+      return envelope.data;
+    },
+    onSuccess: (_data, variables) => {
+      void queryClient.invalidateQueries({ queryKey: projectKeys.all });
+      void queryClient.invalidateQueries({ queryKey: projectKeys.detail(variables.projectId) });
     },
   });
 }

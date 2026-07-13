@@ -9,34 +9,8 @@ import { serializeProject } from "@/lib/serializers/project";
 import { PROJECT_OWNER_ROLE, SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
 import { seedSystemRoles } from "@/lib/rbac/seed-roles";
 import { Project, User, type ProjectDocument } from "@/models";
+import { mapCreateProjectFields } from "@/lib/projects/project-field-map.utils";
 import type { CreateProjectInput } from "@/schemas/project";
-
-function emptyToNull(value: string | null | undefined): string | null {
-  if (value == null) return null;
-  const trimmed = value.trim();
-  return trimmed === "" ? null : trimmed;
-}
-
-function mapOnboardingFields(input: CreateProjectInput) {
-  return {
-    businessName: input.businessName.trim(),
-    websiteUrl: input.websiteUrl.trim(),
-    businessAddress: emptyToNull(input.businessAddress),
-    pocContactNumber: emptyToNull(input.pocContactNumber),
-    servicesOffered: input.servicesOffered ?? [],
-    primaryServiceToPromote: emptyToNull(input.primaryServiceToPromote),
-    idealCustomerProfile: emptyToNull(input.idealCustomerProfile),
-    targetLocations: input.targetLocations ?? [],
-    businessHours: input.businessHours
-      ? {
-          opensAt: emptyToNull(input.businessHours.opensAt),
-          closesAt: emptyToNull(input.businessHours.closesAt),
-        }
-      : null,
-    seoGoals: input.seoGoals ?? [],
-    competitorUrls: input.competitorUrls ?? [],
-  };
-}
 
 type CreateActors = {
   ownerUserId: mongoose.Types.ObjectId;
@@ -99,14 +73,14 @@ export async function createProject(
 
   const isAdmin = auth.user.roles.includes(SUPER_ADMIN_ROLE);
   const { ownerUserId, pocEmail } = await resolveCreateActors(auth, input);
-  const onboarding = mapOnboardingFields(input);
+  const onboarding = mapCreateProjectFields(input);
 
   const project = await Project.create({
     ...onboarding,
     logoImage: options?.logoImage ?? null,
     pocEmail,
     status: isAdmin ? "active" : "pending",
-    createdByUserId: auth.user._id,
+    createdByUserId: ownerUserId,
     approvedAt: isAdmin ? new Date() : null,
     approvedByUserId: isAdmin ? auth.user._id : null,
   });
@@ -121,5 +95,5 @@ export async function createProject(
 }
 
 export function buildCreateProjectResponse(project: ProjectDocument): NextResponse {
-  return ApiResponse.success(serializeProject(project), "Project created successfully.", 201);
+  return ApiResponse.success(serializeProject(project), "Project Created Successfully.", 201);
 }

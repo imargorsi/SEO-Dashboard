@@ -13,6 +13,11 @@ const PENDING_PROJECT_ACCESS_PERMISSIONS = [
   projectPermission("projects", "update"),
 ] as const;
 
+const INACTIVE_PROJECT_ACCESS_PERMISSIONS = [
+  projectPermission("projects", "view"),
+  projectPermission("projects", "update"),
+] as const;
+
 export async function loadEffectiveUserAuthData(user: UserDocument): Promise<EffectiveAuthData> {
   const platformRoles = user.roles ?? [];
   const platformPermissions = permissionsForRoles(platformRoles);
@@ -40,17 +45,25 @@ export async function loadEffectiveUserAuthData(user: UserDocument): Promise<Eff
   const pendingProjectIds = new Set(
     memberProjects.filter((project) => project.status === "pending").map((project) => project._id.toString()),
   );
+  const inactiveProjectIds = new Set(
+    memberProjects.filter((project) => project.status === "inactive").map((project) => project._id.toString()),
+  );
 
   const activeRoleIds = memberships
     .filter((membership) => activeProjectIds.has(membership.projectId.toString()))
     .map((membership) => membership.roleId);
 
   const pendingAccessPermissions = pendingProjectIds.size > 0 ? [...PENDING_PROJECT_ACCESS_PERMISSIONS] : [];
+  const inactiveAccessPermissions =
+    inactiveProjectIds.size > 0 ? [...INACTIVE_PROJECT_ACCESS_PERMISSIONS] : [];
+  const nonActiveProjectAccessPermissions = [
+    ...new Set([...pendingAccessPermissions, ...inactiveAccessPermissions]),
+  ];
 
   if (activeRoleIds.length === 0) {
     return {
       roles: [...new Set(platformRoles)].sort(),
-      permissions: [...new Set([...platformPermissions, ...pendingAccessPermissions])].sort(),
+      permissions: [...new Set([...platformPermissions, ...nonActiveProjectAccessPermissions])].sort(),
     };
   }
 
@@ -62,7 +75,7 @@ export async function loadEffectiveUserAuthData(user: UserDocument): Promise<Eff
   const effectiveRoles = [...new Set([...platformRoles, ...projectRoles.map((role) => role.slug)])].sort();
   const projectPermissions = projectRoles.flatMap((role) => role.permissions);
   const effectivePermissions = [
-    ...new Set([...platformPermissions, ...projectPermissions, ...pendingAccessPermissions]),
+    ...new Set([...platformPermissions, ...projectPermissions, ...nonActiveProjectAccessPermissions]),
   ].sort();
 
   return {

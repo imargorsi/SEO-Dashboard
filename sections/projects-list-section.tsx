@@ -22,11 +22,13 @@ import {
   parseProjectStatusFilter,
 } from "@/lib/projects/project-status-filter.utils";
 import type { ProjectStatus } from "@/lib/projects/constants";
+import { resolveProjectOwnerId } from "@/lib/projects/project-owner-id.utils";
 import {
   canEditProjectCard,
   canViewProjectCard,
 } from "@/lib/projects/project-card-access.utils";
 import { hasPermission, isSuperAdmin, mergePermissions } from "@/lib/rbac/access";
+import { PROJECT_ROUTES } from "@/lib/frontend/projects/project-routes.utils";
 import { elevatedCardSurfaceClass, elevatedCardMutedClass, elevatedCardTitleClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
@@ -60,7 +62,7 @@ export function ProjectsListSection() {
     const accessInput = {
       permissions,
       userId: user?.id,
-      ownerId: project.owner?.id,
+      ownerId: resolveProjectOwnerId(project),
       isSuperAdmin: userIsSuperAdmin,
     };
 
@@ -111,7 +113,7 @@ export function ProjectsListSection() {
 
             {canCreateProject && hasProjects ? (
               <Link
-                href="/projects/new"
+                href={PROJECT_ROUTES.create}
                 className={cn(buttonVariants({ size: "md", variant: "gradient" }))}
               >
                 {t("table.createProject")}

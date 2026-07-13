@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { Input } from "@/components/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ImageUploadAvatar } from "@/components/ui/image-upload-avatar";
-import type { AuthUser } from "@/lib/frontend/auth/types";
 import type { TUseProjectCreateFormResult } from "@/components/forms/hooks/use-project-create-form.hook";
 import { SEO_GOALS } from "@/lib/projects/constants";
 import { SEO_GOAL_ICONS } from "@/lib/frontend/projects/seo-goal-icons";
@@ -13,10 +12,9 @@ import { cn } from "@/lib/utils";
 
 type StepProps = {
   hook: TUseProjectCreateFormResult;
-  authUser: AuthUser;
 };
 
-export function ProjectCreateStepContent({ hook, authUser }: StepProps) {
+export function ProjectCreateStepContent({ hook }: StepProps) {
   const { t: tSeoGoals } = useTranslation("translation", { keyPrefix: "modules.projects.seoGoals" });
   const {
     t,
@@ -26,14 +24,18 @@ export function ProjectCreateStepContent({ hook, authUser }: StepProps) {
     },
     currentStep,
     isAdmin,
+    isEdit,
     logoPreviewUrl,
     onLogoPicked,
     businessName,
     selectedSeoGoals,
     toggleSeoGoal,
+    contactEmail,
+    ownerOptions,
+    isOwnerOptionsPending,
+    isOwnerOptionsError,
+    isOwnerOptionsEmpty,
   } = hook;
-
-  const contactEmail = authUser.email;
 
   if (currentStep === 0) {
     return (
@@ -56,6 +58,8 @@ export function ProjectCreateStepContent({ hook, authUser }: StepProps) {
             label={t("businessName")}
             placeholder={t("businessNamePh")}
             required
+            disabled={isEdit}
+            readOnly={isEdit}
             error={errors.businessName?.message}
             {...register("businessName", {
               required: t("valRequired"),
@@ -93,17 +97,28 @@ export function ProjectCreateStepContent({ hook, authUser }: StepProps) {
             placeholder={t("pocContactNumberPh")}
             {...register("pocContactNumber")}
           />
-          {isAdmin ? (
-            <Input
-              id="ownerUserId"
-              label={t("ownerUserId")}
-              placeholder={t("ownerUserIdPh")}
-              required
-              error={errors.ownerUserId?.message}
-              {...register("ownerUserId", {
-                required: t("valRequired"),
-              })}
-            />
+          {isAdmin && !isEdit ? (
+            <>
+              <Input
+                id="ownerUserId"
+                type="select"
+                label={t("ownerUserId")}
+                options={ownerOptions}
+                required
+                disabled={isOwnerOptionsPending || isOwnerOptionsEmpty}
+                error={
+                  errors.ownerUserId?.message ??
+                  (isOwnerOptionsError
+                    ? t("ownerUserLoadError")
+                    : isOwnerOptionsEmpty
+                      ? t("ownerUserEmpty")
+                      : undefined)
+                }
+                {...register("ownerUserId", {
+                  required: t("valRequired"),
+                })}
+              />
+            </>
           ) : (
             <Input id="pocEmail" label={t("pocEmail")} value={contactEmail} readOnly disabled />
           )}

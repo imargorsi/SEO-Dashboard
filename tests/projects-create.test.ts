@@ -102,6 +102,7 @@ describe("POST /projects — createProject", () => {
     );
 
     expect(project.status).toBe("active");
+    expect(project.createdByUserId.toString()).toBe(owner._id.toString());
     expect(project.approvedByUserId?.toString()).toBe(admin._id.toString());
     expect(project.pocEmail).toBe("owner@example.com");
 

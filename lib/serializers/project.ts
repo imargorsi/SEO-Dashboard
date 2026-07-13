@@ -1,24 +1,35 @@
 import type { ProjectDocument } from "@/models/Project";
 import { serializeStoredImageUrl } from "@/lib/serializers/stored-image";
+import type {
+  TProjectBusinessHours,
+  TProjectDetail,
+  TProjectListItem,
+  TProjectOwnerSummary,
+} from "@/types/project.types";
 
-export type ProjectListItemDto = {
-  id: string;
-  businessName: string;
-  websiteUrl: string;
-  status: ProjectDocument["status"];
-  imageUrl: string | null;
-  owner: {
-    id: string;
-    name: string;
-    profileImage: string | null;
-  } | null;
-};
+export type ProjectListItemDto = TProjectListItem;
+export type ProjectDetailDto = TProjectDetail;
+
+function serializeTimestamp(value: Date | null | undefined): string | null {
+  if (!value) return null;
+  return value.toISOString();
+}
+
+function serializeBusinessHours(
+  value: ProjectDocument["businessHours"],
+): TProjectBusinessHours {
+  if (!value) return null;
+  return {
+    opensAt: value.opensAt ?? null,
+    closesAt: value.closesAt ?? null,
+  };
+}
 
 /** Compact shape for project selector / list views. */
 export function serializeProjectListItem(
   project: ProjectDocument,
-  owner?: { id: string; name: string; profileImage: string | null } | null,
-): ProjectListItemDto {
+  owner?: TProjectOwnerSummary | null,
+): TProjectListItem {
   return {
     id: project._id.toString(),
     businessName: project.businessName,
@@ -26,10 +37,14 @@ export function serializeProjectListItem(
     status: project.status,
     imageUrl: serializeStoredImageUrl(project.logoImage),
     owner: owner ?? null,
+    createdByUserId: project.createdByUserId.toString(),
   };
 }
 
-export function serializeProject(project: ProjectDocument) {
+export function serializeProject(
+  project: ProjectDocument,
+  owner?: TProjectOwnerSummary | null,
+): TProjectDetail {
   return {
     id: project._id.toString(),
     businessName: project.businessName,
@@ -42,16 +57,17 @@ export function serializeProject(project: ProjectDocument) {
     primaryServiceToPromote: project.primaryServiceToPromote,
     idealCustomerProfile: project.idealCustomerProfile,
     targetLocations: project.targetLocations,
-    businessHours: project.businessHours,
+    businessHours: serializeBusinessHours(project.businessHours),
     seoGoals: project.seoGoals,
     competitorUrls: project.competitorUrls,
     status: project.status,
+    owner: owner ?? null,
     createdByUserId: project.createdByUserId.toString(),
-    approvedAt: project.approvedAt,
+    approvedAt: serializeTimestamp(project.approvedAt),
     approvedByUserId: project.approvedByUserId?.toString() ?? null,
-    rejectedAt: project.rejectedAt,
+    rejectedAt: serializeTimestamp(project.rejectedAt),
     rejectedByUserId: project.rejectedByUserId?.toString() ?? null,
-    createdAt: project.createdAt,
-    updatedAt: project.updatedAt,
+    createdAt: project.createdAt.toISOString(),
+    updatedAt: project.updatedAt.toISOString(),
   };
 }

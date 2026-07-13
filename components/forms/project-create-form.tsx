@@ -31,7 +31,7 @@ export function ProjectCreateForm({
     t,
     onSubmit,
     currentStep,
-    steps,
+    stepLabels,
     isLastStep,
     isSubmitting,
     goToNextStep,
@@ -54,7 +54,7 @@ export function ProjectCreateForm({
     <form className="space-y-5" onSubmit={onSubmit} noValidate>
       <section className={cn(elevatedCardSurfaceClass, "rounded-2xl p-6 shadow-(--shadow) sm:p-8")}>
         <div className="space-y-6">
-          <ProjectCreateStepper total={steps.length} current={currentStep} />
+          <ProjectCreateStepper labels={stepLabels} current={currentStep} />
           <ProjectCreateStepContent hook={hook} />
         </div>
       </section>

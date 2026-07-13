@@ -366,6 +366,11 @@ export interface Translation {
         missingProjectAccess: string;
         nextStep: string;
         previousStep: string;
+        stepBasicInformation: string;
+        stepServiceInformation: string;
+        stepSeo: string;
+        stepInviteUsers: string;
+        sectionInviteUsersTitle: string;
         stepValidationError: string;
         valRequired: string;
         valMin: string;
@@ -983,6 +988,11 @@ const translation: Translation = {
           "You are not a member of any project yet. Complete onboarding or ask a project owner to invite you.",
         nextStep: "Next Step",
         previousStep: "Back",
+        stepBasicInformation: "Basic Information",
+        stepServiceInformation: "Service Information",
+        stepSeo: "SEO",
+        stepInviteUsers: "Invite Users",
+        sectionInviteUsersTitle: "Invite Users",
         stepValidationError: "Fix Required Fields Before Moving To The Next Step.",
         valRequired: "This field is required.",
         valMin: "Use at least 2 characters.",

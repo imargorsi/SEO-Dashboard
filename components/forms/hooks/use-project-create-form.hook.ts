@@ -25,6 +25,13 @@ import { isSuperAdmin } from "@/lib/rbac/access";
 
 type UseProjectCreateFormResult = ReturnType<typeof useProjectCreateForm>;
 
+const PROJECT_FORM_STEP_LABEL_KEYS = [
+  "stepBasicInformation",
+  "stepServiceInformation",
+  "stepSeo",
+  "stepInviteUsers",
+] as const;
+
 function fieldStepIndex(): Record<keyof TProjectCreateFormValues, number> {
   return {
     ownerUserId: 0,
@@ -35,11 +42,11 @@ function fieldStepIndex(): Record<keyof TProjectCreateFormValues, number> {
     servicesOffered: 1,
     primaryServiceToPromote: 1,
     idealCustomerProfile: 1,
-    targetLocations: 2,
-    opensAt: 2,
-    closesAt: 2,
-    seoGoals: 3,
-    competitorUrls: 4,
+    targetLocations: 1,
+    opensAt: 1,
+    closesAt: 1,
+    seoGoals: 2,
+    competitorUrls: 2,
   };
 }
 
@@ -52,10 +59,16 @@ function stepFields(isAdmin: boolean, isEdit: boolean): Array<Array<keyof TProje
       "businessAddress",
       "pocContactNumber",
     ],
-    ["servicesOffered", "primaryServiceToPromote", "idealCustomerProfile"],
-    ["targetLocations", "opensAt", "closesAt"],
-    ["seoGoals"],
-    ["competitorUrls"],
+    [
+      "servicesOffered",
+      "primaryServiceToPromote",
+      "idealCustomerProfile",
+      "targetLocations",
+      "opensAt",
+      "closesAt",
+    ],
+    ["seoGoals", "competitorUrls"],
+    [],
   ];
 }
 
@@ -78,6 +91,10 @@ export function useProjectCreateForm(authUser: AuthUser, options: TUseProjectFor
   const isAdmin = isSuperAdmin(authUser.roles);
   const ownerOptionsQuery = useProjectOwnerOptions(isAdmin && !isEdit);
   const steps = useMemo(() => stepFields(isAdmin, isEdit), [isAdmin, isEdit]);
+  const stepLabels = useMemo(
+    () => PROJECT_FORM_STEP_LABEL_KEYS.map((key) => t(key)),
+    [t],
+  );
   const indexMap = useMemo(() => fieldStepIndex(), []);
 
   const form = useForm<TProjectCreateFormValues>({
@@ -129,7 +146,7 @@ export function useProjectCreateForm(authUser: AuthUser, options: TUseProjectFor
       return;
     }
 
-    if (currentStep === 3 && watch("seoGoals").length === 0) {
+    if (currentStep === 2 && watch("seoGoals").length === 0) {
       setError("seoGoals", { type: "manual", message: t("valSeoGoals") });
       notify.error(t("valSeoGoals"));
       return;
@@ -169,7 +186,7 @@ export function useProjectCreateForm(authUser: AuthUser, options: TUseProjectFor
 
     if (values.seoGoals.length === 0) {
       setError("seoGoals", { type: "manual", message: t("valSeoGoals") });
-      setCurrentStep(3);
+      setCurrentStep(2);
       notify.error(t("valSeoGoals"));
       return;
     }
@@ -228,6 +245,7 @@ export function useProjectCreateForm(authUser: AuthUser, options: TUseProjectFor
     currentStep,
     setCurrentStep,
     steps,
+    stepLabels,
     isAdmin,
     isEdit,
     isSubmitting,

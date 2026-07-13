@@ -3,37 +3,54 @@
 import { cn } from "@/lib/utils";
 
 type ProjectCreateStepperProps = {
-  total: number;
+  labels: string[];
   current: number;
 };
 
-export function ProjectCreateStepper({ total, current }: ProjectCreateStepperProps) {
+export function ProjectCreateStepper({ labels, current }: ProjectCreateStepperProps) {
   return (
-    <div className="relative" aria-label="Project Creation Steps">
-      <div className="pointer-events-none absolute left-4 right-4 top-1/2 h-px -translate-y-1/2 bg-border" aria-hidden />
-      <div className="relative flex items-center justify-between gap-3">
-        {Array.from({ length: total }).map((_, index) => {
-          const stepNumber = index + 1;
+    <nav aria-label="Project Form Steps">
+      <ol className="relative flex list-none items-start justify-between gap-2 p-0">
+        <div
+          className="pointer-events-none absolute left-4 right-4 top-4 h-px bg-border sm:top-4.5"
+          aria-hidden
+        />
+        {labels.map((label, index) => {
           const isActive = index === current;
           const isDone = index < current;
+          const stepNumber = index + 1;
 
           return (
-            <div
-              key={stepNumber}
-              className={cn(
-                "relative z-10 flex size-8 shrink-0 items-center justify-center rounded-full type-caption-xs font-semibold",
-                isActive
-                  ? "bg-gradient-button text-text-on-brand"
-                  : isDone
-                    ? "border border-border bg-bg-hover text-text-secondary"
-                    : "border border-border bg-bg-hover text-text-secondary",
-              )}
+            <li
+              key={label}
+              className="relative z-10 flex min-w-0 flex-1 flex-col items-center gap-2"
+              aria-current={isActive ? "step" : undefined}
             >
-              {stepNumber}
-            </div>
+              <span
+                className={cn(
+                  "flex size-8 shrink-0 items-center justify-center rounded-full type-caption-xs font-semibold sm:size-9",
+                  isActive
+                    ? "bg-gradient-button text-text-on-brand"
+                    : isDone
+                      ? "border border-border bg-bg-hover text-text-secondary"
+                      : "border border-border bg-bg-hover text-text-muted",
+                )}
+                aria-hidden
+              >
+                {stepNumber}
+              </span>
+              <span
+                className={cn(
+                  "type-caption-xs text-center font-semibold leading-tight",
+                  isActive ? "text-text-primary" : isDone ? "text-text-secondary" : "text-text-muted",
+                )}
+              >
+                {label}
+              </span>
+            </li>
           );
         })}
-      </div>
-    </div>
+      </ol>
+    </nav>
   );
 }

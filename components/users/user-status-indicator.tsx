@@ -1,15 +1,14 @@
 import { getStatusDotClassName, type TStatusColorKey } from "@/lib/frontend/theme/status-colors";
+import type { TUserAccountStatus } from "@/lib/users/constants";
 import { cn } from "@/lib/utils";
 
-type TUserStatus = "active" | "invited";
-
-const STATUS_COLOR_KEYS: Record<TUserStatus, TStatusColorKey> = {
+const STATUS_COLOR_KEYS: Record<TUserAccountStatus, TStatusColorKey> = {
   active: "active",
-  invited: "invited",
+  inactive: "inactive",
 };
 
 type UserStatusIndicatorProps = {
-  status: TUserStatus;
+  status: TUserAccountStatus;
   label: string;
   className?: string;
 };
@@ -24,8 +23,4 @@ export function UserStatusIndicator({ status, label, className }: UserStatusIndi
       <span>{label}</span>
     </span>
   );
-}
-
-export function getUserStatusFromVerified(isVerified: boolean): TUserStatus {
-  return isVerified ? "active" : "invited";
 }

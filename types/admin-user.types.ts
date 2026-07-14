@@ -1,9 +1,31 @@
+export type TAdminUserProjectAssignment = {
+  id: string;
+  name: string;
+  /** Project workflow status. */
+  status: "pending" | "active" | "inactive" | "rejected";
+  membership_role: "project_owner" | "project_user" | string;
+  membership_status: "active" | "invited" | "removed";
+};
+
 export type TAdminUserListItem = {
   id: string;
   name: string;
   email: string;
+  profile_image: string | null;
+  status: "active" | "inactive";
   email_verified_at: string | null;
-  roles: string[];
+  projects: TAdminUserProjectAssignment[];
+  created_at: string;
+  updated_at: string;
+};
+
+export type TAdminUserDetail = {
+  id: string;
+  name: string;
+  email: string;
+  profile_image: string | null;
+  status: "active" | "inactive";
+  email_verified_at: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -27,6 +49,12 @@ export type TListPagination = {
 export type TListFilters = {
   search: string | null;
   newest: boolean;
+  status?: "active" | "inactive" | null;
+  status_counts?: {
+    all: number;
+    active: number;
+    inactive: number;
+  };
 };
 
 export type TPaginatedList<T> = {

@@ -14,11 +14,33 @@ type TUsersTableProps = {
   isLoading: boolean;
   isFetching: boolean;
   onPageChange: (page: number) => void;
+  onViewUser?: (user: TAdminUserListItem) => void;
+  onEditUser?: (user: TAdminUserListItem) => void;
+  onToggleUserStatus?: (user: TAdminUserListItem) => void;
+  canUpdate?: boolean;
+  statusActionPendingUserId?: string | null;
 };
 
-export function UsersTable({ query, data, isLoading, isFetching, onPageChange }: TUsersTableProps) {
+export function UsersTable({
+  query,
+  data,
+  isLoading,
+  isFetching,
+  onPageChange,
+  onViewUser,
+  onEditUser,
+  onToggleUserStatus,
+  canUpdate,
+  statusActionPendingUserId,
+}: TUsersTableProps) {
   const { t: tTable } = useTranslation("translation", { keyPrefix: "modules.users.table" });
-  const columns = useUsersTableColumns();
+  const columns = useUsersTableColumns({
+    onViewUser,
+    onEditUser,
+    onToggleUserStatus,
+    canUpdate,
+    statusActionPendingUserId,
+  });
 
   const items = (data?.items ?? []) as TUserTableRow[];
   const total = data?.pagination.total ?? 0;

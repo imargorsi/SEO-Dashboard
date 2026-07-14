@@ -122,6 +122,65 @@ export interface Translation {
       title: string;
       subtitle: string;
       createUserTitle: string;
+      createLead: string;
+      editUserTitle: string;
+      editLead: string;
+      createForm: {
+        profileImage: string;
+        profileImageHint: string;
+        name: string;
+        namePh: string;
+        email: string;
+        emailPh: string;
+        password: string;
+        passwordPh: string;
+        passwordPhEdit: string;
+        passwordConfirmation: string;
+        passwordConfirmationPh: string;
+        passwordConfirmationPhEdit: string;
+        submit: string;
+        submitting: string;
+        editSubmit: string;
+        editSubmitting: string;
+        backToList: string;
+        valRequired: string;
+        valEmail: string;
+        valMinPassword: string;
+        valPasswordMatch: string;
+        successFallback: string;
+        errorFallback: string;
+        editSuccessFallback: string;
+        editErrorFallback: string;
+      };
+      assignments: {
+        noProjects: string;
+        membershipOwner: string;
+        membershipMember: string;
+        membershipInvited: string;
+        projectStatus: {
+          pending: string;
+          active: string;
+          inactive: string;
+          rejected: string;
+        };
+      };
+      detail: {
+        title: string;
+        lead: string;
+        email: string;
+        createdAt: string;
+        updatedAt: string;
+        emailVerifiedAt: string;
+        emailNotVerified: string;
+        projectsTitle: string;
+        projectsLead: string;
+      };
+      statusFilter: {
+        ariaLabel: string;
+        all: string;
+        active: string;
+        inactive: string;
+      };
       table: {
         searchPlaceholder: string;
         sortLabel: string;
@@ -129,13 +188,14 @@ export interface Translation {
         sortNewest: string;
         sortOldest: string;
         colUser: string;
-        colRole: string;
+        colProjects: string;
         colStatus: string;
         colLastAction: string;
         colActions: string;
         statusActive: string;
-        statusInvited: string;
-        noRoles: string;
+        statusInactive: string;
+        projectsCount_one: string;
+        projectsCount_other: string;
         lastActionVerified: string;
         lastActionCreated: string;
         showingUsers: string;
@@ -145,6 +205,11 @@ export interface Translation {
         emptyBody: string;
         viewUser: string;
         editUser: string;
+        activateUser: string;
+        deactivateUser: string;
+        activateSuccess: string;
+        deactivateSuccess: string;
+        statusActionError: string;
         createUser: string;
         previousPage: string;
         nextPage: string;
@@ -776,6 +841,65 @@ const translation: Translation = {
       title: "Users",
       subtitle: "Manage Users And Their Access In Your Workspace.",
       createUserTitle: "Create User",
+      createLead: "Add A New User Account With Name, Email, And Password. Assign Project Roles When Inviting Them To A Project.",
+      editUserTitle: "Edit User",
+      editLead: "Update This User's Name, Email, Password, Or Profile Image.",
+      createForm: {
+        profileImage: "Profile Image",
+        profileImageHint: "JPEG, PNG, WebP, Or GIF. Optional.",
+        name: "Full Name",
+        namePh: "Enter Full Name",
+        email: "Email Address",
+        emailPh: "Enter Email Address",
+        password: "Password",
+        passwordPh: "At Least 8 Characters",
+        passwordPhEdit: "Leave Blank To Keep Current Password",
+        passwordConfirmation: "Confirm Password",
+        passwordConfirmationPh: "Re-Enter Password",
+        passwordConfirmationPhEdit: "Re-Enter New Password",
+        submit: "Create User",
+        submitting: "Creating…",
+        editSubmit: "Save Changes",
+        editSubmitting: "Saving…",
+        backToList: "Back To Users",
+        valRequired: "This Field Is Required.",
+        valEmail: "Enter A Valid Email Address.",
+        valMinPassword: "Use At Least 8 Characters.",
+        valPasswordMatch: "Passwords Do Not Match.",
+        successFallback: "User Created Successfully.",
+        errorFallback: "Could Not Create User. Try Again.",
+        editSuccessFallback: "User Updated Successfully.",
+        editErrorFallback: "Could Not Update User. Try Again.",
+      },
+      assignments: {
+        noProjects: "No Projects Assigned",
+        membershipOwner: "Project Owner",
+        membershipMember: "Project User",
+        membershipInvited: "Invite Pending",
+        projectStatus: {
+          pending: "Pending",
+          active: "Active",
+          inactive: "Inactive",
+          rejected: "Rejected",
+        },
+      },
+      detail: {
+        title: "User Details",
+        lead: "Account Information And Project Memberships From The Current List.",
+        email: "Email",
+        createdAt: "Created",
+        updatedAt: "Last Updated",
+        emailVerifiedAt: "Email Verified",
+        emailNotVerified: "Not Verified",
+        projectsTitle: "Assigned Projects",
+        projectsLead: "Projects This User Owns Or Belongs To.",
+      },
+      statusFilter: {
+        ariaLabel: "Filter Users By Status",
+        all: "All Users",
+        active: "Active",
+        inactive: "Inactive",
+      },
       table: {
         searchPlaceholder: "Search Users...",
         sortLabel: "Sort",
@@ -783,13 +907,14 @@ const translation: Translation = {
         sortNewest: "Newest",
         sortOldest: "Oldest",
         colUser: "User",
-        colRole: "Role",
+        colProjects: "Projects",
         colStatus: "Status",
         colLastAction: "Last Action",
         colActions: "Actions",
         statusActive: "Active",
-        statusInvited: "Invited",
-        noRoles: "No Role",
+        statusInactive: "Inactive",
+        projectsCount_one: "{{count}} Project",
+        projectsCount_other: "{{count}} Projects",
         lastActionVerified: "Email Verified",
         lastActionCreated: "Account Created",
         showingUsers: "Showing {{from}} To {{to}} Of {{total}} Users",
@@ -799,6 +924,11 @@ const translation: Translation = {
         emptyBody: "Try Another Search Or Clear Filters To View All Users.",
         viewUser: "View {{name}}",
         editUser: "Edit {{name}}",
+        activateUser: "Activate {{name}}",
+        deactivateUser: "Deactivate {{name}}",
+        activateSuccess: "User Activated Successfully.",
+        deactivateSuccess: "User Deactivated Successfully.",
+        statusActionError: "Could Not Update User Status. Try Again.",
         createUser: "Add User",
         previousPage: "Previous Page",
         nextPage: "Next Page",

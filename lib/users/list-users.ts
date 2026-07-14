@@ -1,12 +1,18 @@
 import { NextResponse } from "next/server";
+import type { FilterQuery } from "mongoose";
 
 import { ApiResponse } from "@/lib/api/response";
 import { SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
 import { serializeAdminUserListItem } from "@/lib/serializers/admin-user";
-import { resolveUserProjectRoleSlugs } from "@/lib/users/resolve-user-project-role-slugs";
+import type { TUserAccountStatus } from "@/lib/users/constants";
+import { resolveUserProjectAssignments } from "@/lib/users/resolve-user-project-assignments";
+import {
+  buildUserStatusCounts,
+  EMPTY_USER_STATUS_COUNTS,
+} from "@/lib/users/user-status-filter.utils";
 import type { ListUsersQueryInput } from "@/schemas/list-users-query";
 import type { TPaginatedList, TAdminUserListItem, TListPagination } from "@/types/admin-user.types";
-import { User } from "@/models";
+import { User, type UserDocument } from "@/models";
 
 function escapeRegex(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -35,8 +41,8 @@ function buildPagination(total: number, page: number, perPage: number): TListPag
   };
 }
 
-function buildSearchFilter(search?: string) {
-  if (!search) return {};
+function buildSearchFilter(search?: string): FilterQuery<UserDocument> | null {
+  if (!search) return null;
 
   const pattern = escapeRegex(search);
   return {
@@ -44,41 +50,71 @@ function buildSearchFilter(search?: string) {
   };
 }
 
-function buildListUsersFilter(search?: string) {
-  const excludeSuperAdmin = { roles: { $nin: [SUPER_ADMIN_ROLE] } };
-  const searchFilter = buildSearchFilter(search);
+function buildStatusFilter(status?: TUserAccountStatus): FilterQuery<UserDocument> | null {
+  if (status === "inactive") {
+    return { status: "inactive" };
+  }
+  if (status === "active") {
+    // Treat missing status as active for legacy documents.
+    return { status: { $ne: "inactive" } };
+  }
+  return null;
+}
 
-  if (!search) return excludeSuperAdmin;
+function combineFilters(parts: Array<FilterQuery<UserDocument> | null>): FilterQuery<UserDocument> {
+  const active = parts.filter((part): part is FilterQuery<UserDocument> => part != null);
+  if (active.length === 0) return {};
+  if (active.length === 1) return active[0]!;
+  return { $and: active };
+}
 
-  return { $and: [excludeSuperAdmin, searchFilter] };
+function buildListUsersFilter(search?: string, status?: TUserAccountStatus): FilterQuery<UserDocument> {
+  return combineFilters([
+    { roles: { $nin: [SUPER_ADMIN_ROLE] } },
+    buildSearchFilter(search),
+    buildStatusFilter(status),
+  ]);
+}
+
+async function countUsersByStatus(baseFilter: FilterQuery<UserDocument>) {
+  const [active, inactive] = await Promise.all([
+    User.countDocuments(combineFilters([baseFilter, buildStatusFilter("active")])),
+    User.countDocuments(combineFilters([baseFilter, buildStatusFilter("inactive")])),
+  ]);
+
+  return buildUserStatusCounts(active, inactive);
 }
 
 export async function listUsers(query: ListUsersQueryInput): Promise<TPaginatedList<TAdminUserListItem>> {
-  const filter = buildListUsersFilter(query.search);
+  const baseFilter = buildListUsersFilter(query.search);
+  const filter = buildListUsersFilter(query.search, query.status);
   const page = query.page;
   const perPage = query.per_page;
   const skip = (page - 1) * perPage;
 
-  const [total, users] = await Promise.all([
+  const [total, users, statusCounts] = await Promise.all([
     User.countDocuments(filter),
     User.find(filter)
       .select("-password")
       .sort({ createdAt: query.newest ? -1 : 1 })
       .skip(skip)
       .limit(perPage),
+    countUsersByStatus(baseFilter),
   ]);
 
   const pagination = buildPagination(total, page, perPage);
-  const projectRoleSlugsByUserId = await resolveUserProjectRoleSlugs(users.map((user) => user._id));
+  const projectsByUserId = await resolveUserProjectAssignments(users.map((user) => user._id));
 
   return {
     items: users.map((user) =>
-      serializeAdminUserListItem(user, projectRoleSlugsByUserId.get(user._id.toString()) ?? []),
+      serializeAdminUserListItem(user, projectsByUserId.get(user._id.toString()) ?? []),
     ),
     pagination,
     filters: {
       search: query.search ?? null,
       newest: query.newest,
+      status: query.status ?? null,
+      status_counts: statusCounts ?? EMPTY_USER_STATUS_COUNTS,
     },
   };
 }

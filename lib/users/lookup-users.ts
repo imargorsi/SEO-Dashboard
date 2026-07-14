@@ -30,6 +30,7 @@ export async function lookupUsersForInvite(
   const users = await User.find({
     roles: { $nin: [SUPER_ADMIN_ROLE] },
     emailVerifiedAt: { $ne: null },
+    status: { $ne: "inactive" },
     ...(excludeIds.length > 0 ? { _id: { $nin: excludeIds } } : {}),
     $or: [{ name: { $regex: pattern, $options: "i" } }, { email: { $regex: pattern, $options: "i" } }],
   })

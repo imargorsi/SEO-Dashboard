@@ -11,13 +11,14 @@ describe("listUsersQuerySchema", () => {
     });
   });
 
-  it("parses search, pagination, and newest params", () => {
-    const params = new URLSearchParams("page=2&per_page=25&search=Jane&newest=false");
+  it("parses search, pagination, newest, and status params", () => {
+    const params = new URLSearchParams("page=2&per_page=25&search=Jane&newest=false&status=inactive");
     expect(parseListUsersQuery(params)).toEqual({
       page: 2,
       per_page: 25,
       search: "Jane",
       newest: false,
+      status: "inactive",
     });
   });
 

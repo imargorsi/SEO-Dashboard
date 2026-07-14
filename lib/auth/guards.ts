@@ -3,6 +3,7 @@ import { findAccessToken } from "@/lib/auth/tokens";
 import { hasAnyPermission, hasPermission } from "@/lib/rbac/access";
 import { loadPlatformUserAuthData } from "@/lib/auth/effective-user-auth";
 import { SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
+import { isActiveUserStatus } from "@/lib/users/constants";
 import { User, type UserDocument } from "@/models";
 import type { Types } from "mongoose";
 import { ApiResponse } from "@/lib/api/response";
@@ -33,17 +34,33 @@ export async function authenticateRequest(request: Request): Promise<AuthContext
   return { user, token, tokenId: found.tokenId };
 }
 
-export async function requireAuth(request: Request): Promise<AuthContext | NextResponse> {
+export async function requireAuth(
+  request: Request,
+  options?: { allowInactive?: boolean },
+): Promise<AuthContext | NextResponse> {
   const auth = await authenticateRequest(request);
   if (!auth) {
     return ApiResponse.error(authMessages.unauthenticated, {}, 401);
   }
+
+  if (!options?.allowInactive) {
+    const activeError = await requireActiveUser(auth);
+    if (activeError) return activeError;
+  }
+
   return auth;
 }
 
 export async function requireVerifiedEmail(auth: AuthContext): Promise<NextResponse | null> {
   if (!auth.user.hasVerifiedEmail()) {
     return ApiResponse.error(authMessages.unverifiedEmail, {}, 403);
+  }
+  return null;
+}
+
+export async function requireActiveUser(auth: AuthContext): Promise<NextResponse | null> {
+  if (!isActiveUserStatus(auth.user.status)) {
+    return ApiResponse.error(authMessages.inactiveAccount, {}, 403);
   }
   return null;
 }

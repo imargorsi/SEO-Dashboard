@@ -29,12 +29,34 @@ describe("GET /admin/roles — listRoles", () => {
     });
   });
 
-  it("filters roles by search on name or slug", async () => {
+  it("excludes reserved and deprecated roles from the list", async () => {
     await seedSystemRoles();
 
-    const result = await listRoles({ ...defaultListQuery, search: "project_owner" });
-    expect(result.items).toHaveLength(1);
-    expect(result.items[0]!.slug).toBe(PROJECT_OWNER_ROLE);
+    const { Role } = await import("@/models");
+    await Role.create({
+      slug: "super_admin",
+      name: "Super Admin",
+      description: "Should never appear",
+      scope: "platform",
+      isSystem: true,
+      permissions: [],
+    });
+    await Role.create({
+      slug: "company_admin",
+      name: "Company Admin",
+      description: "Deprecated",
+      scope: "platform",
+      isSystem: false,
+      permissions: [],
+    });
+
+    const result = await listRoles({ ...defaultListQuery, per_page: 100 });
+    const slugs = result.items.map((role) => role.slug);
+
+    expect(slugs).not.toContain("super_admin");
+    expect(slugs).not.toContain("company_admin");
+    expect(slugs).toContain(PROJECT_OWNER_ROLE);
+    expect(slugs).toContain(PROJECT_USER_ROLE);
   });
 
   it("sorts roles oldest first when newest is false", async () => {

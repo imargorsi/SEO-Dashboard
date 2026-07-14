@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import {
   authenticateRequest,
   loadUserAuthData,
+  requireActiveUser,
   requireRole,
   requireVerifiedEmail,
   type AuthContext,
@@ -58,6 +59,9 @@ export async function runApiGuards(
   if (!auth) {
     return ApiResponse.error(authMessages.unauthenticated, {}, 401);
   }
+
+  const activeError = await requireActiveUser(auth);
+  if (activeError) return activeError;
 
   if (verified) {
     const verifiedError = await requireVerifiedEmail(auth);

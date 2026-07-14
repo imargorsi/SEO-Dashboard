@@ -38,3 +38,46 @@ export const SYSTEM_ROLE_SEEDS: readonly SystemRoleSeed[] = [
 ];
 
 export const SYSTEM_PROJECT_ROLE_SLUGS = [PROJECT_OWNER_ROLE, PROJECT_USER_ROLE] as const;
+
+/** Hardcoded platform operator — lives on `User.roles` only, never in the roles collection / admin UI. */
+export const RESERVED_PLATFORM_ROLE_SLUGS = [SUPER_ADMIN_ROLE] as const;
+
+/** Deprecated Laravel roles that must not appear in v1. */
+export const DEPRECATED_ROLE_SLUGS = ["company_admin"] as const;
+
+export const HIDDEN_ADMIN_ROLE_SLUGS = [
+  ...RESERVED_PLATFORM_ROLE_SLUGS,
+  ...DEPRECATED_ROLE_SLUGS,
+] as const;
+
+const RESERVED_PLATFORM_ROLE_SET = new Set<string>(RESERVED_PLATFORM_ROLE_SLUGS);
+const SYSTEM_PROJECT_ROLE_SET = new Set<string>(SYSTEM_PROJECT_ROLE_SLUGS);
+const DEPRECATED_ROLE_SET = new Set<string>(DEPRECATED_ROLE_SLUGS);
+const HIDDEN_ADMIN_ROLE_SET = new Set<string>(HIDDEN_ADMIN_ROLE_SLUGS);
+
+function normalizeRoleKey(value: string): string {
+  return value.trim().toLowerCase().replace(/[\s-]+/g, "_");
+}
+
+export function isReservedPlatformRole(slug: string): boolean {
+  return RESERVED_PLATFORM_ROLE_SET.has(slug) || RESERVED_PLATFORM_ROLE_SET.has(normalizeRoleKey(slug));
+}
+
+export function isSystemProjectRole(slug: string): boolean {
+  return SYSTEM_PROJECT_ROLE_SET.has(slug) || SYSTEM_PROJECT_ROLE_SET.has(normalizeRoleKey(slug));
+}
+
+export function isDeprecatedRole(slug: string): boolean {
+  return DEPRECATED_ROLE_SET.has(slug) || DEPRECATED_ROLE_SET.has(normalizeRoleKey(slug));
+}
+
+/** Roles that must never appear in admin roles lists or assignable dropdowns. */
+export function isHiddenFromAdminRoleUi(slugOrName: string): boolean {
+  const normalized = normalizeRoleKey(slugOrName);
+  return HIDDEN_ADMIN_ROLE_SET.has(slugOrName) || HIDDEN_ADMIN_ROLE_SET.has(normalized);
+}
+
+/** System / reserved roles that must not be renamed, permission-edited, or deleted via API. */
+export function isImmutableSystemRole(slug: string): boolean {
+  return isReservedPlatformRole(slug) || isSystemProjectRole(slug) || isDeprecatedRole(slug);
+}

@@ -7,7 +7,7 @@ import { connectDb } from "@/lib/db/mongoose";
 
 export const POST = withApiHandler(async (request) => {
   await connectDb();
-  const auth = await requireAuth(request);
+  const auth = await requireAuth(request, { allowInactive: true });
   if (auth instanceof Response) return auth;
 
   const revoked = await revokeAccessToken(auth.token);

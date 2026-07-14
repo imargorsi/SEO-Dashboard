@@ -5,6 +5,7 @@ export const authMessages = {
   loggedOut: "Logged out.",
   unauthenticated: "Unauthenticated.",
   unverifiedEmail: "Your email address is not verified.",
+  inactiveAccount: "Your Account Is Inactive. Contact An Administrator.",
   alreadyVerified: "Already verified.",
   verificationSent: "Verification link sent.",
   registrationSuccess:

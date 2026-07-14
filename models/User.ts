@@ -1,5 +1,7 @@
 import mongoose, { Schema, type InferSchemaType, type Model } from "mongoose";
 
+import { isActiveUserStatus, USER_ACCOUNT_STATUSES } from "@/lib/users/constants";
+
 const userSchema = new Schema(
   {
     name: { type: String, required: true },
@@ -8,8 +10,9 @@ const userSchema = new Schema(
     password: { type: String, required: true },
     emailVerifiedAt: { type: Date, default: null },
     roles: { type: [String], default: [] },
+    status: { type: String, enum: USER_ACCOUNT_STATUSES, required: true, default: "active" },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 userSchema.methods.hasVerifiedEmail = function hasVerifiedEmail(this: UserDocument): boolean {
@@ -24,12 +27,45 @@ userSchema.methods.getEmailForPasswordReset = function getEmailForPasswordReset(
   return this.email;
 };
 
+userSchema.methods.isActive = function isActive(this: UserDocument): boolean {
+  return isActiveUserStatus(this.status);
+};
+
 export type UserDocument = InferSchemaType<typeof userSchema> &
   mongoose.Document & {
     roles: string[];
+    status: (typeof USER_ACCOUNT_STATUSES)[number];
     hasVerifiedEmail(): boolean;
     getEmailForVerification(): string;
     getEmailForPasswordReset(): string;
+    isActive(): boolean;
   };
 
-export const User: Model<UserDocument> = mongoose.models.User ?? mongoose.model<UserDocument>("User", userSchema);
+function attachUserMethods(model: Model<UserDocument>): void {
+  model.schema.methods.hasVerifiedEmail = userSchema.methods.hasVerifiedEmail;
+  model.schema.methods.getEmailForVerification = userSchema.methods.getEmailForVerification;
+  model.schema.methods.getEmailForPasswordReset = userSchema.methods.getEmailForPasswordReset;
+  model.schema.methods.isActive = userSchema.methods.isActive;
+}
+
+/**
+ * Dev HMR reuses `mongoose.models.User`. If the cached schema is stale
+ * (e.g. missing `status`), delete and recompile so path/method changes apply.
+ */
+function registerUserModel(): Model<UserDocument> {
+  const existing = mongoose.models.User as Model<UserDocument> | undefined;
+
+  if (existing?.schema.path("status")) {
+    attachUserMethods(existing);
+    return existing;
+  }
+
+  if (existing) {
+    delete mongoose.models.User;
+    delete mongoose.connection.models.User;
+  }
+
+  return mongoose.model<UserDocument>("User", userSchema);
+}
+
+export const User: Model<UserDocument> = registerUserModel();

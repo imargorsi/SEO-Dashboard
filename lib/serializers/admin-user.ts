@@ -1,20 +1,37 @@
-import { SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
-import type { TAdminUserListItem } from "@/types/admin-user.types";
+import type { TAdminUserDetail, TAdminUserListItem, TAdminUserProjectAssignment } from "@/types/admin-user.types";
+import { serializeStoredImageUrl } from "@/lib/serializers/stored-image";
+import type { TUserAccountStatus } from "@/lib/users/constants";
 import type { UserDocument } from "@/models/User";
+
+function serializeUserStatus(user: UserDocument): TUserAccountStatus {
+  return (user.status ?? "active") as TUserAccountStatus;
+}
 
 export function serializeAdminUserListItem(
   user: UserDocument,
-  projectRoleSlugs: string[] = [],
+  projects: TAdminUserProjectAssignment[] = [],
 ): TAdminUserListItem {
-  const platformRoles = (user.roles ?? []).filter((role) => role !== SUPER_ADMIN_ROLE);
-  const roles = [...new Set([...platformRoles, ...projectRoleSlugs])].sort();
-
   return {
     id: user._id.toString(),
     name: user.name,
     email: user.email,
+    profile_image: serializeStoredImageUrl(user.profileImage),
+    status: serializeUserStatus(user),
     email_verified_at: user.emailVerifiedAt ? user.emailVerifiedAt.toISOString() : null,
-    roles,
+    projects,
+    created_at: user.createdAt.toISOString(),
+    updated_at: user.updatedAt.toISOString(),
+  };
+}
+
+export function serializeAdminUserDetail(user: UserDocument): TAdminUserDetail {
+  return {
+    id: user._id.toString(),
+    name: user.name,
+    email: user.email,
+    profile_image: serializeStoredImageUrl(user.profileImage),
+    status: serializeUserStatus(user),
+    email_verified_at: user.emailVerifiedAt ? user.emailVerifiedAt.toISOString() : null,
     created_at: user.createdAt.toISOString(),
     updated_at: user.updatedAt.toISOString(),
   };

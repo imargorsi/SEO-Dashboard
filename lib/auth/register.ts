@@ -29,6 +29,7 @@ export async function registerUser(input: RegisterUserInput): Promise<{ user: Us
     password: await hashPassword(input.password),
     emailVerifiedAt: null,
     roles: [],
+    status: "active",
   });
 
   try {

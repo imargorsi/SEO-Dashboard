@@ -53,7 +53,7 @@ describe("GET /users — listUsers", () => {
     expect(result.pagination.total).toBe(0);
   });
 
-  it("includes project role slugs from active memberships", async () => {
+  it("includes assigned projects with membership role and project status", async () => {
     await seedSystemRoles();
 
     const owner = await User.create({
@@ -73,7 +73,14 @@ describe("GET /users — listUsers", () => {
     const item = result.items.find((user) => user.email === "project-owner@example.com");
 
     expect(item).toBeDefined();
-    expect(item!.roles).toEqual([PROJECT_OWNER_ROLE]);
+    expect(item!.projects).toEqual([
+      expect.objectContaining({
+        name: "Owner Project",
+        membership_role: PROJECT_OWNER_ROLE,
+        membership_status: "active",
+        status: "pending",
+      }),
+    ]);
   });
 
   it("does not expose password in list items", async () => {
@@ -92,9 +99,12 @@ describe("GET /users — listUsers", () => {
     expect(item).toMatchObject({
       name: "Secret User",
       email: "secret@example.com",
-      roles: [],
+      profile_image: null,
+      status: "active",
+      projects: [],
     });
     expect(item).not.toHaveProperty("password");
+    expect(item).not.toHaveProperty("roles");
   });
 
   it("filters users by search on name or email", async () => {
@@ -121,6 +131,50 @@ describe("GET /users — listUsers", () => {
     const byEmail = await listUsers({ ...defaultListQuery, search: "findme@" });
     expect(byEmail.items).toHaveLength(1);
     expect(byEmail.items[0]!.name).toBe("Find Me");
+  });
+
+  it("filters users by account status and returns status counts", async () => {
+    await User.create({
+      name: "Active Listed",
+      email: "active-listed@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+      status: "active",
+    });
+
+    await User.create({
+      name: "Inactive Listed",
+      email: "inactive-listed@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+      status: "inactive",
+    });
+
+    const inactiveOnly = await listUsers({
+      ...defaultListQuery,
+      search: "listed@",
+      status: "inactive",
+    });
+
+    expect(inactiveOnly.items).toHaveLength(1);
+    expect(inactiveOnly.items[0]!.email).toBe("inactive-listed@example.com");
+    expect(inactiveOnly.filters.status).toBe("inactive");
+    expect(inactiveOnly.filters.status_counts).toEqual({
+      all: 2,
+      active: 1,
+      inactive: 1,
+    });
+
+    const activeOnly = await listUsers({
+      ...defaultListQuery,
+      search: "listed@",
+      status: "active",
+    });
+
+    expect(activeOnly.items).toHaveLength(1);
+    expect(activeOnly.items[0]!.email).toBe("active-listed@example.com");
   });
 
   it("paginates results", async () => {
@@ -159,6 +213,8 @@ describe("GET /users — listUsers", () => {
       filters: {
         search: null,
         newest: true,
+        status: null,
+        status_counts: { all: 0, active: 0, inactive: 0 },
       },
     });
 

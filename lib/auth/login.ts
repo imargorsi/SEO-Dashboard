@@ -5,6 +5,7 @@ import { verifyPassword } from "@/lib/auth/password";
 import { clearLoginAttempts, clientIp, ensureLoginNotRateLimited, recordLoginFailure } from "@/lib/auth/rate-limit";
 import { createAccessToken } from "@/lib/auth/tokens";
 import { serializeUser } from "@/lib/serializers/user";
+import { isActiveUserStatus } from "@/lib/users/constants";
 import { User, type UserDocument } from "@/models";
 import { NextResponse } from "next/server";
 
@@ -29,6 +30,10 @@ export async function authenticateLogin(
     return ApiResponse.validation(authMessages.failed, {
       email: [authMessages.failed],
     });
+  }
+
+  if (!isActiveUserStatus(user.status)) {
+    return ApiResponse.error(authMessages.inactiveAccount, {}, 403);
   }
 
   clearLoginAttempts(normalizedEmail, ip);

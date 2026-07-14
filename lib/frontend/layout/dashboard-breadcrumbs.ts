@@ -24,6 +24,7 @@ const CREATE_KEYS: Record<string, string> = {
 };
 
 const EDIT_KEYS: Record<string, string> = {
+  users: "modules.users.editUserTitle",
   roles: "modules.roles.editRoleTitle",
   projects: "modules.projects.editProjectTitle",
 };

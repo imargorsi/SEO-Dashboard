@@ -12,6 +12,14 @@ async function seed(): Promise<void> {
   await seedSystemRoles();
   console.log("Seeded system roles: project_owner, project_user");
 
+  const backfill = await User.collection.updateMany(
+    { $or: [{ status: { $exists: false } }, { status: null }] },
+    { $set: { status: "active" } },
+  );
+  if (backfill.modifiedCount > 0) {
+    console.log(`Backfilled status=active on ${backfill.modifiedCount} user(s).`);
+  }
+
   const email = env.superAdminEmail();
   const password = env.superAdminPassword();
 
@@ -23,9 +31,11 @@ async function seed(): Promise<void> {
       password: await hashPassword(password),
       emailVerifiedAt: new Date(),
       roles: [SUPER_ADMIN_ROLE],
+      status: "active",
     });
   } else {
     user.emailVerifiedAt = user.emailVerifiedAt ?? new Date();
+    user.status = user.status ?? "active";
     if (!user.roles.includes(SUPER_ADMIN_ROLE)) {
       user.roles = [...user.roles, SUPER_ADMIN_ROLE];
     }

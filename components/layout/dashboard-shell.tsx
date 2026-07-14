@@ -14,10 +14,19 @@ import { cn } from "@/lib/utils";
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const isAuthRevealing = useIsAuthRevealing();
 
   return (
-    <DashboardSidebarProvider value={{ isSidebarOpen, setSidebarOpen: setIsSidebarOpen }}>
+    <DashboardSidebarProvider
+      value={{
+        isSidebarOpen,
+        setSidebarOpen: setIsSidebarOpen,
+        isSidebarCollapsed,
+        setSidebarCollapsed: setIsSidebarCollapsed,
+        toggleSidebarCollapsed: () => setIsSidebarCollapsed((collapsed) => !collapsed),
+      }}
+    >
       <DashboardBreadcrumbProvider>
         <SelectedProjectProvider>
           <ProjectAccessProvider>

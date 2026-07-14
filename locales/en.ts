@@ -14,6 +14,8 @@ export interface Translation {
     aria: string;
     openMenu: string;
     closeMenu: string;
+    collapseSidebar: string;
+    expandSidebar: string;
     sectionGeneral: string;
     sectionMySpace: string;
     dashboard: string;
@@ -734,6 +736,8 @@ const translation: Translation = {
     aria: "Main Navigation",
     openMenu: "Open Menu",
     closeMenu: "Close Menu",
+    collapseSidebar: "Collapse Sidebar",
+    expandSidebar: "Expand Sidebar",
     sectionGeneral: "General",
     sectionMySpace: "My Space",
     dashboard: "Dashboard",

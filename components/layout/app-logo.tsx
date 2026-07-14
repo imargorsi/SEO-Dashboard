@@ -7,6 +7,8 @@ type AppLogoProps = {
   className?: string;
   height?: number;
   priority?: boolean;
+  /** `full` = wordmark; `mark` = brand icon only (favicon). */
+  variant?: "full" | "mark";
   width?: number;
 };
 
@@ -15,8 +17,23 @@ export function AppLogo({
   className,
   height = 24,
   priority = false,
+  variant = "full",
   width = 60,
 }: AppLogoProps) {
+  if (variant === "mark") {
+    return (
+      <Image
+        src="/favicon.svg"
+        alt={alt}
+        width={width}
+        height={height}
+        priority={priority}
+        className={cn(className)}
+        aria-hidden={alt ? undefined : true}
+      />
+    );
+  }
+
   return (
     <>
       <Image

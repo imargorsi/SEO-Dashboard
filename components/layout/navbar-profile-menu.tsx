@@ -19,6 +19,7 @@ const menuItemClass =
 
 type NavbarProfileMenuProps = {
   placement?: "topbar" | "sidebar";
+  isCollapsed?: boolean;
 };
 
 function formatRolesForDisplay(roles: string[]): string {
@@ -26,7 +27,7 @@ function formatRolesForDisplay(roles: string[]): string {
   return roles.map((r) => r.replace(/_/g, " ")).join(" · ");
 }
 
-export function NavbarProfileMenu({ placement = "topbar" }: NavbarProfileMenuProps) {
+export function NavbarProfileMenu({ placement = "topbar", isCollapsed = false }: NavbarProfileMenuProps) {
   const { t } = useTranslation("translation", { keyPrefix: "userMenu" });
   const { t: tVerification } = useTranslation("translation", { keyPrefix: "auth.verification" });
   const router = useRouter();
@@ -43,6 +44,7 @@ export function NavbarProfileMenu({ placement = "topbar" }: NavbarProfileMenuPro
   const roleLine = user ? formatRolesForDisplay(user.roles) : "";
   const isProfileActive = pathname === "/edit-profile" || pathname.startsWith("/edit-profile/");
   const isSidebarPlacement = placement === "sidebar";
+  const isSidebarCollapsed = isSidebarPlacement && isCollapsed;
 
   const close = useCallback(() => setOpen(false), []);
 
@@ -94,6 +96,7 @@ export function NavbarProfileMenu({ placement = "topbar" }: NavbarProfileMenuPro
           isSidebarPlacement
             ? "inline-flex h-12 w-full items-center gap-2.5 rounded-xl border border-border bg-bg-card px-2.5 pe-3 text-text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-border) focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar hover:bg-bg-hover"
             : "inline-flex h-9 items-center gap-2 rounded-lg px-1.5 pe-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-border) focus-visible:ring-offset-2 focus-visible:ring-offset-bg-card",
+          isSidebarCollapsed && "md:h-10 md:justify-center md:px-0 md:pe-0",
           !isSidebarPlacement &&
             (isProfileActive || open
               ? "bg-bg-hover text-text-primary"
@@ -102,6 +105,7 @@ export function NavbarProfileMenu({ placement = "topbar" }: NavbarProfileMenuPro
         aria-expanded={open}
         aria-haspopup="menu"
         aria-label={t("openMenu")}
+        title={isSidebarCollapsed ? displayName : undefined}
         onClick={() => setOpen((v) => !v)}
       >
         <SidebarUserAvatar
@@ -109,9 +113,15 @@ export function NavbarProfileMenu({ placement = "topbar" }: NavbarProfileMenuPro
           imageUrl={user?.profile_image ?? null}
           verified={verified}
           showVerificationBadge
-          size={isSidebarPlacement ? "md" : "sm"}
+          size={isSidebarPlacement ? (isSidebarCollapsed ? "sm" : "md") : "sm"}
         />
-        <span className={cn("min-w-0 flex-1 text-start", !isSidebarPlacement && "hidden sm:block")}>
+        <span
+          className={cn(
+            "min-w-0 flex-1 text-start",
+            !isSidebarPlacement && "hidden sm:block",
+            isSidebarCollapsed && "md:hidden"
+          )}
+        >
           <span className={cn("block truncate text-text-primary", isSidebarPlacement ? "type-body-strong" : "type-caption")}>
             {displayName}
           </span>
@@ -120,7 +130,11 @@ export function NavbarProfileMenu({ placement = "topbar" }: NavbarProfileMenuPro
           ) : null}
         </span>
         <IoChevronDown
-          className={cn("size-3.5 shrink-0 text-text-muted transition-transform", open && "rotate-180")}
+          className={cn(
+            "size-3.5 shrink-0 text-text-muted transition-transform",
+            open && "rotate-180",
+            isSidebarCollapsed && "md:hidden"
+          )}
           aria-hidden
         />
       </button>
@@ -129,7 +143,8 @@ export function NavbarProfileMenu({ placement = "topbar" }: NavbarProfileMenuPro
         <div
           className={cn(
             "absolute z-50 overflow-hidden rounded-xl border border-border bg-bg-card shadow-(--shadow)",
-            isSidebarPlacement ? "inset-x-0 bottom-full mb-2 w-full" : "inset-e-0 top-full mt-3 w-60"
+            isSidebarPlacement ? "inset-x-0 bottom-full mb-2 w-full" : "inset-e-0 top-full mt-3 w-60",
+            isSidebarCollapsed && "md:inset-x-auto md:inset-s-0 md:w-60"
           )}
           role="menu"
           aria-label={t("menuLabel")}

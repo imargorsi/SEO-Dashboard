@@ -16,6 +16,8 @@ const translation: Translation = {
     aria: "التنقل الرئيسي",
     openMenu: "فتح القائمة",
     closeMenu: "إغلاق القائمة",
+    collapseSidebar: "طي الشريط الجانبي",
+    expandSidebar: "توسيع الشريط الجانبي",
     sectionGeneral: "عام",
     sectionMySpace: "مساحتي",
     dashboard: "لوحة التحكم",

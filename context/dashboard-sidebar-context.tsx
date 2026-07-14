@@ -5,6 +5,9 @@ import { createContext, useContext } from "react";
 type DashboardSidebarContextValue = {
   isSidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
+  isSidebarCollapsed: boolean;
+  setSidebarCollapsed: (collapsed: boolean) => void;
+  toggleSidebarCollapsed: () => void;
 };
 
 const DashboardSidebarContext = createContext<DashboardSidebarContextValue | null>(null);

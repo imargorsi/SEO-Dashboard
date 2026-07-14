@@ -60,11 +60,19 @@ function ProjectOption({
   );
 }
 
-export function ProjectSelector() {
+type ProjectSelectorProps = {
+  isCollapsed?: boolean;
+};
+
+export function ProjectSelector({ isCollapsed = false }: ProjectSelectorProps) {
   const { t } = useTranslation("translation", { keyPrefix: "projectSelector" });
   const { projects, selectedProject, setSelectedProjectId, isLoading } = useSelectedProject();
   const [open, setOpen] = useState(false);
   const listId = useId();
+
+  useEffect(() => {
+    if (isCollapsed) setOpen(false);
+  }, [isCollapsed]);
 
   useEffect(() => {
     if (!open) return;
@@ -76,6 +84,22 @@ export function ProjectSelector() {
   }, [open]);
 
   if (isLoading) return null;
+
+  if (isCollapsed) {
+    if (!selectedProject) return null;
+
+    return (
+      <div className="shrink-0 px-2 pb-3 pt-1">
+        <div
+          className="flex items-center justify-center rounded-xl px-1 py-1"
+          title={selectedProject.businessName}
+          aria-label={t("triggerLabel", { name: selectedProject.businessName })}
+        >
+          <ProjectLogo project={selectedProject} size="sm" />
+        </div>
+      </div>
+    );
+  }
 
   if (projects.length === 0) {
     return (

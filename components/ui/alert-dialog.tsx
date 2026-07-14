@@ -54,9 +54,11 @@ function AlertDialogContent({
   onEscapeKeyDown,
 }: React.ComponentProps<"div"> & { onEscapeKeyDown?: (e: KeyboardEvent) => void }) {
   const { open, setOpen } = useAlertDialog();
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => setMounted(true), []);
+  const mounted = React.useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   React.useEffect(() => {
     if (!open) return;

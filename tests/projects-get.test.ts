@@ -192,5 +192,6 @@ describe("GET /projects/{id} — getProjectForUser", () => {
     expect(body.data.owner).toBeNull();
     expect(body.data.logoImage).toContain("pathname=");
     expect(body.data.logoImage).toContain("signature=");
+    expect(body.data.invitedUsers).toEqual([]);
   });
 });

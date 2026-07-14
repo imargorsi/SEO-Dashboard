@@ -30,11 +30,14 @@ export function TableListSearch({
   className,
 }: TTableListSearchProps) {
   const [searchValue, setSearchValue] = useState(value ?? "");
-  const debouncedSearchValue = useDebouncedValue(searchValue, debounceMs);
+  const [prevValue, setPrevValue] = useState(value);
 
-  useEffect(() => {
+  if (value !== prevValue) {
+    setPrevValue(value);
     setSearchValue(value ?? "");
-  }, [value]);
+  }
+
+  const debouncedSearchValue = useDebouncedValue(searchValue, debounceMs);
 
   useEffect(() => {
     const trimmed = searchValue.trim();

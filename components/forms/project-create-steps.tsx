@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next";
 import { Input } from "@/components/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ImageUploadAvatar } from "@/components/ui/image-upload-avatar";
+import { Spinner } from "@/components/ui/spinner";
+import { ProjectInviteUserSelect } from "@/components/forms/project-invite-user-select";
 import type { TUseProjectCreateFormResult } from "@/components/forms/hooks/use-project-create-form.hook";
 import { SEO_GOALS } from "@/lib/projects/constants";
 import { SEO_GOAL_ICONS } from "@/lib/frontend/projects/seo-goal-icons";
@@ -35,6 +37,13 @@ export function ProjectCreateStepContent({ hook }: StepProps) {
     isOwnerOptionsPending,
     isOwnerOptionsError,
     isOwnerOptionsEmpty,
+    inviteSelectedUsers,
+    inviteExcludedUserIds,
+    inviteIsMutating,
+    inviteIsLoading,
+    canInvite,
+    onInviteUserSelect,
+    onInviteUserRemove,
   } = hook;
 
   if (currentStep === 0) {
@@ -266,8 +275,30 @@ export function ProjectCreateStepContent({ hook }: StepProps) {
   }
 
   return (
-    <div className="space-y-1">
-      <h3 className="type-title text-text-primary">{t("sectionInviteUsersTitle")}</h3>
+    <div className="space-y-4">
+      <div className="space-y-1">
+        <h3 className="type-title text-text-primary">{t("sectionInviteUsersTitle")}</h3>
+        <p className="type-body text-text-muted">{t("sectionInviteUsersLead")}</p>
+      </div>
+
+      {!canInvite ? (
+        <p className="type-body text-text-muted">{t("inviteForbidden")}</p>
+      ) : inviteIsLoading ? (
+        <div className="flex items-center gap-2 type-body text-text-muted">
+          <Spinner className="size-4" />
+          <span>{t("inviteLoading")}</span>
+        </div>
+      ) : (
+        <ProjectInviteUserSelect
+          selectedUsers={inviteSelectedUsers}
+          excludedUserIds={inviteExcludedUserIds}
+          onSelect={(user) => void onInviteUserSelect(user)}
+          onRemove={(userId) => void onInviteUserRemove(userId)}
+          isMutating={inviteIsMutating}
+          disabled={!canInvite}
+          helpText={isEdit ? t("inviteHelpEdit") : t("inviteHelpCreate")}
+        />
+      )}
     </div>
   );
 }

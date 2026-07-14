@@ -230,9 +230,11 @@ export interface Translation {
         sectionLocationsLead: string;
         sectionCompetitorsTitle: string;
         sectionCompetitorsLead: string;
-        sidebarSummaryTitle: string;
-        sidebarProjectId: string;
-        sidebarStatus: string;
+        sidebarMembersTitle: string;
+        memberOwnerBadge: string;
+        memberUserBadge: string;
+        memberOwnerFallback: string;
+        noMembers: string;
         timelineTitle: string;
         timelineCreated: string;
         timelineApproved: string;
@@ -244,6 +246,18 @@ export interface Translation {
         noLocations: string;
         noSeoGoals: string;
         noCompetitors: string;
+      };
+      invitations: {
+        bannerAria: string;
+        title: string;
+        invitedBy: string;
+        unknownInviter: string;
+        accept: string;
+        decline: string;
+        acceptSuccess: string;
+        acceptError: string;
+        declineSuccess: string;
+        declineError: string;
       };
       createLead: string;
       createForm: {
@@ -372,6 +386,24 @@ export interface Translation {
         stepSeo: string;
         stepInviteUsers: string;
         sectionInviteUsersTitle: string;
+        sectionInviteUsersLead: string;
+        inviteSearchLabel: string;
+        inviteSearchPlaceholder: string;
+        inviteSearchEmpty: string;
+        inviteSearchError: string;
+        inviteSelectedLabel: string;
+        inviteRemoveAria: string;
+        inviteHelp: string;
+        inviteHelpCreate: string;
+        inviteHelpEdit: string;
+        inviteLoading: string;
+        inviteForbidden: string;
+        inviteSuccess: string;
+        inviteError: string;
+        inviteRemoved: string;
+        inviteRemoveError: string;
+        inviteBatchSuccess: string;
+        inviteBatchPartialError: string;
         stepValidationError: string;
         valRequired: string;
         valMin: string;
@@ -852,9 +884,11 @@ const translation: Translation = {
         sectionLocationsLead: "Geographic Areas This Project Focuses On.",
         sectionCompetitorsTitle: "Competitors",
         sectionCompetitorsLead: "Competitor Websites Provided For Benchmarking.",
-        sidebarSummaryTitle: "Project Summary",
-        sidebarProjectId: "Project ID",
-        sidebarStatus: "Status",
+        sidebarMembersTitle: "Project Members",
+        memberOwnerBadge: "Project Owner",
+        memberUserBadge: "Project User",
+        memberOwnerFallback: "Project Owner",
+        noMembers: "No Members",
         timelineTitle: "Timeline",
         timelineCreated: "Created",
         timelineApproved: "Approved",
@@ -866,6 +900,18 @@ const translation: Translation = {
         noLocations: "No Target Locations Listed.",
         noSeoGoals: "No SEO Goals Selected.",
         noCompetitors: "No Competitors Listed.",
+      },
+      invitations: {
+        bannerAria: "Pending Project Invitations",
+        title: "Invitation To {{projectName}}",
+        invitedBy: "Invited By {{name}}",
+        unknownInviter: "A Project Owner",
+        accept: "Accept",
+        decline: "Decline",
+        acceptSuccess: "Invitation Accepted.",
+        acceptError: "Could Not Accept Invitation.",
+        declineSuccess: "Invitation Declined.",
+        declineError: "Could Not Decline Invitation.",
       },
       createLead: "Add Your Business Information To Start This Project.",
       createForm: {
@@ -995,6 +1041,25 @@ const translation: Translation = {
         stepSeo: "SEO",
         stepInviteUsers: "Invite Users",
         sectionInviteUsersTitle: "Invite Users",
+        sectionInviteUsersLead:
+          "Search Registered Users By Name Or Email And Invite Them As Project Users. They Must Accept Before Gaining Access.",
+        inviteSearchLabel: "Search Users",
+        inviteSearchPlaceholder: "Search By Name Or Email…",
+        inviteSearchEmpty: "No Matching Users Found.",
+        inviteSearchError: "Could Not Search Users. Try Again.",
+        inviteSelectedLabel: "Selected Invitees",
+        inviteRemoveAria: "Remove {{name}}",
+        inviteHelp: "Only Registered, Verified Users Can Be Invited.",
+        inviteHelpCreate: "Only Registered, Verified Users Can Be Invited. Invitations Are Sent After The Project Is Created.",
+        inviteHelpEdit: "Only Registered, Verified Users Can Be Invited. Invitations Are Sent Immediately.",
+        inviteLoading: "Loading Invited Users…",
+        inviteForbidden: "You Do Not Have Permission To Invite Users.",
+        inviteSuccess: "Invitation Sent.",
+        inviteError: "Could Not Send Invitation.",
+        inviteRemoved: "Invitation Removed.",
+        inviteRemoveError: "Could Not Remove Invitation.",
+        inviteBatchSuccess: "Invitations Were Sent.",
+        inviteBatchPartialError: "{{count}} Invitation(s) Could Not Be Sent.",
         stepValidationError: "Fix Required Fields Before Moving To The Next Step.",
         valRequired: "This field is required.",
         valMin: "Use at least 2 characters.",

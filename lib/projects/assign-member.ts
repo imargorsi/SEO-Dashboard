@@ -9,6 +9,7 @@ export type AssignProjectMemberInput = {
   userId: Types.ObjectId | string;
   roleSlug: string;
   status?: ProjectMemberStatus;
+  invitedByUserId?: Types.ObjectId | string | null;
 };
 
 /**
@@ -20,14 +21,22 @@ export async function assignProjectMember(
 ): Promise<ProjectMemberDocument> {
   const role = await resolveProjectRoleBySlug(input.roleSlug);
 
+  const $set: {
+    roleId: Types.ObjectId;
+    status: ProjectMemberStatus;
+    invitedByUserId?: Types.ObjectId | string | null;
+  } = {
+    roleId: role._id,
+    status: input.status ?? "active",
+  };
+
+  if (input.invitedByUserId !== undefined) {
+    $set.invitedByUserId = input.invitedByUserId;
+  }
+
   const member = await ProjectMember.findOneAndUpdate(
     { projectId: input.projectId, userId: input.userId },
-    {
-      $set: {
-        roleId: role._id,
-        status: input.status ?? "active",
-      },
-    },
+    { $set },
     { upsert: true, returnDocument: "after", setDefaultsOnInsert: true },
   );
 

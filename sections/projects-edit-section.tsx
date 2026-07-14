@@ -110,6 +110,7 @@ export function ProjectsEditSection() {
           initialValues={initialValues}
           initialLogoUrl={project.logoImage}
           readOnlyContactEmail={project.pocEmail}
+          initialInvitees={project.invitedUsers ?? []}
         />
       </div>
     </div>

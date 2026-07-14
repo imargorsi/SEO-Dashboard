@@ -3,6 +3,7 @@ import { serializeStoredImageUrl } from "@/lib/serializers/stored-image";
 import type {
   TProjectBusinessHours,
   TProjectDetail,
+  TProjectInvitee,
   TProjectListItem,
   TProjectOwnerSummary,
 } from "@/types/project.types";
@@ -44,6 +45,7 @@ export function serializeProjectListItem(
 export function serializeProject(
   project: ProjectDocument,
   owner?: TProjectOwnerSummary | null,
+  invitedUsers: TProjectInvitee[] = [],
 ): TProjectDetail {
   return {
     id: project._id.toString(),
@@ -62,6 +64,7 @@ export function serializeProject(
     competitorUrls: project.competitorUrls,
     status: project.status,
     owner: owner ?? null,
+    invitedUsers,
     createdByUserId: project.createdByUserId.toString(),
     approvedAt: serializeTimestamp(project.approvedAt),
     approvedByUserId: project.approvedByUserId?.toString() ?? null,

@@ -8,6 +8,7 @@ import { mapUpdateProjectFields } from "@/lib/projects/project-field-map.utils";
 import { deleteStoredProjectLogo } from "@/lib/projects/project-logo-storage";
 import { serializeProject } from "@/lib/serializers/project";
 import { resolveOwnerMap } from "@/lib/projects/resolve-project-owner.utils";
+import { resolveProjectInvitees } from "@/lib/projects/resolve-project-invitees";
 import type { ProjectDocument } from "@/models";
 import type { UpdateProjectInput } from "@/schemas/project";
 
@@ -58,9 +59,12 @@ export async function updateProject(
 }
 
 export async function buildUpdateProjectResponse(project: ProjectDocument): Promise<NextResponse> {
-  const ownerMap = await resolveOwnerMap([project]);
+  const [ownerMap, invitedUsers] = await Promise.all([
+    resolveOwnerMap([project]),
+    resolveProjectInvitees(project._id.toString()),
+  ]);
   return ApiResponse.success(
-    serializeProject(project, ownerMap.get(project._id.toString())),
+    serializeProject(project, ownerMap.get(project._id.toString()), invitedUsers),
     "Project Updated Successfully.",
   );
 }

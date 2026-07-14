@@ -2,12 +2,11 @@
 
 import { useTranslation } from "react-i18next";
 
-import { ProjectStatusChip } from "@/components/projects/project-status-chip";
 import {
-  ProjectDetailField,
   ProjectDetailInfoCard,
   ProjectDetailTagList,
 } from "@/components/projects/detail/project-detail-info-card";
+import { ProjectDetailMembersCard } from "@/components/projects/detail/project-detail-members-card";
 import type { TProjectDetail } from "@/features/projects/projects.api";
 import { formatProjectDate } from "@/lib/frontend/projects/project-detail-display.utils";
 import {
@@ -76,17 +75,7 @@ export function ProjectDetailSidebar({ project }: ProjectDetailSidebarProps) {
 
   return (
     <div className="space-y-4">
-      <ProjectDetailInfoCard title={t("sidebarSummaryTitle")}>
-        <div className="space-y-4">
-          <ProjectDetailField label={t("sidebarProjectId")} value={project.id} />
-          <div className="space-y-1.5">
-            <p className={cn("type-caption-xs uppercase tracking-[0.08em]", elevatedCardMutedClass)}>
-              {t("sidebarStatus")}
-            </p>
-            <ProjectStatusChip status={project.status} />
-          </div>
-        </div>
-      </ProjectDetailInfoCard>
+      <ProjectDetailMembersCard project={project} />
 
       <ProjectDetailInfoCard title={t("timelineTitle")}>
         <ol className="space-y-4">

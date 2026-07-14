@@ -5,6 +5,7 @@ import { ApiResponse } from "@/lib/api/response";
 import type { AuthContext } from "@/lib/auth/guards";
 import { serializeProject, type ProjectDetailDto } from "@/lib/serializers/project";
 import { resolveOwnerMap } from "@/lib/projects/resolve-project-owner.utils";
+import { resolveProjectInvitees } from "@/lib/projects/resolve-project-invitees";
 import { SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
 import { Project, ProjectMember, type ProjectDocument } from "@/models";
 
@@ -43,8 +44,12 @@ export async function getProjectDetailForUser(
     return null;
   }
 
-  const ownerMap = await resolveOwnerMap([project]);
-  return serializeProject(project, ownerMap.get(project._id.toString()));
+  const [ownerMap, invitedUsers] = await Promise.all([
+    resolveOwnerMap([project]),
+    resolveProjectInvitees(project._id.toString()),
+  ]);
+
+  return serializeProject(project, ownerMap.get(project._id.toString()), invitedUsers);
 }
 
 export function buildGetProjectResponse(project: ProjectDetailDto): NextResponse {

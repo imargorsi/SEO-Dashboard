@@ -52,9 +52,11 @@ function SheetContent({
   children,
 }: React.ComponentProps<"div"> & { side?: "right" | "left" }) {
   const { open, setOpen } = useSheet();
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => setMounted(true), []);
+  const mounted = React.useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   React.useEffect(() => {
     if (!open) return;

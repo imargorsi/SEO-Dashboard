@@ -8,6 +8,8 @@ const projectMemberSchema = new Schema(
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     roleId: { type: Schema.Types.ObjectId, ref: "Role", required: true },
     status: { type: String, enum: PROJECT_MEMBER_STATUSES, required: true, default: "active" },
+    /** Set when status is (or was) `invited` — who sent the invitation. */
+    invitedByUserId: { type: Schema.Types.ObjectId, ref: "User", default: null },
   },
   { timestamps: true },
 );
@@ -21,6 +23,7 @@ export type ProjectMemberDocument = InferSchemaType<typeof projectMemberSchema> 
     userId: Types.ObjectId;
     roleId: Types.ObjectId;
     status: (typeof PROJECT_MEMBER_STATUSES)[number];
+    invitedByUserId: Types.ObjectId | null;
   };
 
 export const ProjectMember: Model<ProjectMemberDocument> =

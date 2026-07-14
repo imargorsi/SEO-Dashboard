@@ -65,8 +65,10 @@ describe("GET /projects/{id}/access — getProjectAccessForUser", () => {
     const access = await getProjectAccessForUser(authContextFor(user), project._id.toString());
 
     expect(access).not.toBeNull();
-    expect(access!.permissions).toEqual(expect.arrayContaining(["projects.view", "projects.update"]));
-    expect(access!.permissions).toHaveLength(2);
+    expect(access!.permissions).toEqual(
+      expect.arrayContaining(["projects.view", "projects.update", "members.invite", "members.view"]),
+    );
+    expect(access!.permissions).not.toContain("dashboard.view");
     expect(access!.roles).toContain(PROJECT_OWNER_ROLE);
   });
 

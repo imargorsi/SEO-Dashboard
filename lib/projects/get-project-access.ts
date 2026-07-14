@@ -63,12 +63,18 @@ export async function getProjectAccessForUser(
 
   const role = await Role.findById(membership.roleId).select("slug permissions");
   const roleSlug = role?.slug ?? null;
+  const rolePermissions = role?.permissions ? [...role.permissions] : [];
+  const memberManagementPermissions = rolePermissions.filter((permission) =>
+    permission.startsWith("members."),
+  );
 
   if (project.status === "pending") {
     return {
       projectId,
       roles: roleSlug ? [roleSlug] : [],
-      permissions: [...PENDING_PROJECT_ACCESS_PERMISSIONS],
+      permissions: [
+        ...new Set([...PENDING_PROJECT_ACCESS_PERMISSIONS, ...memberManagementPermissions]),
+      ],
     };
   }
 
@@ -76,7 +82,9 @@ export async function getProjectAccessForUser(
     return {
       projectId,
       roles: roleSlug ? [roleSlug] : [],
-      permissions: [...INACTIVE_PROJECT_ACCESS_PERMISSIONS],
+      permissions: [
+        ...new Set([...INACTIVE_PROJECT_ACCESS_PERMISSIONS, ...memberManagementPermissions]),
+      ],
     };
   }
 

@@ -95,3 +95,24 @@ export function emailVerificationMailContent(verificationUrl: string) {
     ].join("\n"),
   };
 }
+
+export function projectInviteMailContent(input: {
+  projectName: string;
+  inviterName: string;
+  invitationsUrl: string;
+}) {
+  const app = env.appName();
+  return {
+    subject: `You Were Invited To ${input.projectName} On ${app}`,
+    text: [
+      "Hello!",
+      "",
+      `${input.inviterName} invited you to join "${input.projectName}" on ${app}.`,
+      "",
+      "Open your projects page to Accept or Decline the invitation:",
+      input.invitationsUrl,
+      "",
+      "If you were not expecting this invitation, you can safely ignore this email.",
+    ].join("\n"),
+  };
+}

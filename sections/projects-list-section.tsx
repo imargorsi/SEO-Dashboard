@@ -8,6 +8,7 @@ import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
 import { NoProjectComponent } from "@/components/projects/no-project-component";
 import { ProjectCard } from "@/components/projects/project-card";
+import { ProjectInvitationsBanner } from "@/components/projects/project-invitations-banner";
 import { ProjectStatusFilter } from "@/components/projects/project-status-filter";
 import { buttonVariants } from "@/components/ui/button";
 import { LoadingState } from "@/components/ui/loading-state";
@@ -121,6 +122,8 @@ export function ProjectsListSection() {
             ) : null}
           </div>
         </div>
+
+        <ProjectInvitationsBanner />
 
         {isPending ? (
           <LoadingState label={tTable("loading")} />

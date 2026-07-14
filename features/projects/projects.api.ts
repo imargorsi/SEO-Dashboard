@@ -18,7 +18,7 @@ const projectsApi = {
   reducerPath: "projects-api" as const,
 };
 
-const projectKeys = {
+export const projectKeys = {
   all: [projectsApi.reducerPath] as const,
   list: (status?: ProjectStatus | null) => [...projectKeys.all, "list", status ?? "all"] as const,
   detail: (projectId: string) => [...projectKeys.all, "detail", projectId] as const,
@@ -102,7 +102,7 @@ type TUseProjectsQueryOptions = {
 export function useProjectsQuery(options?: TUseProjectsQueryOptions) {
   const status = options?.status ?? null;
 
-  return useQuery({
+  return useQuery<TProjectListItem[]>({
     queryKey: projectKeys.list(status),
     queryFn: () => fetchProjects(status),
     enabled: options?.enabled ?? true,

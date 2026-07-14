@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import type { TUseProjectFormOptions } from "@/components/forms/project-form.types";
 import type { TProjectCreateFormValues } from "@/components/forms/project-create-form.types";
 import { useProjectOwnerOptions } from "@/components/forms/hooks/use-project-owner-options.hook";
+import { useProjectInviteUsers } from "@/components/forms/hooks/use-project-invite-users.hook";
 import {
   useCreateProjectMutation,
   useUpdateProjectMutation,
@@ -21,7 +22,8 @@ import {
   toCreateProjectPayload,
   toUpdateProjectPayload,
 } from "@/lib/frontend/projects/project-form-payload.utils";
-import { isSuperAdmin } from "@/lib/rbac/access";
+import { isSuperAdmin, hasPermission, mergePermissions } from "@/lib/rbac/access";
+import { useProjectAccess } from "@/context/project-access-context";
 
 type UseProjectCreateFormResult = ReturnType<typeof useProjectCreateForm>;
 
@@ -79,17 +81,27 @@ export function useProjectCreateForm(authUser: AuthUser, options: TUseProjectFor
     initialValues,
     initialLogoUrl = null,
     readOnlyContactEmail = null,
+    initialInvitees = [],
   } = options;
 
   const router = useRouter();
   const { t } = useTranslation("translation", { keyPrefix: "modules.projects.createForm" });
+  const { projectPermissions } = useProjectAccess();
   const createMutation = useCreateProjectMutation();
   const updateMutation = useUpdateProjectMutation();
   const [currentStep, setCurrentStep] = useState(0);
   const logoFileRef = useRef<File | null>(null);
   const [logoPreviewUrl, setLogoPreviewUrl] = useState<string | null>(initialLogoUrl);
   const isAdmin = isSuperAdmin(authUser.roles);
+  const permissions = mergePermissions(authUser.permissions, projectPermissions);
+  const canInvite = isAdmin || !isEdit || hasPermission(permissions, "members.invite");
   const ownerOptionsQuery = useProjectOwnerOptions(isAdmin && !isEdit);
+  const inviteUsers = useProjectInviteUsers({
+    projectId,
+    isEdit,
+    initialInvitees,
+    canInvite,
+  });
   const steps = useMemo(() => stepFields(isAdmin, isEdit), [isAdmin, isEdit]);
   const stepLabels = useMemo(
     () => PROJECT_FORM_STEP_LABEL_KEYS.map((key) => t(key)),
@@ -123,7 +135,8 @@ export function useProjectCreateForm(authUser: AuthUser, options: TUseProjectFor
     setLogoPreviewUrl(initialLogoUrl);
   }, [initialLogoUrl]);
 
-  const isSubmitting = isEdit ? updateMutation.isPending : createMutation.isPending;
+  const isSubmitting =
+    (isEdit ? updateMutation.isPending : createMutation.isPending) || inviteUsers.isMutating;
   const isLastStep = currentStep === steps.length - 1;
   const selectedSeoGoals = watch("seoGoals");
   const contactEmail = readOnlyContactEmail ?? authUser.email;
@@ -208,11 +221,17 @@ export function useProjectCreateForm(authUser: AuthUser, options: TUseProjectFor
         return;
       }
 
-      await createMutation.mutateAsync({
+      const created = await createMutation.mutateAsync({
         payload: toCreateProjectPayload(values, isAdmin),
         companyLogoFile: logoFileRef.current,
       });
+      const { failed, total } = await inviteUsers.flushPendingInvites(created.id);
       notify.success(t("successFallback"));
+      if (total > 0 && failed > 0) {
+        notify.error(t("inviteBatchPartialError", { count: failed }));
+      } else if (total > 0) {
+        notify.success(t("inviteBatchSuccess"));
+      }
       router.push(PROJECT_ROUTES.list);
     } catch (error) {
       if (error instanceof ApiError) {
@@ -264,6 +283,13 @@ export function useProjectCreateForm(authUser: AuthUser, options: TUseProjectFor
     isOwnerOptionsPending: ownerOptionsQuery.isPending,
     isOwnerOptionsError: ownerOptionsQuery.isError,
     isOwnerOptionsEmpty: ownerOptionsQuery.isEmpty,
+    inviteSelectedUsers: inviteUsers.selectedUsers,
+    inviteExcludedUserIds: inviteUsers.excludedUserIds,
+    inviteIsMutating: inviteUsers.isMutating,
+    inviteIsLoading: inviteUsers.isLoadingInvites,
+    canInvite: inviteUsers.canInvite,
+    onInviteUserSelect: inviteUsers.addUser,
+    onInviteUserRemove: inviteUsers.removeUser,
   };
 }
 

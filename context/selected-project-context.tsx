@@ -4,69 +4,101 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useState,
+  useSyncExternalStore,
   type ReactNode,
 } from "react";
 
 import { useProjectsQuery, type TProjectListItem } from "@/features/projects/projects.api";
 
 const STORAGE_KEY = "dashboard-selected-project-id";
+const EMPTY_PROJECTS: TProjectListItem[] = [];
 
 type TSelectedProjectContextValue = {
   projects: TProjectListItem[];
   selectedProject: TProjectListItem | null;
   setSelectedProjectId: (id: string) => void;
+  /** Persist preference immediately (e.g. after accepting an invite) before the list refreshes. */
+  preferSelectedProjectId: (id: string) => void;
   isLoading: boolean;
 };
 
 const SelectedProjectContext = createContext<TSelectedProjectContextValue | null>(null);
 
-function resolveSelectedProjectId(projects: TProjectListItem[], storedId: string | null): string | null {
-  if (projects.length === 0) return null;
-  if (storedId && projects.some((project) => project.id === storedId)) return storedId;
+function subscribeStoredProjectId(onStoreChange: () => void) {
+  if (typeof window === "undefined") return () => {};
+
+  const onStorage = (event: StorageEvent) => {
+    if (event.key === STORAGE_KEY || event.key === null) onStoreChange();
+  };
+
+  window.addEventListener("storage", onStorage);
+  return () => window.removeEventListener("storage", onStorage);
+}
+
+function getStoredProjectId(): string | null {
+  try {
+    return localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function getServerStoredProjectId(): string | null {
   return null;
 }
 
+function writeStoredProjectId(id: string | null) {
+  try {
+    if (id) localStorage.setItem(STORAGE_KEY, id);
+    else localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    /* no-op */
+  }
+}
+
 export function SelectedProjectProvider({ children }: { children: ReactNode }) {
-  const { data: projects = [], isLoading } = useProjectsQuery();
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [hydrated, setHydrated] = useState(false);
+  const { data, isLoading } = useProjectsQuery();
+  const projects: TProjectListItem[] = data ?? EMPTY_PROJECTS;
 
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
+  const storedId = useSyncExternalStore(
+    subscribeStoredProjectId,
+    getStoredProjectId,
+    getServerStoredProjectId,
+  );
+  const [preferredId, setPreferredId] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!hydrated || isLoading) return;
+  const effectivePreferredId = preferredId ?? storedId;
 
-    const stored = localStorage.getItem(STORAGE_KEY);
-    setSelectedId(resolveSelectedProjectId(projects, stored));
-  }, [hydrated, isLoading, projects]);
+  const selectedProject = useMemo(
+    () => projects.find((project) => project.id === effectivePreferredId) ?? null,
+    [projects, effectivePreferredId],
+  );
 
   const setSelectedProjectId = useCallback(
     (id: string) => {
       if (!projects.some((project) => project.id === id)) return;
-      setSelectedId(id);
-      localStorage.setItem(STORAGE_KEY, id);
+      writeStoredProjectId(id);
+      setPreferredId(id);
     },
     [projects],
   );
 
-  const selectedProject = useMemo(
-    () => projects.find((project) => project.id === selectedId) ?? null,
-    [projects, selectedId],
-  );
+  const preferSelectedProjectId = useCallback((id: string) => {
+    writeStoredProjectId(id);
+    setPreferredId(id);
+  }, []);
 
   const value = useMemo(
     () => ({
       projects,
       selectedProject,
       setSelectedProjectId,
+      preferSelectedProjectId,
       isLoading,
     }),
-    [projects, selectedProject, setSelectedProjectId, isLoading],
+    [projects, selectedProject, setSelectedProjectId, preferSelectedProjectId, isLoading],
   );
 
   return <SelectedProjectContext.Provider value={value}>{children}</SelectedProjectContext.Provider>;

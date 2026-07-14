@@ -6,6 +6,16 @@ export type TProjectOwnerSummary = {
   profileImage: string | null;
 };
 
+export type TProjectInvitee = {
+  id: string;
+  userId: string;
+  name: string;
+  email: string;
+  profileImage: string | null;
+  status: "invited" | "active";
+  invitedByUserId: string | null;
+};
+
 export type TProjectBusinessHours = {
   opensAt: string | null;
   closesAt: string | null;
@@ -38,6 +48,8 @@ export type TProjectDetail = {
   competitorUrls: string[];
   status: ProjectStatus;
   owner: TProjectOwnerSummary | null;
+  /** Pending invites + active project_user members for Invite Users step. */
+  invitedUsers: TProjectInvitee[];
   createdByUserId: string;
   approvedAt: string | null;
   approvedByUserId: string | null;

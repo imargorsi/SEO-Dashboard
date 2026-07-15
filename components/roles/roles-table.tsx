@@ -14,11 +14,21 @@ type TRolesTableProps = {
   isLoading: boolean;
   isFetching: boolean;
   onPageChange: (page: number) => void;
+  onViewRole?: (roleId: string) => void;
+  onEditRole?: (roleId: string) => void;
 };
 
-export function RolesTable({ query, data, isLoading, isFetching, onPageChange }: TRolesTableProps) {
+export function RolesTable({
+  query,
+  data,
+  isLoading,
+  isFetching,
+  onPageChange,
+  onViewRole,
+  onEditRole,
+}: TRolesTableProps) {
   const { t: tTable } = useTranslation("translation", { keyPrefix: "modules.roles.table" });
-  const columns = useRolesTableColumns();
+  const columns = useRolesTableColumns({ onViewRole, onEditRole });
 
   const items = (data?.items ?? []) as TRoleTableRow[];
   const total = data?.pagination.total ?? 0;

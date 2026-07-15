@@ -55,8 +55,15 @@ const SYSTEM_PROJECT_ROLE_SET = new Set<string>(SYSTEM_PROJECT_ROLE_SLUGS);
 const DEPRECATED_ROLE_SET = new Set<string>(DEPRECATED_ROLE_SLUGS);
 const HIDDEN_ADMIN_ROLE_SET = new Set<string>(HIDDEN_ADMIN_ROLE_SLUGS);
 
-function normalizeRoleKey(value: string): string {
-  return value.trim().toLowerCase().replace(/[\s-]+/g, "_");
+/** Normalize a role name/slug into a comparable underscore key (used for slug generation and reserved-name detection). */
+export function normalizeRoleKey(value: string): string {
+  return (
+    value
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "_")
+      .replace(/^_+|_+$/g, "")
+  );
 }
 
 export function isReservedPlatformRole(slug: string): boolean {
@@ -75,9 +82,4 @@ export function isDeprecatedRole(slug: string): boolean {
 export function isHiddenFromAdminRoleUi(slugOrName: string): boolean {
   const normalized = normalizeRoleKey(slugOrName);
   return HIDDEN_ADMIN_ROLE_SET.has(slugOrName) || HIDDEN_ADMIN_ROLE_SET.has(normalized);
-}
-
-/** System / reserved roles that must not be renamed, permission-edited, or deleted via API. */
-export function isImmutableSystemRole(slug: string): boolean {
-  return isReservedPlatformRole(slug) || isSystemProjectRole(slug) || isDeprecatedRole(slug);
 }

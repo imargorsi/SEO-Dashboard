@@ -4,7 +4,6 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { IoEyeOutline, IoPencil } from "react-icons/io5";
 
-import { RoleScopeBadge } from "@/components/roles/role-scope-badge";
 import type { TAppTableColumn } from "@/components/table/app-table";
 import { TableRowIconActions } from "@/components/table/table-row-icon-actions";
 import { Badge } from "@/components/ui/badge";
@@ -35,16 +34,6 @@ export function useRolesTableColumns({
             <p className="truncate type-body-strong text-text-primary">{item.name}</p>
             <p className="truncate type-caption text-text-muted">{item.slug}</p>
           </div>
-        ),
-      },
-      {
-        key: "scope",
-        label: t("colScope"),
-        render: (item) => (
-          <RoleScopeBadge
-            scope={item.scope}
-            label={item.scope === "platform" ? t("scopePlatform") : t("scopeProject")}
-          />
         ),
       },
       {

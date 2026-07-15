@@ -5,14 +5,11 @@ import { HIDDEN_ADMIN_ROLE_SLUGS } from "@/lib/rbac/roles";
 import { filterVisibleAdminRoles, purgeHiddenAdminRoles } from "@/lib/rbac/purge-hidden-admin-roles";
 import { serializeAdminRoleListItem } from "@/lib/serializers/admin-role";
 import { resolveRoleMemberCounts } from "@/lib/roles/resolve-role-member-counts";
+import { escapeRegex } from "@/lib/roles/role-mutation.utils";
 import type { ListRolesQueryInput } from "@/schemas/list-roles-query";
 import type { TListPagination } from "@/types/admin-user.types";
 import type { TPaginatedRoleList } from "@/types/admin-role.types";
 import { Role } from "@/models";
-
-function escapeRegex(value: string): string {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
 
 function buildPagination(total: number, page: number, perPage: number): TListPagination {
   const lastPage = Math.max(1, Math.ceil(total / perPage));

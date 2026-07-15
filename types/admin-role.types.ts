@@ -13,6 +13,10 @@ export type TAdminRoleListItem = {
   updated_at: string;
 };
 
+export type TAdminRoleDetail = TAdminRoleListItem & {
+  permissions: string[];
+};
+
 export type TRoleListFilters = {
   search: string | null;
   newest: boolean;

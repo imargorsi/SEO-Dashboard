@@ -575,8 +575,12 @@ export interface Translation {
         editErrorFallback: string;
         name: string;
         namePh: string;
+        description: string;
+        descriptionPh: string;
+        systemRoleNameLocked: string;
         permsHeading: string;
         permsSelectAll: string;
+        permsClearAll: string;
         permsCount: string;
         permsLoading: string;
         permsEmpty: string;
@@ -592,6 +596,25 @@ export interface Translation {
         valMin: string;
         backToList: string;
       };
+      actions: {
+        view: string;
+        create: string;
+        edit: string;
+        delete: string;
+        invite: string;
+        remove: string;
+      };
+      detail: {
+        title: string;
+        lead: string;
+        loading: string;
+        members: string;
+        permissionsCount: string;
+        createdAt: string;
+        updatedAt: string;
+        permissionsTitle: string;
+        noPermissions: string;
+      };
       table: {
         searchPlaceholder: string;
         sortLabel: string;
@@ -599,7 +622,6 @@ export interface Translation {
         sortNewest: string;
         sortOldest: string;
         colRole: string;
-        colScope: string;
         colPermissions: string;
         colMembers: string;
         colSystem: string;
@@ -1283,37 +1305,60 @@ const translation: Translation = {
     roles: {
       title: "Roles & Permissions",
       subtitle: "Manage Role Templates And Their Permission Sets.",
-      createRoleTitle: "Create role",
-      editRoleTitle: "Edit role",
+      createRoleTitle: "Create Role",
+      editRoleTitle: "Edit Role",
       createForm: {
-        title: "New role",
-        lead: "Give the role a name and select the permissions it should grant.",
-        editTitle: "Edit role",
-        editLead: "Update the role name and permissions, then save your changes.",
-        editSubmit: "Save changes",
+        title: "Create Role",
+        lead: "Give The Role A Name And Select The Permissions It Should Grant.",
+        editTitle: "Edit Role",
+        editLead: "Update The Role Name And Permissions, Then Save Your Changes.",
+        editSubmit: "Save Changes",
         editSubmitting: "Saving…",
-        editSuccessTitle: "Role updated",
-        editSuccessFallback: "The role was updated.",
-        editErrorTitle: "Could not update role",
-        editErrorFallback: "Something went wrong. Try again.",
-        name: "Role name",
-        namePh: "content_manager",
-        permsHeading: "Select permissions",
-        permsSelectAll: "Select all",
-        permsCount: "{{selected}} of {{total}} selected",
-        permsLoading: "Loading permissions…",
-        permsEmpty: "No permissions available.",
-        permsLoadErrorTitle: "Could not load permissions",
-        permsLoadErrorBody: "Check your connection and try again.",
-        submit: "Create role",
+        editSuccessTitle: "Role Updated",
+        editSuccessFallback: "Role Updated Successfully.",
+        editErrorTitle: "Could Not Update Role",
+        editErrorFallback: "Could Not Update Role. Try Again.",
+        name: "Role Name",
+        namePh: "Content Manager",
+        description: "Description",
+        descriptionPh: "What This Role Is For…",
+        systemRoleNameLocked: "System Role Names Can't Be Changed. You Can Still Edit The Description And Permissions.",
+        permsHeading: "Select Permissions",
+        permsSelectAll: "Select All",
+        permsClearAll: "Clear All",
+        permsCount: "{{selected}} Of {{total}} Selected",
+        permsLoading: "Loading Permissions…",
+        permsEmpty: "No Permissions Available.",
+        permsLoadErrorTitle: "Could Not Load Permissions",
+        permsLoadErrorBody: "Check Your Connection And Try Again.",
+        submit: "Create Role",
         submitting: "Creating…",
-        successTitle: "Role created",
-        successFallback: "The role was saved.",
-        errorTitle: "Could not create role",
-        errorFallback: "Something went wrong. Try again.",
-        valRequired: "This field is required.",
-        valMin: "Use at least 2 characters.",
-        backToList: "Back to roles",
+        successTitle: "Role Created",
+        successFallback: "Role Created Successfully.",
+        errorTitle: "Could Not Create Role",
+        errorFallback: "Could Not Create Role. Try Again.",
+        valRequired: "This Field Is Required.",
+        valMin: "Use At Least 2 Characters.",
+        backToList: "Back To Roles",
+      },
+      actions: {
+        view: "View",
+        create: "Create",
+        edit: "Edit",
+        delete: "Delete",
+        invite: "Invite",
+        remove: "Remove",
+      },
+      detail: {
+        title: "Role Details",
+        lead: "Permission Summary For This Role.",
+        loading: "Loading Role…",
+        members: "Members",
+        permissionsCount: "Permissions",
+        createdAt: "Created",
+        updatedAt: "Last Updated",
+        permissionsTitle: "Granted Permissions",
+        noPermissions: "No Permissions Granted.",
       },
       table: {
         searchPlaceholder: "Search Roles...",
@@ -1322,7 +1367,6 @@ const translation: Translation = {
         sortNewest: "Newest",
         sortOldest: "Oldest",
         colRole: "Role",
-        colScope: "Scope",
         colPermissions: "Permissions",
         colMembers: "Members",
         colSystem: "System",

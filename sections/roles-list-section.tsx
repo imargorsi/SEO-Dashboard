@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { IoAdd } from "react-icons/io5";
 
+import { RoleDetailSheet } from "@/components/roles/role-detail-sheet";
 import { RolesTable } from "@/components/roles/roles-table";
 import { TableListSearch } from "@/components/table/table-list-search";
 import { TableListSort } from "@/components/table/table-list-sort";
@@ -15,17 +17,20 @@ import { useAuthUserQuery } from "@/features/auth/auth.api";
 import { useRolesQuery } from "@/features/roles/roles.api";
 import { useQueryParams } from "@/hooks/use-query-params.hook";
 import { roleCanCreate, roleCanView } from "@/lib/frontend/roles/acl";
+import { ROLE_ROUTES } from "@/lib/frontend/roles/role-routes.utils";
 import { parseRolesListQuery } from "@/lib/frontend/roles/roles-list-query.utils";
 import { notify } from "@/lib/frontend/feedback/notify";
 import { cn } from "@/lib/utils";
 
 export function RolesListSection() {
+  const router = useRouter();
   const { t } = useTranslation("translation", { keyPrefix: "modules.roles" });
   const { data: authUser, isLoading: isAuthLoading } = useAuthUserQuery();
   const { queryParams, setQueryParams, updateQueryParams, deleteQueryParams } = useQueryParams();
   const listQuery = parseRolesListQuery(queryParams);
   const canCreate = roleCanCreate(authUser?.permissions);
   const canView = useMemo(() => roleCanView(authUser?.permissions), [authUser]);
+  const [selectedRoleId, setSelectedRoleId] = useState<string | null>(null);
 
   const { data, error, isLoading, isFetching } = useRolesQuery({
     page: listQuery.page,
@@ -94,6 +99,21 @@ export function RolesListSection() {
     [deleteQueryParams, setQueryParams],
   );
 
+  const onViewRole = useCallback((roleId: string) => {
+    setSelectedRoleId(roleId);
+  }, []);
+
+  const onEditRole = useCallback(
+    (roleId: string) => {
+      router.push(ROLE_ROUTES.edit(roleId));
+    },
+    [router],
+  );
+
+  const onDetailOpenChange = useCallback((open: boolean) => {
+    if (!open) setSelectedRoleId(null);
+  }, []);
+
   return (
     <div className="w-full min-w-0">
       <div className="space-y-5 px-4 py-6 sm:px-6">
@@ -138,10 +158,18 @@ export function RolesListSection() {
               isLoading={isLoading}
               isFetching={isFetching}
               onPageChange={onPageChange}
+              onViewRole={onViewRole}
+              onEditRole={onEditRole}
             />
           </div>
         ) : null}
       </div>
+
+      <RoleDetailSheet
+        roleId={selectedRoleId}
+        open={Boolean(selectedRoleId)}
+        onOpenChange={onDetailOpenChange}
+      />
     </div>
   );
 }

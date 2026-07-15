@@ -14,6 +14,10 @@ const roleSchema = new Schema(
   { timestamps: true }
 );
 
+// Case-insensitive uniqueness, enforced at the DB level so a race between two concurrent
+// creates/renames with the same name (differing only by case) can't both succeed.
+roleSchema.index({ name: 1 }, { unique: true, collation: { locale: "en", strength: 2 } });
+
 export type RoleDocument = InferSchemaType<typeof roleSchema> &
   mongoose.Document & {
     slug: string;

@@ -1,5 +1,5 @@
-import { PlaceholderPage } from "@/components/migration/placeholder-page";
+import { RolesEditSection } from "@/sections/roles-edit-section";
 
 export default function EditRolePage() {
-  return <PlaceholderPage title="Edit role" />;
+  return <RolesEditSection />;
 }

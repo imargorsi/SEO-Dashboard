@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import type { FilterQuery } from "mongoose";
 
 import { ApiResponse } from "@/lib/api/response";
 import { SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
@@ -12,7 +11,7 @@ import {
 } from "@/lib/users/user-status-filter.utils";
 import type { ListUsersQueryInput } from "@/schemas/list-users-query";
 import type { TPaginatedList, TAdminUserListItem, TListPagination } from "@/types/admin-user.types";
-import { User, type UserDocument } from "@/models";
+import { User } from "@/models";
 
 function escapeRegex(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -41,7 +40,7 @@ function buildPagination(total: number, page: number, perPage: number): TListPag
   };
 }
 
-function buildSearchFilter(search?: string): FilterQuery<UserDocument> | null {
+function buildSearchFilter(search?: string) {
   if (!search) return null;
 
   const pattern = escapeRegex(search);
@@ -50,7 +49,7 @@ function buildSearchFilter(search?: string): FilterQuery<UserDocument> | null {
   };
 }
 
-function buildStatusFilter(status?: TUserAccountStatus): FilterQuery<UserDocument> | null {
+function buildStatusFilter(status?: TUserAccountStatus) {
   if (status === "inactive") {
     return { status: "inactive" };
   }
@@ -61,14 +60,14 @@ function buildStatusFilter(status?: TUserAccountStatus): FilterQuery<UserDocumen
   return null;
 }
 
-function combineFilters(parts: Array<FilterQuery<UserDocument> | null>): FilterQuery<UserDocument> {
-  const active = parts.filter((part): part is FilterQuery<UserDocument> => part != null);
+function combineFilters(parts: Array<object | null>) {
+  const active = parts.filter((part): part is object => part != null);
   if (active.length === 0) return {};
   if (active.length === 1) return active[0]!;
   return { $and: active };
 }
 
-function buildListUsersFilter(search?: string, status?: TUserAccountStatus): FilterQuery<UserDocument> {
+function buildListUsersFilter(search?: string, status?: TUserAccountStatus) {
   return combineFilters([
     { roles: { $nin: [SUPER_ADMIN_ROLE] } },
     buildSearchFilter(search),
@@ -76,7 +75,7 @@ function buildListUsersFilter(search?: string, status?: TUserAccountStatus): Fil
   ]);
 }
 
-async function countUsersByStatus(baseFilter: FilterQuery<UserDocument>) {
+async function countUsersByStatus(baseFilter: object) {
   const [active, inactive] = await Promise.all([
     User.countDocuments(combineFilters([baseFilter, buildStatusFilter("active")])),
     User.countDocuments(combineFilters([baseFilter, buildStatusFilter("inactive")])),

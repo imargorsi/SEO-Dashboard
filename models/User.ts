@@ -61,8 +61,7 @@ function registerUserModel(): Model<UserDocument> {
   }
 
   if (existing) {
-    delete mongoose.models.User;
-    delete mongoose.connection.models.User;
+    mongoose.deleteModel("User");
   }
 
   return mongoose.model<UserDocument>("User", userSchema);

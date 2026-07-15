@@ -6,6 +6,7 @@ import type { AuthContext } from "@/lib/auth/guards";
 import { hasPermission } from "@/lib/rbac/access";
 import { allProjectCatalogPermissions, projectPermission } from "@/lib/rbac/permission-catalog";
 import { SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
+import { isActiveRoleStatus } from "@/lib/roles/constants";
 import { Project, ProjectMember, Role } from "@/models";
 
 const PENDING_PROJECT_ACCESS_PERMISSIONS = [
@@ -24,10 +25,7 @@ export type ProjectAccessDto = {
   permissions: string[];
 };
 
-export async function getProjectAccessForUser(
-  auth: AuthContext,
-  projectId: string,
-): Promise<ProjectAccessDto | null> {
+export async function getProjectAccessForUser(auth: AuthContext, projectId: string): Promise<ProjectAccessDto | null> {
   if (!mongoose.isValidObjectId(projectId)) {
     return null;
   }
@@ -61,20 +59,17 @@ export async function getProjectAccessForUser(
     return null;
   }
 
-  const role = await Role.findById(membership.roleId).select("slug permissions");
+  const role = await Role.findById(membership.roleId).select("slug permissions status");
   const roleSlug = role?.slug ?? null;
-  const rolePermissions = role?.permissions ? [...role.permissions] : [];
-  const memberManagementPermissions = rolePermissions.filter((permission) =>
-    permission.startsWith("members."),
-  );
+  // An inactive role grants no permissions, even if it's still referenced by a membership.
+  const rolePermissions = role && isActiveRoleStatus(role.status) ? [...role.permissions] : [];
+  const memberManagementPermissions = rolePermissions.filter((permission) => permission.startsWith("members."));
 
   if (project.status === "pending") {
     return {
       projectId,
       roles: roleSlug ? [roleSlug] : [],
-      permissions: [
-        ...new Set([...PENDING_PROJECT_ACCESS_PERMISSIONS, ...memberManagementPermissions]),
-      ],
+      permissions: [...new Set([...PENDING_PROJECT_ACCESS_PERMISSIONS, ...memberManagementPermissions])],
     };
   }
 
@@ -82,9 +77,7 @@ export async function getProjectAccessForUser(
     return {
       projectId,
       roles: roleSlug ? [roleSlug] : [],
-      permissions: [
-        ...new Set([...INACTIVE_PROJECT_ACCESS_PERMISSIONS, ...memberManagementPermissions]),
-      ],
+      permissions: [...new Set([...INACTIVE_PROJECT_ACCESS_PERMISSIONS, ...memberManagementPermissions])],
     };
   }
 
@@ -95,14 +88,14 @@ export async function getProjectAccessForUser(
   return {
     projectId,
     roles: roleSlug ? [roleSlug] : [],
-    permissions: role?.permissions ? [...role.permissions] : [],
+    permissions: rolePermissions,
   };
 }
 
 export async function requireProjectPermission(
   auth: AuthContext,
   projectId: string,
-  permission: string,
+  permission: string
 ): Promise<NextResponse | null> {
   const access = await getProjectAccessForUser(auth, projectId);
   if (!access) {

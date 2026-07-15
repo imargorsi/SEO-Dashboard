@@ -11,13 +11,14 @@ describe("listRolesQuerySchema", () => {
     });
   });
 
-  it("parses search, pagination, and newest params", () => {
-    const params = new URLSearchParams("page=2&per_page=25&search=owner&newest=false");
+  it("parses search, pagination, newest, and status params", () => {
+    const params = new URLSearchParams("page=2&per_page=25&search=owner&newest=false&status=inactive");
     expect(parseListRolesQuery(params)).toEqual({
       page: 2,
       per_page: 25,
       search: "owner",
       newest: false,
+      status: "inactive",
     });
   });
 

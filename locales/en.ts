@@ -615,6 +615,12 @@ export interface Translation {
         permissionsTitle: string;
         noPermissions: string;
       };
+      statusFilter: {
+        ariaLabel: string;
+        all: string;
+        active: string;
+        inactive: string;
+      };
       table: {
         searchPlaceholder: string;
         sortLabel: string;
@@ -625,12 +631,15 @@ export interface Translation {
         colPermissions: string;
         colMembers: string;
         colSystem: string;
+        colStatus: string;
         colActions: string;
         scopePlatform: string;
         scopeProject: string;
         permissionsCount: string;
         systemYes: string;
         systemNo: string;
+        statusActive: string;
+        statusInactive: string;
         showingRoles: string;
         pageNumber: string;
         loading: string;
@@ -638,6 +647,11 @@ export interface Translation {
         emptyBody: string;
         viewRole: string;
         editRole: string;
+        activateRole: string;
+        deactivateRole: string;
+        activateSuccess: string;
+        deactivateSuccess: string;
+        statusActionError: string;
         createRole: string;
         previousPage: string;
         nextPage: string;
@@ -867,7 +881,8 @@ const translation: Translation = {
       title: "Users",
       subtitle: "Manage Users And Their Access In Your Workspace.",
       createUserTitle: "Create User",
-      createLead: "Add A New User Account With Name, Email, And Password. Assign Project Roles When Inviting Them To A Project.",
+      createLead:
+        "Add A New User Account With Name, Email, And Password. Assign Project Roles When Inviting Them To A Project.",
       editUserTitle: "Edit User",
       editLead: "Update This User's Name, Email, Password, Or Profile Image.",
       createForm: {
@@ -1206,7 +1221,8 @@ const translation: Translation = {
         inviteSelectedLabel: "Selected Invitees",
         inviteRemoveAria: "Remove {{name}}",
         inviteHelp: "Only Registered, Verified Users Can Be Invited.",
-        inviteHelpCreate: "Only Registered, Verified Users Can Be Invited. Invitations Are Sent After The Project Is Created.",
+        inviteHelpCreate:
+          "Only Registered, Verified Users Can Be Invited. Invitations Are Sent After The Project Is Created.",
         inviteHelpEdit: "Only Registered, Verified Users Can Be Invited. Invitations Are Sent Immediately.",
         inviteLoading: "Loading Invited Users…",
         inviteForbidden: "You Do Not Have Permission To Invite Users.",
@@ -1360,6 +1376,12 @@ const translation: Translation = {
         permissionsTitle: "Granted Permissions",
         noPermissions: "No Permissions Granted.",
       },
+      statusFilter: {
+        ariaLabel: "Filter Roles By Status",
+        all: "All Roles",
+        active: "Active",
+        inactive: "Inactive",
+      },
       table: {
         searchPlaceholder: "Search Roles...",
         sortLabel: "Sort",
@@ -1370,12 +1392,15 @@ const translation: Translation = {
         colPermissions: "Permissions",
         colMembers: "Members",
         colSystem: "System",
+        colStatus: "Status",
         colActions: "Actions",
         scopePlatform: "Platform",
         scopeProject: "Project",
         permissionsCount: "{{count}} Permissions",
         systemYes: "System",
         systemNo: "Custom",
+        statusActive: "Active",
+        statusInactive: "Inactive",
         showingRoles: "Showing {{from}} To {{to}} Of {{total}} Roles",
         pageNumber: "Page {{page}}",
         loading: "Loading Roles...",
@@ -1383,6 +1408,11 @@ const translation: Translation = {
         emptyBody: "Try Another Search Or Clear Filters To View All Roles.",
         viewRole: "View {{name}}",
         editRole: "Edit {{name}}",
+        activateRole: "Activate {{name}}",
+        deactivateRole: "Deactivate {{name}}",
+        activateSuccess: "Role Activated Successfully.",
+        deactivateSuccess: "Role Deactivated Successfully.",
+        statusActionError: "Could Not Update Role Status. Try Again.",
         createRole: "Add Role",
         previousPage: "Previous Page",
         nextPage: "Next Page",
@@ -1417,8 +1447,7 @@ const translation: Translation = {
       loginSuccess: "Signed in successfully.",
       loginErrorUnexpected: "Something went wrong. Please try again.",
       emailVerifiedSuccess: "Your email address has been verified. You can sign in now.",
-      registrationSuccess:
-        "Account created. Check your email for a verification link, then sign in to continue.",
+      registrationSuccess: "Account created. Check your email for a verification link, then sign in to continue.",
       noAccountPrompt: "New here?",
       registerCta: "Start Your Journey",
     },

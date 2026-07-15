@@ -7,6 +7,7 @@ export type TAdminRoleListItem = {
   description: string;
   scope: "platform" | "project";
   is_system: boolean;
+  status: "active" | "inactive";
   permissions_count: number;
   members_count: number;
   created_at: string;

@@ -12,7 +12,12 @@
       "Read(//d/tmp/**)",
       "Bash(git -C \"d:\\\\Projects\\\\seo-dashboard\" diff HEAD -- lib/rbac/roles.ts lib/roles/update-role.ts lib/roles/create-role.ts lib/rbac/permission-catalog.ts lib/frontend/roles/permission-labels.utils.ts)",
       "Bash(git --no-pager diff HEAD -- lib/roles/get-role.ts lib/roles/update-role.ts lib/roles/create-role.ts app/api/v1/admin/roles/[id]/route.ts features/permissions/permissions.api.ts)",
-      "Bash(git --no-pager diff HEAD -- components/roles/role-detail-sheet.tsx features/roles/roles.api.ts sections/roles-edit-section.tsx sections/roles-create-section.tsx app/api/v1/admin/roles/route.ts)"
+      "Bash(git --no-pager diff HEAD -- components/roles/role-detail-sheet.tsx features/roles/roles.api.ts sections/roles-edit-section.tsx sections/roles-create-section.tsx app/api/v1/admin/roles/route.ts)",
+      "Bash(command -v mongod)",
+      "Bash(git stash *)",
+      "Bash(npx prettier *)",
+      "Bash(git check-ignore *)",
+      "Bash(grep -n \"### Roles$\\\\|roles-table.tsx\\\\|role-detail-sheet.tsx\\\\|role-routes.utils.ts\\\\|Implemented ✅\\\\|Not built yet\\\\|^Status: 🟡\" doc/modules/04-admin-roles-permissions.md)"
     ]
   }
 }

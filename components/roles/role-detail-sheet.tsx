@@ -4,20 +4,16 @@ import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
 import { RoleScopeBadge } from "@/components/roles/role-scope-badge";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { LoadingState } from "@/components/ui/loading-state";
+import { StatusIndicator } from "@/components/ui/status-indicator";
 import { usePermissionCatalogQuery } from "@/features/permissions/permissions.api";
 import { useRoleQuery } from "@/features/roles/roles.api";
 import { formatShortDate } from "@/lib/frontend/date/format-relative-date.utils";
 import { elevatedCardMutedClass, elevatedCardSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { actionLabelKey, capitalizeAction, modulePermission } from "@/lib/frontend/roles/permission-labels.utils";
+import { isActiveRoleStatus } from "@/lib/roles/constants";
 import { cn } from "@/lib/utils";
 
 type TRoleDetailSheetProps = {
@@ -29,7 +25,7 @@ type TRoleDetailSheetProps = {
 function DetailField({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="space-y-1">
-      <p className={cn("type-caption-xs uppercase tracking-[0.08em]", elevatedCardMutedClass)}>{label}</p>
+      <p className={cn("type-caption-xs tracking-[0.08em] uppercase", elevatedCardMutedClass)}>{label}</p>
       <div className="type-body text-text-primary">{children}</div>
     </div>
   );
@@ -69,10 +65,13 @@ export function RoleDetailSheet({ roleId, open, onOpenChange }: TRoleDetailSheet
                   />
                 </div>
               </div>
-              <p className="mt-1 type-caption text-text-muted">{role.slug}</p>
-              {role.description ? (
-                <p className="mt-3 type-body text-text-secondary">{role.description}</p>
-              ) : null}
+              <p className="type-caption text-text-muted mt-1">{role.slug}</p>
+              <StatusIndicator
+                className="mt-2"
+                status={isActiveRoleStatus(role.status) ? "active" : "inactive"}
+                label={isActiveRoleStatus(role.status) ? tTable("statusActive") : tTable("statusInactive")}
+              />
+              {role.description ? <p className="type-body text-text-secondary mt-3">{role.description}</p> : null}
             </section>
 
             <section className="grid grid-cols-2 gap-4">
@@ -82,7 +81,7 @@ export function RoleDetailSheet({ roleId, open, onOpenChange }: TRoleDetailSheet
               <DetailField label={t("updatedAt")}>{formatShortDate(role.updated_at, i18n.language)}</DetailField>
             </section>
 
-            <section className="space-y-3 border-t border-border pt-5">
+            <section className="border-border space-y-3 border-t pt-5">
               <h3 className="type-label text-text-primary">{t("permissionsTitle")}</h3>
 
               {role.permissions.length === 0 ? (
@@ -91,7 +90,7 @@ export function RoleDetailSheet({ roleId, open, onOpenChange }: TRoleDetailSheet
                 <div className="space-y-3">
                   {modules.map((module) => {
                     const grantedActions = module.actions.filter((action) =>
-                      role.permissions.includes(modulePermission(module.slug, action)),
+                      role.permissions.includes(modulePermission(module.slug, action))
                     );
                     if (grantedActions.length === 0) return null;
 

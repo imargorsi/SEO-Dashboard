@@ -6,7 +6,7 @@ import { AppTable } from "@/components/table/app-table";
 import { useRolesTableColumns, type TRoleTableRow } from "@/hooks/use-roles-table-columns.hook";
 import { buildRolesPaginationSummary } from "@/lib/frontend/roles/roles-table.utils";
 import type { TRolesListQuery } from "@/lib/frontend/roles/roles-list-query.utils";
-import type { TPaginatedRoleList } from "@/types/admin-role.types";
+import type { TAdminRoleListItem, TPaginatedRoleList } from "@/types/admin-role.types";
 
 type TRolesTableProps = {
   query: TRolesListQuery;
@@ -16,6 +16,9 @@ type TRolesTableProps = {
   onPageChange: (page: number) => void;
   onViewRole?: (roleId: string) => void;
   onEditRole?: (roleId: string) => void;
+  onToggleRoleStatus?: (role: TAdminRoleListItem) => void;
+  canUpdate?: boolean;
+  statusActionPendingRoleId?: string | null;
 };
 
 export function RolesTable({
@@ -26,9 +29,18 @@ export function RolesTable({
   onPageChange,
   onViewRole,
   onEditRole,
+  onToggleRoleStatus,
+  canUpdate,
+  statusActionPendingRoleId,
 }: TRolesTableProps) {
   const { t: tTable } = useTranslation("translation", { keyPrefix: "modules.roles.table" });
-  const columns = useRolesTableColumns({ onViewRole, onEditRole });
+  const columns = useRolesTableColumns({
+    onViewRole,
+    onEditRole,
+    onToggleRoleStatus,
+    canUpdate,
+    statusActionPendingRoleId,
+  });
 
   const items = (data?.items ?? []) as TRoleTableRow[];
   const total = data?.pagination.total ?? 0;
@@ -50,7 +62,7 @@ export function RolesTable({
         total,
         onPageChange,
         summaryLabel: buildRolesPaginationSummary(query.page, query.per_page, total, ({ from, to, total: count }) =>
-          tTable("showingRoles", { from, to, total: count }),
+          tTable("showingRoles", { from, to, total: count })
         ),
         previousPageLabel: tTable("previousPage"),
         nextPageLabel: tTable("nextPage"),

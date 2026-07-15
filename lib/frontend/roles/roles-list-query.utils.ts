@@ -1,3 +1,6 @@
+import type { TRoleStatus } from "@/lib/roles/constants";
+import { parseRoleStatusFilter } from "@/lib/roles/role-status-filter.utils";
+
 type TQueryParamValue = string | string[];
 
 export type TRolesListQuery = {
@@ -5,6 +8,7 @@ export type TRolesListQuery = {
   per_page: number;
   search: string | null;
   newest: boolean;
+  status: TRoleStatus | null;
 };
 
 const DEFAULT_PAGE = 1;
@@ -28,11 +32,13 @@ export function parseRolesListQuery(params: Record<string, TQueryParamValue>): T
   const per_page = Math.min(perPageRaw, 100);
   const searchRaw = readStringParam(params.search)?.trim();
   const newestRaw = readStringParam(params.newest);
+  const status = parseRoleStatusFilter(readStringParam(params.status)) ?? null;
 
   return {
     page,
     per_page,
     search: searchRaw ? searchRaw : null,
     newest: newestRaw !== "false" && newestRaw !== "0",
+    status,
   };
 }

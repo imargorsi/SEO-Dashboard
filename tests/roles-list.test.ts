@@ -1,8 +1,13 @@
 import { describe, expect, it } from "vitest";
 
+import { hashPassword } from "@/lib/auth/password";
 import { seedSystemRoles } from "@/lib/rbac/seed-roles";
 import { buildListRolesResponse, listRoles } from "@/lib/roles/list-roles";
+import { createRole } from "@/lib/roles/create-role";
+import { deactivateRole } from "@/lib/roles/role-status-actions";
 import { PROJECT_OWNER_ROLE, PROJECT_USER_ROLE } from "@/lib/rbac/roles";
+import { User } from "@/models";
+import { authContextFor } from "@/tests/helpers/project-test-utils";
 
 const defaultListQuery = { page: 1, per_page: 15, newest: true } as const;
 
@@ -68,6 +73,54 @@ describe("GET /admin/roles — listRoles", () => {
     for (let index = 1; index < timestamps.length; index += 1) {
       expect(timestamps[index]).toBeGreaterThanOrEqual(timestamps[index - 1]!);
     }
+  });
+
+  it("filters roles by status and returns status counts", async () => {
+    const admin = authContextFor(
+      await User.create({
+        name: "Admin",
+        email: "roles-list-status-admin@example.com",
+        password: await hashPassword("password"),
+        emailVerifiedAt: new Date(),
+        roles: ["super_admin"],
+      })
+    );
+
+    const { role: activeRole } = await createRole({
+      name: "Roles List Active",
+      description: "",
+      permissions: [],
+    });
+    const { role: inactiveRole } = await createRole({
+      name: "Roles List Inactive",
+      description: "",
+      permissions: [],
+    });
+    await deactivateRole(admin, inactiveRole._id.toString());
+
+    const inactiveOnly = await listRoles({
+      ...defaultListQuery,
+      search: "Roles List",
+      status: "inactive",
+    });
+
+    expect(inactiveOnly.items).toHaveLength(1);
+    expect(inactiveOnly.items[0]!.slug).toBe(inactiveRole.slug);
+    expect(inactiveOnly.filters.status).toBe("inactive");
+    expect(inactiveOnly.filters.status_counts).toEqual({
+      all: 2,
+      active: 1,
+      inactive: 1,
+    });
+
+    const activeOnly = await listRoles({
+      ...defaultListQuery,
+      search: "Roles List",
+      status: "active",
+    });
+
+    expect(activeOnly.items).toHaveLength(1);
+    expect(activeOnly.items[0]!.slug).toBe(activeRole.slug);
   });
 
   it("serializes list response envelope", async () => {

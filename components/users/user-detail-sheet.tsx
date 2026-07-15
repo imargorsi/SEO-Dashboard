@@ -5,14 +5,8 @@ import { useTranslation } from "react-i18next";
 
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { UserProjectAssignments } from "@/components/users/user-project-assignments";
-import { UserStatusIndicator } from "@/components/users/user-status-indicator";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { StatusIndicator } from "@/components/ui/status-indicator";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { formatShortDate } from "@/lib/frontend/date/format-relative-date.utils";
 import { elevatedCardMutedClass, elevatedCardSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { isActiveUserStatus } from "@/lib/users/constants";
@@ -28,7 +22,7 @@ type UserDetailSheetProps = {
 function DetailField({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="space-y-1">
-      <p className={cn("type-caption-xs uppercase tracking-[0.08em]", elevatedCardMutedClass)}>{label}</p>
+      <p className={cn("type-caption-xs tracking-[0.08em] uppercase", elevatedCardMutedClass)}>{label}</p>
       <div className="type-body text-text-primary">{children}</div>
     </div>
   );
@@ -52,16 +46,11 @@ export function UserDetailSheet({ user, open, onOpenChange }: UserDetailSheetPro
           <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto px-5 py-5">
             <section className={cn(elevatedCardSurfaceClass, "rounded-2xl p-4")}>
               <div className="flex items-start gap-3">
-                <UserAvatar
-                  name={user.name}
-                  imageUrl={user.profile_image}
-                  size="lg"
-                  roundedClassName="rounded-xl"
-                />
+                <UserAvatar name={user.name} imageUrl={user.profile_image} size="lg" roundedClassName="rounded-xl" />
                 <div className="min-w-0 space-y-1">
-                  <p className="truncate type-body-strong text-text-primary">{user.name}</p>
-                  <p className="truncate type-caption text-text-muted">{user.email}</p>
-                  <UserStatusIndicator
+                  <p className="type-body-strong text-text-primary truncate">{user.name}</p>
+                  <p className="type-caption text-text-muted truncate">{user.email}</p>
+                  <StatusIndicator
                     status={accountStatus}
                     label={accountStatus === "active" ? tTable("statusActive") : tTable("statusInactive")}
                     className="mt-1"
@@ -72,12 +61,8 @@ export function UserDetailSheet({ user, open, onOpenChange }: UserDetailSheetPro
 
             <section className="space-y-4">
               <DetailField label={t("email")}>{user.email}</DetailField>
-              <DetailField label={t("createdAt")}>
-                {formatShortDate(user.created_at, i18n.language)}
-              </DetailField>
-              <DetailField label={t("updatedAt")}>
-                {formatShortDate(user.updated_at, i18n.language)}
-              </DetailField>
+              <DetailField label={t("createdAt")}>{formatShortDate(user.created_at, i18n.language)}</DetailField>
+              <DetailField label={t("updatedAt")}>{formatShortDate(user.updated_at, i18n.language)}</DetailField>
               <DetailField label={t("emailVerifiedAt")}>
                 {user.email_verified_at
                   ? formatShortDate(user.email_verified_at, i18n.language)
@@ -85,7 +70,7 @@ export function UserDetailSheet({ user, open, onOpenChange }: UserDetailSheetPro
               </DetailField>
             </section>
 
-            <section className="space-y-3 border-t border-border pt-5">
+            <section className="border-border space-y-3 border-t pt-5">
               <div className="space-y-1">
                 <h3 className="type-label text-text-primary">{t("projectsTitle")}</h3>
                 <p className="type-caption text-text-muted">{t("projectsLead")}</p>

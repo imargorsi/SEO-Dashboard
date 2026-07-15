@@ -1,5 +1,6 @@
 import mongoose, { Schema, type InferSchemaType, type Model } from "mongoose";
 
+import { ROLE_STATUSES, type TRoleStatus } from "@/lib/roles/constants";
 import type { RoleScope } from "@/lib/rbac/roles";
 
 const roleSchema = new Schema(
@@ -10,6 +11,7 @@ const roleSchema = new Schema(
     scope: { type: String, enum: ["platform", "project"], required: true },
     isSystem: { type: Boolean, default: false },
     permissions: { type: [String], default: [] },
+    status: { type: String, enum: ROLE_STATUSES, required: true, default: "active" },
   },
   { timestamps: true }
 );
@@ -26,6 +28,25 @@ export type RoleDocument = InferSchemaType<typeof roleSchema> &
     scope: RoleScope;
     isSystem: boolean;
     permissions: string[];
+    status: TRoleStatus;
   };
 
-export const Role: Model<RoleDocument> = mongoose.models.Role ?? mongoose.model<RoleDocument>("Role", roleSchema);
+/**
+ * Dev HMR reuses `mongoose.models.Role`. If the cached schema is stale
+ * (e.g. missing `status`), delete and recompile so path/method changes apply.
+ */
+function registerRoleModel(): Model<RoleDocument> {
+  const existing = mongoose.models.Role as Model<RoleDocument> | undefined;
+
+  if (existing?.schema.path("status")) {
+    return existing;
+  }
+
+  if (existing) {
+    mongoose.deleteModel("Role");
+  }
+
+  return mongoose.model<RoleDocument>("Role", roleSchema);
+}
+
+export const Role: Model<RoleDocument> = registerRoleModel();

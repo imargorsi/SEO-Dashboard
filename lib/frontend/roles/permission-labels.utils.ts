@@ -1,5 +1,7 @@
+type TActionLabelKey = "view" | "create" | "edit" | "delete" | "invite" | "remove";
+
 /** Maps a catalog action to its locale key under `modules.roles.actions` (undefined for an unrecognized action). */
-const ACTION_LABEL_KEYS: Record<string, string> = {
+const ACTION_LABEL_KEYS: Record<string, TActionLabelKey> = {
   view: "view",
   create: "create",
   update: "edit",
@@ -8,7 +10,7 @@ const ACTION_LABEL_KEYS: Record<string, string> = {
   remove: "remove",
 };
 
-export function actionLabelKey(action: string): string | undefined {
+export function actionLabelKey(action: string): TActionLabelKey | undefined {
   return ACTION_LABEL_KEYS[action];
 }
 

@@ -1,4 +1,4 @@
-import { hasAnyPermission } from "@/lib/rbac/access";
+import { hasAnyPermission, isSuperAdmin } from "@/lib/rbac/access";
 import { permissionsForScope } from "@/lib/rbac/scope-permissions";
 
 /** Routes any authenticated user may open (outside RBAC). */
@@ -8,6 +8,8 @@ export type RouteAccessRule = {
   pattern: RegExp;
   viewPermissions: readonly string[];
   scope: "platform" | "project";
+  /** When true, only `super_admin` may open the route (checked before auth-only prefixes). */
+  requireSuperAdmin?: boolean;
 };
 
 export const ROUTE_ACCESS_RULES: readonly RouteAccessRule[] = [
@@ -33,18 +35,25 @@ export function canAccessRoute(
   projectPermissions: readonly string[],
   roles: readonly string[],
 ): boolean {
+  const rule = ROUTE_ACCESS_RULES.find((entry) => entry.pattern.test(pathname));
+
+  if (rule?.requireSuperAdmin) {
+    return isSuperAdmin(roles);
+  }
+
   if (isAuthOnlyRoute(pathname)) return true;
 
-  const rule = ROUTE_ACCESS_RULES.find((entry) => entry.pattern.test(pathname));
-  if (!rule) return true;
+  if (rule) {
+    const permissions = permissionsForScope(
+      rule.scope,
+      platformPermissions,
+      projectPermissions,
+      roles,
+    );
+    return hasAnyPermission(permissions, rule.viewPermissions);
+  }
 
-  const permissions = permissionsForScope(
-    rule.scope,
-    platformPermissions,
-    projectPermissions,
-    roles,
-  );
-  return hasAnyPermission(permissions, rule.viewPermissions);
+  return true;
 }
 
 export function resolveDefaultAccessiblePath(

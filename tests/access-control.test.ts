@@ -84,6 +84,7 @@ describe("Access control", () => {
     expect(canAccessRoute("/dashboard", [], [], [])).toBe(false);
     expect(canAccessRoute("/edit-profile", [], [], [])).toBe(true);
     expect(canAccessRoute("/settings", [], [], [])).toBe(true);
+    expect(canAccessRoute("/settings/seo-activities", [], [], [])).toBe(true);
   });
 
   it("allows super_admin on project and admin routes with unified permissions", () => {

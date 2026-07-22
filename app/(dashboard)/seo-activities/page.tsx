@@ -1,5 +1,12 @@
-import { PlaceholderPage } from "@/components/migration/placeholder-page";
+import { Suspense } from "react";
+
+import { LoadingState } from "@/components/ui/loading-state";
+import { SeoActivitiesSection } from "@/sections/seo-activities-section";
 
 export default function SeoActivitiesPage() {
-  return <PlaceholderPage title="SEO Activities" />;
+  return (
+    <Suspense fallback={<LoadingState className="m-6" />}>
+      <SeoActivitiesSection />
+    </Suspense>
+  );
 }

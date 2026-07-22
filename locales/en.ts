@@ -61,6 +61,48 @@ export interface Translation {
   settings: {
     title: string;
     subtitle: string;
+    emptyTitle: string;
+    emptyBody: string;
+    categoriesHeading: string;
+    categories: {
+      "seo-activities": string;
+      theme: string;
+    };
+    seoActivities: {
+      navTitle: string;
+      navBody: string;
+      title: string;
+      subtitle: string;
+      cardTitle: string;
+      cardLead: string;
+      warningTooltip: string;
+      urlLabel: string;
+      urlPlaceholder: string;
+      urlHint: string;
+      copyButton: string;
+      copySuccess: string;
+      copyError: string;
+      editButton: string;
+      saveUrl: string;
+      savingUrl: string;
+      cancelEdit: string;
+      urlSaveSuccess: string;
+      urlSaveError: string;
+      lastSynced: string;
+      neverSynced: string;
+      lastError: string;
+      loadErrorTitle: string;
+      loadErrorBody: string;
+      sync: {
+        button: string;
+        syncing: string;
+        success: string;
+        errorFallback: string;
+        cooldownButton: string;
+        cooldownActive: string;
+        running: string;
+      };
+    };
   };
   profile: {
     changePassword: {
@@ -550,6 +592,41 @@ export interface Translation {
     };
     seoActivities: {
       title: string;
+      subtitle: string;
+      typeFilter: {
+        ariaLabel: string;
+        blogs: string;
+        backlinks: string;
+        web_changes: string;
+      };
+      sync: {
+        button: string;
+        syncing: string;
+        success: string;
+        errorFallback: string;
+        cooldownButton: string;
+        cooldownActive: string;
+      };
+      selectProjectTitle: string;
+      selectProjectBody: string;
+      table: {
+        emptyTitle: string;
+        emptyBody: string;
+        summary: string;
+        previousPage: string;
+        nextPage: string;
+        pageNumber: string;
+        colSite: string;
+        colTitle: string;
+        colBlogLink: string;
+        colPublicationDate: string;
+        colUrls: string;
+        colAnchorTexts: string;
+        colDatePosted: string;
+        colPageLink: string;
+        colDetails: string;
+        colChangeDate: string;
+      };
     };
     leads: {
       title: string;
@@ -817,7 +894,51 @@ const translation: Translation = {
   },
   settings: {
     title: "Settings",
-    subtitle: "Account and workspace preferences will live here.",
+    subtitle: "Manage Workspace Preferences And Admin Sync Tools.",
+    emptyTitle: "No Settings Available",
+    emptyBody: "There Are No Settings Modules Available For Your Account Yet.",
+    categoriesHeading: "Categories",
+    categories: {
+      "seo-activities": "SEO Activities",
+      theme: "Theme",
+    },
+    seoActivities: {
+      navTitle: "SEO Activities",
+      navBody: "Review This Month’s Sheet Link, Update It, And Sync Rows Into The Database.",
+      title: "SEO Activities Sync",
+      subtitle: "Confirm The Spreadsheet Url, Then Sync Public CSV Rows For All Projects.",
+      cardTitle: "This Month’s Sheet",
+      cardLead: "Copy And Open The Url First To Confirm You Have The Right Sheet Before Syncing.",
+      warningTooltip:
+        "First Copy And Open The Url To Make Sure You Have The Right Sheet Url. If Not, Change It Before Syncing.",
+      urlLabel: "Spreadsheet Url",
+      urlPlaceholder: "https://docs.google.com/spreadsheets/d/…/edit",
+      urlHint:
+        "Must Be Shared As Anyone With The Link Can View. Sheet Site Values Must Match Project Business Names.",
+      copyButton: "Copy",
+      copySuccess: "Spreadsheet Url Copied.",
+      copyError: "Could Not Copy Spreadsheet Url.",
+      editButton: "Edit",
+      saveUrl: "Save Url",
+      savingUrl: "Saving…",
+      cancelEdit: "Cancel",
+      urlSaveSuccess: "Spreadsheet Url Updated Successfully.",
+      urlSaveError: "Could Not Update Spreadsheet Url.",
+      lastSynced: "Last Synced {{date}}",
+      neverSynced: "Not Synced Yet",
+      lastError: "Last Sync Error: {{message}}",
+      loadErrorTitle: "Could Not Load Sheet Settings",
+      loadErrorBody: "Check Your Connection And Try Again.",
+      sync: {
+        button: "Sync From Sheet",
+        syncing: "Syncing…",
+        success: "SEO Activities Synced Successfully.",
+        errorFallback: "Could Not Sync SEO Activities.",
+        cooldownButton: "Available In {{minutes}} Min",
+        cooldownActive: "Sync Is Limited To Once Per Hour. Try Again In {{minutes}} Min.",
+        running: "Sync Is Already Running. Please Wait.",
+      },
+    },
   },
   profile: {
     changePassword: {
@@ -1311,6 +1432,41 @@ const translation: Translation = {
     },
     seoActivities: {
       title: "SEO Activities",
+      subtitle: "Track Web Changes And Backlink Profile In Real-Time.",
+      typeFilter: {
+        ariaLabel: "SEO Activity Type",
+        blogs: "Blogs",
+        backlinks: "Backlinks",
+        web_changes: "Web Change",
+      },
+      sync: {
+        button: "Sync From Sheet",
+        syncing: "Syncing…",
+        success: "SEO Activities Synced Successfully.",
+        errorFallback: "Could Not Sync SEO Activities.",
+        cooldownButton: "Available In {{minutes}} Min",
+        cooldownActive: "Sync Is Limited To Once Per Hour. Try Again In {{minutes}} Min.",
+      },
+      selectProjectTitle: "Select A Project",
+      selectProjectBody: "Choose A Project From The Sidebar To View Its SEO Activities.",
+      table: {
+        emptyTitle: "No Activities Found",
+        emptyBody: "There Are No Rows For This Activity Type Yet.",
+        summary: "Showing {{shown}} Of {{total}} Monitored Changes",
+        previousPage: "Previous Page",
+        nextPage: "Next Page",
+        pageNumber: "Page {{page}}",
+        colSite: "Site",
+        colTitle: "Title",
+        colBlogLink: "Blog Link",
+        colPublicationDate: "Publication Date",
+        colUrls: "Urls",
+        colAnchorTexts: "Anchor Texts",
+        colDatePosted: "Date Posted",
+        colPageLink: "Page Link",
+        colDetails: "Details",
+        colChangeDate: "Change Date",
+      },
     },
     leads: {
       title: "Leads",

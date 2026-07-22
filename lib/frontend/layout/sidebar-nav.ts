@@ -113,6 +113,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
     group: "mySpace",
     viewPermission: null,
     permissionScope: "platform",
+    matchPaths: ["/settings"],
   },
 ];
 

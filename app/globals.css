@@ -3,7 +3,7 @@
 @import "sonner/dist/styles.css";
 
 @font-face {
-  font-family: "Nunito Fallback";
+  font-family: "Plus Jakarta Sans Fallback";
   src: local("Arial");
 }
 
@@ -11,7 +11,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: "Nunito", "Nunito Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-sans: "Plus Jakarta Sans", "Plus Jakarta Sans Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
 }
 
 /*
@@ -134,8 +134,8 @@
   --auth-form-shadow: var(--shadow-elevated);
   --auth-form-highlight: var(--gradient-button);
 
-  --sans: "Nunito", "Nunito Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
-  --heading: "Nunito", "Nunito Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+  --sans: "Plus Jakarta Sans", "Plus Jakarta Sans Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+  --heading: "Plus Jakarta Sans", "Plus Jakarta Sans Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
   --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
 
   font: 16px/150% var(--sans);
@@ -280,9 +280,9 @@
 }
 
 html[dir="rtl"] {
-  --font-sans: "Nunito", "Nunito Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Tahoma, sans-serif;
-  --sans: "Nunito", "Nunito Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Tahoma, sans-serif;
-  --heading: "Nunito", "Nunito Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Tahoma, sans-serif;
+  --font-sans: "Plus Jakarta Sans", "Plus Jakarta Sans Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Tahoma, sans-serif;
+  --sans: "Plus Jakarta Sans", "Plus Jakarta Sans Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Tahoma, sans-serif;
+  --heading: "Plus Jakarta Sans", "Plus Jakarta Sans Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Tahoma, sans-serif;
   letter-spacing: 0.01em;
 }
 
@@ -552,6 +552,59 @@ code {
   }
   100% {
     transform: translate3d(0, 0, 0);
+  }
+}
+
+@property --seo-neon-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes seo-neon-spin {
+  to {
+    --seo-neon-angle: 360deg;
+  }
+}
+
+.seo-neon-card {
+  isolation: isolate;
+}
+
+.seo-neon-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 2;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--seo-neon-angle),
+    transparent 0%,
+    transparent 52%,
+    color-mix(in srgb, var(--seo-neon) 25%, transparent) 62%,
+    var(--seo-neon) 74%,
+    color-mix(in srgb, var(--seo-neon) 25%, transparent) 86%,
+    transparent 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: seo-neon-spin 3.8s linear infinite;
+  pointer-events: none;
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--seo-neon) 55%, transparent));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seo-neon-card::before {
+    animation: none;
+    background: color-mix(in srgb, var(--seo-neon) 55%, transparent);
+    padding: 1px;
   }
 }
 

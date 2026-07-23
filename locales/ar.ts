@@ -61,7 +61,13 @@ const translation: Translation = {
   },
   settings: {
     title: "الإعدادات",
-    subtitle: "ستظهر هنا تفضيلات الحساب ومساحة العمل.",
+    subtitle: "إدارة تفضيلات مساحة العمل.",
+    emptyTitle: "لا توجد إعدادات متاحة",
+    emptyBody: "لا توجد وحدات إعدادات متاحة لحسابك بعد.",
+    categoriesHeading: "الفئات",
+    categories: {
+      theme: "المظهر",
+    },
   },
   profile: {
     changePassword: {
@@ -552,6 +558,49 @@ const translation: Translation = {
     },
     seoActivities: {
       title: "أنشطة السيو",
+      typeFilter: {
+        ariaLabel: "نوع نشاط السيو",
+        blogs: "المدونات",
+        backlinks: "الروابط الخلفية",
+        web_changes: "تغييرات الويب",
+      },
+      summary: {
+        cards: {
+          blogs: "المدونات المنشورة",
+          backlinks: "الروابط المكتسبة",
+          web_changes: "تغييرات الويب",
+          total: "إجمالي الأنشطة",
+        },
+      },
+      dateFilter: {
+        ariaLabel: "تصفية نطاق التاريخ",
+        presets: {
+          all: "كل الوقت",
+          today: "اليوم",
+          yesterday: "أمس",
+          last_7_days: "آخر 7 أيام",
+          last_30_days: "آخر 30 يوماً",
+          this_month: "هذا الشهر",
+          last_month: "الشهر الماضي",
+        },
+      },
+      selectProjectTitle: "اختر مشروعاً",
+      selectProjectBody: "اختر مشروعاً من الشريط الجانبي لعرض أنشطة السيو الخاصة به.",
+      table: {
+        emptyTitle: "لا توجد أنشطة",
+        emptyBody: "لا توجد صفوف لهذا النوع من النشاط بعد.",
+        summary: "عرض {{shown}} من {{total}} تغييرات مراقبة",
+        previousPage: "الصفحة السابقة",
+        nextPage: "الصفحة التالية",
+        pageNumber: "الصفحة {{page}}",
+        colDate: "التاريخ",
+        colBlogDetails: "تفاصيل المدونة",
+        colBacklinkDetails: "تفاصيل الرابط",
+        colChangeDetails: "تفاصيل التغيير",
+        colBlogLink: "رابط المدونة",
+        colUrls: "الروابط",
+        colPageLink: "رابط الصفحة",
+      },
     },
     leads: {
       title: "العملاء المحتملون",

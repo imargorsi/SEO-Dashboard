@@ -61,6 +61,12 @@ export interface Translation {
   settings: {
     title: string;
     subtitle: string;
+    emptyTitle: string;
+    emptyBody: string;
+    categoriesHeading: string;
+    categories: {
+      theme: string;
+    };
   };
   profile: {
     changePassword: {
@@ -550,6 +556,49 @@ export interface Translation {
     };
     seoActivities: {
       title: string;
+      typeFilter: {
+        ariaLabel: string;
+        blogs: string;
+        backlinks: string;
+        web_changes: string;
+      };
+      summary: {
+        cards: {
+          blogs: string;
+          backlinks: string;
+          web_changes: string;
+          total: string;
+        };
+      };
+      dateFilter: {
+        ariaLabel: string;
+        presets: {
+          all: string;
+          today: string;
+          yesterday: string;
+          last_7_days: string;
+          last_30_days: string;
+          this_month: string;
+          last_month: string;
+        };
+      };
+      selectProjectTitle: string;
+      selectProjectBody: string;
+      table: {
+        emptyTitle: string;
+        emptyBody: string;
+        summary: string;
+        previousPage: string;
+        nextPage: string;
+        pageNumber: string;
+        colDate: string;
+        colBlogDetails: string;
+        colBacklinkDetails: string;
+        colChangeDetails: string;
+        colBlogLink: string;
+        colUrls: string;
+        colPageLink: string;
+      };
     };
     leads: {
       title: string;
@@ -817,7 +866,13 @@ const translation: Translation = {
   },
   settings: {
     title: "Settings",
-    subtitle: "Account and workspace preferences will live here.",
+    subtitle: "Manage Workspace Preferences.",
+    emptyTitle: "No Settings Available",
+    emptyBody: "There Are No Settings Modules Available For Your Account Yet.",
+    categoriesHeading: "Categories",
+    categories: {
+      theme: "Theme",
+    },
   },
   profile: {
     changePassword: {
@@ -1311,6 +1366,49 @@ const translation: Translation = {
     },
     seoActivities: {
       title: "SEO Activities",
+      typeFilter: {
+        ariaLabel: "SEO Activity Type",
+        blogs: "Blogs",
+        backlinks: "Backlinks",
+        web_changes: "Web Change",
+      },
+      summary: {
+        cards: {
+          blogs: "Blogs Published",
+          backlinks: "Backlinks Gained",
+          web_changes: "Web Changes",
+          total: "Total Activities",
+        },
+      },
+      dateFilter: {
+        ariaLabel: "Date Range Filter",
+        presets: {
+          all: "All Time",
+          today: "Today",
+          yesterday: "Yesterday",
+          last_7_days: "Last 7 Days",
+          last_30_days: "Last 30 Days",
+          this_month: "This Month",
+          last_month: "Last Month",
+        },
+      },
+      selectProjectTitle: "Select A Project",
+      selectProjectBody: "Choose A Project From The Sidebar To View Its SEO Activities.",
+      table: {
+        emptyTitle: "No Activities Found",
+        emptyBody: "There Are No Rows For This Activity Type Yet.",
+        summary: "Showing {{shown}} Of {{total}} Monitored Changes",
+        previousPage: "Previous Page",
+        nextPage: "Next Page",
+        pageNumber: "Page {{page}}",
+        colDate: "Date",
+        colBlogDetails: "Blog Details",
+        colBacklinkDetails: "Backlink Details",
+        colChangeDetails: "Change Details",
+        colBlogLink: "Blog Link",
+        colUrls: "Urls",
+        colPageLink: "Page Link",
+      },
     },
     leads: {
       title: "Leads",

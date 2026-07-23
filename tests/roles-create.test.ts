@@ -76,7 +76,7 @@ describe("POST /admin/roles — createRole", () => {
     // "C Team" must not be treated as a duplicate of "C++ Team" just because an unescaped
     // regex would (incorrectly) match "C" followed by anything.
     const { role: unrelated } = await createRole({ name: "C Team", description: "", permissions: [] });
-    expect(unrelated.id).not.toBe(role.id);
+    expect(unrelated._id.toString()).not.toBe(role._id.toString());
   });
 
   it("rejects a name that normalizes to a reserved slug, before it ever reaches slug generation", async () => {

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Nunito } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import { AppProviders } from "@/components/providers/app-providers";
 import "./globals.css";
 
@@ -11,10 +11,10 @@ export const metadata: Metadata = {
   },
 };
 
-const nunito = Nunito({
+const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   display: "swap",
-  fallback: ["Nunito Fallback", "sans-serif"],
+  fallback: ["Plus Jakarta Sans Fallback", "sans-serif"],
 });
 
 export default function RootLayout({
@@ -24,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${nunito.className} min-h-svh antialiased`}>
+      <body className={`${plusJakartaSans.className} min-h-svh antialiased`}>
         <AppProviders>{children}</AppProviders>
       </body>
     </html>

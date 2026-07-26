@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
@@ -18,8 +17,9 @@ import { ProjectsTable } from "@/components/projects/projects-table";
 import { AlertDialogCancel } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { CreateActionButton } from "@/components/ui/create-action-button";
 import { EmptyState } from "@/components/ui/empty-state";
-import { IoAdd, IoFilterOutline, IoTrashOutline } from "react-icons/io5";
+import { IoFilterOutline, IoTrashOutline } from "react-icons/io5";
 import { useProjectAccess } from "@/context/project-access-context";
 import { useSelectedProject } from "@/context/selected-project-context";
 import { useAuthUserQuery, useResendEmailVerificationMutation } from "@/features/auth/auth.api";
@@ -189,13 +189,9 @@ export function ProjectsListSection() {
             ) : null}
 
             {canCreateProject && hasProjects ? (
-              <Link
-                href={PROJECT_ROUTES.create}
-                className={cn(buttonVariants({ size: "md", variant: "gradient" }))}
-              >
-                <IoAdd className="size-4" aria-hidden />
+              <CreateActionButton href={PROJECT_ROUTES.create}>
                 {t("table.createProject")}
-              </Link>
+              </CreateActionButton>
             ) : null}
           </div>
         </div>

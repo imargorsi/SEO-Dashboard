@@ -1,10 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { IoAdd, IoTrashOutline } from "react-icons/io5";
+import { IoTrashOutline } from "react-icons/io5";
 
 import { RoleDetailSheet } from "@/components/roles/role-detail-sheet";
 import { RoleStatusFilter } from "@/components/roles/role-status-filter";
@@ -16,6 +15,7 @@ import { Paragraph } from "@/components/paragraph";
 import { AlertDialogCancel } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { CreateActionButton } from "@/components/ui/create-action-button";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
 import {
   useDeleteRoleMutation,
@@ -185,10 +185,7 @@ export function RolesListSection() {
           </div>
 
           {canCreate ? (
-            <Link href="/roles/new" className={cn(buttonVariants({ size: "md", variant: "gradient" }))}>
-              <IoAdd className="size-4" aria-hidden />
-              {t("table.createRole")}
-            </Link>
+            <CreateActionButton href={ROLE_ROUTES.create}>{t("table.createRole")}</CreateActionButton>
           ) : null}
         </div>
 

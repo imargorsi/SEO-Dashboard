@@ -167,7 +167,7 @@ export function DashboardSidebar({ onClose }: DashboardSidebarProps) {
                             isActive ? sidebarNavIconWellActiveClass : sidebarNavIconWellInactiveClass,
                           )}
                         >
-                          <Icon className="size-[15px]" aria-hidden />
+                          <Icon className="size-3.5" aria-hidden />
                         </span>
                         <span className={cn("min-w-0 flex-1 truncate", isCollapsed && "md:hidden")}>
                           {label}
@@ -209,9 +209,9 @@ export function DashboardSidebar({ onClose }: DashboardSidebarProps) {
             >
               <span className={cn(sidebarNavIconWellClass, sidebarNavIconWellInactiveClass)}>
                 {isCollapsed ? (
-                  <IoChevronForward className="size-[15px] rtl:rotate-180" aria-hidden />
+                  <IoChevronForward className="size-3.5 rtl:rotate-180" aria-hidden />
                 ) : (
-                  <IoChevronBack className="size-[15px] rtl:rotate-180" aria-hidden />
+                  <IoChevronBack className="size-3.5 rtl:rotate-180" aria-hidden />
                 )}
               </span>
               <span className={cn("min-w-0 flex-1 truncate text-start", isCollapsed && "md:hidden")}>

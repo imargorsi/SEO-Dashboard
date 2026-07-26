@@ -50,7 +50,6 @@ export function ProjectCard({
   onDeleteProject,
 }: ProjectCardProps) {
   const { t } = useTranslation("translation", { keyPrefix: "modules.projects.listCard" });
-  const { t: tStatus } = useTranslation("translation", { keyPrefix: "modules.projects.statusFilter" });
   const { t: tActions } = useTranslation("translation", { keyPrefix: "modules.projects.cardActions" });
   const { isPending, handleStatusAction } = useProjectActions(project.id);
   const ownerName = project.owner?.name?.trim() || t("projectOwnerFallback");
@@ -62,7 +61,19 @@ export function ProjectCard({
     <article className={cn(elevatedCardSurfaceClass, "rounded-3xl p-5 sm:p-6")}>
       <div className="flex items-start justify-between gap-3">
         <ProjectImage imageUrl={project.imageUrl} businessName={project.businessName} />
-        <ProjectStatusChip status={project.status} />
+        <div className="flex shrink-0 items-center gap-2">
+          <ProjectStatusChip status={project.status} />
+          {canToggleActiveInactive ? (
+            <ActiveInactiveToggle
+              checked={isActive}
+              isLoading={isPending}
+              ariaLabel={isActive ? tActions("inactive") : tActions("active")}
+              onCheckedChange={(nextChecked) =>
+                void handleStatusAction(nextChecked ? "activate" : "deactivate")
+              }
+            />
+          ) : null}
+        </div>
       </div>
 
       <div className="mt-4 space-y-1.5">
@@ -73,33 +84,19 @@ export function ProjectCard({
         </p>
       </div>
 
-      <div className="mt-6 flex items-start justify-between gap-4">
-        <div className="min-w-0">
-          <p className={cn("type-caption-xs uppercase tracking-[0.08em]", elevatedCardMutedClass)}>
-            {t("projectOwnerLabel")}
-          </p>
-          <div className="mt-2.5 flex items-center gap-2">
-            <UserAvatar
-              name={ownerName}
-              imageUrl={project.owner?.profileImage ?? null}
-              size="sm"
-              variant="photo"
-            />
-            <p className={cn("truncate type-body", elevatedCardTitleClass)}>{ownerName}</p>
-          </div>
-        </div>
-
-        {canToggleActiveInactive ? (
-          <ActiveInactiveToggle
-            checked={isActive}
-            isLoading={isPending}
-            label={isActive ? tStatus("active") : tStatus("inactive")}
-            ariaLabel={isActive ? tActions("inactive") : tActions("active")}
-            onCheckedChange={(nextChecked) =>
-              void handleStatusAction(nextChecked ? "activate" : "deactivate")
-            }
+      <div className="mt-6 min-w-0">
+        <p className={cn("type-caption-xs uppercase tracking-[0.08em]", elevatedCardMutedClass)}>
+          {t("projectOwnerLabel")}
+        </p>
+        <div className="mt-2.5 flex items-center gap-2">
+          <UserAvatar
+            name={ownerName}
+            imageUrl={project.owner?.profileImage ?? null}
+            size="sm"
+            variant="photo"
           />
-        ) : null}
+          <p className={cn("truncate type-body", elevatedCardTitleClass)}>{ownerName}</p>
+        </div>
       </div>
 
       <ProjectActions

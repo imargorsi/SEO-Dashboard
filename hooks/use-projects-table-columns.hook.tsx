@@ -7,10 +7,10 @@ import {
   IoCheckmarkCircleOutline,
   IoCloseCircleOutline,
   IoEyeOutline,
-  IoPencil,
   IoPersonAddOutline,
   IoTrashOutline,
 } from "react-icons/io5";
+import { PiPencilThin } from "react-icons/pi";
 
 import type { TAppTableColumn } from "@/components/table/app-table";
 import { TableRowIconActions } from "@/components/table/table-row-icon-actions";
@@ -49,7 +49,7 @@ function actionIcon(actionId: TProjectCardActionId) {
   if (actionId === "inviteUsers") return <IoPersonAddOutline className="size-4" aria-hidden />;
   if (actionId === "viewDetails") return <IoEyeOutline className="size-4" aria-hidden />;
   if (actionId === "delete") return <IoTrashOutline className="size-4" aria-hidden />;
-  return <IoPencil className="size-4" aria-hidden />;
+  return <PiPencilThin className="size-4" aria-hidden />;
 }
 
 export function useProjectsTableColumns({

@@ -4,6 +4,7 @@ import { IoGridOutline, IoListOutline } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 
 import type { TProjectListViewMode } from "@/lib/frontend/projects/projects-list-view.utils";
+import { toolbarFilterShellClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
 type TProjectListViewToggleProps = {
@@ -30,10 +31,7 @@ export function ProjectListViewToggle({
 
   return (
     <div
-      className={cn(
-        "inline-flex items-center gap-1 rounded-2xl border border-border bg-bg-input p-1",
-        className,
-      )}
+      className={cn(toolbarFilterShellClass, className)}
       role="group"
       aria-label={t("ariaLabel")}
     >
@@ -50,7 +48,7 @@ export function ProjectListViewToggle({
             title={t(option.labelKey)}
             onClick={() => onViewModeChange(option.id)}
             className={cn(
-              "inline-flex size-9 items-center justify-center rounded-xl transition-colors",
+              "inline-flex size-8 items-center justify-center rounded-full transition-colors",
               isActive
                 ? "bg-brand text-text-on-brand"
                 : "text-text-muted hover:bg-bg-hover hover:text-text-primary",

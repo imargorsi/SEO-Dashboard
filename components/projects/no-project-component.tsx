@@ -1,13 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { useTranslation } from "react-i18next";
-import { IoAdd, IoFolderOpenOutline, IoMailOutline } from "react-icons/io5";
+import { IoFolderOpenOutline, IoMailOutline } from "react-icons/io5";
 
 import { EmptyState } from "@/components/ui/empty-state";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
+import { CreateActionButton } from "@/components/ui/create-action-button";
 import { PROJECT_ROUTES } from "@/lib/frontend/projects/project-routes.utils";
-import { cn } from "@/lib/utils";
 
 export type NoProjectComponentVariant = "no-projects" | "email-not-verified";
 
@@ -46,13 +45,7 @@ export function NoProjectComponent({
           {t("verifyEmailCta")}
         </Button>
       ) : canCreateProject ? (
-        <Link
-          href={PROJECT_ROUTES.create}
-          className={cn(buttonVariants({ size: "md", variant: "gradient" }))}
-        >
-          <IoAdd className="size-4" aria-hidden />
-          {t("table.createProject")}
-        </Link>
+        <CreateActionButton href={PROJECT_ROUTES.create}>{t("table.createProject")}</CreateActionButton>
       ) : null}
     </EmptyState>
   );

@@ -3,6 +3,7 @@
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 
 import { Button } from "@/components/ui/button";
+import { tableRowIconActionClass } from "@/components/table/table-row-icon-actions";
 import { getPaginationRange, getVisiblePages } from "@/lib/frontend/table/pagination.utils";
 import { cn } from "@/lib/utils";
 
@@ -35,18 +36,18 @@ export function AppTablePagination({
   return (
     <div
       className={cn(
-        "flex flex-col gap-3 border-t border-border px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6",
+        "flex flex-col gap-2 border-t border-border px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between sm:px-4",
         className,
       )}
     >
       <p className="type-caption text-text-muted tabular-nums">{summaryLabel}</p>
 
-      <div className="flex items-center justify-end gap-1.5">
+      <div className="flex items-center justify-end gap-1">
         <Button
           type="button"
           variant="outline"
           size="icon-sm"
-          className="border-border bg-bg-input text-text-secondary hover:bg-bg-hover hover:text-text-primary"
+          className={tableRowIconActionClass}
           aria-label={previousPageLabel}
           disabled={safePage <= 1}
           onClick={() => onPageChange(safePage - 1)}
@@ -64,10 +65,10 @@ export function AppTablePagination({
               variant={isActive ? "primary" : "outline"}
               size="icon-sm"
               className={cn(
-                "min-w-8",
+                "min-w-7",
                 isActive
                   ? "bg-brand text-text-on-brand hover:brightness-105"
-                  : "border-border bg-bg-input text-text-secondary hover:bg-bg-hover hover:text-text-primary",
+                  : tableRowIconActionClass,
               )}
               aria-label={pageNumberLabel(pageNumber)}
               aria-current={isActive ? "page" : undefined}
@@ -82,7 +83,7 @@ export function AppTablePagination({
           type="button"
           variant="outline"
           size="icon-sm"
-          className="border-border bg-bg-input text-text-secondary hover:bg-bg-hover hover:text-text-primary"
+          className={tableRowIconActionClass}
           aria-label={nextPageLabel}
           disabled={safePage >= lastPage}
           onClick={() => onPageChange(safePage + 1)}

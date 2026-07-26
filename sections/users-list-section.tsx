@@ -1,10 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { IoAdd, IoTrashOutline } from "react-icons/io5";
+import { IoTrashOutline } from "react-icons/io5";
 
 import { TableListSearch } from "@/components/table/table-list-search";
 import { TableListSort } from "@/components/table/table-list-sort";
@@ -16,6 +15,7 @@ import { Paragraph } from "@/components/paragraph";
 import { AlertDialogCancel } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { CreateActionButton } from "@/components/ui/create-action-button";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
 import {
   useDeleteUserMutation,
@@ -188,10 +188,7 @@ export function UsersListSection() {
           </div>
 
           {canCreate ? (
-            <Link href={USER_ROUTES.create} className={cn(buttonVariants({ size: "md", variant: "gradient" }))}>
-              <IoAdd className="size-4" aria-hidden />
-              {t("table.createUser")}
-            </Link>
+            <CreateActionButton href={USER_ROUTES.create}>{t("table.createUser")}</CreateActionButton>
           ) : null}
         </div>
 

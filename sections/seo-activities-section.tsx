@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { IoAdd, IoDownloadOutline, IoTrashOutline } from "react-icons/io5";
+import { IoDownloadOutline, IoTrashOutline } from "react-icons/io5";
 
 import { SeoActivitiesTable } from "@/components/seo-activities/seo-activities-table";
 import { SeoActivityDateRangeFilter } from "@/components/seo-activities/seo-activity-date-range-filter";
@@ -18,6 +18,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { AlertDialogCancel } from "@/components/ui/alert-dialog";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { CreateActionButton } from "@/components/ui/create-action-button";
 import { useSelectedProject } from "@/context/selected-project-context";
 import { useProjectAccess } from "@/context/project-access-context";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
@@ -276,10 +277,9 @@ export function SeoActivitiesSection() {
             />
 
             {canCreate ? (
-              <Button type="button" variant="gradient" size="md" onClick={openCreate} className="shrink-0">
-                <IoAdd className="size-4" aria-hidden />
+              <CreateActionButton onClick={openCreate} className="shrink-0">
                 {t("quickAdd.trigger")}
-              </Button>
+              </CreateActionButton>
             ) : null}
           </div>
         </div>

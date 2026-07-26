@@ -82,7 +82,7 @@ export function AppTable<T extends Record<string, unknown>>({
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-3xl border border-border bg-bg-card transition-opacity duration-200",
+        "overflow-hidden rounded-2xl border border-border bg-bg-card transition-opacity duration-200",
         isFetching && data.length > 0 && "opacity-70",
         className,
       )}
@@ -97,7 +97,7 @@ export function AppTable<T extends Record<string, unknown>>({
                 <TableHead
                   key={column.key}
                   className={cn(
-                    "h-12 px-4 type-overline text-text-muted sm:px-6",
+                    "h-9 px-3 type-overline text-text-muted sm:px-4",
                     getAlignClassName(column.align),
                     column.headerClassName,
                   )}
@@ -110,13 +110,13 @@ export function AppTable<T extends Record<string, unknown>>({
           <TableBody>
             {showEmptyState ? (
               <TableRow className="hover:bg-transparent">
-                <TableCell colSpan={columnCount} className="p-4 sm:p-6">
+                <TableCell colSpan={columnCount} className="p-3 sm:p-4">
                   {noDataComponent ?? (
                     <EmptyState
                       title={resolvedEmptyTitle}
                       description={resolvedEmptyBody ?? ""}
                       icon={IoSearchOutline}
-                      className="py-8 sm:py-10"
+                      className="py-6 sm:py-8"
                     />
                   )}
                 </TableCell>
@@ -128,7 +128,7 @@ export function AppTable<T extends Record<string, unknown>>({
                     <TableCell
                       key={column.key}
                       className={cn(
-                        "px-4 py-4 sm:px-6",
+                        "px-3 py-2.5 type-body sm:px-4",
                         getAlignClassName(column.align),
                         column.cellClassName,
                       )}

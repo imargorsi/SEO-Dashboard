@@ -9,7 +9,7 @@ import {
   IoPersonAddOutline,
   IoTrashOutline,
 } from "react-icons/io5";
-import { TbEditCircle } from "react-icons/tb";
+import { PiPencilThin } from "react-icons/pi";
 import { useTranslation } from "react-i18next";
 
 import { ActiveInactiveToggle } from "@/components/ui/active-inactive-toggle";
@@ -34,7 +34,7 @@ const ACTION_ICONS: Record<Exclude<TProjectCardActionId, "activate" | "deactivat
   reject: IoCloseCircleOutline,
   inviteUsers: IoPersonAddOutline,
   viewDetails: IoEyeOutline,
-  edit: TbEditCircle,
+  edit: PiPencilThin,
   delete: IoTrashOutline,
 };
 
@@ -69,7 +69,7 @@ export function ProjectActionButton({
   const surfaceClass = cn(
     "group relative transition-all duration-200",
     isBig
-      ? cn(buttonVariants({ variant: "outline", size: "md" }), ACTION_BUTTON_TONE[action.tone])
+      ? cn(buttonVariants({ variant: "outline", size: "md" }), "rounded-full", ACTION_BUTTON_TONE[action.tone])
       : "flex min-w-0 flex-1 flex-col items-center gap-2",
     isDisabled && "pointer-events-none opacity-70",
   );
@@ -83,7 +83,7 @@ export function ProjectActionButton({
     <>
       <span
         className={cn(
-          "flex size-11 shrink-0 items-center justify-center rounded-xl border transition-transform duration-200 group-hover:scale-105",
+          "flex size-11 shrink-0 items-center justify-center rounded-full border transition-transform duration-200 group-hover:scale-105",
           ACTION_ICON_WELL[action.tone],
         )}
         aria-hidden

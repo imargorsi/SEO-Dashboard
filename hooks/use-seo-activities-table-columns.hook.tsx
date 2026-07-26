@@ -2,7 +2,8 @@
 
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { IoPencil, IoTrashOutline } from "react-icons/io5";
+import { IoTrashOutline } from "react-icons/io5";
+import { PiPencilThin } from "react-icons/pi";
 
 import type { TAppTableColumn } from "@/components/table/app-table";
 import { TableRowIconActions } from "@/components/table/table-row-icon-actions";
@@ -47,7 +48,6 @@ function buildActionsColumn<T extends TSeoActivityRow>({
     key: "actions",
     label: t("colActions"),
     align: "end",
-    cellClassName: "px-4 py-4 sm:px-6",
     render: (item) => (
       <TableRowIconActions
         actions={[
@@ -55,7 +55,7 @@ function buildActionsColumn<T extends TSeoActivityRow>({
             ? [
                 {
                   key: "edit",
-                  icon: <IoPencil className="size-4" aria-hidden />,
+                  icon: <PiPencilThin className="size-4" aria-hidden />,
                   label: t("editActivity"),
                   onClick: () => onEdit(item),
                 },
@@ -102,19 +102,16 @@ export function useSeoActivitiesTableColumns({
         {
           key: "occurredOn",
           label: t("colDate"),
-          cellClassName: "px-4 py-4 sm:px-6",
           render: (item) => <SeoActivityStackedDateCell isoDate={item.occurredOn} />,
         },
         {
           key: "title",
           label: t("colBlogDetails"),
-          cellClassName: "px-4 py-4 sm:px-6",
           render: (item) => <SeoActivityDetailsCell title={item.title} />,
         },
         {
           key: "url",
           label: t("colBlogLink"),
-          cellClassName: "px-4 py-4 sm:px-6",
           render: (item) => <SeoActivityLinkCell href={item.url} />,
         },
       ];
@@ -127,19 +124,16 @@ export function useSeoActivitiesTableColumns({
         {
           key: "occurredOn",
           label: t("colDate"),
-          cellClassName: "px-4 py-4 sm:px-6",
           render: (item) => <SeoActivityStackedDateCell isoDate={item.occurredOn} />,
         },
         {
           key: "anchorText",
           label: t("colBacklinkDetails"),
-          cellClassName: "px-4 py-4 sm:px-6",
           render: (item) => <SeoActivityDetailsCell title={item.anchorText} />,
         },
         {
           key: "url",
           label: t("colUrls"),
-          cellClassName: "px-4 py-4 sm:px-6",
           render: (item) => <SeoActivityLinkCell href={item.url} />,
         },
       ];
@@ -151,19 +145,16 @@ export function useSeoActivitiesTableColumns({
       {
         key: "occurredOn",
         label: t("colDate"),
-        cellClassName: "px-4 py-4 sm:px-6",
         render: (item) => <SeoActivityStackedDateCell isoDate={item.occurredOn} />,
       },
       {
         key: "details",
         label: t("colChangeDetails"),
-        cellClassName: "px-4 py-4 sm:px-6",
         render: (item) => <SeoActivityDetailsCell title={item.details} />,
       },
       {
         key: "url",
         label: t("colPageLink"),
-        cellClassName: "px-4 py-4 sm:px-6",
         render: (item) => <SeoActivityLinkCell href={item.url} />,
       },
     ];

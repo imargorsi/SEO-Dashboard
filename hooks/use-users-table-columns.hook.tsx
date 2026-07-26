@@ -2,7 +2,8 @@
 
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { IoEyeOutline, IoPencil, IoTrashOutline } from "react-icons/io5";
+import { IoEyeOutline, IoTrashOutline } from "react-icons/io5";
+import { PiPencilThin } from "react-icons/pi";
 
 import type { TAppTableColumn } from "@/components/table/app-table";
 import { TableRowIconActions } from "@/components/table/table-row-icon-actions";
@@ -115,7 +116,7 @@ export function useUsersTableColumns({
                   },
                   {
                     key: "edit",
-                    icon: <IoPencil className="size-4" aria-hidden />,
+                    icon: <PiPencilThin className="size-4" aria-hidden />,
                     label: t("editUser", { name: item.name }),
                     onClick: onEditUser ? () => onEditUser(item) : undefined,
                   },

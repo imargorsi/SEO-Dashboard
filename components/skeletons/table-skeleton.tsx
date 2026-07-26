@@ -18,30 +18,30 @@ export function TableSkeleton({
   const body = (
     <div className="w-full" role="status" aria-live="polite" aria-busy="true">
       <span className="sr-only">Loading</span>
-      <div className="flex items-center gap-4 border-b border-border bg-bg-input px-4 py-3.5 sm:px-6">
+      <div className="flex items-center gap-3 border-b border-border bg-bg-input px-3 py-2.5 sm:px-4">
         {Array.from({ length: columns }).map((_, index) => (
           <Skeleton
             key={`head-${index}`}
             className={cn(
-              "h-3 w-20",
-              index === 0 && "w-16",
-              index === columns - 1 && "ms-auto w-14",
+              "h-2.5 w-16",
+              index === 0 && "w-14",
+              index === columns - 1 && "ms-auto w-12",
             )}
           />
         ))}
       </div>
       <div className="divide-y divide-border">
         {Array.from({ length: rows }).map((_, rowIndex) => (
-          <div key={`row-${rowIndex}`} className="flex items-center gap-4 px-4 py-4 sm:px-6">
+          <div key={`row-${rowIndex}`} className="flex items-center gap-3 px-3 py-2.5 sm:px-4">
             {Array.from({ length: columns }).map((_, colIndex) => (
               <Skeleton
                 key={`cell-${rowIndex}-${colIndex}`}
                 className={cn(
-                  "h-4 rounded-md",
-                  colIndex === 0 && "w-24",
+                  "h-3.5 rounded-md",
+                  colIndex === 0 && "w-20",
                   colIndex === 1 && "min-w-0 flex-1",
-                  colIndex > 1 && colIndex < columns - 1 && "w-20",
-                  colIndex === columns - 1 && "ms-auto w-16",
+                  colIndex > 1 && colIndex < columns - 1 && "w-16",
+                  colIndex === columns - 1 && "ms-auto w-14",
                 )}
               />
             ))}
@@ -54,7 +54,7 @@ export function TableSkeleton({
   if (!withChrome) return body;
 
   return (
-    <div className={cn("overflow-hidden rounded-3xl border border-border bg-bg-card", className)}>
+    <div className={cn("overflow-hidden rounded-2xl border border-border bg-bg-card", className)}>
       {body}
     </div>
   );

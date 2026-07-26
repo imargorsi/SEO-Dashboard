@@ -19,19 +19,20 @@ type TTableRowIconActionsProps = {
   className?: string;
 };
 
+/** Frosted glass icon buttons — sit above dense table rows without heavy fills. */
+export const tableRowIconActionClass =
+  "rounded-full border-border/55 bg-bg-card/35 text-text-secondary shadow-sm backdrop-blur-md backdrop-saturate-150 hover:border-border hover:bg-bg-hover/55 hover:text-text-primary hover:shadow-md";
+
 export function TableRowIconActions({ actions, className }: TTableRowIconActionsProps) {
   return (
-    <div className={cn("flex items-center justify-end gap-1.5", className)}>
+    <div className={cn("flex items-center justify-end gap-1", className)}>
       {actions.map((action) => (
         <Button
           key={action.key}
           type="button"
           variant="outline"
           size="icon-sm"
-          className={cn(
-            "border-border bg-bg-input text-text-secondary hover:bg-bg-hover hover:text-text-primary",
-            action.className,
-          )}
+          className={cn(tableRowIconActionClass, action.className)}
           aria-label={action.label}
           disabled={action.disabled}
           onClick={action.onClick}

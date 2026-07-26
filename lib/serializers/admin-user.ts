@@ -1,4 +1,5 @@
 import type { TAdminUserDetail, TAdminUserListItem, TAdminUserProjectAssignment } from "@/types/admin-user.types";
+import { SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
 import { serializeStoredImageUrl } from "@/lib/serializers/stored-image";
 import type { TUserAccountStatus } from "@/lib/users/constants";
 import type { UserDocument } from "@/models/User";
@@ -17,6 +18,7 @@ export function serializeAdminUserListItem(
     email: user.email,
     profile_image: serializeStoredImageUrl(user.profileImage),
     status: serializeUserStatus(user),
+    is_super_admin: user.roles.includes(SUPER_ADMIN_ROLE),
     email_verified_at: user.emailVerifiedAt ? user.emailVerifiedAt.toISOString() : null,
     projects,
     created_at: user.createdAt.toISOString(),

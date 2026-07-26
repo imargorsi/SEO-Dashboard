@@ -13,6 +13,7 @@ export type TAdminUserListItem = {
   email: string;
   profile_image: string | null;
   status: "active" | "inactive";
+  is_super_admin: boolean;
   email_verified_at: string | null;
   projects: TAdminUserProjectAssignment[];
   created_at: string;

@@ -21,6 +21,7 @@ type TProjectsTableProps = {
   isSuperAdmin: boolean;
   getAccess: (project: TProjectListItem) => TProjectTableAccess;
   onInviteUsers: (projectId: string) => void;
+  onDeleteProject: (project: TProjectListItem) => void;
 };
 
 function getSuccessMessageKey(action: TProjectStatusAction): "approve" | "decline" | "active" | "inactive" {
@@ -37,6 +38,7 @@ export function ProjectsTable({
   isSuperAdmin,
   getAccess,
   onInviteUsers,
+  onDeleteProject,
 }: TProjectsTableProps) {
   const { t } = useTranslation("translation", { keyPrefix: "modules.projects" });
   const { t: tActions } = useTranslation("translation", { keyPrefix: "modules.projects.cardActions" });
@@ -62,7 +64,9 @@ export function ProjectsTable({
       void onStatusAction(project, action);
     },
     onInviteUsers,
+    onDeleteProject,
     statusActionPendingProjectId: statusMutation.isPending ? (statusMutation.variables?.projectId ?? null) : null,
+    isStatusMutationPending: statusMutation.isPending,
   });
 
   return (

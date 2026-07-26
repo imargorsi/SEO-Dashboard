@@ -11,8 +11,10 @@ import { useTranslation } from "react-i18next";
 
 import { Heading } from "@/components/heading";
 import { ProjectStatusChip } from "@/components/projects/project-status-chip";
+import { ActiveInactiveToggle } from "@/components/ui/active-inactive-toggle";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import type { TProjectDetail } from "@/features/projects/projects.api";
+import { useProjectActions } from "@/features/projects/use-project-actions.hook";
 import { displayDetailValue } from "@/lib/frontend/projects/project-detail-display.utils";
 import {
   elevatedCardBodyClass,
@@ -23,6 +25,7 @@ import { cn } from "@/lib/utils";
 
 type ProjectDetailHeroProps = {
   project: TProjectDetail;
+  isSuperAdmin?: boolean;
 };
 
 function ContactItem({
@@ -69,8 +72,13 @@ function ContactItem({
   );
 }
 
-export function ProjectDetailHero({ project }: ProjectDetailHeroProps) {
+export function ProjectDetailHero({ project, isSuperAdmin = false }: ProjectDetailHeroProps) {
   const { t } = useTranslation("translation", { keyPrefix: "modules.projects.detail" });
+  const { t: tActions } = useTranslation("translation", { keyPrefix: "modules.projects.cardActions" });
+  const { isPending, handleStatusAction } = useProjectActions(project.id);
+  const canToggleActiveInactive =
+    isSuperAdmin && (project.status === "active" || project.status === "inactive");
+  const isActive = project.status === "active";
 
   return (
     <section className={cn(elevatedCardSurfaceClass, "rounded-3xl p-3 sm:p-4")}>
@@ -84,11 +92,23 @@ export function ProjectDetailHero({ project }: ProjectDetailHeroProps) {
         />
 
         <div className="min-w-0 flex-1 space-y-1">
-          <div className="flex items-center justify-between gap-2">
+          <div className="flex items-start justify-between gap-2">
             <Heading sectionTitle className={cn("min-w-0 truncate", elevatedCardTitleClass)}>
               {project.businessName}
             </Heading>
-            <ProjectStatusChip status={project.status} className="shrink-0" />
+            <div className="flex shrink-0 items-center gap-2">
+              <ProjectStatusChip status={project.status} />
+              {canToggleActiveInactive ? (
+                <ActiveInactiveToggle
+                  checked={isActive}
+                  isLoading={isPending}
+                  ariaLabel={isActive ? tActions("inactive") : tActions("active")}
+                  onCheckedChange={(nextChecked) =>
+                    void handleStatusAction(nextChecked ? "activate" : "deactivate")
+                  }
+                />
+              ) : null}
+            </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 sm:flex-nowrap sm:gap-x-4">

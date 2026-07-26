@@ -15,8 +15,10 @@ type ProjectDetailHeaderProps = {
   status: ProjectStatus;
   canEditProject: boolean;
   canInviteMembers: boolean;
+  canDeleteProject?: boolean;
   isSuperAdmin: boolean;
   onInviteUsers?: () => void;
+  onDeleteProject?: () => void;
 };
 
 export function ProjectDetailHeader({
@@ -25,12 +27,14 @@ export function ProjectDetailHeader({
   status,
   canEditProject,
   canInviteMembers,
+  canDeleteProject = false,
   isSuperAdmin,
   onInviteUsers,
+  onDeleteProject,
 }: ProjectDetailHeaderProps) {
   const { t } = useTranslation("translation", { keyPrefix: "modules.projects.detail" });
 
-  const showActions = isSuperAdmin || canEditProject || canInviteMembers;
+  const showActions = isSuperAdmin || canEditProject || canInviteMembers || canDeleteProject;
 
   return (
     <div className="space-y-4">
@@ -57,8 +61,11 @@ export function ProjectDetailHeader({
             isSuperAdmin={isSuperAdmin}
             canEditProject={canEditProject}
             canInviteMembers={canInviteMembers}
+            canDeleteProject={canDeleteProject}
             canViewDetails={false}
             onInviteUsers={onInviteUsers}
+            onDeleteProject={onDeleteProject}
+            includeActiveInactiveToggle={false}
             size="big"
           />
         ) : null}

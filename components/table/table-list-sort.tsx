@@ -32,8 +32,9 @@ export function TableListSort({ value, onChange, options, ariaLabel, className }
     [options, value],
   );
 
-  const isDescending = value === options[0]?.value;
-  const SortIcon = isDescending ? IoArrowDown : IoArrowUp;
+  // Newest (first option) → up; Oldest → down
+  const isNewest = value === "newest" || value === options[0]?.value;
+  const SortIcon = isNewest ? IoArrowUp : IoArrowDown;
   const nextValue = getNextSortValue(value, options);
 
   return (
@@ -42,7 +43,7 @@ export function TableListSort({ value, onChange, options, ariaLabel, className }
       aria-label={ariaLabel ?? `Sort: ${selectedOption?.label ?? ""}`}
       onClick={() => onChange(nextValue)}
       className={cn(
-        "inline-flex h-10 w-full items-center justify-center gap-2 rounded-full border border-border bg-bg-input px-4 type-body text-text-primary transition-colors hover:bg-bg-hover focus-visible:ring-2 focus-visible:ring-accent-border focus-visible:outline-none sm:w-auto",
+        "box-border inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl border-2 border-text-muted/50 bg-transparent px-4 type-body text-text-primary transition-colors hover:bg-bg-hover focus-visible:border-text-secondary/70 focus-visible:ring-2 focus-visible:ring-accent-border focus-visible:outline-none sm:w-auto",
         className,
       )}
     >

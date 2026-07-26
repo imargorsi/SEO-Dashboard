@@ -2,10 +2,11 @@
 
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { IoEyeOutline, IoPauseCircleOutline, IoPencil, IoPlayCircleOutline } from "react-icons/io5";
+import { IoEyeOutline, IoPencil, IoTrashOutline } from "react-icons/io5";
 
 import type { TAppTableColumn } from "@/components/table/app-table";
 import { TableRowIconActions } from "@/components/table/table-row-icon-actions";
+import { ActiveInactiveToggle } from "@/components/ui/active-inactive-toggle";
 import { Badge } from "@/components/ui/badge";
 import { StatusIndicator } from "@/components/ui/status-indicator";
 import { getBadgeToneClassName } from "@/lib/frontend/theme/status-colors";
@@ -19,16 +20,22 @@ type TUseRolesTableColumnsInput = {
   onViewRole?: (roleId: string) => void;
   onEditRole?: (roleId: string) => void;
   onToggleRoleStatus?: (role: TAdminRoleListItem) => void;
+  onDeleteRole?: (role: TAdminRoleListItem) => void;
   canUpdate?: boolean;
+  canDelete?: boolean;
   statusActionPendingRoleId?: string | null;
+  isStatusMutationPending?: boolean;
 };
 
 export function useRolesTableColumns({
   onViewRole,
   onEditRole,
   onToggleRoleStatus,
+  onDeleteRole,
   canUpdate = false,
+  canDelete = false,
   statusActionPendingRoleId = null,
+  isStatusMutationPending = false,
 }: TUseRolesTableColumnsInput = {}): TAppTableColumn<TRoleTableRow>[] {
   const { t } = useTranslation("translation", { keyPrefix: "modules.roles.table" });
 
@@ -88,45 +95,68 @@ export function useRolesTableColumns({
         render: (item) => {
           const isActive = isActiveRoleStatus(item.status);
           const isStatusPending = statusActionPendingRoleId === item.id;
+          const canToggleStatus =
+            Boolean(canUpdate && onToggleRoleStatus) &&
+            !item.is_system &&
+            !(isActive && item.members_count > 0);
 
           return (
-            <TableRowIconActions
-              actions={[
-                {
-                  key: "view",
-                  icon: <IoEyeOutline className="size-4" aria-hidden />,
-                  label: t("viewRole", { name: item.name }),
-                  onClick: onViewRole ? () => onViewRole(item.id) : undefined,
-                },
-                {
-                  key: "edit",
-                  icon: <IoPencil className="size-4" aria-hidden />,
-                  label: t("editRole", { name: item.name }),
-                  onClick: onEditRole ? () => onEditRole(item.id) : undefined,
-                },
-                ...(canUpdate && onToggleRoleStatus
-                  ? [
-                      {
-                        key: isActive ? "deactivate" : "activate",
-                        icon: isActive ? (
-                          <IoPauseCircleOutline className="size-4" aria-hidden />
-                        ) : (
-                          <IoPlayCircleOutline className="size-4" aria-hidden />
-                        ),
-                        label: isActive
-                          ? t("deactivateRole", { name: item.name })
-                          : t("activateRole", { name: item.name }),
-                        onClick: () => onToggleRoleStatus(item),
-                        disabled: isStatusPending,
-                      },
-                    ]
-                  : []),
-              ]}
-            />
+            <div className="flex items-center justify-end gap-1.5">
+              <TableRowIconActions
+                actions={[
+                  {
+                    key: "view",
+                    icon: <IoEyeOutline className="size-4" aria-hidden />,
+                    label: t("viewRole", { name: item.name }),
+                    onClick: onViewRole ? () => onViewRole(item.id) : undefined,
+                  },
+                  {
+                    key: "edit",
+                    icon: <IoPencil className="size-4" aria-hidden />,
+                    label: t("editRole", { name: item.name }),
+                    onClick: onEditRole ? () => onEditRole(item.id) : undefined,
+                  },
+                  ...(canDelete && !isActive && !item.is_system && onDeleteRole
+                    ? [
+                        {
+                          key: "delete",
+                          icon: <IoTrashOutline className="size-4" aria-hidden />,
+                          label: t("deleteRole", { name: item.name }),
+                          onClick: () => onDeleteRole(item),
+                          className: "text-destructive hover:bg-destructive/10 hover:text-destructive",
+                        },
+                      ]
+                    : []),
+                ]}
+              />
+              {canToggleStatus ? (
+                <ActiveInactiveToggle
+                  checked={isActive}
+                  disabled={isStatusMutationPending}
+                  isLoading={isStatusPending}
+                  ariaLabel={
+                    isActive
+                      ? t("deactivateRole", { name: item.name })
+                      : t("activateRole", { name: item.name })
+                  }
+                  onCheckedChange={() => onToggleRoleStatus?.(item)}
+                />
+              ) : null}
+            </div>
           );
         },
       },
     ],
-    [canUpdate, onEditRole, onToggleRoleStatus, onViewRole, statusActionPendingRoleId, t]
+    [
+      canDelete,
+      canUpdate,
+      isStatusMutationPending,
+      onDeleteRole,
+      onEditRole,
+      onToggleRoleStatus,
+      onViewRole,
+      statusActionPendingRoleId,
+      t,
+    ],
   );
 }

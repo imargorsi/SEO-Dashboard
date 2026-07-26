@@ -6,13 +6,13 @@ import {
   IoCheckmarkCircleOutline,
   IoCloseCircleOutline,
   IoEyeOutline,
-  IoPauseCircleOutline,
   IoPersonAddOutline,
-  IoPlayCircleOutline,
+  IoTrashOutline,
 } from "react-icons/io5";
 import { TbEditCircle } from "react-icons/tb";
 import { useTranslation } from "react-i18next";
 
+import { ActiveInactiveToggle } from "@/components/ui/active-inactive-toggle";
 import { buttonVariants } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { useProjectActions } from "@/features/projects/use-project-actions.hook";
@@ -29,14 +29,13 @@ import { cn } from "@/lib/utils";
 
 export type TProjectActionSize = "small" | "big";
 
-const ACTION_ICONS: Record<TProjectCardActionId, IconType> = {
+const ACTION_ICONS: Record<Exclude<TProjectCardActionId, "activate" | "deactivate">, IconType> = {
   approve: IoCheckmarkCircleOutline,
   reject: IoCloseCircleOutline,
-  activate: IoPlayCircleOutline,
-  deactivate: IoPauseCircleOutline,
   inviteUsers: IoPersonAddOutline,
   viewDetails: IoEyeOutline,
   edit: TbEditCircle,
+  delete: IoTrashOutline,
 };
 
 type ProjectActionButtonProps = {
@@ -46,6 +45,7 @@ type ProjectActionButtonProps = {
   size: TProjectActionSize;
   onStatusAction?: (action: TProjectStatusAction) => void;
   onInviteUsers?: () => void;
+  onDeleteProject?: () => void;
 };
 
 export function ProjectActionButton({
@@ -55,7 +55,12 @@ export function ProjectActionButton({
   size,
   onStatusAction,
   onInviteUsers,
+  onDeleteProject,
 }: ProjectActionButtonProps) {
+  if (action.id === "activate" || action.id === "deactivate") {
+    return null;
+  }
+
   const Icon = ACTION_ICONS[action.id];
   const isActionLoading = Boolean(action.action) && isLoading;
   const isDisabled = isActionLoading;
@@ -114,6 +119,10 @@ export function ProjectActionButton({
           onInviteUsers?.();
           return;
         }
+        if (action.id === "delete") {
+          onDeleteProject?.();
+          return;
+        }
         if (action.action && onStatusAction) {
           onStatusAction(action.action);
         }
@@ -131,11 +140,19 @@ type ProjectActionsProps = {
   canViewDetails?: boolean;
   canEditProject?: boolean;
   canInviteMembers?: boolean;
+  canDeleteProject?: boolean;
   onInviteUsers?: () => void;
+  onDeleteProject?: () => void;
   size?: TProjectActionSize;
   withCardFooter?: boolean;
+  /** When false, activate/deactivate is handled elsewhere (e.g. beside project owner). */
+  includeActiveInactiveToggle?: boolean;
   className?: string;
 };
+
+function isActiveInactiveAction(action: TProjectCardActionConfig): boolean {
+  return action.id === "activate" || action.id === "deactivate";
+}
 
 export function ProjectActions({
   projectId,
@@ -144,9 +161,12 @@ export function ProjectActions({
   canViewDetails = false,
   canEditProject = false,
   canInviteMembers = false,
+  canDeleteProject = false,
   onInviteUsers,
+  onDeleteProject,
   size = "small",
   withCardFooter = false,
+  includeActiveInactiveToggle = false,
   className,
 }: ProjectActionsProps) {
   const { t } = useTranslation("translation", { keyPrefix: "modules.projects.cardActions" });
@@ -159,14 +179,20 @@ export function ProjectActions({
     canViewDetails,
     canEditProject,
     canInviteMembers,
+    canDeleteProject,
   });
 
   if (actions.length === 0) return null;
 
   const statusActions = actions.filter((action) => action.group === "status");
   const generalActions = actions.filter((action) => action.group === "general");
+  const toggleAction = includeActiveInactiveToggle
+    ? statusActions.find(isActiveInactiveAction)
+    : undefined;
+  const buttonStatusActions = statusActions.filter((action) => !isActiveInactiveAction(action));
   const isBig = size === "big";
-  const showDivider = isBig && statusActions.length > 0 && generalActions.length > 0;
+  const isActive = status === "active";
+  const showDivider = isBig && buttonStatusActions.length > 0 && generalActions.length > 0;
 
   function renderAction(action: TProjectCardActionConfig) {
     return (
@@ -178,28 +204,53 @@ export function ProjectActions({
         size={size}
         onStatusAction={handleStatusAction}
         onInviteUsers={onInviteUsers}
+        onDeleteProject={onDeleteProject}
       />
     );
   }
 
+  function renderActiveInactiveToggle() {
+    if (!toggleAction) return null;
+
+    return (
+      <ActiveInactiveToggle
+        key="active-inactive-toggle"
+        checked={isActive}
+        isLoading={isPending}
+        ariaLabel={isActive ? t("inactive") : t("active")}
+        onCheckedChange={(nextChecked) =>
+          void handleStatusAction(nextChecked ? "activate" : "deactivate")
+        }
+      />
+    );
+  }
+
+  const visibleActionsCount =
+    generalActions.length + buttonStatusActions.length + (toggleAction ? 1 : 0);
+
+  if (visibleActionsCount === 0) return null;
+
   const actionsContent = isBig ? (
     <div className={cn("flex flex-wrap items-center gap-2", className)}>
-      {statusActions.map(renderAction)}
+      {buttonStatusActions.map(renderAction)}
       {showDivider ? <div className="h-9 w-px shrink-0 bg-border" aria-hidden /> : null}
       {generalActions.map(renderAction)}
+      {renderActiveInactiveToggle()}
     </div>
   ) : (
     <div
       className={cn(
         "grid gap-2.5",
-        actions.length === 1 && "grid-cols-1",
-        actions.length === 2 && "grid-cols-2",
-        actions.length === 3 && "grid-cols-3",
-        actions.length >= 4 && "grid-cols-2 sm:grid-cols-4",
+        visibleActionsCount === 1 && "grid-cols-1",
+        visibleActionsCount === 2 && "grid-cols-2",
+        visibleActionsCount === 3 && "grid-cols-3",
+        visibleActionsCount >= 4 && "grid-cols-2 sm:grid-cols-4",
         className,
       )}
     >
-      {actions.map(renderAction)}
+      {buttonStatusActions.map(renderAction)}
+      {generalActions.map(renderAction)}
+      {renderActiveInactiveToggle()}
     </div>
   );
 

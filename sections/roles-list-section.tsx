@@ -13,12 +13,25 @@ import { TableListSearch } from "@/components/table/table-list-search";
 import { TableListSort } from "@/components/table/table-list-sort";
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
-import { useRoleStatusActionMutation, useRolesQuery } from "@/features/roles/roles.api";
+import {
+  useDeleteRoleMutation,
+  useRoleStatusActionMutation,
+  useRolesQuery,
+} from "@/features/roles/roles.api";
 import { useQueryParams } from "@/hooks/use-query-params.hook";
 import { ApiError } from "@/lib/frontend/api/errors";
-import { roleCanCreate, roleCanUpdate, roleCanView } from "@/lib/frontend/roles/acl";
+import { roleCanCreate, roleCanDelete, roleCanUpdate, roleCanView } from "@/lib/frontend/roles/acl";
 import { ROLE_ROUTES } from "@/lib/frontend/roles/role-routes.utils";
 import { parseRolesListQuery } from "@/lib/frontend/roles/roles-list-query.utils";
 import { notify } from "@/lib/frontend/feedback/notify";
@@ -36,8 +49,11 @@ export function RolesListSection() {
   const canCreate = roleCanCreate(authUser?.permissions);
   const canView = useMemo(() => roleCanView(authUser?.permissions), [authUser]);
   const canUpdate = useMemo(() => roleCanUpdate(authUser?.permissions), [authUser]);
+  const canDelete = useMemo(() => roleCanDelete(authUser?.permissions), [authUser]);
   const [selectedRoleId, setSelectedRoleId] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<TAdminRoleListItem | null>(null);
   const statusMutation = useRoleStatusActionMutation();
+  const deleteMutation = useDeleteRoleMutation();
 
   const { data, error, isLoading, isFetching } = useRolesQuery({
     page: listQuery.page,
@@ -70,7 +86,7 @@ export function RolesListSection() {
       { value: "newest", label: t("table.sortNewest") },
       { value: "oldest", label: t("table.sortOldest") },
     ],
-    [t]
+    [t],
   );
 
   const onSearchChange = useCallback(
@@ -82,7 +98,7 @@ export function RolesListSection() {
 
       updateQueryParams({}, ["search", "page"]);
     },
-    [updateQueryParams]
+    [updateQueryParams],
   );
 
   const onNewestChange = useCallback(
@@ -94,7 +110,7 @@ export function RolesListSection() {
 
       setQueryParams({ newest: "false" });
     },
-    [deleteQueryParams, setQueryParams]
+    [deleteQueryParams, setQueryParams],
   );
 
   const onStatusFilterChange = useCallback(
@@ -106,7 +122,7 @@ export function RolesListSection() {
 
       updateQueryParams({ status: nextStatus }, ["page"]);
     },
-    [updateQueryParams]
+    [updateQueryParams],
   );
 
   const onPageChange = useCallback(
@@ -118,7 +134,7 @@ export function RolesListSection() {
 
       setQueryParams({ page: String(page) });
     },
-    [deleteQueryParams, setQueryParams]
+    [deleteQueryParams, setQueryParams],
   );
 
   const onViewRole = useCallback((roleId: string) => {
@@ -129,7 +145,7 @@ export function RolesListSection() {
     (roleId: string) => {
       router.push(ROLE_ROUTES.edit(roleId));
     },
-    [router]
+    [router],
   );
 
   const onDetailOpenChange = useCallback((open: boolean) => {
@@ -142,14 +158,27 @@ export function RolesListSection() {
       try {
         const result = await statusMutation.mutateAsync({ roleId: role.id, action });
         notify.success(
-          result.message?.trim() || t(action === "activate" ? "table.activateSuccess" : "table.deactivateSuccess")
+          result.message?.trim() ||
+            t(action === "activate" ? "table.activateSuccess" : "table.deactivateSuccess"),
         );
       } catch (error) {
         notify.error(ApiError.messageFrom(error, t("table.statusActionError")));
       }
     },
-    [statusMutation, t]
+    [statusMutation, t],
   );
+
+  async function confirmDelete() {
+    if (!deleteTarget) return;
+    try {
+      const result = await deleteMutation.mutateAsync(deleteTarget.id);
+      setDeleteTarget(null);
+      if (selectedRoleId === deleteTarget.id) setSelectedRoleId(null);
+      notify.success(result.message?.trim() || t("table.deleteSuccess"));
+    } catch (error) {
+      notify.error(ApiError.messageFrom(error, t("table.deleteErrorFallback")));
+    }
+  }
 
   return (
     <div className="w-full min-w-0">
@@ -172,21 +201,23 @@ export function RolesListSection() {
 
         {canView ? (
           <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
-              <TableListSearch
-                value={listQuery.search}
-                onChange={onSearchChange}
-                placeholder={t("table.searchPlaceholder")}
-                isLoading={isFetching}
-              />
-              <TableListSort
-                value={listQuery.newest ? "newest" : "oldest"}
-                onChange={onNewestChange}
-                options={sortOptions}
-                ariaLabel={t("table.sortToggle", {
-                  direction: listQuery.newest ? t("table.sortNewest") : t("table.sortOldest"),
-                })}
-              />
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                <TableListSearch
+                  value={listQuery.search}
+                  onChange={onSearchChange}
+                  placeholder={t("table.searchPlaceholder")}
+                  isLoading={isFetching}
+                />
+                <TableListSort
+                  value={listQuery.newest ? "newest" : "oldest"}
+                  onChange={onNewestChange}
+                  options={sortOptions}
+                  ariaLabel={t("table.sortToggle", {
+                    direction: listQuery.newest ? t("table.sortNewest") : t("table.sortOldest"),
+                  })}
+                />
+              </div>
               <RoleStatusFilter
                 activeStatus={listQuery.status}
                 counts={statusCounts}
@@ -203,14 +234,39 @@ export function RolesListSection() {
               onViewRole={onViewRole}
               onEditRole={onEditRole}
               onToggleRoleStatus={canUpdate ? onToggleRoleStatus : undefined}
+              onDeleteRole={canDelete ? setDeleteTarget : undefined}
               canUpdate={canUpdate}
-              statusActionPendingRoleId={statusMutation.isPending ? (statusMutation.variables?.roleId ?? null) : null}
+              canDelete={canDelete}
+              statusActionPendingRoleId={
+                statusMutation.isPending ? (statusMutation.variables?.roleId ?? null) : null
+              }
+              isStatusMutationPending={statusMutation.isPending}
             />
           </div>
         ) : null}
       </div>
 
       <RoleDetailSheet roleId={selectedRoleId} open={Boolean(selectedRoleId)} onOpenChange={onDetailOpenChange} />
+
+      <AlertDialog open={Boolean(deleteTarget)} onOpenChange={(open) => !open && setDeleteTarget(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("table.deleteTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("table.deleteBody")}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("table.deleteCancel")}</AlertDialogCancel>
+            <button
+              type="button"
+              className={cn(buttonVariants({ variant: "destructive", size: "sm" }))}
+              onClick={() => void confirmDelete()}
+              disabled={deleteMutation.isPending}
+            >
+              {t("table.deleteConfirm")}
+            </button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

@@ -17,8 +17,11 @@ type TRolesTableProps = {
   onViewRole?: (roleId: string) => void;
   onEditRole?: (roleId: string) => void;
   onToggleRoleStatus?: (role: TAdminRoleListItem) => void;
+  onDeleteRole?: (role: TAdminRoleListItem) => void;
   canUpdate?: boolean;
+  canDelete?: boolean;
   statusActionPendingRoleId?: string | null;
+  isStatusMutationPending?: boolean;
 };
 
 export function RolesTable({
@@ -30,16 +33,22 @@ export function RolesTable({
   onViewRole,
   onEditRole,
   onToggleRoleStatus,
+  onDeleteRole,
   canUpdate,
+  canDelete,
   statusActionPendingRoleId,
+  isStatusMutationPending,
 }: TRolesTableProps) {
   const { t: tTable } = useTranslation("translation", { keyPrefix: "modules.roles.table" });
   const columns = useRolesTableColumns({
     onViewRole,
     onEditRole,
     onToggleRoleStatus,
+    onDeleteRole,
     canUpdate,
+    canDelete,
     statusActionPendingRoleId,
+    isStatusMutationPending,
   });
 
   const items = (data?.items ?? []) as TRoleTableRow[];

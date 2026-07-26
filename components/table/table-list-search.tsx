@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoSearch } from "react-icons/io5";
 
 import { Spinner } from "@/components/ui/spinner";
@@ -29,12 +29,17 @@ export function TableListSearch({
   debounceMs = DEFAULT_TABLE_SEARCH_DEBOUNCE_MS,
   className,
 }: TTableListSearchProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [searchValue, setSearchValue] = useState(value ?? "");
   const [prevValue, setPrevValue] = useState(value);
 
+  // Sync from URL/parent only when the field is not focused, so debounce round-trips
+  // cannot wipe keystrokes the user typed after the last emit.
   if (value !== prevValue) {
     setPrevValue(value);
-    setSearchValue(value ?? "");
+    if (inputRef.current !== document.activeElement) {
+      setSearchValue(value ?? "");
+    }
   }
 
   const debouncedSearchValue = useDebouncedValue(searchValue, debounceMs);
@@ -60,18 +65,19 @@ export function TableListSearch({
   const isDebouncing = searchValue.trim() !== (value?.trim() ?? "");
 
   return (
-    <div className={cn("relative w-full sm:max-w-sm", className)}>
+    <div className={cn("relative w-full sm:max-w-2xl", className)}>
       <IoSearch
         className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-text-muted"
         aria-hidden
       />
       <input
+        ref={inputRef}
         type="search"
         value={searchValue}
         onChange={(event) => setSearchValue(event.target.value)}
         placeholder={placeholder}
         aria-label={ariaLabel ?? placeholder}
-        className="h-10 w-full rounded-xl border border-border bg-bg-input pr-10 pl-10 type-body text-text-primary outline-none placeholder:text-text-placeholder focus-visible:ring-2 focus-visible:ring-accent-border"
+        className="box-border h-10 w-full rounded-xl border-2 border-text-muted/50 bg-transparent pr-10 pl-10 type-body text-text-primary outline-none placeholder:text-text-placeholder focus-visible:border-text-secondary/70 focus-visible:ring-2 focus-visible:ring-accent-border"
       />
       {isLoading || isDebouncing ? (
         <Spinner className="absolute top-1/2 right-3 size-4 -translate-y-1/2 text-text-muted" />

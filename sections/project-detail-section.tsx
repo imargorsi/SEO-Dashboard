@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
 import { DashboardModuleBreadcrumbSection } from "@/components/layout/dashboard-module-breadcrumb-section";
@@ -10,25 +10,45 @@ import { ProjectDetailHero } from "@/components/projects/detail/project-detail-h
 import { ProjectDetailMainContent } from "@/components/projects/detail/project-detail-main-content";
 import { ProjectDetailSidebar } from "@/components/projects/detail/project-detail-sidebar";
 import { ProjectInviteUsersQuickAdd } from "@/components/projects/project-invite-users-quick-add";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { buttonVariants } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { LoadingState } from "@/components/ui/loading-state";
 import { IoFolderOpenOutline, IoWarningOutline } from "react-icons/io5";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
-import { useProjectAccessQuery, useProjectQuery } from "@/features/projects/projects.api";
+import {
+  useDeleteProjectMutation,
+  useProjectAccessQuery,
+  useProjectQuery,
+} from "@/features/projects/projects.api";
 import { ApiError } from "@/lib/frontend/api/errors";
+import { notify } from "@/lib/frontend/feedback/notify";
+import { PROJECT_ROUTES } from "@/lib/frontend/projects/project-routes.utils";
 import { resolveProjectOwnerId } from "@/lib/projects/project-owner-id.utils";
 import {
+  canDeleteProjectCard,
   canEditProjectCard,
   canInviteProjectMembers,
   canViewProjectCard,
 } from "@/lib/projects/project-card-access.utils";
 import { isSuperAdmin, mergePermissions } from "@/lib/rbac/access";
+import { cn } from "@/lib/utils";
 
 export function ProjectDetailSection() {
   const params = useParams<{ id: string }>();
   const projectId = typeof params.id === "string" ? params.id : "";
+  const router = useRouter();
   const { t } = useTranslation("translation", { keyPrefix: "modules.projects.detail" });
   const { t: tRoot } = useTranslation("translation");
+  const { t: tTable } = useTranslation("translation", { keyPrefix: "modules.projects.table" });
   const { data: user } = useAuthUserQuery();
   const userIsSuperAdmin = isSuperAdmin(user?.roles);
   const { data: projectAccess } = useProjectAccessQuery(projectId, {
@@ -37,7 +57,9 @@ export function ProjectDetailSection() {
   const { data: project, isPending, isError, error } = useProjectQuery(projectId, {
     enabled: Boolean(user && projectId),
   });
+  const deleteMutation = useDeleteProjectMutation();
   const [isInviteOpen, setIsInviteOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const permissions = mergePermissions(user?.permissions ?? [], projectAccess?.permissions ?? []);
 
@@ -71,6 +93,14 @@ export function ProjectDetailSection() {
       })
     : false;
 
+  const canDelete = project
+    ? canDeleteProjectCard({
+        platformPermissions: user?.permissions ?? [],
+        isSuperAdmin: userIsSuperAdmin,
+        status: project.status,
+      })
+    : false;
+
   const breadcrumbItems = useMemo(
     () => [
       { id: "dashboard", label: tRoot("breadcrumb.root"), href: "/dashboard" },
@@ -79,6 +109,18 @@ export function ProjectDetailSection() {
     ],
     [project?.businessName, t, tRoot],
   );
+
+  async function confirmDelete() {
+    if (!project) return;
+    try {
+      const result = await deleteMutation.mutateAsync(project.id);
+      setIsDeleteOpen(false);
+      notify.success(result.message?.trim() || tTable("deleteSuccessFallback"));
+      router.push(PROJECT_ROUTES.list);
+    } catch (err) {
+      notify.error(ApiError.messageFrom(err, tTable("deleteErrorTitle")));
+    }
+  }
 
   if (!projectId) {
     return (
@@ -132,11 +174,13 @@ export function ProjectDetailSection() {
           status={project.status}
           canEditProject={canEdit}
           canInviteMembers={canInvite}
+          canDeleteProject={canDelete}
           isSuperAdmin={userIsSuperAdmin}
           onInviteUsers={() => setIsInviteOpen(true)}
+          onDeleteProject={() => setIsDeleteOpen(true)}
         />
 
-        <ProjectDetailHero project={project} />
+        <ProjectDetailHero project={project} isSuperAdmin={userIsSuperAdmin} />
 
         <div className="grid gap-5 xl:grid-cols-2 xl:items-start">
           <ProjectDetailMainContent project={project} />
@@ -150,6 +194,28 @@ export function ProjectDetailSection() {
         canInvite={canInvite}
         onOpenChange={setIsInviteOpen}
       />
+
+      <AlertDialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{tTable("deleteConfirmTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {tTable("deleteConfirmDescription", { name: project.businessName })}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{tTable("deleteConfirmCancel")}</AlertDialogCancel>
+            <button
+              type="button"
+              className={cn(buttonVariants({ variant: "destructive", size: "sm" }))}
+              onClick={() => void confirmDelete()}
+              disabled={deleteMutation.isPending}
+            >
+              {tTable("deleteConfirmAction")}
+            </button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

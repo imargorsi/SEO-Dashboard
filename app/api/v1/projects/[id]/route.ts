@@ -1,6 +1,8 @@
 import { withApiHandler } from "@/lib/api/handler";
 import { ApiResponse } from "@/lib/api/response";
 import { runApiGuards } from "@/lib/auth/run-api-guards";
+import { connectDb } from "@/lib/db/mongoose";
+import { buildDeleteProjectResponse, deleteProject } from "@/lib/projects/delete-project";
 import { buildGetProjectResponse, getProjectDetailForUser } from "@/lib/projects/get-project";
 import { requireProjectPermission } from "@/lib/projects/get-project-access";
 import {
@@ -8,7 +10,7 @@ import {
   resolveProjectLogoUpdate,
 } from "@/lib/projects/parse-update-project-request";
 import { buildUpdateProjectResponse, updateProject } from "@/lib/projects/update-project";
-import { connectDb } from "@/lib/db/mongoose";
+import { projectPermission } from "@/lib/rbac/permission-catalog";
 
 export const GET = withApiHandler(async (request, context) => {
   await connectDb();
@@ -54,4 +56,20 @@ export const PATCH = withApiHandler(async (request, context) => {
   });
 
   return buildUpdateProjectResponse(project);
+});
+
+/** Platform permission `projects.delete` (super_admin). Only inactive/rejected projects. */
+export const DELETE = withApiHandler(async (request, context) => {
+  await connectDb();
+
+  const auth = await runApiGuards(request, { permission: projectPermission("projects", "delete") });
+  if (auth instanceof Response) return auth;
+
+  const { id } = await context!.params;
+  if (!id) {
+    return ApiResponse.error("Project Not Found.", {}, 404);
+  }
+
+  await deleteProject(auth, id);
+  return buildDeleteProjectResponse();
 });

@@ -180,6 +180,21 @@ export function useUserStatusActionMutation() {
   });
 }
 
+export function useDeleteUserMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (userId: string) => {
+      const envelope = await baseQuery.delete<null>(`users/${userId}`);
+      return { userId, message: envelope.message };
+    },
+    onSuccess: (_data, userId) => {
+      void queryClient.invalidateQueries({ queryKey: usersKeys.all });
+      void queryClient.removeQueries({ queryKey: usersKeys.detail(userId) });
+    },
+  });
+}
+
 async function fetchUserLookup(search: string): Promise<TUserLookupItem[]> {
   const searchParams = new URLSearchParams({ search, limit: "10" });
   const envelope = await baseQuery.get<{ items: TUserLookupItem[] }>(

@@ -240,6 +240,13 @@ export interface Translation {
         activateSuccess: string;
         deactivateSuccess: string;
         statusActionError: string;
+        deleteUser: string;
+        deleteTitle: string;
+        deleteBody: string;
+        deleteCancel: string;
+        deleteConfirm: string;
+        deleteSuccess: string;
+        deleteErrorFallback: string;
         createUser: string;
         previousPage: string;
         nextPage: string;
@@ -285,6 +292,7 @@ export interface Translation {
         viewDetails: string;
         editProject: string;
         inviteUsers: string;
+        deleteProject: string;
         moreActions: string;
         errorFallback: string;
         success: {
@@ -844,6 +852,13 @@ export interface Translation {
         activateSuccess: string;
         deactivateSuccess: string;
         statusActionError: string;
+        deleteRole: string;
+        deleteTitle: string;
+        deleteBody: string;
+        deleteCancel: string;
+        deleteConfirm: string;
+        deleteSuccess: string;
+        deleteErrorFallback: string;
         createRole: string;
         previousPage: string;
         nextPage: string;
@@ -1191,6 +1206,13 @@ const translation: Translation = {
         activateSuccess: "User Activated Successfully.",
         deactivateSuccess: "User Deactivated Successfully.",
         statusActionError: "Could Not Update User Status. Try Again.",
+        deleteUser: "Delete {{name}}",
+        deleteTitle: "Delete User?",
+        deleteBody: "This User Will Be Permanently Removed. This Action Cannot Be Undone.",
+        deleteCancel: "Cancel",
+        deleteConfirm: "Delete",
+        deleteSuccess: "User Deleted Successfully.",
+        deleteErrorFallback: "Could Not Delete User. Try Again.",
         createUser: "Add User",
         previousPage: "Previous Page",
         nextPage: "Next Page",
@@ -1236,6 +1258,7 @@ const translation: Translation = {
         viewDetails: "View Details",
         editProject: "Edit Project",
         inviteUsers: "Invite Users",
+        deleteProject: "Delete Project",
         moreActions: "More Actions",
         errorFallback: "Could Not Update Project Status.",
         success: {
@@ -1517,18 +1540,18 @@ const translation: Translation = {
         delete: "Delete",
         more: "More actions",
         moreView: "View details",
-        deleteConfirmTitle: "Delete this project?",
-        deleteConfirmDescription: "This will remove “{{name}}”. This action cannot be undone.",
+        deleteConfirmTitle: "Delete This Project?",
+        deleteConfirmDescription: "This Will Remove “{{name}}”. This Action Cannot Be Undone.",
         deleteConfirmCancel: "Cancel",
-        deleteConfirmAction: "Delete project",
+        deleteConfirmAction: "Delete Project",
         deleteInProgress: "Deleting…",
-        deleteSuccessTitle: "Project deleted",
-        deleteSuccessFallback: "The project was removed.",
-        deleteErrorTitle: "Could not delete project",
+        deleteSuccessTitle: "Project Deleted",
+        deleteSuccessFallback: "The Project Was Removed.",
+        deleteErrorTitle: "Could Not Delete Project",
         dismiss: "Dismiss",
         detailSheetLead: "Full project details from the current page.",
-        accessDeniedTitle: "No access",
-        accessDeniedBody: "You don't have permission to view projects. Ask an administrator if you need access.",
+        accessDeniedTitle: "No Access",
+        accessDeniedBody: "You Don't Have Permission To View Projects. Ask An Administrator If You Need Access.",
         yes: "Yes",
         no: "No",
         colIsB2b: "B2B",
@@ -1798,6 +1821,13 @@ const translation: Translation = {
         activateSuccess: "Role Activated Successfully.",
         deactivateSuccess: "Role Deactivated Successfully.",
         statusActionError: "Could Not Update Role Status. Try Again.",
+        deleteRole: "Delete {{name}}",
+        deleteTitle: "Delete Role?",
+        deleteBody: "This Role Will Be Permanently Removed. This Action Cannot Be Undone.",
+        deleteCancel: "Cancel",
+        deleteConfirm: "Delete",
+        deleteSuccess: "Role Deleted Successfully.",
+        deleteErrorFallback: "Could Not Delete Role. Try Again.",
         createRole: "Add Role",
         previousPage: "Previous Page",
         nextPage: "Next Page",

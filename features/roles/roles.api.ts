@@ -142,3 +142,18 @@ export function useRoleStatusActionMutation() {
     },
   });
 }
+
+export function useDeleteRoleMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (roleId: string) => {
+      const envelope = await baseQuery.delete<null>(`admin/roles/${roleId}`);
+      return { roleId, message: envelope.message };
+    },
+    onSuccess: (_data, roleId) => {
+      void queryClient.invalidateQueries({ queryKey: rolesKeys.all });
+      void queryClient.removeQueries({ queryKey: rolesKeys.detail(roleId) });
+    },
+  });
+}

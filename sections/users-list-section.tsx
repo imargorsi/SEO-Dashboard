@@ -13,14 +13,27 @@ import { UserStatusFilter } from "@/components/users/user-status-filter";
 import { UsersTable } from "@/components/users/users-table";
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
-import { useUserStatusActionMutation, useUsersQuery } from "@/features/users/users.api";
+import {
+  useDeleteUserMutation,
+  useUserStatusActionMutation,
+  useUsersQuery,
+} from "@/features/users/users.api";
 import { useQueryParams } from "@/hooks/use-query-params.hook";
 import { ApiError } from "@/lib/frontend/api/errors";
 import { notify } from "@/lib/frontend/feedback/notify";
 import { parseUsersListQuery } from "@/lib/frontend/users/users-list-query.utils";
-import { userCanCreate, userCanUpdate, userCanView } from "@/lib/frontend/users/acl";
+import { userCanCreate, userCanDelete, userCanUpdate, userCanView } from "@/lib/frontend/users/acl";
 import { USER_ROUTES } from "@/lib/frontend/users/user-routes.utils";
 import { isActiveUserStatus, type TUserAccountStatus } from "@/lib/users/constants";
 import { EMPTY_USER_STATUS_COUNTS } from "@/lib/users/user-status-filter.utils";
@@ -36,8 +49,11 @@ export function UsersListSection() {
   const canView = useMemo(() => userCanView(authUser?.permissions), [authUser]);
   const canCreate = useMemo(() => userCanCreate(authUser?.permissions), [authUser]);
   const canUpdate = useMemo(() => userCanUpdate(authUser?.permissions), [authUser]);
+  const canDelete = useMemo(() => userCanDelete(authUser?.permissions), [authUser]);
   const [selectedUser, setSelectedUser] = useState<TAdminUserListItem | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<TAdminUserListItem | null>(null);
   const statusMutation = useUserStatusActionMutation();
+  const deleteMutation = useDeleteUserMutation();
 
   const { data, error, isLoading, isFetching } = useUsersQuery({
     page: listQuery.page,
@@ -155,6 +171,18 @@ export function UsersListSection() {
     if (!open) setSelectedUser(null);
   }, []);
 
+  async function confirmDelete() {
+    if (!deleteTarget) return;
+    try {
+      const result = await deleteMutation.mutateAsync(deleteTarget.id);
+      setDeleteTarget(null);
+      if (selectedUser?.id === deleteTarget.id) setSelectedUser(null);
+      notify.success(result.message?.trim() || t("table.deleteSuccess"));
+    } catch (error) {
+      notify.error(ApiError.messageFrom(error, t("table.deleteErrorFallback")));
+    }
+  }
+
   return (
     <div className="w-full min-w-0">
       <div className="space-y-5 px-4 py-6 sm:px-6">
@@ -176,21 +204,23 @@ export function UsersListSection() {
 
         {canView ? (
           <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
-              <TableListSearch
-                value={listQuery.search}
-                onChange={onSearchChange}
-                placeholder={t("table.searchPlaceholder")}
-                isLoading={isFetching}
-              />
-              <TableListSort
-                value={listQuery.newest ? "newest" : "oldest"}
-                onChange={onNewestChange}
-                options={sortOptions}
-                ariaLabel={t("table.sortToggle", {
-                  direction: listQuery.newest ? t("table.sortNewest") : t("table.sortOldest"),
-                })}
-              />
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                <TableListSearch
+                  value={listQuery.search}
+                  onChange={onSearchChange}
+                  placeholder={t("table.searchPlaceholder")}
+                  isLoading={isFetching}
+                />
+                <TableListSort
+                  value={listQuery.newest ? "newest" : "oldest"}
+                  onChange={onNewestChange}
+                  options={sortOptions}
+                  ariaLabel={t("table.sortToggle", {
+                    direction: listQuery.newest ? t("table.sortNewest") : t("table.sortOldest"),
+                  })}
+                />
+              </div>
               <UserStatusFilter
                 activeStatus={listQuery.status}
                 counts={statusCounts}
@@ -207,10 +237,14 @@ export function UsersListSection() {
               onViewUser={onViewUser}
               onEditUser={onEditUser}
               onToggleUserStatus={canUpdate ? onToggleUserStatus : undefined}
+              onDeleteUser={canDelete ? setDeleteTarget : undefined}
               canUpdate={canUpdate}
+              canDelete={canDelete}
+              currentUserId={authUser?.id ?? null}
               statusActionPendingUserId={
                 statusMutation.isPending ? (statusMutation.variables?.userId ?? null) : null
               }
+              isStatusMutationPending={statusMutation.isPending}
             />
           </div>
         ) : null}
@@ -221,6 +255,26 @@ export function UsersListSection() {
         open={Boolean(selectedUser)}
         onOpenChange={onDetailOpenChange}
       />
+
+      <AlertDialog open={Boolean(deleteTarget)} onOpenChange={(open) => !open && setDeleteTarget(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("table.deleteTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("table.deleteBody")}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("table.deleteCancel")}</AlertDialogCancel>
+            <button
+              type="button"
+              className={cn(buttonVariants({ variant: "destructive", size: "sm" }))}
+              onClick={() => void confirmDelete()}
+              disabled={deleteMutation.isPending}
+            >
+              {t("table.deleteConfirm")}
+            </button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

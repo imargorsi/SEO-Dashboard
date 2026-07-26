@@ -43,3 +43,21 @@ export function canInviteProjectMembers({
   if (hasPermission(permissions, "members.invite")) return true;
   return Boolean(userId && ownerId && userId === ownerId);
 }
+
+/**
+ * Hard-delete — platform `projects.delete` (super_admin) only.
+ * Allowed statuses: inactive or rejected.
+ */
+export function canDeleteProjectCard({
+  platformPermissions,
+  isSuperAdmin,
+  status,
+}: {
+  platformPermissions: readonly string[];
+  isSuperAdmin: boolean;
+  status: ProjectStatus;
+}): boolean {
+  if (status !== "inactive" && status !== "rejected") return false;
+  if (isSuperAdmin) return true;
+  return hasPermission(platformPermissions, "projects.delete");
+}

@@ -17,8 +17,12 @@ type TUsersTableProps = {
   onViewUser?: (user: TAdminUserListItem) => void;
   onEditUser?: (user: TAdminUserListItem) => void;
   onToggleUserStatus?: (user: TAdminUserListItem) => void;
+  onDeleteUser?: (user: TAdminUserListItem) => void;
   canUpdate?: boolean;
+  canDelete?: boolean;
+  currentUserId?: string | null;
   statusActionPendingUserId?: string | null;
+  isStatusMutationPending?: boolean;
 };
 
 export function UsersTable({
@@ -30,16 +34,24 @@ export function UsersTable({
   onViewUser,
   onEditUser,
   onToggleUserStatus,
+  onDeleteUser,
   canUpdate,
+  canDelete,
+  currentUserId,
   statusActionPendingUserId,
+  isStatusMutationPending,
 }: TUsersTableProps) {
   const { t: tTable } = useTranslation("translation", { keyPrefix: "modules.users.table" });
   const columns = useUsersTableColumns({
     onViewUser,
     onEditUser,
     onToggleUserStatus,
+    onDeleteUser,
     canUpdate,
+    canDelete,
+    currentUserId,
     statusActionPendingUserId,
+    isStatusMutationPending,
   });
 
   const items = (data?.items ?? []) as TUserTableRow[];

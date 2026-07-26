@@ -217,4 +217,20 @@ export function useProjectStatusActionMutation() {
   });
 }
 
+export function useDeleteProjectMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (projectId: string) => {
+      const envelope = await baseQuery.delete<null>(`projects/${projectId}`);
+      return { projectId, message: envelope.message };
+    },
+    onSuccess: (_data, projectId) => {
+      void queryClient.invalidateQueries({ queryKey: projectKeys.all });
+      void queryClient.removeQueries({ queryKey: projectKeys.detail(projectId) });
+      void queryClient.removeQueries({ queryKey: projectKeys.access(projectId) });
+    },
+  });
+}
+
 export type { TProjectStatusAction } from "@/lib/projects/project-card-actions.utils";

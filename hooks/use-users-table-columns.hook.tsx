@@ -2,10 +2,11 @@
 
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { IoEyeOutline, IoPauseCircleOutline, IoPencil, IoPlayCircleOutline } from "react-icons/io5";
+import { IoEyeOutline, IoPencil, IoTrashOutline } from "react-icons/io5";
 
 import type { TAppTableColumn } from "@/components/table/app-table";
 import { TableRowIconActions } from "@/components/table/table-row-icon-actions";
+import { ActiveInactiveToggle } from "@/components/ui/active-inactive-toggle";
 import { StatusIndicator } from "@/components/ui/status-indicator";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { formatLastActionTime } from "@/lib/frontend/date/format-relative-date.utils";
@@ -18,16 +19,24 @@ type TUseUsersTableColumnsInput = {
   onViewUser?: (user: TAdminUserListItem) => void;
   onEditUser?: (user: TAdminUserListItem) => void;
   onToggleUserStatus?: (user: TAdminUserListItem) => void;
+  onDeleteUser?: (user: TAdminUserListItem) => void;
   canUpdate?: boolean;
+  canDelete?: boolean;
+  currentUserId?: string | null;
   statusActionPendingUserId?: string | null;
+  isStatusMutationPending?: boolean;
 };
 
 export function useUsersTableColumns({
   onViewUser,
   onEditUser,
   onToggleUserStatus,
+  onDeleteUser,
   canUpdate = false,
+  canDelete = false,
+  currentUserId = null,
   statusActionPendingUserId = null,
+  isStatusMutationPending = false,
 }: TUseUsersTableColumnsInput = {}): TAppTableColumn<TUserTableRow>[] {
   const { t } = useTranslation("translation", { keyPrefix: "modules.users.table" });
 
@@ -90,45 +99,68 @@ export function useUsersTableColumns({
         render: (item) => {
           const isActive = isActiveUserStatus(item.status);
           const isStatusPending = statusActionPendingUserId === item.id;
+          const canToggleStatus =
+            Boolean(canUpdate && onToggleUserStatus) &&
+            !(isActive && (item.id === currentUserId || item.is_super_admin));
 
           return (
-            <TableRowIconActions
-              actions={[
-                {
-                  key: "view",
-                  icon: <IoEyeOutline className="size-4" aria-hidden />,
-                  label: t("viewUser", { name: item.name }),
-                  onClick: onViewUser ? () => onViewUser(item) : undefined,
-                },
-                {
-                  key: "edit",
-                  icon: <IoPencil className="size-4" aria-hidden />,
-                  label: t("editUser", { name: item.name }),
-                  onClick: onEditUser ? () => onEditUser(item) : undefined,
-                },
-                ...(canUpdate && onToggleUserStatus
-                  ? [
-                      {
-                        key: isActive ? "deactivate" : "activate",
-                        icon: isActive ? (
-                          <IoPauseCircleOutline className="size-4" aria-hidden />
-                        ) : (
-                          <IoPlayCircleOutline className="size-4" aria-hidden />
-                        ),
-                        label: isActive
-                          ? t("deactivateUser", { name: item.name })
-                          : t("activateUser", { name: item.name }),
-                        onClick: () => onToggleUserStatus(item),
-                        disabled: isStatusPending,
-                      },
-                    ]
-                  : []),
-              ]}
-            />
+            <div className="flex items-center justify-end gap-1.5">
+              <TableRowIconActions
+                actions={[
+                  {
+                    key: "view",
+                    icon: <IoEyeOutline className="size-4" aria-hidden />,
+                    label: t("viewUser", { name: item.name }),
+                    onClick: onViewUser ? () => onViewUser(item) : undefined,
+                  },
+                  {
+                    key: "edit",
+                    icon: <IoPencil className="size-4" aria-hidden />,
+                    label: t("editUser", { name: item.name }),
+                    onClick: onEditUser ? () => onEditUser(item) : undefined,
+                  },
+                  ...(canDelete && !isActive && onDeleteUser
+                    ? [
+                        {
+                          key: "delete",
+                          icon: <IoTrashOutline className="size-4" aria-hidden />,
+                          label: t("deleteUser", { name: item.name }),
+                          onClick: () => onDeleteUser(item),
+                          className: "text-destructive hover:bg-destructive/10 hover:text-destructive",
+                        },
+                      ]
+                    : []),
+                ]}
+              />
+              {canToggleStatus ? (
+                <ActiveInactiveToggle
+                  checked={isActive}
+                  disabled={isStatusMutationPending}
+                  isLoading={isStatusPending}
+                  ariaLabel={
+                    isActive
+                      ? t("deactivateUser", { name: item.name })
+                      : t("activateUser", { name: item.name })
+                  }
+                  onCheckedChange={() => onToggleUserStatus?.(item)}
+                />
+              ) : null}
+            </div>
           );
         },
       },
     ],
-    [canUpdate, onEditUser, onToggleUserStatus, onViewUser, statusActionPendingUserId, t]
+    [
+      canDelete,
+      canUpdate,
+      currentUserId,
+      isStatusMutationPending,
+      onDeleteUser,
+      onEditUser,
+      onToggleUserStatus,
+      onViewUser,
+      statusActionPendingUserId,
+      t,
+    ],
   );
 }

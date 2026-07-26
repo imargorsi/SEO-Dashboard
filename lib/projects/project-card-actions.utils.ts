@@ -3,7 +3,12 @@ import { PROJECT_ROUTES } from "@/lib/frontend/projects/project-routes.utils";
 
 export type TProjectStatusAction = "approve" | "reject" | "activate" | "deactivate";
 
-export type TProjectCardActionId = TProjectStatusAction | "viewDetails" | "edit" | "inviteUsers";
+export type TProjectCardActionId =
+  | TProjectStatusAction
+  | "viewDetails"
+  | "edit"
+  | "inviteUsers"
+  | "delete";
 
 export type TProjectCardActionTone = "success" | "warning" | "destructive" | "muted" | "brand" | "default";
 
@@ -24,7 +29,8 @@ export type TProjectCardActionLabelKey =
   | "pending"
   | "viewDetails"
   | "editProject"
-  | "inviteUsers";
+  | "inviteUsers"
+  | "deleteProject";
 
 type TBuildProjectCardActionsInput = {
   status: ProjectStatus;
@@ -33,6 +39,7 @@ type TBuildProjectCardActionsInput = {
   canViewDetails: boolean;
   canEditProject: boolean;
   canInviteMembers?: boolean;
+  canDeleteProject?: boolean;
 };
 
 export function buildProjectCardActions({
@@ -42,6 +49,7 @@ export function buildProjectCardActions({
   canViewDetails,
   canEditProject,
   canInviteMembers = false,
+  canDeleteProject = false,
 }: TBuildProjectCardActionsInput): TProjectCardActionConfig[] {
   const statusActions = buildStatusActions(status, isSuperAdmin);
   const generalActions = buildGeneralActions(
@@ -50,6 +58,7 @@ export function buildProjectCardActions({
     canViewDetails,
     canEditProject,
     canInviteMembers,
+    canDeleteProject,
   );
 
   return [...statusActions, ...generalActions];
@@ -70,7 +79,7 @@ function buildStatusActions(status: ProjectStatus, isSuperAdmin: boolean): TProj
       {
         id: "deactivate",
         group: "status",
-        tone: "muted",
+        tone: "destructive",
         labelKey: "inactive",
         action: "deactivate",
       },
@@ -98,6 +107,7 @@ function buildGeneralActions(
   canViewDetails: boolean,
   canEditProject: boolean,
   canInviteMembers: boolean,
+  canDeleteProject: boolean,
 ): TProjectCardActionConfig[] {
   const actions: TProjectCardActionConfig[] = [];
 
@@ -127,6 +137,15 @@ function buildGeneralActions(
       tone: "default",
       labelKey: "editProject",
       href: PROJECT_ROUTES.edit(projectId),
+    });
+  }
+
+  if (canDeleteProject) {
+    actions.push({
+      id: "delete",
+      group: "general",
+      tone: "destructive",
+      labelKey: "deleteProject",
     });
   }
 

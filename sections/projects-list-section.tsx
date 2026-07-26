@@ -15,12 +15,25 @@ import { ProjectInvitationsBanner } from "@/components/projects/project-invitati
 import { ProjectListViewToggle } from "@/components/projects/project-list-view-toggle";
 import { ProjectStatusFilter } from "@/components/projects/project-status-filter";
 import { ProjectsTable } from "@/components/projects/projects-table";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { useProjectAccess } from "@/context/project-access-context";
 import { useSelectedProject } from "@/context/selected-project-context";
 import { useAuthUserQuery, useResendEmailVerificationMutation } from "@/features/auth/auth.api";
-import { type TProjectListItem, useProjectsQuery } from "@/features/projects/projects.api";
+import {
+  type TProjectListItem,
+  useDeleteProjectMutation,
+  useProjectsQuery,
+} from "@/features/projects/projects.api";
 import { useQueryParams } from "@/hooks/use-query-params.hook";
 import { ApiError } from "@/lib/frontend/api/errors";
 import { notify } from "@/lib/frontend/feedback/notify";
@@ -31,6 +44,7 @@ import {
 import type { ProjectStatus } from "@/lib/projects/constants";
 import { resolveProjectOwnerId } from "@/lib/projects/project-owner-id.utils";
 import {
+  canDeleteProjectCard,
   canEditProjectCard,
   canInviteProjectMembers,
   canViewProjectCard,
@@ -61,6 +75,7 @@ export function ProjectsListSection() {
     enabled: Boolean(statusFilter),
   });
   const resendMutation = useResendEmailVerificationMutation();
+  const deleteMutation = useDeleteProjectMutation();
   const projectItems = statusFilter ? filteredProjects : allProjects;
   const hasProjects = allProjects.length > 0;
   const hasFilteredResults = projectItems.length > 0;
@@ -68,10 +83,12 @@ export function ProjectsListSection() {
   const statusCounts = countProjectsByStatus(allProjects);
   const isVerified = Boolean(user?.email_verified_at);
   const [inviteProjectId, setInviteProjectId] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<TProjectListItem | null>(null);
 
   const permissions = mergePermissions(user?.permissions ?? [], projectPermissions);
   const userIsSuperAdmin = isSuperAdmin(user?.roles);
   const canCreateProject = isVerified && (hasPermission(permissions, "projects.create") || !hasProjects);
+  const platformPermissions = user?.permissions ?? [];
 
   const getProjectCardAccess = useCallback(
     (project: TProjectListItem) => {
@@ -100,9 +117,14 @@ export function ProjectsListSection() {
           isSuperAdmin: userIsSuperAdmin,
           status: project.status,
         }),
+        canDeleteProject: canDeleteProjectCard({
+          platformPermissions,
+          isSuperAdmin: userIsSuperAdmin,
+          status: project.status,
+        }),
       };
     },
-    [permissions, selectedProject?.id, user?.id, user?.permissions, userIsSuperAdmin],
+    [permissions, platformPermissions, selectedProject?.id, user?.id, user?.permissions, userIsSuperAdmin],
   );
 
   function onStatusFilterChange(nextStatus: ProjectStatus | null) {
@@ -129,6 +151,17 @@ export function ProjectsListSection() {
       router.push("/email-verification");
     } catch (error) {
       notify.error(ApiError.messageFrom(error, tVerification("resendErrorFallback")));
+    }
+  }
+
+  async function confirmDelete() {
+    if (!deleteTarget) return;
+    try {
+      const result = await deleteMutation.mutateAsync(deleteTarget.id);
+      setDeleteTarget(null);
+      notify.success(result.message?.trim() || t("table.deleteSuccessFallback"));
+    } catch (error) {
+      notify.error(ApiError.messageFrom(error, t("table.deleteErrorTitle")));
     }
   }
 
@@ -184,6 +217,7 @@ export function ProjectsListSection() {
               isSuperAdmin={userIsSuperAdmin}
               getAccess={getProjectCardAccess}
               onInviteUsers={setInviteProjectId}
+              onDeleteProject={setDeleteTarget}
             />
           ) : (
             <CardGridSkeleton />
@@ -208,21 +242,24 @@ export function ProjectsListSection() {
             isSuperAdmin={userIsSuperAdmin}
             getAccess={getProjectCardAccess}
             onInviteUsers={setInviteProjectId}
+            onDeleteProject={setDeleteTarget}
           />
         ) : (
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">
             {projectItems.map((project: TProjectListItem) => {
-              const { canViewDetails, canEditProject, canInviteMembers } = getProjectCardAccess(project);
+              const access = getProjectCardAccess(project);
 
               return (
                 <ProjectCard
                   key={project.id}
                   project={project}
-                  canViewDetails={canViewDetails}
-                  canEditProject={canEditProject}
-                  canInviteMembers={canInviteMembers}
+                  canViewDetails={access.canViewDetails}
+                  canEditProject={access.canEditProject}
+                  canInviteMembers={access.canInviteMembers}
+                  canDeleteProject={access.canDeleteProject}
                   isSuperAdmin={userIsSuperAdmin}
                   onInviteUsers={() => setInviteProjectId(project.id)}
+                  onDeleteProject={() => setDeleteTarget(project)}
                 />
               );
             })}
@@ -238,6 +275,28 @@ export function ProjectsListSection() {
           if (!open) setInviteProjectId(null);
         }}
       />
+
+      <AlertDialog open={Boolean(deleteTarget)} onOpenChange={(open) => !open && setDeleteTarget(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("table.deleteConfirmTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("table.deleteConfirmDescription", { name: deleteTarget?.businessName ?? "" })}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("table.deleteConfirmCancel")}</AlertDialogCancel>
+            <button
+              type="button"
+              className={cn(buttonVariants({ variant: "destructive", size: "sm" }))}
+              onClick={() => void confirmDelete()}
+              disabled={deleteMutation.isPending}
+            >
+              {t("table.deleteConfirmAction")}
+            </button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

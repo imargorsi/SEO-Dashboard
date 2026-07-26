@@ -32,9 +32,7 @@ export function useSeoActivitiesTableColumns(type: TSeoActivityType) {
           key: "title",
           label: t("colBlogDetails"),
           cellClassName: "px-4 py-4 sm:px-6",
-          render: (item) => (
-            <SeoActivityDetailsCell title={item.title} projectName={item.projectName} />
-          ),
+          render: (item) => <SeoActivityDetailsCell title={item.title} />,
         },
         {
           key: "url",
@@ -58,9 +56,7 @@ export function useSeoActivitiesTableColumns(type: TSeoActivityType) {
           key: "anchorText",
           label: t("colBacklinkDetails"),
           cellClassName: "px-4 py-4 sm:px-6",
-          render: (item) => (
-            <SeoActivityDetailsCell title={item.anchorText} projectName={item.projectName} />
-          ),
+          render: (item) => <SeoActivityDetailsCell title={item.anchorText} />,
         },
         {
           key: "url",
@@ -83,9 +79,7 @@ export function useSeoActivitiesTableColumns(type: TSeoActivityType) {
         key: "details",
         label: t("colChangeDetails"),
         cellClassName: "px-4 py-4 sm:px-6",
-        render: (item) => (
-          <SeoActivityDetailsCell title={item.details} projectName={item.projectName} />
-        ),
+        render: (item) => <SeoActivityDetailsCell title={item.details} />,
       },
       {
         key: "url",

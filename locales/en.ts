@@ -572,6 +572,7 @@ export interface Translation {
       };
       dateFilter: {
         ariaLabel: string;
+        presetsHeading: string;
         presets: {
           all: string;
           today: string;
@@ -581,9 +582,38 @@ export interface Translation {
           this_month: string;
           last_month: string;
         };
+        months: [
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+        ];
+        weekdays: {
+          sun: string;
+          mon: string;
+          tue: string;
+          wed: string;
+          thu: string;
+          fri: string;
+          sat: string;
+        };
+        fromPlaceholder: string;
+        toPlaceholder: string;
+        separator: string;
+        previousMonth: string;
+        nextMonth: string;
+        reset: string;
+        cancel: string;
+        apply: string;
       };
-      selectProjectTitle: string;
-      selectProjectBody: string;
       table: {
         emptyTitle: string;
         emptyBody: string;
@@ -598,6 +628,44 @@ export interface Translation {
         colBlogLink: string;
         colUrls: string;
         colPageLink: string;
+      };
+      quickAdd: {
+        trigger: string;
+        title: string;
+        lead: string;
+        close: string;
+        tabsAriaLabel: string;
+        tabs: {
+          blogs: string;
+          backlinks: string;
+          web_changes: string;
+        };
+        fields: {
+          title: string;
+          titlePh: string;
+          anchorText: string;
+          anchorTextPh: string;
+          details: string;
+          detailsPh: string;
+          url: string;
+          urlPh: string;
+          occurredOn: string;
+        };
+        validation: {
+          required: string;
+          url: string;
+          date: string;
+          minTitle: string;
+          minAnchor: string;
+          minDetails: string;
+        };
+        cancel: string;
+        submit: string;
+        success: {
+          blogs: string;
+          backlinks: string;
+          web_changes: string;
+        };
       };
     };
     leads: {
@@ -1382,6 +1450,7 @@ const translation: Translation = {
       },
       dateFilter: {
         ariaLabel: "Date Range Filter",
+        presetsHeading: "Quick Ranges",
         presets: {
           all: "All Time",
           today: "Today",
@@ -1391,9 +1460,38 @@ const translation: Translation = {
           this_month: "This Month",
           last_month: "Last Month",
         },
+        months: [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ],
+        weekdays: {
+          sun: "S",
+          mon: "M",
+          tue: "T",
+          wed: "W",
+          thu: "T",
+          fri: "F",
+          sat: "S",
+        },
+        fromPlaceholder: "From",
+        toPlaceholder: "To",
+        separator: "–",
+        previousMonth: "Previous Month",
+        nextMonth: "Next Month",
+        reset: "Reset",
+        cancel: "Cancel",
+        apply: "Apply",
       },
-      selectProjectTitle: "Select A Project",
-      selectProjectBody: "Choose A Project From The Sidebar To View Its SEO Activities.",
       table: {
         emptyTitle: "No Activities Found",
         emptyBody: "There Are No Rows For This Activity Type Yet.",
@@ -1408,6 +1506,44 @@ const translation: Translation = {
         colBlogLink: "Blog Link",
         colUrls: "Urls",
         colPageLink: "Page Link",
+      },
+      quickAdd: {
+        trigger: "Add Activity",
+        title: "Quick Add",
+        lead: "Capture A New SEO Activity In A Few Seconds.",
+        close: "Close",
+        tabsAriaLabel: "Activity Type",
+        tabs: {
+          blogs: "Blogs",
+          backlinks: "Backlinks",
+          web_changes: "Web Change",
+        },
+        fields: {
+          title: "Blog Title",
+          titlePh: "How To Improve Local SEO Rankings",
+          anchorText: "Anchor Text",
+          anchorTextPh: "Best SEO Agency",
+          details: "Change Details",
+          detailsPh: "Updated Meta Description On Services Page",
+          url: "Url",
+          urlPh: "https://example.com/page",
+          occurredOn: "Date",
+        },
+        validation: {
+          required: "This Field Is Required.",
+          url: "Enter A Valid Http Or Https Url.",
+          date: "Enter A Valid Date.",
+          minTitle: "Use At Least 3 Characters.",
+          minAnchor: "Use At Least 2 Characters.",
+          minDetails: "Use At Least 4 Characters.",
+        },
+        cancel: "Cancel",
+        submit: "Add Activity",
+        success: {
+          blogs: "Blog Activity Added.",
+          backlinks: "Backlink Activity Added.",
+          web_changes: "Web Change Activity Added.",
+        },
       },
     },
     leads: {

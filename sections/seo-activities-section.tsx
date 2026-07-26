@@ -1,21 +1,29 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { IoAdd } from "react-icons/io5";
 
 import { SeoActivitiesTable } from "@/components/seo-activities/seo-activities-table";
 import { SeoActivityDateRangeFilter } from "@/components/seo-activities/seo-activity-date-range-filter";
+import { SeoActivityQuickAdd } from "@/components/seo-activities/seo-activity-quick-add";
 import { SeoActivitySummaryCards } from "@/components/seo-activities/seo-activity-summary-cards";
 import { SeoActivityTypeFilter } from "@/components/seo-activities/seo-activity-type-filter";
 import { Heading } from "@/components/heading";
-import { EmptyState } from "@/components/ui/empty-state";
-import { useSelectedProject } from "@/context/selected-project-context";
+import { Button } from "@/components/ui/button";
 import { useQueryParams } from "@/hooks/use-query-params.hook";
-import { getDummySeoActivitiesByType } from "@/lib/frontend/seo-activities/dummy-data";
+import {
+  DUMMY_SEO_ACTIVITY_BACKLINKS,
+  DUMMY_SEO_ACTIVITY_BLOGS,
+  DUMMY_SEO_ACTIVITY_WEB_CHANGES,
+} from "@/lib/frontend/seo-activities/dummy-data";
 import { isDateInRange, type TDateRange } from "@/lib/frontend/seo-activities/date-range.utils";
 import {
   paginateItems,
   parseSeoActivitiesListQuery,
 } from "@/lib/frontend/seo-activities/list-query.utils";
+import { notify } from "@/lib/frontend/feedback/notify";
+import type { TSeoActivityCollections } from "@/lib/frontend/seo-activities/quick-add.utils";
 import { buildSeoActivityRangeStats } from "@/lib/frontend/seo-activities/summary.utils";
 import type {
   TSeoActivityBacklink,
@@ -28,13 +36,29 @@ export function SeoActivitiesSection() {
   const { t } = useTranslation("translation", { keyPrefix: "modules.seoActivities" });
   const { queryParams, updateQueryParams, deleteQueryParams } = useQueryParams();
   const listQuery = parseSeoActivitiesListQuery(queryParams);
-  const { selectedProject } = useSelectedProject();
-  const projectId = selectedProject?.id ?? null;
+  const [quickAddOpen, setQuickAddOpen] = useState(false);
+  const [collections, setCollections] = useState<TSeoActivityCollections>(() => ({
+    blogs: [...DUMMY_SEO_ACTIVITY_BLOGS],
+    backlinks: [...DUMMY_SEO_ACTIVITY_BACKLINKS],
+    web_changes: [...DUMMY_SEO_ACTIVITY_WEB_CHANGES],
+  }));
 
-  const { counts, metrics } = buildSeoActivityRangeStats(listQuery.dateRange);
-  const allRows = getDummySeoActivitiesByType(listQuery.type).filter((row) =>
-    isDateInRange(row.occurredOn, listQuery.dateRange),
+  const { counts, metrics } = useMemo(
+    () => buildSeoActivityRangeStats(listQuery.dateRange, collections),
+    [collections, listQuery.dateRange],
   );
+
+  const allRows = useMemo(() => {
+    const source =
+      listQuery.type === "blogs"
+        ? collections.blogs
+        : listQuery.type === "backlinks"
+          ? collections.backlinks
+          : collections.web_changes;
+
+    return source.filter((row) => isDateInRange(row.occurredOn, listQuery.dateRange));
+  }, [collections, listQuery.dateRange, listQuery.type]);
+
   const rows = paginateItems(allRows, listQuery.page, listQuery.perPage);
 
   function onTypeChange(type: TSeoActivityType) {
@@ -65,12 +89,27 @@ export function SeoActivitiesSection() {
     updateQueryParams(next, ["page", "range"]);
   }
 
-  if (!projectId) {
-    return (
-      <div className="w-full min-w-0 px-4 py-6 sm:px-6">
-        <EmptyState title={t("selectProjectTitle")} description={t("selectProjectBody")} />
-      </div>
-    );
+  function onCreate(
+    type: TSeoActivityType,
+    row: TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityWebChange,
+  ) {
+    setCollections((prev) => {
+      if (type === "blogs") {
+        return { ...prev, blogs: [row as TSeoActivityBlog, ...prev.blogs] };
+      }
+      if (type === "backlinks") {
+        return { ...prev, backlinks: [row as TSeoActivityBacklink, ...prev.backlinks] };
+      }
+      return { ...prev, web_changes: [row as TSeoActivityWebChange, ...prev.web_changes] };
+    });
+
+    if (type !== listQuery.type) {
+      onTypeChange(type);
+    } else {
+      deleteQueryParams(["page"]);
+    }
+
+    notify.success(t(`quickAdd.success.${type}`));
   }
 
   return (
@@ -80,13 +119,24 @@ export function SeoActivitiesSection() {
           <Heading id="seo-activities-title" pageTitle>
             {t("title")}
           </Heading>
-          <SeoActivityTypeFilter
-            activeType={listQuery.type}
-            counts={counts}
-            onTypeChange={onTypeChange}
+          <Button
+            type="button"
+            variant="gradient"
+            size="md"
+            onClick={() => setQuickAddOpen(true)}
             className="shrink-0 self-start sm:self-auto"
-          />
+          >
+            <IoAdd className="size-4" aria-hidden />
+            {t("quickAdd.trigger")}
+          </Button>
         </div>
+
+        <SeoActivityTypeFilter
+          activeType={listQuery.type}
+          counts={counts}
+          onTypeChange={onTypeChange}
+          className="self-start"
+        />
 
         <SeoActivitySummaryCards metrics={metrics} />
 
@@ -105,6 +155,13 @@ export function SeoActivitiesSection() {
           />
         </div>
       </div>
+
+      <SeoActivityQuickAdd
+        open={quickAddOpen}
+        initialType={listQuery.type}
+        onOpenChange={setQuickAddOpen}
+        onCreate={onCreate}
+      />
     </div>
   );
 }

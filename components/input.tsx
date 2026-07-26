@@ -14,7 +14,16 @@ import { IoEye, IoEyeOff } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 import SelectDropdownArrowIcon from "@/components/icons/input-select-dropdown-arrow";
 
-export type InputType = "text" | "number" | "email" | "password" | "textarea" | "select" | "time";
+export type InputType =
+  | "text"
+  | "number"
+  | "email"
+  | "password"
+  | "textarea"
+  | "select"
+  | "time"
+  | "date"
+  | "url";
 
 export interface Option {
   label: string;

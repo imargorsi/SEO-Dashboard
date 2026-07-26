@@ -1,6 +1,6 @@
 import { sanitizeHttpUrl } from "@/lib/frontend/seo-activities/sanitize-url.utils";
 import { cn } from "@/lib/utils";
-import { IoFolderOpenOutline, IoOpenOutline } from "react-icons/io5";
+import { IoOpenOutline } from "react-icons/io5";
 
 type TSeoActivityLinkCellProps = {
   href: string | null;
@@ -13,7 +13,6 @@ type TSeoActivityStackedDateCellProps = {
 
 type TSeoActivityDetailsCellProps = {
   title: string | null;
-  projectName: string | null;
   className?: string;
 };
 
@@ -70,17 +69,12 @@ export function SeoActivityStackedDateCell({ isoDate }: TSeoActivityStackedDateC
 
 export function SeoActivityDetailsCell({
   title,
-  projectName,
   className,
 }: TSeoActivityDetailsCellProps) {
   return (
-    <div className={cn("min-w-0 max-w-[18rem] space-y-1.5 sm:max-w-[24rem]", className)}>
+    <div className={cn("min-w-0 max-w-[18rem] sm:max-w-[24rem]", className)}>
       <p className="line-clamp-2 type-body-strong text-text-primary" title={title ?? undefined}>
         {dash(title)}
-      </p>
-      <p className="inline-flex min-w-0 items-center gap-1.5 type-caption text-text-muted">
-        <IoFolderOpenOutline className="size-3.5 shrink-0" aria-hidden />
-        <span className="truncate">{dash(projectName)}</span>
       </p>
     </div>
   );

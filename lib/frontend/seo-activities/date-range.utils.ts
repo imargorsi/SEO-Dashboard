@@ -51,6 +51,11 @@ export function isValidIsoDate(value: string | null | undefined): value is strin
   );
 }
 
+export function parseIsoDate(value: string): Date {
+  const [year, month, day] = value.split("-").map(Number);
+  return new Date(year!, month! - 1, day);
+}
+
 export function resolveDateRangePreset(preset: TDateRangePresetId, now = new Date()): TDateRange {
   const today = startOfDay(now);
 
@@ -106,4 +111,51 @@ export function isDateInRange(isoDate: string | null | undefined, range: TDateRa
   if (range.from && isoDate < range.from) return false;
   if (range.to && isoDate > range.to) return false;
   return true;
+}
+
+export function formatDateRangeLabel(
+  range: TDateRange,
+  labels: { all: string; separator: string },
+): string {
+  if (!range.from && !range.to) return labels.all;
+  if (range.from && range.to && range.from === range.to) return range.from;
+  if (range.from && range.to) return `${range.from} ${labels.separator} ${range.to}`;
+  return range.from ?? range.to ?? labels.all;
+}
+
+export type TCalendarDay = {
+  isoDate: string;
+  day: number;
+  inCurrentMonth: boolean;
+};
+
+/** Builds a Sunday-start 6-week grid for the given month. */
+export function buildMonthCalendarDays(year: number, monthIndex: number): TCalendarDay[] {
+  const firstOfMonth = new Date(year, monthIndex, 1);
+  const startOffset = firstOfMonth.getDay();
+  const gridStart = addDays(firstOfMonth, -startOffset);
+  const days: TCalendarDay[] = [];
+
+  for (let i = 0; i < 42; i += 1) {
+    const date = addDays(gridStart, i);
+    days.push({
+      isoDate: toIsoDate(date),
+      day: date.getDate(),
+      inCurrentMonth: date.getMonth() === monthIndex,
+    });
+  }
+
+  return days;
+}
+
+export function shiftMonth(
+  year: number,
+  monthIndex: number,
+  delta: number,
+): {
+  year: number;
+  monthIndex: number;
+} {
+  const date = new Date(year, monthIndex + delta, 1);
+  return { year: date.getFullYear(), monthIndex: date.getMonth() };
 }

@@ -4,7 +4,6 @@ export type TSeoActivityType = (typeof SEO_ACTIVITY_TYPES)[number];
 
 export type TSeoActivityBlog = {
   id: string;
-  projectName: string | null;
   title: string | null;
   url: string | null;
   occurredOn: string | null;
@@ -12,7 +11,6 @@ export type TSeoActivityBlog = {
 
 export type TSeoActivityBacklink = {
   id: string;
-  projectName: string | null;
   url: string | null;
   anchorText: string | null;
   occurredOn: string | null;
@@ -20,7 +18,6 @@ export type TSeoActivityBacklink = {
 
 export type TSeoActivityWebChange = {
   id: string;
-  projectName: string | null;
   url: string | null;
   details: string | null;
   occurredOn: string | null;

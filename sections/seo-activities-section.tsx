@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { IoAdd, IoDownloadOutline } from "react-icons/io5";
+import { IoAdd, IoDownloadOutline, IoTrashOutline } from "react-icons/io5";
 
 import { SeoActivitiesTable } from "@/components/seo-activities/seo-activities-table";
 import { SeoActivityDateRangeFilter } from "@/components/seo-activities/seo-activity-date-range-filter";
@@ -14,16 +14,9 @@ import { SeoActivitySummaryCards } from "@/components/seo-activities/seo-activit
 import { SeoActivityTypeFilter } from "@/components/seo-activities/seo-activity-type-filter";
 import { Heading } from "@/components/heading";
 import { EmptyState } from "@/components/ui/empty-state";
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { AlertDialogCancel } from "@/components/ui/alert-dialog";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { useSelectedProject } from "@/context/selected-project-context";
 import { useProjectAccess } from "@/context/project-access-context";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
@@ -331,25 +324,26 @@ export function SeoActivitiesSection() {
         onSave={onSave}
       />
 
-      <AlertDialog open={Boolean(deleteTarget)} onOpenChange={(open) => !open && setDeleteTarget(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t("table.deleteTitle")}</AlertDialogTitle>
-            <AlertDialogDescription>{t("table.deleteBody")}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
+      <ConfirmDialog
+        open={Boolean(deleteTarget)}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+        icon={IoTrashOutline}
+        title={t("table.deleteTitle")}
+        description={t("table.deleteBody")}
+        action={
+          <>
             <AlertDialogCancel>{t("table.deleteCancel")}</AlertDialogCancel>
             <button
               type="button"
-              className={cn(buttonVariants({ variant: "destructive", size: "sm" }))}
+              className={cn(buttonVariants({ variant: "destructive", size: "md" }))}
               onClick={() => void confirmDelete()}
               disabled={deleteMutation.isPending}
             >
               {t("table.deleteConfirm")}
             </button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+          </>
+        }
+      />
     </div>
   );
 }

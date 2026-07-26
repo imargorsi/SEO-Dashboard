@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { IoAdd } from "react-icons/io5";
+import { IoAdd, IoTrashOutline } from "react-icons/io5";
 
 import { TableListSearch } from "@/components/table/table-list-search";
 import { TableListSort } from "@/components/table/table-list-sort";
@@ -13,16 +13,9 @@ import { UserStatusFilter } from "@/components/users/user-status-filter";
 import { UsersTable } from "@/components/users/users-table";
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { AlertDialogCancel } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
 import {
   useDeleteUserMutation,
@@ -256,25 +249,26 @@ export function UsersListSection() {
         onOpenChange={onDetailOpenChange}
       />
 
-      <AlertDialog open={Boolean(deleteTarget)} onOpenChange={(open) => !open && setDeleteTarget(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t("table.deleteTitle")}</AlertDialogTitle>
-            <AlertDialogDescription>{t("table.deleteBody")}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
+      <ConfirmDialog
+        open={Boolean(deleteTarget)}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+        icon={IoTrashOutline}
+        title={t("table.deleteTitle")}
+        description={t("table.deleteBody")}
+        action={
+          <>
             <AlertDialogCancel>{t("table.deleteCancel")}</AlertDialogCancel>
             <button
               type="button"
-              className={cn(buttonVariants({ variant: "destructive", size: "sm" }))}
+              className={cn(buttonVariants({ variant: "destructive", size: "md" }))}
               onClick={() => void confirmDelete()}
               disabled={deleteMutation.isPending}
             >
               {t("table.deleteConfirm")}
             </button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+          </>
+        }
+      />
     </div>
   );
 }

@@ -11,18 +11,13 @@ import { ProjectDetailMainContent } from "@/components/projects/detail/project-d
 import { ProjectDetailSidebar } from "@/components/projects/detail/project-detail-sidebar";
 import { ProjectInviteUsersQuickAdd } from "@/components/projects/project-invite-users-quick-add";
 import {
-  AlertDialog,
   AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { LoadingState } from "@/components/ui/loading-state";
-import { IoFolderOpenOutline, IoWarningOutline } from "react-icons/io5";
+import { IoFolderOpenOutline, IoTrashOutline, IoWarningOutline } from "react-icons/io5";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
 import {
   useDeleteProjectMutation,
@@ -195,27 +190,26 @@ export function ProjectDetailSection() {
         onOpenChange={setIsInviteOpen}
       />
 
-      <AlertDialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{tTable("deleteConfirmTitle")}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {tTable("deleteConfirmDescription", { name: project.businessName })}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
+      <ConfirmDialog
+        open={isDeleteOpen}
+        onOpenChange={setIsDeleteOpen}
+        icon={IoTrashOutline}
+        title={tTable("deleteConfirmTitle")}
+        description={tTable("deleteConfirmDescription", { name: project.businessName })}
+        action={
+          <>
             <AlertDialogCancel>{tTable("deleteConfirmCancel")}</AlertDialogCancel>
             <button
               type="button"
-              className={cn(buttonVariants({ variant: "destructive", size: "sm" }))}
+              className={cn(buttonVariants({ variant: "destructive", size: "md" }))}
               onClick={() => void confirmDelete()}
               disabled={deleteMutation.isPending}
             >
               {tTable("deleteConfirmAction")}
             </button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+          </>
+        }
+      />
     </div>
   );
 }

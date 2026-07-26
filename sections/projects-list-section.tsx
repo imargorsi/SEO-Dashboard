@@ -15,17 +15,11 @@ import { ProjectInvitationsBanner } from "@/components/projects/project-invitati
 import { ProjectListViewToggle } from "@/components/projects/project-list-view-toggle";
 import { ProjectStatusFilter } from "@/components/projects/project-status-filter";
 import { ProjectsTable } from "@/components/projects/projects-table";
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { AlertDialogCancel } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
+import { IoAdd, IoFilterOutline, IoTrashOutline } from "react-icons/io5";
 import { useProjectAccess } from "@/context/project-access-context";
 import { useSelectedProject } from "@/context/selected-project-context";
 import { useAuthUserQuery, useResendEmailVerificationMutation } from "@/features/auth/auth.api";
@@ -57,7 +51,6 @@ import {
 import { hasPermission, isSuperAdmin, mergePermissions } from "@/lib/rbac/access";
 import { PROJECT_ROUTES } from "@/lib/frontend/projects/project-routes.utils";
 import { cn } from "@/lib/utils";
-import { IoAdd, IoFilterOutline } from "react-icons/io5";
 
 export function ProjectsListSection() {
   const { t } = useTranslation("translation", { keyPrefix: "modules.projects" });
@@ -276,27 +269,26 @@ export function ProjectsListSection() {
         }}
       />
 
-      <AlertDialog open={Boolean(deleteTarget)} onOpenChange={(open) => !open && setDeleteTarget(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t("table.deleteConfirmTitle")}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {t("table.deleteConfirmDescription", { name: deleteTarget?.businessName ?? "" })}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
+      <ConfirmDialog
+        open={Boolean(deleteTarget)}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+        icon={IoTrashOutline}
+        title={t("table.deleteConfirmTitle")}
+        description={t("table.deleteConfirmDescription", { name: deleteTarget?.businessName ?? "" })}
+        action={
+          <>
             <AlertDialogCancel>{t("table.deleteConfirmCancel")}</AlertDialogCancel>
             <button
               type="button"
-              className={cn(buttonVariants({ variant: "destructive", size: "sm" }))}
+              className={cn(buttonVariants({ variant: "destructive", size: "md" }))}
               onClick={() => void confirmDelete()}
               disabled={deleteMutation.isPending}
             >
               {t("table.deleteConfirmAction")}
             </button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+          </>
+        }
+      />
     </div>
   );
 }

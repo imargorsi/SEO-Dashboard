@@ -47,7 +47,7 @@ export function useUsersTableColumns({
         label: t("colUser"),
         render: (item) => (
           <div className="flex min-w-0 items-center gap-3">
-            <UserAvatar name={item.name} imageUrl={item.profile_image} size="md" roundedClassName="rounded-full" />
+            <UserAvatar name={item.name} imageUrl={item.profile_image} size="md" variant="photo" />
             <div className="min-w-0">
               <p className="type-body-strong text-text-primary truncate">{item.name}</p>
               <p className="type-caption text-text-muted truncate">{item.email}</p>

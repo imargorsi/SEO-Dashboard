@@ -21,8 +21,7 @@ function ProjectLogo({ project, size = "md" }: { project: TProjectListItem; size
       name={project.businessName}
       imageUrl={project.imageUrl}
       size={size === "sm" ? "sm" : "md"}
-      roundedClassName="rounded-lg"
-      className={size === "sm" ? "size-7" : "size-9"}
+      variant="logo"
     />
   );
 }

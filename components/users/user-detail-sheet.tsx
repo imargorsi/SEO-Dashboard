@@ -46,7 +46,7 @@ export function UserDetailSheet({ user, open, onOpenChange }: UserDetailSheetPro
           <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto px-5 py-5">
             <section className={cn(elevatedCardSurfaceClass, "rounded-2xl p-4")}>
               <div className="flex items-start gap-3">
-                <UserAvatar name={user.name} imageUrl={user.profile_image} size="lg" roundedClassName="rounded-xl" />
+                <UserAvatar name={user.name} imageUrl={user.profile_image} size="lg" variant="photo" />
                 <div className="min-w-0 space-y-1">
                   <p className="type-body-strong text-text-primary truncate">{user.name}</p>
                   <p className="type-caption text-text-muted truncate">{user.email}</p>

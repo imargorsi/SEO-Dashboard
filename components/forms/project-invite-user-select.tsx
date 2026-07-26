@@ -78,7 +78,7 @@ export function ProjectInviteUserSelect({
                 name={user.name}
                 imageUrl={user.profileImage}
                 size="sm"
-                roundedClassName="rounded-full"
+                variant="photo"
               />
               <span className="min-w-0 truncate type-body text-text-primary">
                 <span className="font-semibold">{user.name}</span>
@@ -167,7 +167,7 @@ export function ProjectInviteUserSelect({
                       name={user.name}
                       imageUrl={user.profileImage}
                       size="sm"
-                      roundedClassName="rounded-full"
+                      variant="photo"
                     />
                     <span className="min-w-0 flex-1 space-y-0.5">
                       <span className="block truncate type-body-strong text-text-primary">{user.name}</span>

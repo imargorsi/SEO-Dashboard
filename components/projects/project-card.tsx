@@ -33,9 +33,8 @@ function ProjectImage({ imageUrl, businessName }: { imageUrl: string | null; bus
     <UserAvatar
       name={businessName}
       imageUrl={imageUrl}
-      size="md"
-      roundedClassName="rounded-xl"
-      className="size-12"
+      size="lg"
+      variant="logo"
     />
   );
 }
@@ -84,7 +83,7 @@ export function ProjectCard({
               name={ownerName}
               imageUrl={project.owner?.profileImage ?? null}
               size="sm"
-              roundedClassName="rounded-full"
+              variant="photo"
             />
             <p className={cn("truncate type-body", elevatedCardTitleClass)}>{ownerName}</p>
           </div>

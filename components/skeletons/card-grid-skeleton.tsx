@@ -19,7 +19,7 @@ export function CardGridSkeleton({ count = 6, className }: TCardGridSkeletonProp
       {Array.from({ length: count }).map((_, index) => (
         <div key={index} className={cn(elevatedCardSurfaceClass, "rounded-3xl p-5 sm:p-6")}>
           <div className="flex items-start justify-between gap-3">
-            <Skeleton className="size-12 rounded-xl" />
+            <Skeleton className="size-12 rounded-full" />
             <Skeleton className="h-6 w-20 rounded-full" />
           </div>
           <div className="mt-4 space-y-2">

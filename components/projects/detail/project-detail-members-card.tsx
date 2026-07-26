@@ -50,7 +50,7 @@ function MemberRow({
         name={name}
         imageUrl={profileImage}
         size="sm"
-        roundedClassName="rounded-full"
+        variant="photo"
       />
       <div className="min-w-0 flex-1">
         <p className={cn("truncate type-body-strong", elevatedCardTitleClass)}>{name}</p>

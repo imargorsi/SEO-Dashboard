@@ -86,9 +86,8 @@ export function ProjectDetailHero({ project, isSuperAdmin = false }: ProjectDeta
         <UserAvatar
           name={project.businessName}
           imageUrl={project.logoImage}
-          size="md"
-          roundedClassName="rounded-xl"
-          className="size-12 shrink-0"
+          size="lg"
+          variant="logo"
         />
 
         <div className="min-w-0 flex-1 space-y-1">

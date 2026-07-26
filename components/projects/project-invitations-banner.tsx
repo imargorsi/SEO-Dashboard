@@ -77,7 +77,7 @@ export function ProjectInvitationsBanner() {
                 name={invitation.projectName}
                 imageUrl={invitation.projectImageUrl}
                 size="md"
-                roundedClassName="rounded-xl"
+                variant="logo"
               />
               <div className="min-w-0 space-y-1">
                 <p className={cn("type-body-strong", elevatedCardTitleClass)}>

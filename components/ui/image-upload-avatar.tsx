@@ -3,7 +3,7 @@
 import { useRef, type ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 
-import { UserAvatar } from "@/components/ui/user-avatar";
+import { UserAvatar, type TAvatarSize, type TAvatarVariant } from "@/components/ui/user-avatar";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -15,7 +15,8 @@ type ImageUploadAvatarProps = {
   hint?: string;
   pickLabel?: string;
   changeLabel?: string;
-  size?: "sm" | "md" | "lg";
+  size?: Extract<TAvatarSize, "md" | "lg" | "xl">;
+  variant?: TAvatarVariant;
   className?: string;
 };
 
@@ -27,7 +28,8 @@ export function ImageUploadAvatar({
   hint,
   pickLabel,
   changeLabel,
-  size = "lg",
+  size = "xl",
+  variant = "photo",
   className,
 }: ImageUploadAvatarProps) {
   const { t } = useTranslation("translation", { keyPrefix: "form" });
@@ -49,13 +51,7 @@ export function ImageUploadAvatar({
     <div className={cn("space-y-2", className)}>
       {label ? <span className="block type-label text-text-primary">{label}</span> : null}
       <div className="flex flex-wrap items-start gap-4">
-        <UserAvatar
-          name={name}
-          imageUrl={imageUrl}
-          size={size}
-          roundedClassName="rounded-xl"
-          className={size === "lg" ? "size-16" : undefined}
-        />
+        <UserAvatar name={name} imageUrl={imageUrl} size={size} variant={variant} />
         <div className="flex min-w-0 flex-1 flex-col gap-2">
           <Button type="button" variant="outlined" size="small" className="w-fit" onClick={openFilePicker}>
             {hasPhoto ? (changeLabel ?? t("changeImage")) : (pickLabel ?? t("pickImage"))}

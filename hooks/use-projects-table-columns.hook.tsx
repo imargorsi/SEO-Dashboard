@@ -77,7 +77,7 @@ export function useProjectsTableColumns({
               name={item.businessName}
               imageUrl={item.imageUrl}
               size="md"
-              roundedClassName="rounded-xl"
+              variant="logo"
             />
             <div className="min-w-0">
               <p className="truncate type-body-strong text-text-primary">{item.businessName}</p>
@@ -97,7 +97,7 @@ export function useProjectsTableColumns({
                 name={ownerName}
                 imageUrl={item.owner?.profileImage ?? null}
                 size="sm"
-                roundedClassName="rounded-full"
+                variant="photo"
               />
               <span className="truncate type-body text-text-primary">{ownerName}</span>
             </div>

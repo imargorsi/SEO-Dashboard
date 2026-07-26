@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { IoAlertCircle, IoCheckmarkCircle, IoChevronDown, IoLogOutOutline, IoPersonCircle } from "react-icons/io5";
 
-import { SidebarUserAvatar } from "@/components/layout/sidebar-user-avatar";
+import { UserAvatar } from "@/components/ui/user-avatar";
 import { Spinner } from "@/components/ui/spinner";
 import { useAuthUserQuery, useLogoutMutation, useResendEmailVerificationMutation } from "@/features/auth/auth.api";
 import { ApiError } from "@/lib/frontend/api/errors";
@@ -108,12 +108,13 @@ export function NavbarProfileMenu({ placement = "topbar", isCollapsed = false }:
         title={isSidebarCollapsed ? displayName : undefined}
         onClick={() => setOpen((v) => !v)}
       >
-        <SidebarUserAvatar
+        <UserAvatar
           name={displayName}
           imageUrl={user?.profile_image ?? null}
           verified={verified}
           showVerificationBadge
           size={isSidebarPlacement ? (isSidebarCollapsed ? "sm" : "md") : "sm"}
+          variant="photo"
         />
         <span
           className={cn(
@@ -151,12 +152,13 @@ export function NavbarProfileMenu({ placement = "topbar", isCollapsed = false }:
         >
           <div className="border-b border-border px-3 py-3">
             <div className="flex items-center gap-2.5">
-              <SidebarUserAvatar
+              <UserAvatar
                 name={displayName}
                 imageUrl={user?.profile_image ?? null}
                 verified={verified}
                 showVerificationBadge
                 size={isSidebarPlacement ? "md" : "sm"}
+                variant="photo"
               />
               <div className="min-w-0 flex-1">
                 <p className="truncate type-body-strong text-text-primary">{displayName}</p>

@@ -29,6 +29,7 @@ export function UserCreateFields({ hook }: UserCreateFieldsProps) {
         onFilePicked={onProfileImagePicked}
         label={t("profileImage")}
         hint={t("profileImageHint")}
+        variant="photo"
       />
 
       <div className="grid gap-4 sm:grid-cols-2">

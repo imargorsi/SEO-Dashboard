@@ -50,6 +50,7 @@ export function ProjectCreateStepContent({ hook }: StepProps) {
           onFilePicked={onLogoPicked}
           label={t("companyLogo")}
           hint={t("companyLogoHint")}
+          variant="logo"
           className="sm:col-span-2"
         />
         <div className="grid gap-4 sm:grid-cols-2">

@@ -7,7 +7,7 @@ import { Paragraph } from "@/components/paragraph";
 import { SettingsCategoriesLayout } from "@/components/settings/settings-categories-layout";
 import { SettingsThemePanel } from "@/components/settings/settings-theme-panel";
 import { LoadingState } from "@/components/ui/loading-state";
-import { StateCard } from "@/components/ui/state-card";
+import { EmptyState } from "@/components/ui/empty-state";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
 import { resolveSettingsCategories } from "@/lib/frontend/settings/categories";
 import { isSuperAdmin } from "@/lib/rbac/access";
@@ -31,7 +31,7 @@ export function SettingsSection() {
         </div>
 
         {categories.length === 0 ? (
-          <StateCard title={t("emptyTitle")} body={t("emptyBody")} />
+          <EmptyState title={t("emptyTitle")} description={t("emptyBody")} />
         ) : (
           <SettingsCategoriesLayout
             categories={categories}

@@ -7,9 +7,10 @@ import { useTranslation } from "react-i18next";
 import { ProjectCreateForm } from "@/components/forms/project-create-form";
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
+import { EmptyState } from "@/components/ui/empty-state";
 import { LoadingState } from "@/components/ui/loading-state";
-import { StateCard } from "@/components/ui/state-card";
 import { useProjectAccess } from "@/context/project-access-context";
+import { IoFolderOpenOutline, IoLockClosedOutline, IoWarningOutline } from "react-icons/io5";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
 import { useProjectQuery } from "@/features/projects/projects.api";
 import { ApiError } from "@/lib/frontend/api/errors";
@@ -57,7 +58,11 @@ export function ProjectsEditSection() {
   if (!projectId) {
     return (
       <div className="px-4 py-6 sm:px-6">
-        <StateCard title={tDetail("notFoundTitle")} body={tDetail("notFoundBody")} />
+        <EmptyState
+          title={tDetail("notFoundTitle")}
+          description={tDetail("notFoundBody")}
+          icon={IoFolderOpenOutline}
+        />
       </div>
     );
   }
@@ -70,9 +75,10 @@ export function ProjectsEditSection() {
     const isNotFound = error instanceof ApiError && error.status === 404;
     return (
       <div className="px-4 py-6 sm:px-6">
-        <StateCard
+        <EmptyState
           title={isNotFound ? tDetail("notFoundTitle") : tDetail("loadErrorTitle")}
-          body={isNotFound ? tDetail("notFoundBody") : tDetail("loadErrorBody")}
+          description={isNotFound ? tDetail("notFoundBody") : tDetail("loadErrorBody")}
+          icon={isNotFound ? IoFolderOpenOutline : IoWarningOutline}
         />
       </div>
     );
@@ -81,7 +87,11 @@ export function ProjectsEditSection() {
   if (!project || !canEdit) {
     return (
       <div className="px-4 py-6 sm:px-6">
-        <StateCard title={tForm("editForbiddenTitle")} body={tForm("editForbiddenBody")} />
+        <EmptyState
+          title={tForm("editForbiddenTitle")}
+          description={tForm("editForbiddenBody")}
+          icon={IoLockClosedOutline}
+        />
       </div>
     );
   }
@@ -89,7 +99,11 @@ export function ProjectsEditSection() {
   if (project.status === "rejected") {
     return (
       <div className="px-4 py-6 sm:px-6">
-        <StateCard title={tForm("editNotAllowedTitle")} body={tForm("editNotAllowedBody")} />
+        <EmptyState
+          title={tForm("editNotAllowedTitle")}
+          description={tForm("editNotAllowedBody")}
+          icon={IoWarningOutline}
+        />
       </div>
     );
   }

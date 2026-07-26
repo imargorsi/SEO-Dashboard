@@ -9,9 +9,10 @@ import { ProjectDetailHeader } from "@/components/projects/detail/project-detail
 import { ProjectDetailHero } from "@/components/projects/detail/project-detail-hero";
 import { ProjectDetailMainContent } from "@/components/projects/detail/project-detail-main-content";
 import { ProjectDetailSidebar } from "@/components/projects/detail/project-detail-sidebar";
+import { EmptyState } from "@/components/ui/empty-state";
 import { LoadingState } from "@/components/ui/loading-state";
-import { StateCard } from "@/components/ui/state-card";
 import { useProjectAccess } from "@/context/project-access-context";
+import { IoFolderOpenOutline, IoWarningOutline } from "react-icons/io5";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
 import { useProjectQuery } from "@/features/projects/projects.api";
 import { ApiError } from "@/lib/frontend/api/errors";
@@ -68,7 +69,11 @@ export function ProjectDetailSection() {
   if (!projectId) {
     return (
       <div className="px-4 py-6 sm:px-6">
-        <StateCard title={t("notFoundTitle")} body={t("notFoundBody")} />
+        <EmptyState
+          title={t("notFoundTitle")}
+          description={t("notFoundBody")}
+          icon={IoFolderOpenOutline}
+        />
       </div>
     );
   }
@@ -81,9 +86,10 @@ export function ProjectDetailSection() {
     const isNotFound = error instanceof ApiError && error.status === 404;
     return (
       <div className="px-4 py-6 sm:px-6">
-        <StateCard
+        <EmptyState
           title={isNotFound ? t("notFoundTitle") : t("loadErrorTitle")}
-          body={isNotFound ? t("notFoundBody") : t("loadErrorBody")}
+          description={isNotFound ? t("notFoundBody") : t("loadErrorBody")}
+          icon={isNotFound ? IoFolderOpenOutline : IoWarningOutline}
         />
       </div>
     );
@@ -92,7 +98,11 @@ export function ProjectDetailSection() {
   if (!project || !canView) {
     return (
       <div className="px-4 py-6 sm:px-6">
-        <StateCard title={t("notFoundTitle")} body={t("notFoundBody")} />
+        <EmptyState
+          title={t("notFoundTitle")}
+          description={t("notFoundBody")}
+          icon={IoFolderOpenOutline}
+        />
       </div>
     );
   }

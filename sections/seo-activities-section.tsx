@@ -7,7 +7,7 @@ import { SeoActivityDateRangeFilter } from "@/components/seo-activities/seo-acti
 import { SeoActivitySummaryCards } from "@/components/seo-activities/seo-activity-summary-cards";
 import { SeoActivityTypeFilter } from "@/components/seo-activities/seo-activity-type-filter";
 import { Heading } from "@/components/heading";
-import { StateCard } from "@/components/ui/state-card";
+import { EmptyState } from "@/components/ui/empty-state";
 import { useSelectedProject } from "@/context/selected-project-context";
 import { useQueryParams } from "@/hooks/use-query-params.hook";
 import { getDummySeoActivitiesByType } from "@/lib/frontend/seo-activities/dummy-data";
@@ -68,7 +68,7 @@ export function SeoActivitiesSection() {
   if (!projectId) {
     return (
       <div className="w-full min-w-0 px-4 py-6 sm:px-6">
-        <StateCard title={t("selectProjectTitle")} body={t("selectProjectBody")} />
+        <EmptyState title={t("selectProjectTitle")} description={t("selectProjectBody")} />
       </div>
     );
   }

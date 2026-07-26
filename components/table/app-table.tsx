@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { AppTablePagination, type TAppTablePaginationProps } from "@/components/table/app-table-pagination";
 import { TableSkeleton } from "@/components/skeletons/table-skeleton";
+import { EmptyState } from "@/components/ui/empty-state";
 import {
   Table,
   TableBody,
@@ -14,6 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
+import { IoSearchOutline } from "react-icons/io5";
 
 export type TAppTableColumn<T> = {
   key: string;
@@ -108,14 +110,14 @@ export function AppTable<T extends Record<string, unknown>>({
           <TableBody>
             {showEmptyState ? (
               <TableRow className="hover:bg-transparent">
-                <TableCell colSpan={columnCount} className="px-4 py-12 sm:px-6">
+                <TableCell colSpan={columnCount} className="p-4 sm:p-6">
                   {noDataComponent ?? (
-                    <div className="text-center">
-                      <p className="type-body-strong text-text-primary">{resolvedEmptyTitle}</p>
-                      {resolvedEmptyBody ? (
-                        <p className="mt-1 type-caption text-text-muted">{resolvedEmptyBody}</p>
-                      ) : null}
-                    </div>
+                    <EmptyState
+                      title={resolvedEmptyTitle}
+                      description={resolvedEmptyBody ?? ""}
+                      icon={IoSearchOutline}
+                      className="py-8 sm:py-10"
+                    />
                   )}
                 </TableCell>
               </TableRow>

@@ -12,6 +12,7 @@ import { ProjectCard } from "@/components/projects/project-card";
 import { ProjectInvitationsBanner } from "@/components/projects/project-invitations-banner";
 import { ProjectStatusFilter } from "@/components/projects/project-status-filter";
 import { buttonVariants } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
 import { useProjectAccess } from "@/context/project-access-context";
 import { useAuthUserQuery, useResendEmailVerificationMutation } from "@/features/auth/auth.api";
 import { type TProjectListItem, useProjectsQuery } from "@/features/projects/projects.api";
@@ -30,8 +31,8 @@ import {
 } from "@/lib/projects/project-card-access.utils";
 import { hasPermission, isSuperAdmin, mergePermissions } from "@/lib/rbac/access";
 import { PROJECT_ROUTES } from "@/lib/frontend/projects/project-routes.utils";
-import { elevatedCardSurfaceClass, elevatedCardMutedClass, elevatedCardTitleClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
+import { IoAdd, IoFilterOutline } from "react-icons/io5";
 
 export function ProjectsListSection() {
   const { t } = useTranslation("translation", { keyPrefix: "modules.projects" });
@@ -116,6 +117,7 @@ export function ProjectsListSection() {
                 href={PROJECT_ROUTES.create}
                 className={cn(buttonVariants({ size: "md", variant: "gradient" }))}
               >
+                <IoAdd className="size-4" aria-hidden />
                 {t("table.createProject")}
               </Link>
             ) : null}
@@ -134,12 +136,11 @@ export function ProjectsListSection() {
             isVerifyEmailPending={resendMutation.isPending}
           />
         ) : !hasFilteredResults ? (
-          <div className={cn(elevatedCardSurfaceClass, "rounded-3xl px-6 py-10 text-center")}>
-            <Heading sectionTitle className={elevatedCardTitleClass}>
-              {t("statusFilter.emptyTitle")}
-            </Heading>
-            <Paragraph className={cn("mt-2", elevatedCardMutedClass)}>{t("statusFilter.emptyBody")}</Paragraph>
-          </div>
+          <EmptyState
+            title={t("statusFilter.emptyTitle")}
+            description={t("statusFilter.emptyBody")}
+            icon={IoFilterOutline}
+          />
         ) : (
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">
             {projectItems.map((project: TProjectListItem) => {

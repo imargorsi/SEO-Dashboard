@@ -301,17 +301,11 @@ h2 {
   font-family: var(--heading);
   font-weight: 500;
   color: var(--text-primary);
+  margin: 0;
 }
 
-h2 {
-  font-size: 1.375rem;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 1.125rem;
-  }
-}
+/* Sizing comes from type-* utilities / Heading — do not set h2 font-size here
+   or it overrides Tailwind utilities (unlayered CSS beats @layer utilities). */
 p {
   margin: 0;
 }

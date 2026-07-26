@@ -88,7 +88,7 @@ export function SeoActivitySummaryCards({ metrics, className }: TSeoActivitySumm
                   <Icon className="size-4" aria-hidden />
                 </span>
 
-                <p className="type-h2 text-text-primary">{metric.value}</p>
+                <p className="type-title text-text-primary tabular-nums">{metric.value}</p>
               </div>
 
               <p className="type-caption text-text-muted">{t(`cards.${metric.id}`)}</p>

@@ -18,6 +18,8 @@ type TSeoActivityTableRow = (
 ) &
   Record<string, unknown>;
 
+type TSeoActivityRow = TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityWebChange;
+
 type TSeoActivitiesTableProps = {
   type: TSeoActivityType;
   rows: TSeoActivityBlog[] | TSeoActivityBacklink[] | TSeoActivityWebChange[];
@@ -25,6 +27,10 @@ type TSeoActivitiesTableProps = {
   perPage: number;
   total: number;
   onPageChange: (page: number) => void;
+  canUpdate?: boolean;
+  canDelete?: boolean;
+  onEdit?: (row: TSeoActivityRow) => void;
+  onDelete?: (row: TSeoActivityRow) => void;
   className?: string;
 };
 
@@ -35,10 +41,20 @@ export function SeoActivitiesTable({
   perPage,
   total,
   onPageChange,
+  canUpdate = false,
+  canDelete = false,
+  onEdit,
+  onDelete,
   className,
 }: TSeoActivitiesTableProps) {
   const { t } = useTranslation("translation", { keyPrefix: "modules.seoActivities" });
-  const columns = useSeoActivitiesTableColumns(type) as TAppTableColumn<TSeoActivityTableRow>[];
+  const columns = useSeoActivitiesTableColumns({
+    type,
+    canUpdate,
+    canDelete,
+    onEdit,
+    onDelete,
+  }) as TAppTableColumn<TSeoActivityTableRow>[];
   const shown = Math.min(rows.length, perPage);
 
   return (

@@ -2,8 +2,10 @@
 
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { IoPencil, IoTrashOutline } from "react-icons/io5";
 
 import type { TAppTableColumn } from "@/components/table/app-table";
+import { TableRowIconActions } from "@/components/table/table-row-icon-actions";
 import {
   SeoActivityDetailsCell,
   SeoActivityLinkCell,
@@ -16,10 +18,85 @@ import type {
   TSeoActivityWebChange,
 } from "@/types/seo-activity.types";
 
-export function useSeoActivitiesTableColumns(type: TSeoActivityType) {
+type TSeoActivityRow = TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityWebChange;
+
+type TUseSeoActivitiesTableColumnsOptions = {
+  type: TSeoActivityType;
+  canUpdate?: boolean;
+  canDelete?: boolean;
+  onEdit?: (row: TSeoActivityRow) => void;
+  onDelete?: (row: TSeoActivityRow) => void;
+};
+
+function buildActionsColumn<T extends TSeoActivityRow>({
+  canUpdate,
+  canDelete,
+  onEdit,
+  onDelete,
+  t,
+}: {
+  canUpdate?: boolean;
+  canDelete?: boolean;
+  onEdit?: (row: T) => void;
+  onDelete?: (row: T) => void;
+  t: (key: string) => string;
+}): TAppTableColumn<T> | null {
+  if (!canUpdate && !canDelete) return null;
+
+  return {
+    key: "actions",
+    label: t("colActions"),
+    align: "end",
+    cellClassName: "px-4 py-4 sm:px-6",
+    render: (item) => (
+      <TableRowIconActions
+        actions={[
+          ...(canUpdate && onEdit
+            ? [
+                {
+                  key: "edit",
+                  icon: <IoPencil className="size-4" aria-hidden />,
+                  label: t("editActivity"),
+                  onClick: () => onEdit(item),
+                },
+              ]
+            : []),
+          ...(canDelete && onDelete
+            ? [
+                {
+                  key: "delete",
+                  icon: <IoTrashOutline className="size-4" aria-hidden />,
+                  label: t("deleteActivity"),
+                  onClick: () => onDelete(item),
+                  className:
+                    "text-destructive hover:bg-destructive/10 hover:text-destructive",
+                },
+              ]
+            : []),
+        ]}
+      />
+    ),
+  };
+}
+
+export function useSeoActivitiesTableColumns({
+  type,
+  canUpdate = false,
+  canDelete = false,
+  onEdit,
+  onDelete,
+}: TUseSeoActivitiesTableColumnsOptions) {
   const { t } = useTranslation("translation", { keyPrefix: "modules.seoActivities.table" });
 
   return useMemo(() => {
+    const actionsColumn = buildActionsColumn({
+      canUpdate,
+      canDelete,
+      onEdit,
+      onDelete,
+      t,
+    });
+
     if (type === "blogs") {
       const columns: TAppTableColumn<TSeoActivityBlog>[] = [
         {
@@ -41,6 +118,7 @@ export function useSeoActivitiesTableColumns(type: TSeoActivityType) {
           render: (item) => <SeoActivityLinkCell href={item.url} />,
         },
       ];
+      if (actionsColumn) columns.push(actionsColumn as TAppTableColumn<TSeoActivityBlog>);
       return columns;
     }
 
@@ -65,6 +143,7 @@ export function useSeoActivitiesTableColumns(type: TSeoActivityType) {
           render: (item) => <SeoActivityLinkCell href={item.url} />,
         },
       ];
+      if (actionsColumn) columns.push(actionsColumn as TAppTableColumn<TSeoActivityBacklink>);
       return columns;
     }
 
@@ -88,6 +167,7 @@ export function useSeoActivitiesTableColumns(type: TSeoActivityType) {
         render: (item) => <SeoActivityLinkCell href={item.url} />,
       },
     ];
+    if (actionsColumn) columns.push(actionsColumn as TAppTableColumn<TSeoActivityWebChange>);
     return columns;
-  }, [t, type]);
+  }, [canDelete, canUpdate, onDelete, onEdit, t, type]);
 }

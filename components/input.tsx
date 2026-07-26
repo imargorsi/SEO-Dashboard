@@ -103,7 +103,7 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
 
   const showError = Boolean(error);
   const baseClasses =
-    "w-full rounded-xl border bg-bg-input px-3 py-2.5 text-text-primary outline-none transition placeholder:text-text-placeholder focus:border-[var(--accent-border)] focus:ring-2 focus:ring-brand/25 disabled:cursor-not-allowed disabled:opacity-60 disabled:text-text-disabled read-only:cursor-default read-only:opacity-80";
+    "type-body w-full rounded-xl border bg-bg-input px-3 py-2.5 text-text-primary outline-none transition placeholder:text-text-placeholder focus:border-[var(--accent-border)] focus:ring-2 focus:ring-brand/25 disabled:cursor-not-allowed disabled:opacity-60 disabled:text-text-disabled read-only:cursor-default read-only:opacity-80";
   const borderClass = showError
     ? "border-[color-mix(in_srgb,var(--destructive)_68%,transparent)]"
     : "border-border";
@@ -122,7 +122,7 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
         <label
           htmlFor={id}
           className={cn(
-            "text-sm font-medium text-text-primary",
+            "type-label text-text-primary",
             required ? 'after:ms-0.5 after:text-destructive after:content-["*"]' : "",
             showError ? "text-destructive" : ""
           )}

@@ -628,11 +628,28 @@ export interface Translation {
         colBlogLink: string;
         colUrls: string;
         colPageLink: string;
+        colActions: string;
+        editActivity: string;
+        deleteActivity: string;
+        deleteTitle: string;
+        deleteBody: string;
+        deleteCancel: string;
+        deleteConfirm: string;
+        deleteSuccess: string;
+      };
+      selectProjectTitle: string;
+      selectProjectBody: string;
+      export: {
+        excel: string;
+        success: string;
+        empty: string;
       };
       quickAdd: {
         trigger: string;
         title: string;
         lead: string;
+        editTitle: string;
+        editLead: string;
         close: string;
         tabsAriaLabel: string;
         tabs: {
@@ -661,7 +678,13 @@ export interface Translation {
         };
         cancel: string;
         submit: string;
+        save: string;
         success: {
+          blogs: string;
+          backlinks: string;
+          web_changes: string;
+        };
+        updateSuccess: {
           blogs: string;
           backlinks: string;
           web_changes: string;
@@ -1506,11 +1529,28 @@ const translation: Translation = {
         colBlogLink: "Blog Link",
         colUrls: "Urls",
         colPageLink: "Page Link",
+        colActions: "Actions",
+        editActivity: "Edit Activity",
+        deleteActivity: "Delete Activity",
+        deleteTitle: "Delete Activity?",
+        deleteBody: "This Activity Will Be Removed From The Selected Project.",
+        deleteCancel: "Cancel",
+        deleteConfirm: "Delete",
+        deleteSuccess: "Activity Deleted.",
+      },
+      selectProjectTitle: "Select A Project",
+      selectProjectBody: "Choose A Project From The Sidebar To Manage Its SEO Activities.",
+      export: {
+        excel: "Export Excel",
+        success: "Excel Report Downloaded.",
+        empty: "No Activities Match The Current Filters.",
       },
       quickAdd: {
         trigger: "Add Activity",
         title: "Quick Add",
         lead: "Capture A New SEO Activity In A Few Seconds.",
+        editTitle: "Edit Activity",
+        editLead: "Update The Fields Below, Then Save Your Changes.",
         close: "Close",
         tabsAriaLabel: "Activity Type",
         tabs: {
@@ -1539,10 +1579,16 @@ const translation: Translation = {
         },
         cancel: "Cancel",
         submit: "Add Activity",
+        save: "Save Changes",
         success: {
           blogs: "Blog Activity Added.",
           backlinks: "Backlink Activity Added.",
           web_changes: "Web Change Activity Added.",
+        },
+        updateSuccess: {
+          blogs: "Blog Activity Updated.",
+          backlinks: "Backlink Activity Updated.",
+          web_changes: "Web Change Activity Updated.",
         },
       },
     },

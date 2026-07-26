@@ -61,7 +61,7 @@ export function SeoActivityStackedDateCell({ isoDate }: TSeoActivityStackedDateC
 
   return (
     <div className="flex min-w-12 flex-col leading-none">
-      <span className="type-h2 text-text-primary">{day}</span>
+      <span className="type-title text-text-primary">{day}</span>
       <span className="mt-1 type-overline text-text-muted">{monthLabel}</span>
     </div>
   );

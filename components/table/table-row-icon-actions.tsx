@@ -11,6 +11,7 @@ export type TTableRowIconAction = {
   label: string;
   onClick?: () => void;
   disabled?: boolean;
+  className?: string;
 };
 
 type TTableRowIconActionsProps = {
@@ -27,7 +28,10 @@ export function TableRowIconActions({ actions, className }: TTableRowIconActions
           type="button"
           variant="outline"
           size="icon-sm"
-          className="border-border bg-bg-input text-text-secondary hover:bg-bg-hover hover:text-text-primary"
+          className={cn(
+            "border-border bg-bg-input text-text-secondary hover:bg-bg-hover hover:text-text-primary",
+            action.className,
+          )}
           aria-label={action.label}
           disabled={action.disabled}
           onClick={action.onClick}

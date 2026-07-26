@@ -46,10 +46,11 @@ export function emptyQuickAddValues(now = new Date()): TSeoActivityQuickAddValue
 export function buildSeoActivityFromQuickAdd(
   type: TSeoActivityType,
   values: TSeoActivityQuickAddValues,
+  existingId?: string,
 ): TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityWebChange {
   const occurredOn = isValidIsoDate(values.occurredOn.trim()) ? values.occurredOn.trim() : todayIsoDate();
   const url = sanitizeHttpUrl(values.url);
-  const id = createSeoActivityId(type);
+  const id = existingId?.trim() || createSeoActivityId(type);
 
   if (type === "blogs") {
     return {
@@ -74,5 +75,39 @@ export function buildSeoActivityFromQuickAdd(
     details: values.details.trim() || null,
     url,
     occurredOn,
+  };
+}
+
+export function activityToQuickAddValues(
+  type: TSeoActivityType,
+  row: TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityWebChange,
+): TSeoActivityQuickAddValues {
+  const values = emptyQuickAddValues();
+  values.url = row.url ?? "";
+  values.occurredOn = row.occurredOn && isValidIsoDate(row.occurredOn) ? row.occurredOn : todayIsoDate();
+
+  if (type === "blogs") {
+    values.title = (row as TSeoActivityBlog).title ?? "";
+    return values;
+  }
+
+  if (type === "backlinks") {
+    values.anchorText = (row as TSeoActivityBacklink).anchorText ?? "";
+    return values;
+  }
+
+  values.details = (row as TSeoActivityWebChange).details ?? "";
+  return values;
+}
+
+export function createSeedSeoActivityCollections(
+  blogs: readonly TSeoActivityBlog[],
+  backlinks: readonly TSeoActivityBacklink[],
+  webChanges: readonly TSeoActivityWebChange[],
+): TSeoActivityCollections {
+  return {
+    blogs: blogs.map((row) => ({ ...row })),
+    backlinks: backlinks.map((row) => ({ ...row })),
+    web_changes: webChanges.map((row) => ({ ...row })),
   };
 }

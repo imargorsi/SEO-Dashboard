@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { SEO_ACTIVITY_TYPE_OPTIONS } from "@/lib/frontend/seo-activities/constants";
 import { isValidIsoDate } from "@/lib/frontend/seo-activities/date-range.utils";
 import {
+  activityToQuickAddValues,
   buildSeoActivityFromQuickAdd,
   emptyQuickAddValues,
   type TSeoActivityQuickAddValues,
@@ -25,26 +26,34 @@ import type {
 } from "@/types/seo-activity.types";
 import { cn } from "@/lib/utils";
 
+export type TSeoActivityEditorTarget = {
+  mode: "create" | "edit";
+  type: TSeoActivityType;
+  row?: TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityWebChange;
+};
+
 type TSeoActivityQuickAddProps = {
   open: boolean;
-  initialType: TSeoActivityType;
+  target: TSeoActivityEditorTarget;
   onOpenChange: (open: boolean) => void;
-  onCreate: (
+  onSave: (
     type: TSeoActivityType,
     row: TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityWebChange,
+    mode: "create" | "edit",
   ) => void;
 };
 
 export function SeoActivityQuickAdd({
   open,
-  initialType,
+  target,
   onOpenChange,
-  onCreate,
+  onSave,
 }: TSeoActivityQuickAddProps) {
   const { t } = useTranslation("translation", { keyPrefix: "modules.seoActivities.quickAdd" });
   const titleId = useId();
   const descriptionId = useId();
-  const [type, setType] = useState<TSeoActivityType>(initialType);
+  const isEdit = target.mode === "edit";
+  const [type, setType] = useState<TSeoActivityType>(target.type);
   const [mounted, setMounted] = useState(false);
 
   const {
@@ -63,9 +72,13 @@ export function SeoActivityQuickAdd({
 
   useEffect(() => {
     if (!open) return;
-    setType(initialType);
+    setType(target.type);
+    if (target.mode === "edit" && target.row) {
+      reset(activityToQuickAddValues(target.type, target.row));
+      return;
+    }
     reset(emptyQuickAddValues());
-  }, [open, initialType, reset]);
+  }, [open, reset, target]);
 
   useEffect(() => {
     if (!open) return;
@@ -84,13 +97,18 @@ export function SeoActivityQuickAdd({
   }, [open, onOpenChange]);
 
   function onTypeChange(next: TSeoActivityType) {
+    if (isEdit) return;
     setType(next);
     reset(emptyQuickAddValues());
   }
 
   function onSubmit(values: TSeoActivityQuickAddValues) {
-    const row = buildSeoActivityFromQuickAdd(type, values);
-    onCreate(type, row);
+    const row = buildSeoActivityFromQuickAdd(
+      type,
+      values,
+      isEdit ? target.row?.id : undefined,
+    );
+    onSave(type, row, target.mode);
     onOpenChange(false);
   }
 
@@ -122,11 +140,11 @@ export function SeoActivityQuickAdd({
             <span className="sr-only">{t("close")}</span>
           </button>
 
-          <h2 id={titleId} className="type-title text-text-primary pe-8">
-            {t("title")}
+          <h2 id={titleId} className="type-title pe-8 text-text-primary">
+            {isEdit ? t("editTitle") : t("title")}
           </h2>
           <p id={descriptionId} className="mt-1 type-caption text-text-muted">
-            {t("lead")}
+            {isEdit ? t("editLead") : t("lead")}
           </p>
 
           <div
@@ -142,12 +160,14 @@ export function SeoActivityQuickAdd({
                   type="button"
                   role="tab"
                   aria-selected={isActive}
+                  disabled={isEdit && !isActive}
                   onClick={() => onTypeChange(option)}
                   className={cn(
                     "min-w-0 flex-1 rounded-xl px-3 py-2 type-label transition-colors",
                     isActive
                       ? "bg-brand text-text-on-brand"
                       : "text-text-secondary hover:bg-bg-hover hover:text-text-primary",
+                    isEdit && !isActive && "pointer-events-none opacity-40",
                   )}
                 >
                   {t(`tabs.${option}`)}
@@ -251,7 +271,7 @@ export function SeoActivityQuickAdd({
               disabled={isSubmitting}
               className="w-full sm:min-w-36 sm:w-auto"
             >
-              {t("submit")}
+              {isEdit ? t("save") : t("submit")}
             </Button>
           </footer>
         </form>

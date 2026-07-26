@@ -74,11 +74,7 @@ export function ProjectDetailSection() {
   }
 
   if (isPending || !user) {
-    return (
-      <div className="px-4 py-6 sm:px-6">
-        <LoadingState label={t("loading")} />
-      </div>
-    );
+    return <LoadingState skeletonVariant="detail" />;
   }
 
   if (isError) {

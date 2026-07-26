@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
+import { CardGridSkeleton } from "@/components/skeletons/card-grid-skeleton";
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
 import { NoProjectComponent } from "@/components/projects/no-project-component";
@@ -11,7 +12,6 @@ import { ProjectCard } from "@/components/projects/project-card";
 import { ProjectInvitationsBanner } from "@/components/projects/project-invitations-banner";
 import { ProjectStatusFilter } from "@/components/projects/project-status-filter";
 import { buttonVariants } from "@/components/ui/button";
-import { LoadingState } from "@/components/ui/loading-state";
 import { useProjectAccess } from "@/context/project-access-context";
 import { useAuthUserQuery, useResendEmailVerificationMutation } from "@/features/auth/auth.api";
 import { type TProjectListItem, useProjectsQuery } from "@/features/projects/projects.api";
@@ -35,7 +35,6 @@ import { cn } from "@/lib/utils";
 
 export function ProjectsListSection() {
   const { t } = useTranslation("translation", { keyPrefix: "modules.projects" });
-  const { t: tTable } = useTranslation("translation", { keyPrefix: "table" });
   const { t: tVerification } = useTranslation("translation", { keyPrefix: "auth.verification" });
   const router = useRouter();
   const { data: user } = useAuthUserQuery();
@@ -126,7 +125,7 @@ export function ProjectsListSection() {
         <ProjectInvitationsBanner />
 
         {isPending ? (
-          <LoadingState label={tTable("loading")} />
+          <CardGridSkeleton />
         ) : !hasProjects ? (
           <NoProjectComponent
             variant={isVerified ? "no-projects" : "email-not-verified"}

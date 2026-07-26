@@ -63,7 +63,7 @@ export function ProjectsEditSection() {
   }
 
   if (isAuthLoading || isPending || !authUser) {
-    return <LoadingState className="m-6" label={tDetail("loading")} />;
+    return <LoadingState skeletonVariant="form" />;
   }
 
   if (isError) {

@@ -48,7 +48,7 @@ export function RolesEditSection() {
   }, [canUpdate, isError, isRoleLoading, role, roleId, router]);
 
   if (isAuthLoading || !authUser || isRoleLoading || !role || !initialValues) {
-    return <LoadingState className="m-6" />;
+    return <LoadingState skeletonVariant="form" />;
   }
 
   if (!canUpdate) return null;

@@ -1,7 +1,7 @@
 "use client";
 
 import { Input } from "@/components/input";
-import { LoadingState } from "@/components/ui/loading-state";
+import { Skeleton } from "@/components/ui/skeleton";
 import { RolePermissionMatrix } from "@/components/roles/role-permission-matrix";
 import type { TUseRoleFormResult } from "@/components/forms/hooks/use-role-form.hook";
 
@@ -60,7 +60,19 @@ export function RoleFormFields({ hook }: TRoleFormFieldsProps) {
         </div>
 
         {isCatalogLoading ? (
-          <LoadingState label={t("permsLoading")} />
+          <div className="space-y-3" role="status" aria-live="polite" aria-busy="true">
+            <span className="sr-only">{t("permsLoading")}</span>
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div key={index} className="space-y-2 rounded-2xl border border-border p-4">
+                <Skeleton className="h-4 w-32" />
+                <div className="flex flex-wrap gap-2">
+                  <Skeleton className="h-8 w-20 rounded-lg" />
+                  <Skeleton className="h-8 w-20 rounded-lg" />
+                  <Skeleton className="h-8 w-24 rounded-lg" />
+                </div>
+              </div>
+            ))}
+          </div>
         ) : isCatalogError ? (
           <p className="type-body text-destructive">{t("permsLoadErrorBody")}</p>
         ) : modules.length === 0 ? (

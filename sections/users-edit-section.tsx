@@ -53,7 +53,7 @@ export function UsersEditSection() {
   }, [canUpdate, isError, isUserLoading, router, user, userId]);
 
   if (isAuthLoading || !authUser || isUserLoading || !user || !initialValues) {
-    return <LoadingState className="m-6" />;
+    return <LoadingState skeletonVariant="form" />;
   }
 
   if (!canUpdate) return null;

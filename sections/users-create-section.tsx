@@ -26,7 +26,7 @@ export function UsersCreateSection() {
   }, [authUser, canCreate, isLoading, router]);
 
   if (isLoading || !authUser) {
-    return <LoadingState className="m-6" />;
+    return <LoadingState skeletonVariant="form" />;
   }
 
   if (!canCreate) return null;

@@ -19,7 +19,7 @@ export function SettingsSection() {
   const categories = resolveSettingsCategories(userIsSuperAdmin);
 
   if (isLoading || !authUser) {
-    return <LoadingState className="m-6" />;
+    return <LoadingState skeletonVariant="settings" />;
   }
 
   return (

@@ -52,8 +52,6 @@ export function RolesTable({
       getRowId={(item) => item.id}
       isLoading={isLoading && !data}
       isFetching={isFetching}
-      loadingLabel={tTable("loading")}
-      updatingLabel={tTable("updating")}
       emptyTitle={tTable("emptyTitle")}
       emptyBody={tTable("emptyBody")}
       pagination={{

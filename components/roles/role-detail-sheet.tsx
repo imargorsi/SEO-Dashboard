@@ -4,9 +4,9 @@ import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
 import { RoleScopeBadge } from "@/components/roles/role-scope-badge";
+import { SheetContentSkeleton } from "@/components/skeletons/dashboard-page-skeleton";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
-import { LoadingState } from "@/components/ui/loading-state";
 import { StatusIndicator } from "@/components/ui/status-indicator";
 import { usePermissionCatalogQuery } from "@/features/permissions/permissions.api";
 import { useRoleQuery } from "@/features/roles/roles.api";
@@ -50,7 +50,7 @@ export function RoleDetailSheet({ roleId, open, onOpenChange }: TRoleDetailSheet
 
         {isLoading || !role ? (
           <div className="p-5">
-            <LoadingState label={t("loading")} />
+            <SheetContentSkeleton />
           </div>
         ) : (
           <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto px-5 py-5">

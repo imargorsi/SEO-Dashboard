@@ -41,7 +41,7 @@ export function ProjectsCreateSection() {
   }, [authUser, canCreate, isLoading, isProjectsPending, isVerified, router]);
 
   if (isLoading || isProjectsPending || !authUser) {
-    return <LoadingState className="m-6" />;
+    return <LoadingState skeletonVariant="form" />;
   }
 
   if (!isVerified) return null;

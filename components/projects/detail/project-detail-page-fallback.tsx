@@ -1,10 +1,7 @@
 "use client";
 
-import { useTranslation } from "react-i18next";
-
-import { LoadingState } from "@/components/ui/loading-state";
+import { DashboardPageSkeleton } from "@/components/skeletons/dashboard-page-skeleton";
 
 export function ProjectDetailPageFallback() {
-  const { t } = useTranslation("translation", { keyPrefix: "modules.projects.detail" });
-  return <LoadingState label={t("loading")} />;
+  return <DashboardPageSkeleton variant="detail" />;
 }

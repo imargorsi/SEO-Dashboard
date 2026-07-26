@@ -39,7 +39,7 @@ function buildActionsColumn<T extends TSeoActivityRow>({
   canDelete?: boolean;
   onEdit?: (row: T) => void;
   onDelete?: (row: T) => void;
-  t: (key: string) => string;
+  t: (key: "colActions" | "editActivity" | "deleteActivity") => string;
 }): TAppTableColumn<T> | null {
   if (!canUpdate && !canDelete) return null;
 

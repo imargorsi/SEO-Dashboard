@@ -1,18 +1,5 @@
 /**
  * Allows only http(s) absolute URLs. Rejects javascript:/data:/etc.
+ * Shared implementation lives in `lib/seo-activities/sanitize-url.ts`.
  */
-export function sanitizeHttpUrl(value: string | null | undefined): string | null {
-  if (value == null) return null;
-  const trimmed = value.trim();
-  if (!trimmed) return null;
-
-  try {
-    const parsed = new URL(trimmed);
-    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
-      return null;
-    }
-    return parsed.toString();
-  } catch {
-    return null;
-  }
-}
+export { sanitizeHttpUrl } from "@/lib/seo-activities/sanitize-url";

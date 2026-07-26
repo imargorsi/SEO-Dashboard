@@ -12,7 +12,6 @@ import { SEO_ACTIVITY_TYPE_OPTIONS } from "@/lib/frontend/seo-activities/constan
 import { isValidIsoDate } from "@/lib/frontend/seo-activities/date-range.utils";
 import {
   activityToQuickAddValues,
-  buildSeoActivityFromQuickAdd,
   emptyQuickAddValues,
   type TSeoActivityQuickAddValues,
 } from "@/lib/frontend/seo-activities/quick-add.utils";
@@ -36,11 +35,12 @@ type TSeoActivityQuickAddProps = {
   open: boolean;
   target: TSeoActivityEditorTarget;
   onOpenChange: (open: boolean) => void;
-  onSave: (
-    type: TSeoActivityType,
-    row: TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityWebChange,
-    mode: "create" | "edit",
-  ) => void;
+  onSave: (input: {
+    mode: "create" | "edit";
+    type: TSeoActivityType;
+    values: TSeoActivityQuickAddValues;
+    activityId?: string;
+  }) => Promise<void>;
 };
 
 export function SeoActivityQuickAdd({
@@ -102,13 +102,13 @@ export function SeoActivityQuickAdd({
     reset(emptyQuickAddValues());
   }
 
-  function onSubmit(values: TSeoActivityQuickAddValues) {
-    const row = buildSeoActivityFromQuickAdd(
+  async function onSubmit(values: TSeoActivityQuickAddValues) {
+    await onSave({
+      mode: target.mode,
       type,
       values,
-      isEdit ? target.row?.id : undefined,
-    );
-    onSave(type, row, target.mode);
+      activityId: isEdit ? target.row?.id : undefined,
+    });
     onOpenChange(false);
   }
 

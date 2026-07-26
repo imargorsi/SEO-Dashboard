@@ -31,6 +31,7 @@ type TSeoActivitiesTableProps = {
   canDelete?: boolean;
   onEdit?: (row: TSeoActivityRow) => void;
   onDelete?: (row: TSeoActivityRow) => void;
+  isLoading?: boolean;
   className?: string;
 };
 
@@ -45,6 +46,7 @@ export function SeoActivitiesTable({
   canDelete = false,
   onEdit,
   onDelete,
+  isLoading = false,
   className,
 }: TSeoActivitiesTableProps) {
   const { t } = useTranslation("translation", { keyPrefix: "modules.seoActivities" });
@@ -65,6 +67,7 @@ export function SeoActivitiesTable({
       getRowId={(item) => item.id as string}
       emptyTitle={t("table.emptyTitle")}
       emptyBody={t("table.emptyBody")}
+      isLoading={isLoading}
       pagination={{
         page,
         perPage,

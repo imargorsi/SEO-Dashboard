@@ -638,6 +638,8 @@ const translation: Translation = {
         deleteCancel: "إلغاء",
         deleteConfirm: "حذف",
         deleteSuccess: "تم حذف النشاط.",
+        deleteErrorFallback: "تعذّر حذف النشاط. حاول مرة أخرى.",
+        loadErrorBody: "تعذّر تحميل أنشطة السيو. حاول مرة أخرى.",
       },
       selectProjectTitle: "اختر مشروعاً",
       selectProjectBody: "اختر مشروعاً من الشريط الجانبي لإدارة أنشطة السيو الخاصة به.",
@@ -645,6 +647,7 @@ const translation: Translation = {
         excel: "تصدير Excel",
         success: "تم تنزيل تقرير Excel.",
         empty: "لا توجد أنشطة مطابقة للفلاتر الحالية.",
+        errorFallback: "تعذّر تصدير الأنشطة. حاول مرة أخرى.",
       },
       quickAdd: {
         trigger: "إضافة نشاط",
@@ -691,6 +694,8 @@ const translation: Translation = {
           backlinks: "تم تحديث نشاط الرابط الخلفي.",
           web_changes: "تم تحديث نشاط تغيير الويب.",
         },
+        createErrorFallback: "تعذّر إنشاء النشاط. حاول مرة أخرى.",
+        updateErrorFallback: "تعذّر تحديث النشاط. حاول مرة أخرى.",
       },
     },
     leads: {

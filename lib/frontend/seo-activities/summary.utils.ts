@@ -1,8 +1,3 @@
-import {
-  isDateInRange,
-  type TDateRange,
-} from "@/lib/frontend/seo-activities/date-range.utils";
-import type { TSeoActivityCollections } from "@/lib/frontend/seo-activities/quick-add.utils";
 import type { TSeoActivityTypeCounts } from "@/types/seo-activity.types";
 
 export type TSeoActivitySummaryMetricId =
@@ -21,25 +16,16 @@ export type TSeoActivityRangeStats = {
   metrics: TSeoActivitySummaryMetric[];
 };
 
-export function buildSeoActivityRangeStats(
-  range: TDateRange,
-  collections: TSeoActivityCollections,
+export function buildSeoActivityRangeStatsFromCounts(
+  counts: TSeoActivityTypeCounts,
 ): TSeoActivityRangeStats {
-  const blogs = collections.blogs.filter((row) => isDateInRange(row.occurredOn, range)).length;
-  const backlinks = collections.backlinks.filter((row) => isDateInRange(row.occurredOn, range)).length;
-  const web_changes = collections.web_changes.filter((row) =>
-    isDateInRange(row.occurredOn, range),
-  ).length;
-
-  const counts = { blogs, backlinks, web_changes };
-
   return {
     counts,
     metrics: [
-      { id: "blogs", value: blogs },
-      { id: "backlinks", value: backlinks },
-      { id: "web_changes", value: web_changes },
-      { id: "total", value: blogs + backlinks + web_changes },
+      { id: "blogs", value: counts.blogs },
+      { id: "backlinks", value: counts.backlinks },
+      { id: "web_changes", value: counts.web_changes },
+      { id: "total", value: counts.blogs + counts.backlinks + counts.web_changes },
     ],
   };
 }

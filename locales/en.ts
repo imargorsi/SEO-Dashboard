@@ -636,6 +636,8 @@ export interface Translation {
         deleteCancel: string;
         deleteConfirm: string;
         deleteSuccess: string;
+        deleteErrorFallback: string;
+        loadErrorBody: string;
       };
       selectProjectTitle: string;
       selectProjectBody: string;
@@ -643,6 +645,7 @@ export interface Translation {
         excel: string;
         success: string;
         empty: string;
+        errorFallback: string;
       };
       quickAdd: {
         trigger: string;
@@ -689,6 +692,8 @@ export interface Translation {
           backlinks: string;
           web_changes: string;
         };
+        createErrorFallback: string;
+        updateErrorFallback: string;
       };
     };
     leads: {
@@ -1537,6 +1542,8 @@ const translation: Translation = {
         deleteCancel: "Cancel",
         deleteConfirm: "Delete",
         deleteSuccess: "Activity Deleted.",
+        deleteErrorFallback: "Could Not Delete Activity. Try Again.",
+        loadErrorBody: "Could Not Load SEO Activities. Try Again.",
       },
       selectProjectTitle: "Select A Project",
       selectProjectBody: "Choose A Project From The Sidebar To Manage Its SEO Activities.",
@@ -1544,6 +1551,7 @@ const translation: Translation = {
         excel: "Export Excel",
         success: "Excel Report Downloaded.",
         empty: "No Activities Match The Current Filters.",
+        errorFallback: "Could Not Export Activities. Try Again.",
       },
       quickAdd: {
         trigger: "Add Activity",
@@ -1590,6 +1598,8 @@ const translation: Translation = {
           backlinks: "Backlink Activity Updated.",
           web_changes: "Web Change Activity Updated.",
         },
+        createErrorFallback: "Could Not Create Activity. Try Again.",
+        updateErrorFallback: "Could Not Update Activity. Try Again.",
       },
     },
     leads: {

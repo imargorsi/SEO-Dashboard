@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IoAdd, IoDownloadOutline } from "react-icons/io5";
 
@@ -27,42 +27,40 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { useSelectedProject } from "@/context/selected-project-context";
 import { useProjectAccess } from "@/context/project-access-context";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
+import {
+  fetchSeoActivitiesForExport,
+  useCreateSeoActivityMutation,
+  useDeleteSeoActivityMutation,
+  useSeoActivitiesQuery,
+  useUpdateSeoActivityMutation,
+} from "@/features/seo-activities/seo-activities.api";
 import { useQueryParams } from "@/hooks/use-query-params.hook";
-import {
-  DUMMY_SEO_ACTIVITY_BACKLINKS,
-  DUMMY_SEO_ACTIVITY_BLOGS,
-  DUMMY_SEO_ACTIVITY_WEB_CHANGES,
-} from "@/lib/frontend/seo-activities/dummy-data";
-import { isDateInRange, type TDateRange } from "@/lib/frontend/seo-activities/date-range.utils";
-import {
-  paginateItems,
-  parseSeoActivitiesListQuery,
-} from "@/lib/frontend/seo-activities/list-query.utils";
-import { notify } from "@/lib/frontend/feedback/notify";
+import { ApiError } from "@/lib/frontend/api/errors";
+import { type TDateRange } from "@/lib/frontend/seo-activities/date-range.utils";
 import { downloadSeoActivitiesExcel } from "@/lib/frontend/seo-activities/export.utils";
-import {
-  createSeedSeoActivityCollections,
-  type TSeoActivityCollections,
-} from "@/lib/frontend/seo-activities/quick-add.utils";
-import { buildSeoActivityRangeStats } from "@/lib/frontend/seo-activities/summary.utils";
+import { parseSeoActivitiesListQuery } from "@/lib/frontend/seo-activities/list-query.utils";
+import { notify } from "@/lib/frontend/feedback/notify";
+import type { TSeoActivityQuickAddValues } from "@/lib/frontend/seo-activities/quick-add.utils";
+import { buildSeoActivityRangeStatsFromCounts } from "@/lib/frontend/seo-activities/summary.utils";
+import { SEO_ACTIVITY_DEFAULT_PER_PAGE } from "@/lib/seo-activities/constants";
 import { hasPermission, mergePermissions } from "@/lib/rbac/access";
 import { cn } from "@/lib/utils";
-import type {
-  TSeoActivityBacklink,
-  TSeoActivityBlog,
-  TSeoActivityType,
-  TSeoActivityWebChange,
+import {
+  toSeoActivityTableRow,
+  type TSeoActivityBacklink,
+  type TSeoActivityBlog,
+  type TSeoActivityType,
+  type TSeoActivityTypeCounts,
+  type TSeoActivityWebChange,
 } from "@/types/seo-activity.types";
 
 type TSeoActivityRow = TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityWebChange;
 
-function seedCollections(): TSeoActivityCollections {
-  return createSeedSeoActivityCollections(
-    DUMMY_SEO_ACTIVITY_BLOGS,
-    DUMMY_SEO_ACTIVITY_BACKLINKS,
-    DUMMY_SEO_ACTIVITY_WEB_CHANGES,
-  );
-}
+const EMPTY_COUNTS: TSeoActivityTypeCounts = {
+  blogs: 0,
+  backlinks: 0,
+  web_changes: 0,
+};
 
 export function SeoActivitiesSection() {
   const { t } = useTranslation("translation", { keyPrefix: "modules.seoActivities" });
@@ -81,49 +79,41 @@ export function SeoActivitiesSection() {
   const canUpdate = hasPermission(permissions, "seo_activities.update");
   const canDelete = hasPermission(permissions, "seo_activities.delete");
 
-  const [storeByProject, setStoreByProject] = useState<Record<string, TSeoActivityCollections>>({});
   const [editorOpen, setEditorOpen] = useState(false);
   const [editorTarget, setEditorTarget] = useState<TSeoActivityEditorTarget>({
     mode: "create",
     type: listQuery.type,
   });
   const [deleteTarget, setDeleteTarget] = useState<TSeoActivityRow | null>(null);
+  const loadErrorNotified = useRef(false);
 
-  const collections = useMemo(() => {
-    if (!projectId) {
-      return { blogs: [], backlinks: [], web_changes: [] } satisfies TSeoActivityCollections;
-    }
-    return storeByProject[projectId] ?? seedCollections();
-  }, [projectId, storeByProject]);
+  const listParams = {
+    type: listQuery.type,
+    page: listQuery.page,
+    per_page: listQuery.perPage || SEO_ACTIVITY_DEFAULT_PER_PAGE,
+    from: listQuery.dateRange.from,
+    to: listQuery.dateRange.to,
+  };
 
-  const updateProjectCollections = useCallback(
-    (updater: (prev: TSeoActivityCollections) => TSeoActivityCollections) => {
-      if (!projectId) return;
-      setStoreByProject((prev) => ({
-        ...prev,
-        [projectId]: updater(prev[projectId] ?? seedCollections()),
-      }));
-    },
-    [projectId],
-  );
+  const { data, error, isLoading, isFetching } = useSeoActivitiesQuery(projectId, listParams, {
+    enabled: Boolean(projectId),
+  });
+  const createMutation = useCreateSeoActivityMutation(projectId);
+  const updateMutation = useUpdateSeoActivityMutation(projectId);
+  const deleteMutation = useDeleteSeoActivityMutation(projectId);
 
-  const { counts, metrics } = useMemo(
-    () => buildSeoActivityRangeStats(listQuery.dateRange, collections),
-    [collections, listQuery.dateRange],
-  );
+  useEffect(() => {
+    if (!error || loadErrorNotified.current) return;
+    loadErrorNotified.current = true;
+    notify.error(error instanceof Error ? error.message : t("table.loadErrorBody"));
+  }, [error, t]);
 
-  const allRows = useMemo(() => {
-    const source =
-      listQuery.type === "blogs"
-        ? collections.blogs
-        : listQuery.type === "backlinks"
-          ? collections.backlinks
-          : collections.web_changes;
-
-    return source.filter((row) => isDateInRange(row.occurredOn, listQuery.dateRange));
-  }, [collections, listQuery.dateRange, listQuery.type]);
-
-  const rows = paginateItems(allRows, listQuery.page, listQuery.perPage);
+  const counts = data?.filters.type_counts ?? EMPTY_COUNTS;
+  const { metrics } = buildSeoActivityRangeStatsFromCounts(counts);
+  const rows = (data?.items ?? []).map(toSeoActivityTableRow);
+  const total = data?.pagination.total ?? 0;
+  const page = data?.pagination.current_page ?? listQuery.page;
+  const perPage = data?.pagination.per_page ?? listParams.per_page;
 
   function onTypeChange(type: TSeoActivityType) {
     if (type === "blogs") {
@@ -163,97 +153,106 @@ export function SeoActivitiesSection() {
     setEditorOpen(true);
   }
 
-  function onSave(
-    type: TSeoActivityType,
-    row: TSeoActivityRow,
-    mode: "create" | "edit",
-  ) {
-    updateProjectCollections((prev) => {
-      if (type === "blogs") {
-        const nextRow = row as TSeoActivityBlog;
-        if (mode === "edit") {
-          return {
-            ...prev,
-            blogs: prev.blogs.map((item) => (item.id === nextRow.id ? nextRow : item)),
-          };
-        }
-        return { ...prev, blogs: [nextRow, ...prev.blogs] };
-      }
+  function buildPayload(type: TSeoActivityType, values: TSeoActivityQuickAddValues) {
+    const base = {
+      url: values.url.trim(),
+      occurredOn: values.occurredOn.trim(),
+    };
 
-      if (type === "backlinks") {
-        const nextRow = row as TSeoActivityBacklink;
-        if (mode === "edit") {
-          return {
-            ...prev,
-            backlinks: prev.backlinks.map((item) => (item.id === nextRow.id ? nextRow : item)),
-          };
-        }
-        return { ...prev, backlinks: [nextRow, ...prev.backlinks] };
-      }
-
-      const nextRow = row as TSeoActivityWebChange;
-      if (mode === "edit") {
-        return {
-          ...prev,
-          web_changes: prev.web_changes.map((item) => (item.id === nextRow.id ? nextRow : item)),
-        };
-      }
-      return { ...prev, web_changes: [nextRow, ...prev.web_changes] };
-    });
-
-    if (mode === "create") {
-      if (type !== listQuery.type) onTypeChange(type);
-      else deleteQueryParams(["page"]);
-      notify.success(t(`quickAdd.success.${type}`));
-      return;
+    if (type === "blogs") {
+      return { ...base, type, title: values.title.trim() };
     }
-
-    notify.success(t(`quickAdd.updateSuccess.${type}`));
+    if (type === "backlinks") {
+      return { ...base, type, anchorText: values.anchorText.trim() };
+    }
+    return { ...base, type, details: values.details.trim() };
   }
 
-  function confirmDelete() {
+  async function onSave(input: {
+    mode: "create" | "edit";
+    type: TSeoActivityType;
+    values: TSeoActivityQuickAddValues;
+    activityId?: string;
+  }) {
+    try {
+      if (input.mode === "edit" && input.activityId) {
+        const payload = buildPayload(input.type, input.values);
+        const { type: _type, ...updatePayload } = payload;
+        await updateMutation.mutateAsync({
+          activityId: input.activityId,
+          payload: updatePayload,
+        });
+        notify.success(t(`quickAdd.updateSuccess.${input.type}`));
+        return;
+      }
+
+      await createMutation.mutateAsync(buildPayload(input.type, input.values));
+      if (input.type !== listQuery.type) onTypeChange(input.type);
+      else deleteQueryParams(["page"]);
+      notify.success(t(`quickAdd.success.${input.type}`));
+    } catch (err) {
+      const message =
+        err instanceof ApiError
+          ? err.message
+          : input.mode === "edit"
+            ? t("quickAdd.updateErrorFallback")
+            : t("quickAdd.createErrorFallback");
+      notify.error(message);
+      throw err;
+    }
+  }
+
+  async function confirmDelete() {
     if (!deleteTarget) return;
-    const id = deleteTarget.id;
-    const type = listQuery.type;
-
-    updateProjectCollections((prev) => {
-      if (type === "blogs") {
-        return { ...prev, blogs: prev.blogs.filter((item) => item.id !== id) };
-      }
-      if (type === "backlinks") {
-        return { ...prev, backlinks: prev.backlinks.filter((item) => item.id !== id) };
-      }
-      return { ...prev, web_changes: prev.web_changes.filter((item) => item.id !== id) };
-    });
-
-    setDeleteTarget(null);
-    notify.success(t("table.deleteSuccess"));
+    try {
+      await deleteMutation.mutateAsync(deleteTarget.id);
+      setDeleteTarget(null);
+      notify.success(t("table.deleteSuccess"));
+    } catch (err) {
+      notify.error(err instanceof ApiError ? err.message : t("table.deleteErrorFallback"));
+    }
   }
 
-  function onExportExcel() {
-    if (allRows.length === 0) {
+  async function onExportExcel() {
+    if (!projectId) return;
+    if (total === 0) {
       notify.info(t("export.empty"));
       return;
     }
 
-    downloadSeoActivitiesExcel({
-      type: listQuery.type,
-      rows: allRows,
-      range: listQuery.dateRange,
-      labels: {
-        date: t("table.colDate"),
-        title: t("table.colBlogDetails"),
-        url:
-          listQuery.type === "blogs"
-            ? t("table.colBlogLink")
-            : listQuery.type === "backlinks"
-              ? t("table.colUrls")
-              : t("table.colPageLink"),
-        anchorText: t("table.colBacklinkDetails"),
-        details: t("table.colChangeDetails"),
-      },
-    });
-    notify.success(t("export.success"));
+    try {
+      const items = await fetchSeoActivitiesForExport(projectId, {
+        type: listQuery.type,
+        from: listQuery.dateRange.from,
+        to: listQuery.dateRange.to,
+      });
+
+      if (items.length === 0) {
+        notify.info(t("export.empty"));
+        return;
+      }
+
+      downloadSeoActivitiesExcel({
+        type: listQuery.type,
+        rows: items.map(toSeoActivityTableRow),
+        range: listQuery.dateRange,
+        labels: {
+          date: t("table.colDate"),
+          title: t("table.colBlogDetails"),
+          url:
+            listQuery.type === "blogs"
+              ? t("table.colBlogLink")
+              : listQuery.type === "backlinks"
+                ? t("table.colUrls")
+                : t("table.colPageLink"),
+          anchorText: t("table.colBacklinkDetails"),
+          details: t("table.colChangeDetails"),
+        },
+      });
+      notify.success(t("export.success"));
+    } catch (err) {
+      notify.error(err instanceof ApiError ? err.message : t("export.errorFallback"));
+    }
   }
 
   if (!projectId) {
@@ -301,7 +300,7 @@ export function SeoActivitiesSection() {
               type="button"
               variant="outline"
               size="md"
-              onClick={onExportExcel}
+              onClick={() => void onExportExcel()}
               className="shrink-0"
             >
               <IoDownloadOutline className="size-4" aria-hidden />
@@ -312,14 +311,15 @@ export function SeoActivitiesSection() {
           <SeoActivitiesTable
             type={listQuery.type}
             rows={rows as TSeoActivityBlog[] | TSeoActivityBacklink[] | TSeoActivityWebChange[]}
-            page={listQuery.page}
-            perPage={listQuery.perPage}
-            total={allRows.length}
+            page={page}
+            perPage={perPage}
+            total={total}
             onPageChange={onPageChange}
             canUpdate={canUpdate}
             canDelete={canDelete}
             onEdit={openEdit}
             onDelete={setDeleteTarget}
+            isLoading={isLoading || isFetching}
           />
         </div>
       </div>
@@ -342,7 +342,8 @@ export function SeoActivitiesSection() {
             <button
               type="button"
               className={cn(buttonVariants({ variant: "destructive", size: "sm" }))}
-              onClick={confirmDelete}
+              onClick={() => void confirmDelete()}
+              disabled={deleteMutation.isPending}
             >
               {t("table.deleteConfirm")}
             </button>

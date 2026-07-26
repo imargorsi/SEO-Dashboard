@@ -3,7 +3,7 @@ import type {
   TSeoActivityBacklink,
   TSeoActivityBlog,
   TSeoActivityType,
-  TSeoActivityWebChange,
+  TSeoActivityTechnicalWork,
 } from "@/types/seo-activity.types";
 
 export type TSeoActivityQuickAddValues = {
@@ -33,7 +33,7 @@ export function emptyQuickAddValues(now = new Date()): TSeoActivityQuickAddValue
 
 export function activityToQuickAddValues(
   type: TSeoActivityType,
-  row: TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityWebChange,
+  row: TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityTechnicalWork,
 ): TSeoActivityQuickAddValues {
   const values = emptyQuickAddValues();
   values.url = row.url ?? "";
@@ -49,6 +49,6 @@ export function activityToQuickAddValues(
     return values;
   }
 
-  values.details = (row as TSeoActivityWebChange).details ?? "";
+  values.details = (row as TSeoActivityTechnicalWork).details ?? "";
   return values;
 }

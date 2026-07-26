@@ -1,6 +1,6 @@
 import type { TSeoActivityType } from "@/types/seo-activity.types";
 
-export const SEO_ACTIVITY_TYPES = ["blogs", "backlinks", "web_changes"] as const;
+export const SEO_ACTIVITY_TYPES = ["blogs", "backlinks", "technical_work"] as const;
 
 export const SEO_ACTIVITY_DEFAULT_TYPE: TSeoActivityType = "blogs";
 

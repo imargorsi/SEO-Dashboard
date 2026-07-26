@@ -48,13 +48,13 @@ async function countByType(
   projectId: string,
   dateFilter: TSeoActivityFilter,
 ): Promise<TSeoActivityTypeCounts> {
-  const [blogs, backlinks, web_changes] = await Promise.all([
+  const [blogs, backlinks, technical_work] = await Promise.all([
     SeoActivity.countDocuments({ projectId, activityType: "blogs", ...dateFilter }),
     SeoActivity.countDocuments({ projectId, activityType: "backlinks", ...dateFilter }),
-    SeoActivity.countDocuments({ projectId, activityType: "web_changes", ...dateFilter }),
+    SeoActivity.countDocuments({ projectId, activityType: "technical_work", ...dateFilter }),
   ]);
 
-  return { blogs, backlinks, web_changes };
+  return { blogs, backlinks, technical_work };
 }
 
 export async function listSeoActivities(

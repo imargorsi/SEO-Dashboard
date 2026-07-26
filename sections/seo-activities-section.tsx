@@ -44,15 +44,15 @@ import {
   type TSeoActivityBlog,
   type TSeoActivityType,
   type TSeoActivityTypeCounts,
-  type TSeoActivityWebChange,
+  type TSeoActivityTechnicalWork,
 } from "@/types/seo-activity.types";
 
-type TSeoActivityRow = TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityWebChange;
+type TSeoActivityRow = TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityTechnicalWork;
 
 const EMPTY_COUNTS: TSeoActivityTypeCounts = {
   blogs: 0,
   backlinks: 0,
-  web_changes: 0,
+  technical_work: 0,
 };
 
 export function SeoActivitiesSection() {
@@ -303,7 +303,7 @@ export function SeoActivitiesSection() {
 
           <SeoActivitiesTable
             type={listQuery.type}
-            rows={rows as TSeoActivityBlog[] | TSeoActivityBacklink[] | TSeoActivityWebChange[]}
+            rows={rows as TSeoActivityBlog[] | TSeoActivityBacklink[] | TSeoActivityTechnicalWork[]}
             page={page}
             perPage={perPage}
             total={total}

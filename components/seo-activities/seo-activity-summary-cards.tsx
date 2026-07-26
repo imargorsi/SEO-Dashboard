@@ -3,9 +3,9 @@
 import type { CSSProperties } from "react";
 import type { IconType } from "react-icons";
 import {
+  IoConstructOutline,
   IoDocumentTextOutline,
   IoFolderOpenOutline,
-  IoGlobeOutline,
   IoLinkOutline,
 } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
@@ -32,8 +32,8 @@ const METRIC_THEME: Record<TSeoActivitySummaryMetric["id"], TMetricTheme> = {
     icon: IoLinkOutline,
     accent: "var(--color-secondary)",
   },
-  web_changes: {
-    icon: IoGlobeOutline,
+  technical_work: {
+    icon: IoConstructOutline,
     accent: "var(--status-invited)",
   },
   total: {

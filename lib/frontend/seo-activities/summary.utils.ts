@@ -3,7 +3,7 @@ import type { TSeoActivityTypeCounts } from "@/types/seo-activity.types";
 export type TSeoActivitySummaryMetricId =
   | "blogs"
   | "backlinks"
-  | "web_changes"
+  | "technical_work"
   | "total";
 
 export type TSeoActivitySummaryMetric = {
@@ -24,8 +24,8 @@ export function buildSeoActivityRangeStatsFromCounts(
     metrics: [
       { id: "blogs", value: counts.blogs },
       { id: "backlinks", value: counts.backlinks },
-      { id: "web_changes", value: counts.web_changes },
-      { id: "total", value: counts.blogs + counts.backlinks + counts.web_changes },
+      { id: "technical_work", value: counts.technical_work },
+      { id: "total", value: counts.blogs + counts.backlinks + counts.technical_work },
     ],
   };
 }

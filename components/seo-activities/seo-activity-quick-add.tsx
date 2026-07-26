@@ -21,14 +21,14 @@ import type {
   TSeoActivityBacklink,
   TSeoActivityBlog,
   TSeoActivityType,
-  TSeoActivityWebChange,
+  TSeoActivityTechnicalWork,
 } from "@/types/seo-activity.types";
 import { cn } from "@/lib/utils";
 
 export type TSeoActivityEditorTarget = {
   mode: "create" | "edit";
   type: TSeoActivityType;
-  row?: TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityWebChange;
+  row?: TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityTechnicalWork;
 };
 
 type TSeoActivityQuickAddProps = {
@@ -128,27 +128,29 @@ export function SeoActivityQuickAdd({
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={descriptionId}
-        className="relative z-10 flex max-h-[min(92vh,40rem)] w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-border bg-bg-card shadow-(--shadow)"
+        className="relative z-10 flex max-h-[min(92vh,40rem)] w-full max-w-lg flex-col overflow-hidden rounded-2xl border-2 border-text-muted/45 bg-bg-card shadow-(--shadow)"
       >
-        <header className="relative shrink-0 border-b border-border px-5 pb-4 pt-5 sm:px-6">
+        <header className="relative flex shrink-0 flex-col gap-4 border-b border-border px-5 pb-5 pt-5 sm:px-6">
           <button
             type="button"
             onClick={() => onOpenChange(false)}
-            className="absolute inset-e-3 top-3 rounded-lg p-1.5 text-text-muted transition-colors hover:bg-bg-hover hover:text-text-primary"
+            className="absolute inset-e-3 top-3 rounded-lg p-2 text-text-muted transition-colors hover:bg-bg-hover hover:text-text-primary"
           >
             <IoClose className="size-4" aria-hidden />
             <span className="sr-only">{t("close")}</span>
           </button>
 
-          <h2 id={titleId} className="type-title pe-8 text-text-primary">
-            {isEdit ? t("editTitle") : t("title")}
-          </h2>
-          <p id={descriptionId} className="mt-1 type-caption text-text-muted">
-            {isEdit ? t("editLead") : t("lead")}
-          </p>
+          <div className="flex flex-col gap-1.5 pe-10">
+            <h2 id={titleId} className="type-title text-text-primary">
+              {isEdit ? t("editTitle") : t("title")}
+            </h2>
+            <p id={descriptionId} className="type-caption text-text-muted">
+              {isEdit ? t("editLead") : t("lead")}
+            </p>
+          </div>
 
           <div
-            className="mt-4 inline-flex w-full max-w-full flex-wrap items-center gap-1 rounded-2xl border border-border bg-bg-input p-1"
+            className="inline-flex w-full max-w-full flex-wrap items-center gap-1 rounded-xl border border-border bg-bg-input p-1"
             role="tablist"
             aria-label={t("tabsAriaLabel")}
           >
@@ -163,9 +165,9 @@ export function SeoActivityQuickAdd({
                   disabled={isEdit && !isActive}
                   onClick={() => onTypeChange(option)}
                   className={cn(
-                    "min-w-0 flex-1 rounded-xl px-3 py-2 type-label transition-colors",
+                    "min-w-0 flex-1 rounded-lg px-3 py-2 type-label transition-colors",
                     isActive
-                      ? "bg-brand text-text-on-brand"
+                      ? "bg-brand text-text-on-brand shadow-xs"
                       : "text-text-secondary hover:bg-bg-hover hover:text-text-primary",
                     isEdit && !isActive && "pointer-events-none opacity-40",
                   )}
@@ -211,7 +213,7 @@ export function SeoActivityQuickAdd({
               />
             ) : null}
 
-            {type === "web_changes" ? (
+            {type === "technical_work" ? (
               <Input
                 id="seo-quick-add-details"
                 type="textarea"
@@ -254,22 +256,22 @@ export function SeoActivityQuickAdd({
             />
           </div>
 
-          <footer className="flex shrink-0 flex-col-reverse gap-2 border-t border-border px-5 py-4 sm:flex-row sm:items-center sm:justify-end sm:px-6">
+          <footer className="flex shrink-0 flex-col-reverse gap-2.5 border-t border-border px-5 py-4 sm:flex-row sm:items-center sm:justify-end sm:gap-3 sm:px-6">
             <Button
               type="button"
-              variant="outline"
-              size="md"
+              variant="outlined"
+              size="lg"
               onClick={() => onOpenChange(false)}
-              className="w-full sm:w-auto"
+              className="w-full sm:min-w-28 sm:w-auto"
             >
               {t("cancel")}
             </Button>
             <Button
               type="submit"
               variant="gradient"
-              size="md"
+              size="lg"
               disabled={isSubmitting}
-              className="w-full sm:min-w-36 sm:w-auto"
+              className="w-full sm:min-w-28 sm:w-auto"
             >
               {isEdit ? t("save") : t("submit")}
             </Button>

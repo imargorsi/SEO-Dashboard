@@ -12,6 +12,7 @@
     "seed": "npx tsx --env-file=.env.local scripts/seed.ts",
     "migrate:project-statuses": "npx tsx --env-file=.env.local scripts/migrate-project-statuses.ts",
     "migrate:user-statuses": "npx tsx --env-file=.env.local scripts/migrate-user-statuses.ts",
+    "migrate:seo-activity-types": "npx tsx --env-file=.env.local scripts/migrate-seo-activity-types.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },

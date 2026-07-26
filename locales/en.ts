@@ -615,13 +615,13 @@ export interface Translation {
         ariaLabel: string;
         blogs: string;
         backlinks: string;
-        web_changes: string;
+        technical_work: string;
       };
       summary: {
         cards: {
           blogs: string;
           backlinks: string;
-          web_changes: string;
+          technical_work: string;
           total: string;
         };
       };
@@ -713,7 +713,7 @@ export interface Translation {
         tabs: {
           blogs: string;
           backlinks: string;
-          web_changes: string;
+          technical_work: string;
         };
         fields: {
           title: string;
@@ -740,12 +740,12 @@ export interface Translation {
         success: {
           blogs: string;
           backlinks: string;
-          web_changes: string;
+          technical_work: string;
         };
         updateSuccess: {
           blogs: string;
           backlinks: string;
-          web_changes: string;
+          technical_work: string;
         };
         createErrorFallback: string;
         updateErrorFallback: string;
@@ -1584,13 +1584,13 @@ const translation: Translation = {
         ariaLabel: "SEO Activity Type",
         blogs: "Blogs",
         backlinks: "Backlinks",
-        web_changes: "Web Change",
+        technical_work: "Technical Work",
       },
       summary: {
         cards: {
           blogs: "Blogs Published",
           backlinks: "Backlinks Gained",
-          web_changes: "Web Changes",
+          technical_work: "Technical Work",
           total: "Total Activities",
         },
       },
@@ -1648,9 +1648,9 @@ const translation: Translation = {
         colDate: "Date",
         colBlogDetails: "Blog Details",
         colBacklinkDetails: "Backlink Details",
-        colChangeDetails: "Change Details",
+        colChangeDetails: "Work Details",
         colBlogLink: "Blog Link",
-        colUrls: "Urls",
+        colUrls: "Links",
         colPageLink: "Page Link",
         colActions: "Actions",
         editActivity: "Edit Activity",
@@ -1682,22 +1682,22 @@ const translation: Translation = {
         tabs: {
           blogs: "Blogs",
           backlinks: "Backlinks",
-          web_changes: "Web Change",
+          technical_work: "Technical Work",
         },
         fields: {
           title: "Blog Title",
           titlePh: "How To Improve Local SEO Rankings",
           anchorText: "Anchor Text",
           anchorTextPh: "Best SEO Agency",
-          details: "Change Details",
+          details: "Work Details",
           detailsPh: "Updated Meta Description On Services Page",
-          url: "Url",
+          url: "Link",
           urlPh: "https://example.com/page",
           occurredOn: "Date",
         },
         validation: {
           required: "This Field Is Required.",
-          url: "Enter A Valid Http Or Https Url.",
+          url: "Enter A Valid Http Or Https Link.",
           date: "Enter A Valid Date.",
           minTitle: "Use At Least 3 Characters.",
           minAnchor: "Use At Least 2 Characters.",
@@ -1709,12 +1709,12 @@ const translation: Translation = {
         success: {
           blogs: "Blog Activity Added.",
           backlinks: "Backlink Activity Added.",
-          web_changes: "Web Change Activity Added.",
+          technical_work: "Technical Work Activity Added.",
         },
         updateSuccess: {
           blogs: "Blog Activity Updated.",
           backlinks: "Backlink Activity Updated.",
-          web_changes: "Web Change Activity Updated.",
+          technical_work: "Technical Work Activity Updated.",
         },
         createErrorFallback: "Could Not Create Activity. Try Again.",
         updateErrorFallback: "Could Not Update Activity. Try Again.",

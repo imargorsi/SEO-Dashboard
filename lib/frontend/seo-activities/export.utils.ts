@@ -3,7 +3,7 @@ import type {
   TSeoActivityBacklink,
   TSeoActivityBlog,
   TSeoActivityType,
-  TSeoActivityWebChange,
+  TSeoActivityTechnicalWork,
 } from "@/types/seo-activity.types";
 
 export type TSeoActivityExportLabels = {
@@ -14,7 +14,7 @@ export type TSeoActivityExportLabels = {
   details: string;
 };
 
-type TSeoActivityExportRow = TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityWebChange;
+type TSeoActivityExportRow = TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityTechnicalWork;
 
 function escapeCsvCell(value: string): string {
   if (/[",\n\r]/.test(value)) {
@@ -60,7 +60,7 @@ function buildExportTable(
 
   return {
     headers: [labels.date, labels.details, labels.url],
-    values: (rows as TSeoActivityWebChange[]).map((row) => [
+    values: (rows as TSeoActivityTechnicalWork[]).map((row) => [
       row.occurredOn ?? "",
       row.details ?? "",
       row.url ?? "",

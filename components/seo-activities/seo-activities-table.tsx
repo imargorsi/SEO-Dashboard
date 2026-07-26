@@ -8,21 +8,21 @@ import type {
   TSeoActivityBacklink,
   TSeoActivityBlog,
   TSeoActivityType,
-  TSeoActivityWebChange,
+  TSeoActivityTechnicalWork,
 } from "@/types/seo-activity.types";
 
 type TSeoActivityTableRow = (
   | TSeoActivityBlog
   | TSeoActivityBacklink
-  | TSeoActivityWebChange
+  | TSeoActivityTechnicalWork
 ) &
   Record<string, unknown>;
 
-type TSeoActivityRow = TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityWebChange;
+type TSeoActivityRow = TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityTechnicalWork;
 
 type TSeoActivitiesTableProps = {
   type: TSeoActivityType;
-  rows: TSeoActivityBlog[] | TSeoActivityBacklink[] | TSeoActivityWebChange[];
+  rows: TSeoActivityBlog[] | TSeoActivityBacklink[] | TSeoActivityTechnicalWork[];
   page: number;
   perPage: number;
   total: number;

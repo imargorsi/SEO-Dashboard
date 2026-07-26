@@ -15,10 +15,10 @@ import type {
   TSeoActivityBacklink,
   TSeoActivityBlog,
   TSeoActivityType,
-  TSeoActivityWebChange,
+  TSeoActivityTechnicalWork,
 } from "@/types/seo-activity.types";
 
-type TSeoActivityRow = TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityWebChange;
+type TSeoActivityRow = TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityTechnicalWork;
 
 type TUseSeoActivitiesTableColumnsOptions = {
   type: TSeoActivityType;
@@ -147,7 +147,7 @@ export function useSeoActivitiesTableColumns({
       return columns;
     }
 
-    const columns: TAppTableColumn<TSeoActivityWebChange>[] = [
+    const columns: TAppTableColumn<TSeoActivityTechnicalWork>[] = [
       {
         key: "occurredOn",
         label: t("colDate"),
@@ -167,7 +167,7 @@ export function useSeoActivitiesTableColumns({
         render: (item) => <SeoActivityLinkCell href={item.url} />,
       },
     ];
-    if (actionsColumn) columns.push(actionsColumn as TAppTableColumn<TSeoActivityWebChange>);
+    if (actionsColumn) columns.push(actionsColumn as TAppTableColumn<TSeoActivityTechnicalWork>);
     return columns;
   }, [canDelete, canUpdate, onDelete, onEdit, t, type]);
 }

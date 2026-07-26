@@ -1,4 +1,4 @@
-export const SEO_ACTIVITY_TYPES = ["blogs", "backlinks", "web_changes"] as const;
+export const SEO_ACTIVITY_TYPES = ["blogs", "backlinks", "technical_work"] as const;
 
 export type TSeoActivityType = (typeof SEO_ACTIVITY_TYPES)[number];
 
@@ -28,14 +28,14 @@ export type TSeoActivityBacklink = {
   occurredOn: string | null;
 };
 
-export type TSeoActivityWebChange = {
+export type TSeoActivityTechnicalWork = {
   id: string;
   url: string | null;
   details: string | null;
   occurredOn: string | null;
 };
 
-export type TSeoActivityRow = TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityWebChange;
+export type TSeoActivityRow = TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityTechnicalWork;
 
 export type TSeoActivityTypeCounts = Record<TSeoActivityType, number>;
 
@@ -68,7 +68,7 @@ export type TPaginatedSeoActivities = {
 
 export function toSeoActivityTableRow(
   item: TSeoActivityDto,
-): TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityWebChange {
+): TSeoActivityBlog | TSeoActivityBacklink | TSeoActivityTechnicalWork {
   if (item.activityType === "blogs") {
     return {
       id: item.id,

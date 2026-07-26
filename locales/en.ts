@@ -611,6 +611,7 @@ export interface Translation {
     };
     seoActivities: {
       title: string;
+      subtitle: string;
       typeFilter: {
         ariaLabel: string;
         blogs: string;
@@ -630,12 +631,12 @@ export interface Translation {
         presetsHeading: string;
         presets: {
           all: string;
-          today: string;
-          yesterday: string;
-          last_7_days: string;
+          last_15_days: string;
           last_30_days: string;
-          this_month: string;
           last_month: string;
+          this_month: string;
+          last_year: string;
+          this_year: string;
         };
         months: [
           string,
@@ -1580,6 +1581,7 @@ const translation: Translation = {
     },
     seoActivities: {
       title: "SEO Activities",
+      subtitle: "Track Blogs, Backlinks, And Technical Work For The Selected Project.",
       typeFilter: {
         ariaLabel: "SEO Activity Type",
         blogs: "Blogs",
@@ -1590,8 +1592,8 @@ const translation: Translation = {
         cards: {
           blogs: "Blogs Published",
           backlinks: "Backlinks Gained",
-          technical_work: "Technical Work",
-          total: "Total Activities",
+          technical_work: "Technical Work Issues Fixed",
+          total: "All Activities Total",
         },
       },
       dateFilter: {
@@ -1599,12 +1601,12 @@ const translation: Translation = {
         presetsHeading: "Quick Ranges",
         presets: {
           all: "All Time",
-          today: "Today",
-          yesterday: "Yesterday",
-          last_7_days: "Last 7 Days",
+          last_15_days: "Last 15 Days",
           last_30_days: "Last 30 Days",
-          this_month: "This Month",
           last_month: "Last Month",
+          this_month: "This Month",
+          last_year: "Last Year",
+          this_year: "This Year",
         },
         months: [
           "January",

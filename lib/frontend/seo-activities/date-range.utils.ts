@@ -5,21 +5,21 @@ export type TDateRange = {
 
 export type TDateRangePresetId =
   | "all"
-  | "today"
-  | "yesterday"
-  | "last_7_days"
+  | "last_15_days"
   | "last_30_days"
+  | "last_month"
   | "this_month"
-  | "last_month";
+  | "last_year"
+  | "this_year";
 
 export const DATE_RANGE_PRESET_IDS: readonly TDateRangePresetId[] = [
   "all",
-  "today",
-  "yesterday",
-  "last_7_days",
+  "last_15_days",
   "last_30_days",
-  "this_month",
   "last_month",
+  "this_month",
+  "last_year",
+  "this_year",
 ] as const;
 
 function toIsoDate(date: Date): string {
@@ -60,26 +60,32 @@ export function resolveDateRangePreset(preset: TDateRangePresetId, now = new Dat
   const today = startOfDay(now);
 
   switch (preset) {
-    case "today":
-      return { from: toIsoDate(today), to: toIsoDate(today) };
-    case "yesterday": {
-      const yesterday = addDays(today, -1);
-      return { from: toIsoDate(yesterday), to: toIsoDate(yesterday) };
-    }
-    case "last_7_days":
-      return { from: toIsoDate(addDays(today, -6)), to: toIsoDate(today) };
+    case "last_15_days":
+      return { from: toIsoDate(addDays(today, -14)), to: toIsoDate(today) };
     case "last_30_days":
       return { from: toIsoDate(addDays(today, -29)), to: toIsoDate(today) };
-    case "this_month":
-      return {
-        from: toIsoDate(new Date(today.getFullYear(), today.getMonth(), 1)),
-        to: toIsoDate(today),
-      };
     case "last_month": {
       const start = new Date(today.getFullYear(), today.getMonth() - 1, 1);
       const end = new Date(today.getFullYear(), today.getMonth(), 0);
       return { from: toIsoDate(start), to: toIsoDate(end) };
     }
+    case "this_month":
+      return {
+        from: toIsoDate(new Date(today.getFullYear(), today.getMonth(), 1)),
+        to: toIsoDate(today),
+      };
+    case "last_year": {
+      const year = today.getFullYear() - 1;
+      return {
+        from: toIsoDate(new Date(year, 0, 1)),
+        to: toIsoDate(new Date(year, 11, 31)),
+      };
+    }
+    case "this_year":
+      return {
+        from: toIsoDate(new Date(today.getFullYear(), 0, 1)),
+        to: toIsoDate(today),
+      };
     case "all":
     default:
       return { from: null, to: null };

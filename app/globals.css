@@ -662,6 +662,46 @@ code {
   }
 }
 
+/* SEO summary sparkline — soft wave drift + fill breathe (path morph is SMIL in the component) */
+@keyframes seo-sparkline-wave {
+  0%,
+  100% {
+    transform: translate3d(0, 0.6px, 0);
+  }
+  50% {
+    transform: translate3d(-5px, -0.8px, 0);
+  }
+}
+
+@keyframes seo-sparkline-fill-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+.seo-sparkline-wave {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: seo-sparkline-wave 8s ease-in-out infinite;
+  animation-delay: var(--seo-spark-delay, 0s);
+}
+
+.seo-sparkline-area-live {
+  animation: seo-sparkline-fill-breathe 8s ease-in-out infinite;
+  animation-delay: var(--seo-spark-delay, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seo-sparkline-wave,
+  .seo-sparkline-area-live {
+    animation: none;
+  }
+}
+
 .auth-icon-float {
   animation: auth-icon-float 7s ease-in-out infinite;
 }

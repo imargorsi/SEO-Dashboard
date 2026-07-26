@@ -13,6 +13,7 @@ import {
 import { SeoActivitySummaryCards } from "@/components/seo-activities/seo-activity-summary-cards";
 import { SeoActivityTypeFilter } from "@/components/seo-activities/seo-activity-type-filter";
 import { Heading } from "@/components/heading";
+import { Paragraph } from "@/components/paragraph";
 import { EmptyState } from "@/components/ui/empty-state";
 import { AlertDialogCancel } from "@/components/ui/alert-dialog";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -259,30 +260,29 @@ export function SeoActivitiesSection() {
   return (
     <div className="w-full min-w-0">
       <div className="space-y-5 px-4 py-6 sm:px-6">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <Heading id="seo-activities-title" pageTitle>
-            {t("title")}
-          </Heading>
-          {canCreate ? (
-            <Button
-              type="button"
-              variant="gradient"
-              size="md"
-              onClick={openCreate}
-              className="shrink-0 self-start sm:self-auto"
-            >
-              <IoAdd className="size-4" aria-hidden />
-              {t("quickAdd.trigger")}
-            </Button>
-          ) : null}
-        </div>
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="space-y-1">
+            <Heading id="seo-activities-title" pageTitle>
+              {t("title")}
+            </Heading>
+            <Paragraph className="text-text-muted">{t("subtitle")}</Paragraph>
+          </div>
 
-        <SeoActivityTypeFilter
-          activeType={listQuery.type}
-          counts={counts}
-          onTypeChange={onTypeChange}
-          className="self-start"
-        />
+          <div className="flex flex-wrap items-center justify-end gap-3">
+            <SeoActivityTypeFilter
+              activeType={listQuery.type}
+              counts={counts}
+              onTypeChange={onTypeChange}
+            />
+
+            {canCreate ? (
+              <Button type="button" variant="gradient" size="md" onClick={openCreate} className="shrink-0">
+                <IoAdd className="size-4" aria-hidden />
+                {t("quickAdd.trigger")}
+              </Button>
+            ) : null}
+          </div>
+        </div>
 
         <SeoActivitySummaryCards metrics={metrics} />
 

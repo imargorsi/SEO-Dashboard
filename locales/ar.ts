@@ -613,6 +613,7 @@ const translation: Translation = {
     },
     seoActivities: {
       title: "أنشطة السيو",
+      subtitle: "تتبع المدونات والروابط الخلفية والعمل التقني للمشروع المحدد.",
       typeFilter: {
         ariaLabel: "نوع نشاط السيو",
         blogs: "المدونات",
@@ -623,8 +624,8 @@ const translation: Translation = {
         cards: {
           blogs: "المدونات المنشورة",
           backlinks: "الروابط المكتسبة",
-          technical_work: "العمل التقني",
-          total: "إجمالي الأنشطة",
+          technical_work: "مشاكل العمل التقني التي تم إصلاحها",
+          total: "إجمالي كل الأنشطة",
         },
       },
       dateFilter: {
@@ -632,12 +633,12 @@ const translation: Translation = {
         presetsHeading: "نطاقات سريعة",
         presets: {
           all: "كل الوقت",
-          today: "اليوم",
-          yesterday: "أمس",
-          last_7_days: "آخر 7 أيام",
+          last_15_days: "آخر 15 يوماً",
           last_30_days: "آخر 30 يوماً",
-          this_month: "هذا الشهر",
           last_month: "الشهر الماضي",
+          this_month: "هذا الشهر",
+          last_year: "العام الماضي",
+          this_year: "هذا العام",
         },
         months: [
           "يناير",

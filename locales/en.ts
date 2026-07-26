@@ -67,6 +67,14 @@ export interface Translation {
     categories: {
       theme: string;
     };
+    themePacks: {
+      lead: string;
+      selected: string;
+      default: string;
+      defaultDescription: string;
+      "glass-aurora": string;
+      "glass-auroraDescription": string;
+    };
   };
   profile: {
     changePassword: {
@@ -969,6 +977,15 @@ const translation: Translation = {
     categories: {
       theme: "Theme",
     },
+    themePacks: {
+      lead: "Choose A Color Theme. Your Selection Is Saved In This Browser.",
+      selected: "Selected",
+      default: "Default",
+      defaultDescription: "Orange And Purple Brand Palette For Everyday Use.",
+      "glass-aurora": "Glass Aurora",
+      "glass-auroraDescription":
+        "Premium Glassmorphism Theme With Soft Aurora Accents For A Futuristic SaaS Experience.",
+    },
   },
   profile: {
     changePassword: {
@@ -1803,8 +1820,8 @@ const translation: Translation = {
     switchToEnglish: "Switch interface to English",
   },
   theme: {
-    switchToLight: "Switch to light theme",
-    switchToDark: "Switch to dark theme",
+    switchToLight: "Switch To Light Theme",
+    switchToDark: "Switch To Dark Theme",
   },
 };
 

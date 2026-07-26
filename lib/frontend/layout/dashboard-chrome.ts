@@ -9,7 +9,7 @@ export const dashboardNavIconClass =
 
 /** Elevated card/panel surface — tuned in globals.css (`--bg-card-elevated`, `--border-elevated`, `--shadow-elevated`). */
 export const elevatedCardSurfaceClass =
-  "border border-(--border-elevated) bg-bg-card-elevated text-(--text-on-elevated) shadow-(--shadow-elevated)";
+  "border border-(--border-elevated) bg-bg-card-elevated text-(--text-on-elevated) shadow-(--shadow-elevated) backdrop-blur-md transition-shadow duration-200 hover:shadow-[0_0_0_1px_var(--accent-border)]";
 
 export const elevatedCardTitleClass = "text-(--text-on-elevated)";
 

@@ -68,6 +68,14 @@ const translation: Translation = {
     categories: {
       theme: "المظهر",
     },
+    themePacks: {
+      lead: "اختر سمة الألوان. يتم حفظ اختيارك في هذا المتصفح.",
+      selected: "محدد",
+      default: "الافتراضي",
+      defaultDescription: "لوحة ألوان البرتقالي والبنفسجي للاستخدام اليومي.",
+      "glass-aurora": "زجاج الشفق",
+      "glass-auroraDescription": "سمة زجاجية فاخرة بلمسات شفق ناعمة لتجربة SaaS مستقبلية.",
+    },
   },
   profile: {
     changePassword: {

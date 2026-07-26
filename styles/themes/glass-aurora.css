@@ -1,0 +1,204 @@
+/*
+  Glass Aurora — premium glassmorphism with soft aurora accents.
+  Status colors are NOT overridden (fixed in app/globals.css).
+  Card elevation: soft shadow + translucent card surfaces.
+*/
+
+html[data-theme="glass-aurora"] {
+  --color-contrast: #f6f8ff;
+  --color-primary: #e9edff;
+  --color-secondary: #4f8cff;
+  --color-brand-primary: #8204ff;
+  --brand: var(--color-secondary);
+
+  --gradient-mid: #6b5cff;
+  --gradient-button: linear-gradient(90deg, #4f8cff, #8204ff);
+  --gradient-button-hover: linear-gradient(
+    90deg,
+    color-mix(in srgb, #4f8cff 88%, white 12%),
+    color-mix(in srgb, #8204ff 88%, white 12%)
+  );
+  --gradient-primary: linear-gradient(135deg, #4f8cff, #6b5cff, #8204ff);
+  --glow-brand: rgba(79, 140, 255, 0.26);
+  --motion-btn-bg: var(--gradient-button);
+
+  --bg-main: #f9fbff;
+  --bg-sidebar: #eef2ff;
+  --bg-card: #ffffffb3;
+  --bg-card-elevated: #ffffffb3;
+  --border-elevated: color-mix(in srgb, var(--color-brand-primary) 12%, var(--color-primary) 88%);
+  --shadow-elevated: 0 1px 2px rgba(11, 16, 32, 0.03), 0 6px 16px rgba(79, 140, 255, 0.06);
+  --bg-input: color-mix(in srgb, var(--color-primary) 55%, white 45%);
+  --bg-hover: var(--color-primary);
+  --bg-selected: color-mix(in srgb, var(--color-secondary) 12%, transparent);
+  --bg-divider: color-mix(in srgb, #0b1020 8%, transparent);
+
+  --text-primary: #0b1020;
+  --text-secondary: color-mix(in srgb, #0b1020 72%, transparent);
+  --text-muted: #6b7280;
+  --text-placeholder: color-mix(in srgb, #6b7280 85%, transparent);
+  --text-disabled: color-mix(in srgb, #6b7280 55%, transparent);
+  --text-on-brand: #ffffff;
+  --text-on-elevated: var(--text-primary);
+  --text-on-elevated-secondary: var(--text-secondary);
+  --text-on-elevated-muted: var(--text-muted);
+
+  --btn-secondary-bg: var(--color-primary);
+  --btn-secondary-bg-hover: color-mix(in srgb, var(--color-primary) 82%, var(--color-secondary) 18%);
+  --btn-secondary-fg: color-mix(in srgb, #0b1020 82%, transparent);
+  --btn-disabled-bg: color-mix(in srgb, #0b1020 12%, transparent);
+  --btn-disabled-fg: var(--text-disabled);
+
+  --border: var(--bg-divider);
+  --code-bg: color-mix(in srgb, var(--bg-input) 92%, var(--color-secondary) 8%);
+  --accent: var(--bg-hover);
+  --accent-muted: color-mix(in srgb, var(--color-secondary) 45%, var(--text-primary) 55%);
+  --accent-bg: var(--bg-selected);
+  --accent-border: color-mix(in srgb, var(--color-secondary) 40%, transparent);
+  --social-bg: color-mix(in srgb, var(--bg-sidebar) 70%, transparent);
+  --shadow: rgba(11, 16, 32, 0.07) 0 10px 15px -3px, rgba(11, 16, 32, 0.04) 0 4px 6px -2px;
+  --hero-mesh-opacity: 0.3;
+  --motion-orbit-color: var(--color-secondary);
+
+  --overlay: color-mix(in srgb, #0b1020 48%, transparent);
+  --overlay-strong: color-mix(in srgb, #0b1020 56%, transparent);
+  --surface-inverse: color-mix(in srgb, #0b1020 75%, transparent);
+  --surface-inverse-hover: color-mix(in srgb, var(--text-on-brand) 15%, transparent);
+  --text-inverse: var(--text-on-brand);
+  --ring-inverse: color-mix(in srgb, var(--text-on-brand) 60%, transparent);
+  --text-ghost: color-mix(in srgb, var(--text-primary) 65%, transparent);
+  --text-ghost-hover: var(--text-primary);
+  --surface-ghost-hover: color-mix(in srgb, var(--text-primary) 10%, transparent);
+  --ring-ghost: color-mix(in srgb, var(--text-primary) 25%, transparent);
+  --surface-chrome-pill: var(--social-bg);
+  --border-chrome-pill: var(--border);
+  --shadow-chrome-pill: none;
+  --text-chrome-muted: var(--text-muted);
+  --surface-panel-header: color-mix(in srgb, var(--social-bg) 40%, var(--bg-elevated));
+
+  --auth-video-scrim: color-mix(in srgb, #0b1020 30%, transparent);
+  --auth-form-bg: var(--bg-card);
+  --auth-form-border: var(--border);
+  --auth-form-ring: transparent;
+  --auth-form-shadow: var(--shadow-elevated);
+  --auth-form-highlight: var(--gradient-button);
+
+  --background: var(--bg-main);
+  --foreground: var(--text-primary);
+  --primary: var(--color-secondary);
+  --ring: var(--color-secondary);
+  --chart-1: var(--color-secondary);
+  --chart-2: color-mix(in srgb, var(--color-secondary) 65%, var(--color-primary) 35%);
+  --chart-3: #0b1020;
+  --chart-4: color-mix(in srgb, var(--color-secondary) 50%, white 50%);
+  --chart-5: color-mix(in srgb, var(--color-primary) 70%, white 30%);
+  --sidebar: var(--bg-sidebar);
+  --sidebar-primary: var(--color-secondary);
+  --sidebar-ring: var(--color-secondary);
+
+  background: var(--bg-main);
+  color: var(--text-secondary);
+}
+
+html.dark[data-theme="glass-aurora"] {
+  --color-contrast: #0a0f1f;
+  --color-primary: #151a2f;
+  --color-secondary: #5ea0ff;
+  --color-brand-primary: #8204ff;
+  --brand: var(--color-secondary);
+
+  --gradient-mid: #6b5cff;
+  --gradient-button: linear-gradient(90deg, #5ea0ff, #8204ff);
+  --gradient-button-hover: linear-gradient(
+    90deg,
+    color-mix(in srgb, #5ea0ff 88%, white 12%),
+    color-mix(in srgb, #8204ff 88%, white 12%)
+  );
+  --gradient-primary: linear-gradient(135deg, #5ea0ff, #6b5cff, #8204ff);
+  --glow-brand: rgba(94, 160, 255, 0.3);
+  --motion-btn-bg: var(--gradient-button);
+
+  /* Distinct from Default dark (#1a1628) — deep blue-black */
+  --bg-main: #060a18;
+  --bg-sidebar: #0a1028;
+  --bg-card: #151a2fa6;
+  --bg-card-elevated: #151a2fa6;
+  --border-elevated: color-mix(in srgb, var(--color-secondary) 18%, transparent);
+  --shadow-elevated:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 1px 2px rgba(0, 0, 0, 0.16),
+    0 4px 14px rgba(94, 160, 255, 0.06);
+  --bg-input: color-mix(in srgb, var(--color-primary) 90%, black 10%);
+  --bg-hover: color-mix(in srgb, var(--color-primary) 72%, white 14%);
+  --bg-selected: color-mix(in srgb, var(--color-secondary) 14%, transparent);
+  --bg-divider: rgba(255, 255, 255, 0.07);
+
+  --text-primary: #e6ebff;
+  --text-secondary: color-mix(in srgb, #e6ebff 78%, transparent);
+  --text-muted: #9aa3b2;
+  --text-placeholder: color-mix(in srgb, #9aa3b2 80%, transparent);
+  --text-disabled: color-mix(in srgb, #9aa3b2 45%, transparent);
+  --text-on-brand: #ffffff;
+  --text-on-elevated: var(--text-primary);
+  --text-on-elevated-secondary: var(--text-secondary);
+  --text-on-elevated-muted: var(--text-muted);
+
+  --btn-secondary-bg: color-mix(in srgb, var(--color-primary) 88%, black 12%);
+  --btn-secondary-bg-hover: var(--bg-hover);
+  --btn-secondary-fg: color-mix(in srgb, #e6ebff 82%, transparent);
+  --btn-disabled-bg: color-mix(in srgb, var(--color-primary) 55%, transparent);
+  --btn-disabled-fg: var(--text-disabled);
+
+  --border: var(--bg-divider);
+  --code-bg: color-mix(in srgb, var(--bg-input) 88%, black 12%);
+  --accent: var(--bg-hover);
+  --accent-muted: color-mix(in srgb, var(--color-secondary) 70%, white 30%);
+  --accent-bg: var(--bg-selected);
+  --accent-border: color-mix(in srgb, var(--color-secondary) 35%, transparent);
+  --social-bg: color-mix(in srgb, var(--bg-sidebar) 72%, transparent);
+  --shadow: rgba(0, 0, 0, 0.22) 0 8px 16px -4px, rgba(0, 0, 0, 0.14) 0 3px 6px -2px;
+  --hero-mesh-opacity: 0.26;
+  --motion-orbit-color: color-mix(in srgb, var(--color-secondary) 90%, white 10%);
+
+  --surface-chrome-pill: color-mix(in srgb, var(--color-contrast) 78%, transparent);
+  --border-chrome-pill: color-mix(in srgb, var(--text-on-brand) 28%, transparent);
+  --shadow-chrome-pill: inset 0 1px 0 color-mix(in srgb, var(--text-on-brand) 10%, transparent);
+  --text-chrome-muted: var(--text-muted);
+  --surface-panel-header: color-mix(in srgb, var(--text-on-brand) 4%, var(--bg-elevated));
+
+  --auth-video-scrim: color-mix(in srgb, var(--color-contrast) 40%, transparent);
+  --auth-form-bg: var(--bg-card);
+  --auth-form-border: var(--border);
+  --auth-form-ring: transparent;
+  --auth-form-shadow: var(--shadow-elevated);
+  --auth-form-highlight: var(--gradient-button);
+
+  color-scheme: dark;
+
+  --background: var(--bg-main);
+  --foreground: var(--text-primary);
+  --card: var(--bg-card);
+  --card-foreground: var(--text-primary);
+  --popover: var(--bg-card-elevated);
+  --popover-foreground: var(--text-on-elevated);
+  --primary: var(--color-secondary);
+  --primary-foreground: var(--text-on-brand);
+  --secondary: var(--btn-secondary-bg);
+  --secondary-foreground: var(--btn-secondary-fg);
+  --muted: var(--bg-hover);
+  --muted-foreground: var(--text-muted);
+  --accent-foreground: var(--text-primary);
+  --input: var(--bg-input);
+  --ring: var(--color-secondary);
+  --sidebar: var(--bg-sidebar);
+  --sidebar-foreground: var(--text-primary);
+  --sidebar-primary: var(--color-secondary);
+  --sidebar-primary-foreground: var(--text-on-brand);
+  --sidebar-accent: var(--bg-hover);
+  --sidebar-accent-foreground: var(--text-primary);
+  --sidebar-border: var(--bg-divider);
+  --sidebar-ring: var(--color-secondary);
+
+  background: var(--bg-main);
+  color: var(--text-secondary);
+}

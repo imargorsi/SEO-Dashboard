@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "shadcn/tailwind.css";
 @import "sonner/dist/styles.css";
+@import "../styles/themes/default.css";
+@import "../styles/themes/glass-aurora.css";
 
 @font-face {
   font-family: "Plus Jakarta Sans Fallback";
@@ -15,13 +17,14 @@
 }
 
 /*
-  Design tokens — style guide source of truth.
-  Hex / rgba live only here. Components must use CSS vars or theme utilities.
+  Design tokens — default pack lives in `:root` / `.dark`.
+  Additional packs override the same variable names via `html[data-theme="…"]`
+  (see `styles/themes/`). Pack selectors must beat `:root` / `.dark` specificity.
 */
 
 :root {
   /*
-    Base palette — three surface hex values per mode.
+    Base palette — three surface hex values per mode (+ brand purple for gradients).
     contrast: deepest surface / ink
     primary: elevated surfaces (cards, panels)
     secondary: accent orange
@@ -50,7 +53,7 @@
   --bg-card: #ffffff;
   --bg-card-elevated: #ffffff;
   --border-elevated: color-mix(in srgb, var(--color-brand-primary) 14%, var(--color-primary) 86%);
-  --shadow-elevated: 0 1px 2px rgba(26, 22, 40, 0.04), 0 10px 24px rgba(130, 4, 255, 0.07);
+  --shadow-elevated: 0 1px 2px rgba(26, 22, 40, 0.03), 0 6px 16px rgba(130, 4, 255, 0.05);
   --bg-input: color-mix(in srgb, var(--color-primary) 55%, white 45%);
   --bg-hover: var(--color-primary);
   --bg-selected: color-mix(in srgb, var(--color-secondary) 10%, transparent);
@@ -196,9 +199,11 @@
   --bg-card: var(--color-primary);
   --bg-card-elevated: var(--bg-card);
   --border-elevated: var(--border);
+  /* Soft lift only — heavy black halos read muddy on dark surfaces */
   --shadow-elevated:
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    0 12px 28px rgba(0, 0, 0, 0.32);
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 1px 2px rgba(0, 0, 0, 0.18),
+    0 4px 12px rgba(0, 0, 0, 0.12);
   --bg-input: color-mix(in srgb, var(--color-primary) 95%, black 5%);
   --bg-hover: color-mix(in srgb, var(--color-primary) 72%, white 28%);
   --bg-selected: color-mix(in srgb, var(--color-secondary) 15%, transparent);
@@ -229,7 +234,7 @@
   --accent-bg: var(--bg-selected);
   --accent-border: color-mix(in srgb, var(--color-secondary) 45%, transparent);
   --social-bg: color-mix(in srgb, var(--bg-sidebar) 72%, transparent);
-  --shadow: rgba(0, 0, 0, 0.45) 0 12px 18px -4px, rgba(0, 0, 0, 0.28) 0 6px 8px -3px;
+  --shadow: rgba(0, 0, 0, 0.22) 0 8px 16px -4px, rgba(0, 0, 0, 0.14) 0 3px 6px -2px;
   --hero-mesh-opacity: 0.22;
   --motion-orbit-color: color-mix(in srgb, var(--color-secondary) 90%, white 10%);
   --destructive: #f87171;

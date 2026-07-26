@@ -1,0 +1,142 @@
+/*
+  Theme pack template — copy to `{slug}.css` and replace PLACEHOLDER.
+
+  Designer minimum (per mode): 4 base colors
+    --color-contrast
+    --color-primary
+    --color-secondary
+    --color-brand-primary
+
+  See doc/theme-packs.md for the full designer sheet and engineer checklist.
+
+  Selectors must beat `:root` / `.dark`:
+    html[data-theme="PLACEHOLDER"]
+    html.dark[data-theme="PLACEHOLDER"]
+*/
+
+html[data-theme="PLACEHOLDER"] {
+  /* —— Base (required) —— */
+  --color-contrast: #1a1628;
+  --color-primary: #ebe8f1;
+  --color-secondary: #ff7952;
+  --color-brand-primary: #8204ff;
+  --brand: var(--color-secondary);
+
+  --gradient-mid: color-mix(in srgb, var(--color-secondary) 35%, var(--color-brand-primary) 65%);
+  --gradient-button: linear-gradient(90deg, var(--color-secondary), var(--color-brand-primary));
+  --gradient-button-hover: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--color-secondary) 88%, white 12%),
+    color-mix(in srgb, var(--color-brand-primary) 88%, white 12%)
+  );
+  --gradient-primary: linear-gradient(135deg, var(--color-secondary), var(--gradient-mid), var(--color-brand-primary));
+  --glow-brand: color-mix(in srgb, var(--color-secondary) 22%, transparent);
+  --motion-btn-bg: var(--gradient-button);
+
+  /* —— Surfaces (override when derived look is wrong) —— */
+  --bg-main: #faf9fc;
+  --bg-sidebar: color-mix(in srgb, var(--bg-main) 65%, var(--color-primary) 35%);
+  --bg-card: #ffffff;
+  --bg-card-elevated: #ffffff;
+  --border-elevated: color-mix(in srgb, var(--color-brand-primary) 14%, var(--color-primary) 86%);
+  --shadow-elevated: 0 1px 2px rgba(26, 22, 40, 0.03), 0 6px 16px color-mix(in srgb, var(--color-brand-primary) 5%, transparent);
+  --bg-input: color-mix(in srgb, var(--color-primary) 55%, white 45%);
+  --bg-hover: var(--color-primary);
+  --bg-selected: color-mix(in srgb, var(--color-secondary) 10%, transparent);
+  --bg-divider: color-mix(in srgb, var(--color-contrast) 8%, transparent);
+
+  /* —— Text —— */
+  --text-primary: var(--color-contrast);
+  --text-secondary: color-mix(in srgb, var(--color-contrast) 72%, transparent);
+  --text-muted: color-mix(in srgb, var(--color-contrast) 50%, transparent);
+  --text-placeholder: color-mix(in srgb, var(--color-contrast) 35%, transparent);
+  --text-disabled: color-mix(in srgb, var(--color-contrast) 20%, transparent);
+  --text-on-brand: #ffffff;
+  --text-on-elevated: var(--text-primary);
+  --text-on-elevated-secondary: var(--text-secondary);
+  --text-on-elevated-muted: var(--text-muted);
+
+  /* —— Buttons / accents —— */
+  --btn-secondary-bg: var(--color-primary);
+  --btn-secondary-bg-hover: color-mix(in srgb, var(--color-primary) 82%, var(--color-secondary) 18%);
+  --btn-secondary-fg: color-mix(in srgb, var(--color-contrast) 82%, transparent);
+  --btn-disabled-bg: color-mix(in srgb, var(--color-contrast) 12%, transparent);
+  --btn-disabled-fg: var(--text-disabled);
+
+  --border: var(--bg-divider);
+  --accent: var(--bg-hover);
+  --accent-muted: color-mix(in srgb, var(--color-secondary) 55%, var(--text-primary) 45%);
+  --accent-bg: var(--bg-selected);
+  --accent-border: color-mix(in srgb, var(--color-secondary) 45%, transparent);
+  --social-bg: color-mix(in srgb, var(--bg-sidebar) 70%, transparent);
+
+  /* —— Status: DO NOT override — fixed globally in app/globals.css —— */
+
+  /* —— shadcn bridges —— */
+  --primary: var(--color-secondary);
+  --ring: var(--color-secondary);
+  --sidebar-primary: var(--color-secondary);
+  --sidebar-ring: var(--color-secondary);
+}
+
+html.dark[data-theme="PLACEHOLDER"] {
+  --color-contrast: #1a1628;
+  --color-primary: #2c2745;
+  --color-secondary: #ff7952;
+  --color-brand-primary: #8204ff;
+  --brand: var(--color-secondary);
+
+  --gradient-mid: color-mix(in srgb, var(--color-secondary) 35%, var(--color-brand-primary) 65%);
+  --gradient-button: linear-gradient(90deg, var(--color-secondary), var(--color-brand-primary));
+  --gradient-button-hover: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--color-secondary) 88%, white 12%),
+    color-mix(in srgb, var(--color-brand-primary) 88%, white 12%)
+  );
+  --gradient-primary: linear-gradient(135deg, var(--color-secondary), var(--gradient-mid), var(--color-brand-primary));
+  --glow-brand: color-mix(in srgb, var(--color-secondary) 25%, transparent);
+  --motion-btn-bg: var(--gradient-button);
+
+  --bg-main: var(--color-contrast);
+  --bg-sidebar: var(--color-contrast);
+  --bg-card: var(--color-primary);
+  --bg-card-elevated: var(--bg-card);
+  --border-elevated: var(--border);
+  --shadow-elevated:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 1px 2px rgba(0, 0, 0, 0.18),
+    0 4px 12px rgba(0, 0, 0, 0.12);
+  --bg-input: color-mix(in srgb, var(--color-primary) 95%, black 5%);
+  --bg-hover: color-mix(in srgb, var(--color-primary) 72%, white 28%);
+  --bg-selected: color-mix(in srgb, var(--color-secondary) 15%, transparent);
+  --bg-divider: rgba(255, 255, 255, 0.06);
+
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.72);
+  --text-muted: rgba(255, 255, 255, 0.5);
+  --text-placeholder: rgba(255, 255, 255, 0.35);
+  --text-disabled: rgba(255, 255, 255, 0.2);
+  --text-on-brand: #ffffff;
+  --text-on-elevated: var(--text-primary);
+  --text-on-elevated-secondary: var(--text-secondary);
+  --text-on-elevated-muted: var(--text-muted);
+
+  --btn-secondary-bg: color-mix(in srgb, var(--color-primary) 85%, black 15%);
+  --btn-secondary-bg-hover: var(--bg-hover);
+  --btn-secondary-fg: rgba(255, 255, 255, 0.82);
+  --btn-disabled-bg: color-mix(in srgb, var(--color-primary) 55%, transparent);
+  --btn-disabled-fg: var(--text-disabled);
+
+  --border: var(--bg-divider);
+  --accent: var(--bg-hover);
+  --accent-bg: var(--bg-selected);
+  --accent-border: color-mix(in srgb, var(--color-secondary) 45%, transparent);
+  --social-bg: color-mix(in srgb, var(--bg-sidebar) 72%, transparent);
+
+  --primary: var(--color-secondary);
+  --ring: var(--color-secondary);
+  --sidebar-primary: var(--color-secondary);
+  --sidebar-ring: var(--color-secondary);
+
+  color-scheme: dark;
+}

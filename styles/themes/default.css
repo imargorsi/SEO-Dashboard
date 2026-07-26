@@ -1,0 +1,7 @@
+/*
+  Default theme pack — orange / purple brand.
+  Token values live in `app/globals.css` (`:root` = light, `.dark` = dark).
+  Applied when `data-theme` is missing or `default`.
+
+  To author a new pack, copy `_pack-template.css` and follow `doc/theme-packs.md`.
+*/

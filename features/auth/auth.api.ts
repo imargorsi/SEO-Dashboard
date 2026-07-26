@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { baseQuery } from "@/lib/frontend/api/base";
 import { ApiError } from "@/lib/frontend/api/errors";
 import { clearAuthSession, getAccessToken, getStoredAuthUser, persistAuthSession, setStoredAuthUser } from "@/lib/frontend/auth/session";
+import { analyticsKeys } from "@/features/analytics/analytics.api";
 import {
   normalizeAuthUser,
   type AuthMessageResult,
@@ -128,6 +129,7 @@ export function useLoginMutation() {
     onSuccess: (result) => {
       persistAuthSession(result.token, result.user);
       queryClient.setQueryData(authKeys.user(), result.user);
+      queryClient.removeQueries({ queryKey: analyticsKeys.all });
     },
   });
 }
@@ -140,6 +142,8 @@ export function useLogoutMutation() {
     onSettled: () => {
       clearAuthSession();
       queryClient.removeQueries({ queryKey: authKeys.all });
+      // Drop analytics cache so integration metadata cannot leak across users on a shared browser.
+      queryClient.removeQueries({ queryKey: analyticsKeys.all });
     },
   });
 }

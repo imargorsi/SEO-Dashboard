@@ -1,7 +1,7 @@
 import type { IconType } from "react-icons";
-import { IoColorPaletteOutline } from "react-icons/io5";
+import { IoColorPaletteOutline, IoLinkOutline } from "react-icons/io5";
 
-export const SETTINGS_CATEGORY_IDS = ["theme"] as const;
+export const SETTINGS_CATEGORY_IDS = ["theme", "integrations"] as const;
 
 export type TSettingsCategoryId = (typeof SETTINGS_CATEGORY_IDS)[number];
 
@@ -20,6 +20,12 @@ export const SETTINGS_CATEGORIES: readonly TSettingsCategory[] = [
     labelKey: "theme",
     icon: IoColorPaletteOutline,
     requiresSuperAdmin: false,
+  },
+  {
+    id: "integrations",
+    labelKey: "integrations",
+    icon: IoLinkOutline,
+    requiresSuperAdmin: true,
   },
 ];
 

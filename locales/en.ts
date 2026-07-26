@@ -66,6 +66,7 @@ export interface Translation {
     categoriesHeading: string;
     categories: {
       theme: string;
+      integrations: string;
     };
     themePacks: {
       sectionTitle: string;
@@ -92,6 +93,56 @@ export interface Translation {
       nunitoDescription: string;
       inter: string;
       interDescription: string;
+    };
+    integrations: {
+      lead: string;
+      projectContext: string;
+      selectProjectTitle: string;
+      selectProjectBody: string;
+      refresh: string;
+      connect: string;
+      update: string;
+      disconnect: string;
+      propertyLabel: string;
+      propertyPlaceholder: string;
+      propertyRequired: string;
+      gscPropertyPlaceholder: string;
+      ga4PropertyPlaceholder: string;
+      lastSynced: string;
+      connectSuccess: string;
+      connectError: string;
+      updateSuccess: string;
+      updateError: string;
+      disconnectSuccess: string;
+      disconnectError: string;
+      syncSuccess: string;
+      syncError: string;
+      confirmCancel: string;
+      confirmConnectTitle: string;
+      confirmConnectBody: string;
+      confirmConnect: string;
+      confirmUpdateTitle: string;
+      confirmUpdateBody: string;
+      confirmUpdate: string;
+      confirmDisconnectTitle: string;
+      confirmDisconnectBody: string;
+      confirmDisconnect: string;
+      confirmRefreshTitle: string;
+      confirmRefreshBody: string;
+      confirmRefresh: string;
+      services: {
+        gsc: string;
+        ga4: string;
+      };
+      serviceLead: {
+        gsc: string;
+        ga4: string;
+      };
+      status: {
+        connected: string;
+        disconnected: string;
+        error: string;
+      };
     };
   };
   profile: {
@@ -612,6 +663,37 @@ export interface Translation {
     };
     analytics: {
       title: string;
+      subtitle: string;
+      selectProjectTitle: string;
+      selectProjectBody: string;
+      noAccessTitle: string;
+      noAccessBody: string;
+      loadError: string;
+      dateFrom: string;
+      dateTo: string;
+      summary: {
+        clicks: string;
+        impressions: string;
+        ctr: string;
+        position: string;
+        sessions: string;
+        organicSessions: string;
+      };
+      tables: {
+        topQueries: string;
+        topPages: string;
+        geoTraffic: string;
+        dimension: string;
+        clicks: string;
+        impressions: string;
+        ctr: string;
+        position: string;
+        sessions: string;
+        users: string;
+        loading: string;
+        emptyTitle: string;
+        emptyBody: string;
+      };
     };
     seoActivities: {
       title: string;
@@ -1035,6 +1117,7 @@ const translation: Translation = {
     categoriesHeading: "Categories",
     categories: {
       theme: "Theme",
+      integrations: "Integrations",
     },
     themePacks: {
       sectionTitle: "Color Theme",
@@ -1064,6 +1147,56 @@ const translation: Translation = {
       nunitoDescription: "Rounded Soft Sans For A Friendly, Approachable Interface Feel.",
       inter: "Inter",
       interDescription: "Modern UI Sans Optimized For Dense Screens And Long Reading.",
+    },
+    integrations: {
+      lead: "Link Search Console And GA4 Properties For The Selected Project. Only Platform Admins Can Manage These Connections.",
+      projectContext: "Selected Project: {{name}}",
+      selectProjectTitle: "Select A Project",
+      selectProjectBody: "Choose A Project From The Sidebar Before Linking Google Properties.",
+      refresh: "Refresh Data",
+      connect: "Connect",
+      update: "Update",
+      disconnect: "Disconnect",
+      propertyLabel: "Property",
+      propertyPlaceholder: "Select A Property",
+      propertyRequired: "Property Id Is Required.",
+      gscPropertyPlaceholder: "https://example.com/",
+      ga4PropertyPlaceholder: "properties/123456789",
+      lastSynced: "Last Synced {{value}}",
+      connectSuccess: "Integration Connected.",
+      connectError: "Failed To Connect Integration.",
+      updateSuccess: "Integration Updated.",
+      updateError: "Failed To Update Integration.",
+      disconnectSuccess: "Integration Disconnected.",
+      disconnectError: "Failed To Disconnect Integration.",
+      syncSuccess: "Analytics Sync Completed.",
+      syncError: "Failed To Sync Analytics.",
+      confirmCancel: "Cancel",
+      confirmConnectTitle: "Connect Property?",
+      confirmConnectBody: "Link This {{service}} Property To The Selected Project And Start Syncing Cached Analytics.",
+      confirmConnect: "Connect Property",
+      confirmUpdateTitle: "Update Property?",
+      confirmUpdateBody: "Replace The Linked {{service}} Property For This Project. Cached Analytics For The Previous Property Will Be Cleared And A Fresh Backfill Will Start.",
+      confirmUpdate: "Update Property",
+      confirmDisconnectTitle: "Disconnect Property?",
+      confirmDisconnectBody: "Remove The {{service}} Link For This Project And Clear Cached Analytics For That Source.",
+      confirmDisconnect: "Disconnect",
+      confirmRefreshTitle: "Refresh Analytics Data?",
+      confirmRefreshBody: "Pull The Latest Search Console And GA4 Metrics For This Project. Manual Refresh Is Limited To Once Per Hour.",
+      confirmRefresh: "Refresh Data",
+      services: {
+        gsc: "Search Console",
+        ga4: "Google Analytics 4",
+      },
+      serviceLead: {
+        gsc: "Connect The Search Console Property Used For Organic Search Performance.",
+        ga4: "Connect The GA4 Property Used For Sessions And Traffic Breakdowns.",
+      },
+      status: {
+        connected: "Connected",
+        disconnected: "Disconnected",
+        error: "Error",
+      },
     },
   },
   profile: {
@@ -1588,6 +1721,37 @@ const translation: Translation = {
     },
     analytics: {
       title: "Analytics",
+      subtitle: "Search Console And Analytics Performance For The Selected Project.",
+      selectProjectTitle: "Select A Project",
+      selectProjectBody: "Choose A Project From The Sidebar To View Analytics.",
+      noAccessTitle: "Analytics Access Required",
+      noAccessBody: "You Do Not Have Permission To View Analytics For This Project.",
+      loadError: "Failed To Load Analytics.",
+      dateFrom: "From",
+      dateTo: "To",
+      summary: {
+        clicks: "Clicks",
+        impressions: "Impressions",
+        ctr: "CTR",
+        position: "Avg Position",
+        sessions: "Sessions",
+        organicSessions: "Organic Sessions",
+      },
+      tables: {
+        topQueries: "Top Queries",
+        topPages: "Top Pages",
+        geoTraffic: "Geographic Traffic",
+        dimension: "Dimension",
+        clicks: "Clicks",
+        impressions: "Impressions",
+        ctr: "CTR",
+        position: "Position",
+        sessions: "Sessions",
+        users: "Users",
+        loading: "Loading…",
+        emptyTitle: "No Analytics Rows",
+        emptyBody: "Connect Integrations And Sync To Populate This Table.",
+      },
     },
     seoActivities: {
       title: "SEO Activities",

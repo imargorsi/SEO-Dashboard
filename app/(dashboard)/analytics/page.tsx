@@ -1,5 +1,12 @@
-import { PlaceholderPage } from "@/components/migration/placeholder-page";
+import { Suspense } from "react";
+
+import { DashboardPageSkeleton } from "@/components/skeletons/dashboard-page-skeleton";
+import { AnalyticsSection } from "@/sections/analytics-section";
 
 export default function AnalyticsPage() {
-  return <PlaceholderPage title="Analytics" />;
+  return (
+    <Suspense fallback={<DashboardPageSkeleton variant="list" />}>
+      <AnalyticsSection />
+    </Suspense>
+  );
 }

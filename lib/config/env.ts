@@ -33,4 +33,22 @@ export const env = {
   passwordResetExpireMinutes: () => Number(optional("PASSWORD_RESET_EXPIRE", "60")),
   passwordResetThrottleSeconds: () => Number(optional("PASSWORD_RESET_THROTTLE", "60")),
   emailVerificationExpireMinutes: () => Number(optional("EMAIL_VERIFICATION_EXPIRE", "60")),
+  /** Protects `/api/v1/cron/*` routes. */
+  cronSecret: () => optional("CRON_SECRET"),
+  /**
+   * Google Service Account — either JSON blob or email + private key.
+   * Private key may use `\n` escaped newlines in env files.
+   */
+  googleServiceAccountJson: () => optional("GOOGLE_SERVICE_ACCOUNT_JSON"),
+  googleServiceAccountEmail: () => optional("GOOGLE_SERVICE_ACCOUNT_EMAIL"),
+  googleServiceAccountPrivateKey: () => {
+    const raw = optional("GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY");
+    return raw.replace(/\\n/g, "\n");
+  },
+  googleConfigured: () => {
+    if (optional("GOOGLE_SERVICE_ACCOUNT_JSON")) return true;
+    return Boolean(
+      optional("GOOGLE_SERVICE_ACCOUNT_EMAIL") && optional("GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY"),
+    );
+  },
 };

@@ -258,6 +258,11 @@ const translation: Translation = {
         emptyTitle: "لا توجد مشاريع تطابق هذا التصفية",
         emptyBody: "جرّب حالة أخرى أو اعرض كل المشاريع.",
       },
+      viewMode: {
+        ariaLabel: "تخطيط المشاريع",
+        cards: "عرض البطاقات",
+        table: "عرض الجدول",
+      },
       cardActions: {
         approve: "موافقة",
         decline: "رفض",
@@ -506,6 +511,7 @@ const translation: Translation = {
         colId: "المعرّف",
         colBusinessName: "اسم النشاط",
         colWebsite: "الموقع",
+        colStatus: "الحالة",
         colBusinessType: "نوع النشاط",
         colActions: "إجراءات",
         createProject: "إنشاء مشروع",

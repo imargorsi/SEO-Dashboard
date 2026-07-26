@@ -257,6 +257,11 @@ export interface Translation {
         emptyTitle: string;
         emptyBody: string;
       };
+      viewMode: {
+        ariaLabel: string;
+        cards: string;
+        table: string;
+      };
       cardActions: {
         approve: string;
         decline: string;
@@ -504,6 +509,7 @@ export interface Translation {
         colId: string;
         colBusinessName: string;
         colWebsite: string;
+        colStatus: string;
         colBusinessType: string;
         colActions: string;
         createProject: string;
@@ -1169,6 +1175,11 @@ const translation: Translation = {
         emptyTitle: "No Projects Match This Filter",
         emptyBody: "Try Another Status Or View All Projects.",
       },
+      viewMode: {
+        ariaLabel: "Projects Layout",
+        cards: "Cards View",
+        table: "Table View",
+      },
       cardActions: {
         approve: "Approve",
         decline: "Decline",
@@ -1417,8 +1428,9 @@ const translation: Translation = {
       table: {
         toolbarHint: "Projects in your workspace.",
         colId: "ID",
-        colBusinessName: "Business name",
+        colBusinessName: "Business Name",
         colWebsite: "Website",
+        colStatus: "Status",
         colBusinessType: "Business type",
         colActions: "Actions",
         createProject: "Create Project",

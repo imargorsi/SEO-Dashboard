@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
@@ -10,7 +11,9 @@ import { Paragraph } from "@/components/paragraph";
 import { NoProjectComponent } from "@/components/projects/no-project-component";
 import { ProjectCard } from "@/components/projects/project-card";
 import { ProjectInvitationsBanner } from "@/components/projects/project-invitations-banner";
+import { ProjectListViewToggle } from "@/components/projects/project-list-view-toggle";
 import { ProjectStatusFilter } from "@/components/projects/project-status-filter";
+import { ProjectsTable } from "@/components/projects/projects-table";
 import { buttonVariants } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { useProjectAccess } from "@/context/project-access-context";
@@ -29,6 +32,11 @@ import {
   canEditProjectCard,
   canViewProjectCard,
 } from "@/lib/projects/project-card-access.utils";
+import {
+  DEFAULT_PROJECT_LIST_VIEW_MODE,
+  parseProjectListViewMode,
+  type TProjectListViewMode,
+} from "@/lib/frontend/projects/projects-list-view.utils";
 import { hasPermission, isSuperAdmin, mergePermissions } from "@/lib/rbac/access";
 import { PROJECT_ROUTES } from "@/lib/frontend/projects/project-routes.utils";
 import { cn } from "@/lib/utils";
@@ -42,6 +50,7 @@ export function ProjectsListSection() {
   const { projectPermissions } = useProjectAccess();
   const { queryParams, setQueryParams, deleteQueryParams } = useQueryParams();
   const statusFilter = parseProjectStatusFilter(queryParams.status);
+  const viewMode = parseProjectListViewMode(queryParams.view);
   const { data: allProjects = [], isPending: isAllProjectsPending } = useProjectsQuery({ status: null });
   const { data: filteredProjects = [], isPending: isFilteredProjectsPending } = useProjectsQuery({
     status: statusFilter ?? null,
@@ -59,19 +68,22 @@ export function ProjectsListSection() {
   const userIsSuperAdmin = isSuperAdmin(user?.roles);
   const canCreateProject = isVerified && (hasPermission(permissions, "projects.create") || !hasProjects);
 
-  function getProjectCardAccess(project: TProjectListItem) {
-    const accessInput = {
-      permissions,
-      userId: user?.id,
-      ownerId: resolveProjectOwnerId(project),
-      isSuperAdmin: userIsSuperAdmin,
-    };
+  const getProjectCardAccess = useCallback(
+    (project: TProjectListItem) => {
+      const accessInput = {
+        permissions,
+        userId: user?.id,
+        ownerId: resolveProjectOwnerId(project),
+        isSuperAdmin: userIsSuperAdmin,
+      };
 
-    return {
-      canViewDetails: canViewProjectCard(accessInput),
-      canEditProject: canEditProjectCard(accessInput),
-    };
-  }
+      return {
+        canViewDetails: canViewProjectCard(accessInput),
+        canEditProject: canEditProjectCard(accessInput),
+      };
+    },
+    [permissions, user?.id, userIsSuperAdmin],
+  );
 
   function onStatusFilterChange(nextStatus: ProjectStatus | null) {
     if (!nextStatus) {
@@ -80,6 +92,14 @@ export function ProjectsListSection() {
     }
 
     setQueryParams({ status: nextStatus });
+  }
+
+  function onViewModeChange(nextMode: TProjectListViewMode) {
+    if (nextMode === DEFAULT_PROJECT_LIST_VIEW_MODE) {
+      deleteQueryParams(["view"]);
+      return;
+    }
+    setQueryParams({ view: nextMode });
   }
 
   async function onResendVerification() {
@@ -112,6 +132,10 @@ export function ProjectsListSection() {
               />
             ) : null}
 
+            {hasProjects ? (
+              <ProjectListViewToggle viewMode={viewMode} onViewModeChange={onViewModeChange} />
+            ) : null}
+
             {canCreateProject && hasProjects ? (
               <Link
                 href={PROJECT_ROUTES.create}
@@ -127,7 +151,16 @@ export function ProjectsListSection() {
         <ProjectInvitationsBanner />
 
         {isPending ? (
-          <CardGridSkeleton />
+          viewMode === "table" ? (
+            <ProjectsTable
+              projects={[]}
+              isLoading
+              isSuperAdmin={userIsSuperAdmin}
+              getAccess={getProjectCardAccess}
+            />
+          ) : (
+            <CardGridSkeleton />
+          )
         ) : !hasProjects ? (
           <NoProjectComponent
             variant={isVerified ? "no-projects" : "email-not-verified"}
@@ -140,6 +173,13 @@ export function ProjectsListSection() {
             title={t("statusFilter.emptyTitle")}
             description={t("statusFilter.emptyBody")}
             icon={IoFilterOutline}
+          />
+        ) : viewMode === "table" ? (
+          <ProjectsTable
+            projects={projectItems}
+            isLoading={false}
+            isSuperAdmin={userIsSuperAdmin}
+            getAccess={getProjectCardAccess}
           />
         ) : (
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">

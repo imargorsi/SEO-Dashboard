@@ -4,16 +4,35 @@
 @import "../styles/themes/default.css";
 @import "../styles/themes/glass-aurora.css";
 
-@font-face {
-  font-family: "Plus Jakarta Sans Fallback";
-  src: local("Arial");
-}
-
 /* Class-based dark mode for Tailwind `dark:` utilities */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*
+  Font packs — next/font sets --font-jakarta / --font-ubuntu / --font-nunito / --font-inter on <html>.
+  Selection: html[data-font="…"] (bootstrap + FontPackProvider). Do not set data-font in React JSX.
+*/
+:root {
+  --font-app-stack: var(--font-jakarta), "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+}
+
+html[data-font="jakarta"] {
+  --font-app-stack: var(--font-jakarta), "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+}
+
+html[data-font="ubuntu"] {
+  --font-app-stack: var(--font-ubuntu), "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+}
+
+html[data-font="nunito"] {
+  --font-app-stack: var(--font-nunito), "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+}
+
+html[data-font="inter"] {
+  --font-app-stack: var(--font-inter), "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+}
+
 @theme {
-  --font-sans: "Plus Jakarta Sans", "Plus Jakarta Sans Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-sans: var(--font-app-stack);
 }
 
 /*
@@ -137,8 +156,8 @@
   --auth-form-shadow: var(--shadow-elevated);
   --auth-form-highlight: var(--gradient-button);
 
-  --sans: "Plus Jakarta Sans", "Plus Jakarta Sans Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
-  --heading: "Plus Jakarta Sans", "Plus Jakarta Sans Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+  --sans: var(--font-app-stack);
+  --heading: var(--font-app-stack);
   --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
 
   font: 16px/150% var(--sans);
@@ -285,9 +304,6 @@
 }
 
 html[dir="rtl"] {
-  --font-sans: "Plus Jakarta Sans", "Plus Jakarta Sans Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Tahoma, sans-serif;
-  --sans: "Plus Jakarta Sans", "Plus Jakarta Sans Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Tahoma, sans-serif;
-  --heading: "Plus Jakarta Sans", "Plus Jakarta Sans Fallback", "Noto Sans Arabic", ui-sans-serif, system-ui, "Segoe UI", Tahoma, sans-serif;
   letter-spacing: 0.01em;
 }
 

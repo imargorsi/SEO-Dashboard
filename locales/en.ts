@@ -68,12 +68,26 @@ export interface Translation {
       theme: string;
     };
     themePacks: {
+      sectionTitle: string;
       lead: string;
       selected: string;
       default: string;
       defaultDescription: string;
       "glass-aurora": string;
       "glass-auroraDescription": string;
+    };
+    fontPacks: {
+      sectionTitle: string;
+      lead: string;
+      selected: string;
+      jakarta: string;
+      jakartaDescription: string;
+      ubuntu: string;
+      ubuntuDescription: string;
+      nunito: string;
+      nunitoDescription: string;
+      inter: string;
+      interDescription: string;
     };
   };
   profile: {
@@ -1003,6 +1017,7 @@ const translation: Translation = {
       theme: "Theme",
     },
     themePacks: {
+      sectionTitle: "Color Theme",
       lead: "Choose A Color Theme. Your Selection Is Saved In This Browser.",
       selected: "Selected",
       default: "Default",
@@ -1010,6 +1025,19 @@ const translation: Translation = {
       "glass-aurora": "Glass Aurora",
       "glass-auroraDescription":
         "Premium Glassmorphism Theme With Soft Aurora Accents For A Futuristic SaaS Experience.",
+    },
+    fontPacks: {
+      sectionTitle: "Font",
+      lead: "Choose A Typeface For The Dashboard. Your Selection Is Saved In This Browser.",
+      selected: "Selected",
+      jakarta: "Plus Jakarta Sans",
+      jakartaDescription: "Default Modern Sans — Clear And Friendly For Everyday Dashboard Use.",
+      ubuntu: "Ubuntu",
+      ubuntuDescription: "Humanist Sans With Warm Character For A Distinctive Product Voice.",
+      nunito: "Nunito",
+      nunitoDescription: "Rounded Soft Sans For A Friendly, Approachable Interface Feel.",
+      inter: "Inter",
+      interDescription: "Modern UI Sans Optimized For Dense Screens And Long Reading.",
     },
   },
   profile: {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
@@ -9,16 +9,17 @@ import { ProjectDetailHeader } from "@/components/projects/detail/project-detail
 import { ProjectDetailHero } from "@/components/projects/detail/project-detail-hero";
 import { ProjectDetailMainContent } from "@/components/projects/detail/project-detail-main-content";
 import { ProjectDetailSidebar } from "@/components/projects/detail/project-detail-sidebar";
+import { ProjectInviteUsersQuickAdd } from "@/components/projects/project-invite-users-quick-add";
 import { EmptyState } from "@/components/ui/empty-state";
 import { LoadingState } from "@/components/ui/loading-state";
-import { useProjectAccess } from "@/context/project-access-context";
 import { IoFolderOpenOutline, IoWarningOutline } from "react-icons/io5";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
-import { useProjectQuery } from "@/features/projects/projects.api";
+import { useProjectAccessQuery, useProjectQuery } from "@/features/projects/projects.api";
 import { ApiError } from "@/lib/frontend/api/errors";
 import { resolveProjectOwnerId } from "@/lib/projects/project-owner-id.utils";
 import {
   canEditProjectCard,
+  canInviteProjectMembers,
   canViewProjectCard,
 } from "@/lib/projects/project-card-access.utils";
 import { isSuperAdmin, mergePermissions } from "@/lib/rbac/access";
@@ -29,13 +30,16 @@ export function ProjectDetailSection() {
   const { t } = useTranslation("translation", { keyPrefix: "modules.projects.detail" });
   const { t: tRoot } = useTranslation("translation");
   const { data: user } = useAuthUserQuery();
-  const { projectPermissions } = useProjectAccess();
+  const userIsSuperAdmin = isSuperAdmin(user?.roles);
+  const { data: projectAccess } = useProjectAccessQuery(projectId, {
+    enabled: Boolean(user && projectId) && !userIsSuperAdmin,
+  });
   const { data: project, isPending, isError, error } = useProjectQuery(projectId, {
     enabled: Boolean(user && projectId),
   });
+  const [isInviteOpen, setIsInviteOpen] = useState(false);
 
-  const permissions = mergePermissions(user?.permissions ?? [], projectPermissions);
-  const userIsSuperAdmin = isSuperAdmin(user?.roles);
+  const permissions = mergePermissions(user?.permissions ?? [], projectAccess?.permissions ?? []);
 
   const projectOwnerId = project ? resolveProjectOwnerId(project) : null;
 
@@ -54,6 +58,16 @@ export function ProjectDetailSection() {
         userId: user?.id,
         ownerId: projectOwnerId,
         isSuperAdmin: userIsSuperAdmin,
+      })
+    : false;
+
+  const canInvite = project
+    ? canInviteProjectMembers({
+        permissions,
+        userId: user?.id,
+        ownerId: projectOwnerId,
+        isSuperAdmin: userIsSuperAdmin,
+        status: project.status,
       })
     : false;
 
@@ -117,7 +131,9 @@ export function ProjectDetailSection() {
           projectId={project.id}
           status={project.status}
           canEditProject={canEdit}
+          canInviteMembers={canInvite}
           isSuperAdmin={userIsSuperAdmin}
+          onInviteUsers={() => setIsInviteOpen(true)}
         />
 
         <ProjectDetailHero project={project} />
@@ -127,6 +143,13 @@ export function ProjectDetailSection() {
           <ProjectDetailSidebar project={project} />
         </div>
       </div>
+
+      <ProjectInviteUsersQuickAdd
+        open={isInviteOpen}
+        projectId={project.id}
+        canInvite={canInvite}
+        onOpenChange={setIsInviteOpen}
+      />
     </div>
   );
 }

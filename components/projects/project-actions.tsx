@@ -7,6 +7,7 @@ import {
   IoCloseCircleOutline,
   IoEyeOutline,
   IoPauseCircleOutline,
+  IoPersonAddOutline,
   IoPlayCircleOutline,
 } from "react-icons/io5";
 import { TbEditCircle } from "react-icons/tb";
@@ -33,6 +34,7 @@ const ACTION_ICONS: Record<TProjectCardActionId, IconType> = {
   reject: IoCloseCircleOutline,
   activate: IoPlayCircleOutline,
   deactivate: IoPauseCircleOutline,
+  inviteUsers: IoPersonAddOutline,
   viewDetails: IoEyeOutline,
   edit: TbEditCircle,
 };
@@ -43,6 +45,7 @@ type ProjectActionButtonProps = {
   isLoading: boolean;
   size: TProjectActionSize;
   onStatusAction?: (action: TProjectStatusAction) => void;
+  onInviteUsers?: () => void;
 };
 
 export function ProjectActionButton({
@@ -51,6 +54,7 @@ export function ProjectActionButton({
   isLoading,
   size,
   onStatusAction,
+  onInviteUsers,
 }: ProjectActionButtonProps) {
   const Icon = ACTION_ICONS[action.id];
   const isActionLoading = Boolean(action.action) && isLoading;
@@ -106,6 +110,10 @@ export function ProjectActionButton({
       className={surfaceClass}
       disabled={isDisabled}
       onClick={() => {
+        if (action.id === "inviteUsers") {
+          onInviteUsers?.();
+          return;
+        }
         if (action.action && onStatusAction) {
           onStatusAction(action.action);
         }
@@ -122,6 +130,8 @@ type ProjectActionsProps = {
   isSuperAdmin: boolean;
   canViewDetails?: boolean;
   canEditProject?: boolean;
+  canInviteMembers?: boolean;
+  onInviteUsers?: () => void;
   size?: TProjectActionSize;
   withCardFooter?: boolean;
   className?: string;
@@ -133,6 +143,8 @@ export function ProjectActions({
   isSuperAdmin,
   canViewDetails = false,
   canEditProject = false,
+  canInviteMembers = false,
+  onInviteUsers,
   size = "small",
   withCardFooter = false,
   className,
@@ -146,6 +158,7 @@ export function ProjectActions({
     isSuperAdmin,
     canViewDetails,
     canEditProject,
+    canInviteMembers,
   });
 
   if (actions.length === 0) return null;
@@ -164,6 +177,7 @@ export function ProjectActions({
         isLoading={isPending}
         size={size}
         onStatusAction={handleStatusAction}
+        onInviteUsers={onInviteUsers}
       />
     );
   }

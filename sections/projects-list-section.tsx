@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
@@ -10,6 +10,7 @@ import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
 import { NoProjectComponent } from "@/components/projects/no-project-component";
 import { ProjectCard } from "@/components/projects/project-card";
+import { ProjectInviteUsersQuickAdd } from "@/components/projects/project-invite-users-quick-add";
 import { ProjectInvitationsBanner } from "@/components/projects/project-invitations-banner";
 import { ProjectListViewToggle } from "@/components/projects/project-list-view-toggle";
 import { ProjectStatusFilter } from "@/components/projects/project-status-filter";
@@ -17,6 +18,7 @@ import { ProjectsTable } from "@/components/projects/projects-table";
 import { buttonVariants } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { useProjectAccess } from "@/context/project-access-context";
+import { useSelectedProject } from "@/context/selected-project-context";
 import { useAuthUserQuery, useResendEmailVerificationMutation } from "@/features/auth/auth.api";
 import { type TProjectListItem, useProjectsQuery } from "@/features/projects/projects.api";
 import { useQueryParams } from "@/hooks/use-query-params.hook";
@@ -30,6 +32,7 @@ import type { ProjectStatus } from "@/lib/projects/constants";
 import { resolveProjectOwnerId } from "@/lib/projects/project-owner-id.utils";
 import {
   canEditProjectCard,
+  canInviteProjectMembers,
   canViewProjectCard,
 } from "@/lib/projects/project-card-access.utils";
 import {
@@ -47,6 +50,7 @@ export function ProjectsListSection() {
   const { t: tVerification } = useTranslation("translation", { keyPrefix: "auth.verification" });
   const router = useRouter();
   const { data: user } = useAuthUserQuery();
+  const { selectedProject } = useSelectedProject();
   const { projectPermissions } = useProjectAccess();
   const { queryParams, setQueryParams, deleteQueryParams } = useQueryParams();
   const statusFilter = parseProjectStatusFilter(queryParams.status);
@@ -63,6 +67,7 @@ export function ProjectsListSection() {
   const isPending = statusFilter ? isFilteredProjectsPending : isAllProjectsPending;
   const statusCounts = countProjectsByStatus(allProjects);
   const isVerified = Boolean(user?.email_verified_at);
+  const [inviteProjectId, setInviteProjectId] = useState<string | null>(null);
 
   const permissions = mergePermissions(user?.permissions ?? [], projectPermissions);
   const userIsSuperAdmin = isSuperAdmin(user?.roles);
@@ -70,19 +75,34 @@ export function ProjectsListSection() {
 
   const getProjectCardAccess = useCallback(
     (project: TProjectListItem) => {
+      const ownerId = resolveProjectOwnerId(project);
       const accessInput = {
         permissions,
         userId: user?.id,
-        ownerId: resolveProjectOwnerId(project),
+        ownerId,
         isSuperAdmin: userIsSuperAdmin,
       };
+
+      /**
+       * Invite must not reuse selected-project `members.invite` on other rows (false positives).
+       * Owners / super admins always qualify; role-based invite applies only when this row is selected.
+       */
+      const invitePermissions =
+        selectedProject?.id === project.id ? permissions : (user?.permissions ?? []);
 
       return {
         canViewDetails: canViewProjectCard(accessInput),
         canEditProject: canEditProjectCard(accessInput),
+        canInviteMembers: canInviteProjectMembers({
+          permissions: invitePermissions,
+          userId: user?.id,
+          ownerId,
+          isSuperAdmin: userIsSuperAdmin,
+          status: project.status,
+        }),
       };
     },
-    [permissions, user?.id, userIsSuperAdmin],
+    [permissions, selectedProject?.id, user?.id, user?.permissions, userIsSuperAdmin],
   );
 
   function onStatusFilterChange(nextStatus: ProjectStatus | null) {
@@ -111,6 +131,12 @@ export function ProjectsListSection() {
       notify.error(ApiError.messageFrom(error, tVerification("resendErrorFallback")));
     }
   }
+
+  const inviteTarget = inviteProjectId
+    ? (projectItems.find((project) => project.id === inviteProjectId) ??
+      allProjects.find((project) => project.id === inviteProjectId) ??
+      null)
+    : null;
 
   return (
     <div className="w-full min-w-0">
@@ -157,6 +183,7 @@ export function ProjectsListSection() {
               isLoading
               isSuperAdmin={userIsSuperAdmin}
               getAccess={getProjectCardAccess}
+              onInviteUsers={setInviteProjectId}
             />
           ) : (
             <CardGridSkeleton />
@@ -180,11 +207,12 @@ export function ProjectsListSection() {
             isLoading={false}
             isSuperAdmin={userIsSuperAdmin}
             getAccess={getProjectCardAccess}
+            onInviteUsers={setInviteProjectId}
           />
         ) : (
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">
             {projectItems.map((project: TProjectListItem) => {
-              const { canViewDetails, canEditProject } = getProjectCardAccess(project);
+              const { canViewDetails, canEditProject, canInviteMembers } = getProjectCardAccess(project);
 
               return (
                 <ProjectCard
@@ -192,13 +220,24 @@ export function ProjectsListSection() {
                   project={project}
                   canViewDetails={canViewDetails}
                   canEditProject={canEditProject}
+                  canInviteMembers={canInviteMembers}
                   isSuperAdmin={userIsSuperAdmin}
+                  onInviteUsers={() => setInviteProjectId(project.id)}
                 />
               );
             })}
           </div>
         )}
       </div>
+
+      <ProjectInviteUsersQuickAdd
+        open={Boolean(inviteProjectId)}
+        projectId={inviteProjectId}
+        canInvite={inviteTarget ? getProjectCardAccess(inviteTarget).canInviteMembers : false}
+        onOpenChange={(open) => {
+          if (!open) setInviteProjectId(null);
+        }}
+      />
     </div>
   );
 }

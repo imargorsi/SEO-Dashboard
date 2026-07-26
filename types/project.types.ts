@@ -48,7 +48,7 @@ export type TProjectDetail = {
   competitorUrls: string[];
   status: ProjectStatus;
   owner: TProjectOwnerSummary | null;
-  /** Pending invites + active project_user members for Invite Users step. */
+  /** Pending invites + active project_user members for invite UI. */
   invitedUsers: TProjectInvitee[];
   createdByUserId: string;
   approvedAt: string | null;

@@ -19,7 +19,6 @@ export function ProjectCreateForm({
   initialValues,
   initialLogoUrl = null,
   readOnlyContactEmail = null,
-  initialInvitees = [],
 }: TProjectFormProps) {
   const hook = useProjectCreateForm(authUser, {
     isEdit,
@@ -27,7 +26,6 @@ export function ProjectCreateForm({
     initialValues,
     initialLogoUrl,
     readOnlyContactEmail,
-    initialInvitees,
   });
   const {
     t,

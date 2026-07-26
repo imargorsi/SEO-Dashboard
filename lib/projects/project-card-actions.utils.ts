@@ -3,7 +3,7 @@ import { PROJECT_ROUTES } from "@/lib/frontend/projects/project-routes.utils";
 
 export type TProjectStatusAction = "approve" | "reject" | "activate" | "deactivate";
 
-export type TProjectCardActionId = TProjectStatusAction | "viewDetails" | "edit";
+export type TProjectCardActionId = TProjectStatusAction | "viewDetails" | "edit" | "inviteUsers";
 
 export type TProjectCardActionTone = "success" | "warning" | "destructive" | "muted" | "brand" | "default";
 
@@ -23,7 +23,8 @@ export type TProjectCardActionLabelKey =
   | "inactive"
   | "pending"
   | "viewDetails"
-  | "editProject";
+  | "editProject"
+  | "inviteUsers";
 
 type TBuildProjectCardActionsInput = {
   status: ProjectStatus;
@@ -31,6 +32,7 @@ type TBuildProjectCardActionsInput = {
   isSuperAdmin: boolean;
   canViewDetails: boolean;
   canEditProject: boolean;
+  canInviteMembers?: boolean;
 };
 
 export function buildProjectCardActions({
@@ -39,9 +41,16 @@ export function buildProjectCardActions({
   isSuperAdmin,
   canViewDetails,
   canEditProject,
+  canInviteMembers = false,
 }: TBuildProjectCardActionsInput): TProjectCardActionConfig[] {
   const statusActions = buildStatusActions(status, isSuperAdmin);
-  const generalActions = buildGeneralActions(projectId, status, canViewDetails, canEditProject);
+  const generalActions = buildGeneralActions(
+    projectId,
+    status,
+    canViewDetails,
+    canEditProject,
+    canInviteMembers,
+  );
 
   return [...statusActions, ...generalActions];
 }
@@ -88,8 +97,18 @@ function buildGeneralActions(
   status: ProjectStatus,
   canViewDetails: boolean,
   canEditProject: boolean,
+  canInviteMembers: boolean,
 ): TProjectCardActionConfig[] {
   const actions: TProjectCardActionConfig[] = [];
+
+  if (canInviteMembers) {
+    actions.push({
+      id: "inviteUsers",
+      group: "general",
+      tone: "brand",
+      labelKey: "inviteUsers",
+    });
+  }
 
   if (canViewDetails) {
     actions.push({

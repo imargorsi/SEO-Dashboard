@@ -9,6 +9,7 @@ import {
   IoEyeOutline,
   IoPauseCircleOutline,
   IoPencil,
+  IoPersonAddOutline,
   IoPlayCircleOutline,
 } from "react-icons/io5";
 
@@ -27,12 +28,14 @@ export type TProjectTableRow = TProjectListItem & Record<string, unknown>;
 export type TProjectTableAccess = {
   canViewDetails: boolean;
   canEditProject: boolean;
+  canInviteMembers: boolean;
 };
 
 type TUseProjectsTableColumnsInput = {
   isSuperAdmin: boolean;
   getAccess: (project: TProjectListItem) => TProjectTableAccess;
   onStatusAction: (project: TProjectListItem, action: TProjectStatusAction) => void;
+  onInviteUsers: (projectId: string) => void;
   statusActionPendingProjectId?: string | null;
 };
 
@@ -40,6 +43,7 @@ export function useProjectsTableColumns({
   isSuperAdmin,
   getAccess,
   onStatusAction,
+  onInviteUsers,
   statusActionPendingProjectId = null,
 }: TUseProjectsTableColumnsInput): TAppTableColumn<TProjectTableRow>[] {
   const { t } = useTranslation("translation", { keyPrefix: "modules.projects" });
@@ -102,6 +106,7 @@ export function useProjectsTableColumns({
             isSuperAdmin,
             canViewDetails: access.canViewDetails,
             canEditProject: access.canEditProject,
+            canInviteMembers: access.canInviteMembers,
           });
           const isStatusPending = statusActionPendingProjectId === item.id;
 
@@ -117,6 +122,8 @@ export function useProjectsTableColumns({
                     <IoPlayCircleOutline className="size-4" aria-hidden />
                   ) : action.id === "deactivate" ? (
                     <IoPauseCircleOutline className="size-4" aria-hidden />
+                  ) : action.id === "inviteUsers" ? (
+                    <IoPersonAddOutline className="size-4" aria-hidden />
                   ) : action.id === "viewDetails" ? (
                     <IoEyeOutline className="size-4" aria-hidden />
                   ) : (
@@ -129,6 +136,10 @@ export function useProjectsTableColumns({
                   label: tActions(action.labelKey),
                   disabled: Boolean(action.action) && isStatusPending,
                   onClick: () => {
+                    if (action.id === "inviteUsers") {
+                      onInviteUsers(item.id);
+                      return;
+                    }
                     if (action.href) {
                       router.push(action.href);
                       return;
@@ -144,6 +155,16 @@ export function useProjectsTableColumns({
         },
       },
     ],
-    [getAccess, isSuperAdmin, onStatusAction, router, statusActionPendingProjectId, t, tActions, tCard],
+    [
+      getAccess,
+      isSuperAdmin,
+      onInviteUsers,
+      onStatusAction,
+      router,
+      statusActionPendingProjectId,
+      t,
+      tActions,
+      tCard,
+    ],
   );
 }

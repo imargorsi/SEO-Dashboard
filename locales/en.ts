@@ -270,6 +270,7 @@ export interface Translation {
         pending: string;
         viewDetails: string;
         editProject: string;
+        inviteUsers: string;
         moreActions: string;
         errorFallback: string;
         success: {
@@ -503,6 +504,24 @@ export interface Translation {
         editNotAllowedTitle: string;
         editNotAllowedBody: string;
         remove: string;
+      };
+      inviteModal: {
+        title: string;
+        lead: string;
+        leadWithProject: string;
+        close: string;
+        done: string;
+        save: string;
+        saving: string;
+        loading: string;
+        loadError: string;
+        help: string;
+        forbidden: string;
+        inviteRemoved: string;
+        inviteRemoveError: string;
+        inviteError: string;
+        inviteBatchSuccess: string;
+        inviteBatchPartialError: string;
       };
       table: {
         toolbarHint: string;
@@ -1188,6 +1207,7 @@ const translation: Translation = {
         pending: "Pending",
         viewDetails: "View Details",
         editProject: "Edit Project",
+        inviteUsers: "Invite Users",
         moreActions: "More Actions",
         errorFallback: "Could Not Update Project Status.",
         success: {
@@ -1424,6 +1444,24 @@ const translation: Translation = {
         editNotAllowedTitle: "Project Cannot Be Edited",
         editNotAllowedBody: "Rejected Projects Cannot Be Updated.",
         remove: "Remove",
+      },
+      inviteModal: {
+        title: "Invite Users",
+        lead: "Search Platform Users And Invite Them To This Project.",
+        leadWithProject: "Invite Users To {{name}}.",
+        close: "Close",
+        done: "Done",
+        save: "Send Invites",
+        saving: "Sending…",
+        loading: "Loading Project Members…",
+        loadError: "Could Not Load Project Members.",
+        help: "Only Registered, Verified Users Can Be Invited. Invitations Are Sent When You Save.",
+        forbidden: "You Do Not Have Permission To Invite Users.",
+        inviteRemoved: "Invitation Removed.",
+        inviteRemoveError: "Could Not Remove Invitation.",
+        inviteError: "Could Not Send Invitations.",
+        inviteBatchSuccess: "Invitations Were Sent.",
+        inviteBatchPartialError: "{{count}} Invitation(s) Could Not Be Sent.",
       },
       table: {
         toolbarHint: "Projects in your workspace.",

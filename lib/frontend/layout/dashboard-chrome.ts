@@ -33,18 +33,36 @@ export const sidebarBrandRowCollapsedClass = "md:px-2";
 
 /** Desktop collapse/expand control. */
 export const sidebarCollapseToggleClass =
-  "hidden w-full items-center gap-3 rounded-xl px-3 py-2.5 type-body-strong text-text-muted transition-colors hover:bg-bg-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-border) focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar md:inline-flex";
+  "group hidden w-full items-center gap-3 rounded-2xl px-2.5 py-2 type-label text-text-muted transition-colors hover:bg-bg-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-border) focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar md:inline-flex";
 
 export const sidebarCollapseToggleCollapsedClass = "md:justify-center md:px-0";
 
-/** Nav link: gradient pill for active / hover. */
+/** Circular icon well inside sidebar nav rows. */
+export const sidebarNavIconWellClass =
+  "inline-flex size-8 shrink-0 items-center justify-center rounded-full border transition-[background-color,border-color,color] duration-200";
+
+export const sidebarNavIconWellActiveClass =
+  "border-transparent bg-text-on-brand/20 text-text-on-brand";
+
+export const sidebarNavIconWellInactiveClass =
+  "border-border/80 bg-bg-card text-text-muted group-hover:border-accent-border group-hover:bg-bg-hover group-hover:text-text-primary";
+
+/** Nav link: soft pill + circular icon wells. */
 export const sidebarNavLinkClass =
-  "group relative flex items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 type-body-strong transition-[border-color,background-color,box-shadow,transform,color] duration-200 before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:border before:border-border before:opacity-0 before:transition-opacity before:duration-200 hover:before:opacity-100 hover:shadow-[inset_0_1px_0_var(--bg-hover)] active:translate-y-px active:shadow-[inset_0_2px_0_var(--bg-hover)]";
+  "group relative flex items-center gap-3 rounded-2xl px-2.5 py-2 type-label transition-[border-color,background-color,background-image,color] duration-200";
 
 export const sidebarNavLinkCollapsedClass = "md:justify-center md:gap-0 md:px-0";
 
+/** Keep gradient as background-image only — avoid border/bg-color utilities that punch holes in it. */
 export const sidebarNavLinkActiveClass =
-  "border-0 bg-gradient-button text-text-on-brand shadow-none before:opacity-0 hover:before:opacity-0";
+  "border-0 bg-gradient-button text-text-on-brand shadow-none hover:bg-gradient-button";
 
 export const sidebarNavLinkInactiveClass =
-  "text-text-secondary hover:border-border hover:bg-bg-card hover:text-text-primary";
+  "border border-transparent bg-transparent text-text-secondary hover:border-border hover:bg-bg-card/80 hover:text-text-primary";
+
+export const sidebarNavItemDividerClass = "border-b border-border/40";
+
+export const sidebarNavGroupClass = "flex flex-col gap-1";
+
+export const sidebarNavGroupLabelClass =
+  "px-2.5 pb-0.5 pt-1 type-caption-xs text-text-muted";

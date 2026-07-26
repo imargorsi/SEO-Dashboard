@@ -1,14 +1,14 @@
 import type { IconType } from "react-icons";
 import {
-  IoBarChartOutline,
-  IoDocumentTextOutline,
-  IoFolderOpenOutline,
-  IoGridOutline,
-  IoPeopleCircleOutline,
+  IoAnalyticsOutline,
+  IoBriefcaseOutline,
+  IoNewspaperOutline,
+  IoOptionsOutline,
   IoPeopleOutline,
-  IoSearchOutline,
-  IoSettingsOutline,
-  IoShieldOutline,
+  IoPersonCircleOutline,
+  IoRocketOutline,
+  IoShieldCheckmarkOutline,
+  IoSpeedometerOutline,
 } from "react-icons/io5";
 
 export type SidebarNavLabelKey =
@@ -45,7 +45,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
   {
     path: "/dashboard",
     labelKey: "dashboard",
-    icon: IoGridOutline,
+    icon: IoSpeedometerOutline,
     group: "general",
     viewPermission: "dashboard.view",
     permissionScope: "project",
@@ -53,7 +53,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
   {
     path: "/projects",
     labelKey: "projects",
-    icon: IoFolderOpenOutline,
+    icon: IoBriefcaseOutline,
     group: "general",
     viewPermission: null,
     permissionScope: "project",
@@ -61,7 +61,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
   {
     path: "/analytics",
     labelKey: "analytics",
-    icon: IoBarChartOutline,
+    icon: IoAnalyticsOutline,
     group: "general",
     viewPermission: "analytics.view",
     permissionScope: "project",
@@ -69,7 +69,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
   {
     path: "/seo-activities",
     labelKey: "seoActivities",
-    icon: IoSearchOutline,
+    icon: IoRocketOutline,
     group: "general",
     viewPermission: "seo_activities.view",
     permissionScope: "project",
@@ -85,7 +85,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
   {
     path: "/reports",
     labelKey: "reports",
-    icon: IoDocumentTextOutline,
+    icon: IoNewspaperOutline,
     group: "general",
     viewPermission: "reports.view",
     permissionScope: "project",
@@ -93,7 +93,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
   {
     path: "/users",
     labelKey: "users",
-    icon: IoPeopleCircleOutline,
+    icon: IoPersonCircleOutline,
     group: "mySpace",
     viewPermission: "admin.users.view",
     permissionScope: "platform",
@@ -101,7 +101,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
   {
     path: "/roles",
     labelKey: "rolesPermissions",
-    icon: IoShieldOutline,
+    icon: IoShieldCheckmarkOutline,
     group: "mySpace",
     viewPermission: "admin.roles.view",
     permissionScope: "platform",
@@ -109,7 +109,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
   {
     path: "/settings",
     labelKey: "settings",
-    icon: IoSettingsOutline,
+    icon: IoOptionsOutline,
     group: "mySpace",
     viewPermission: null,
     permissionScope: "platform",

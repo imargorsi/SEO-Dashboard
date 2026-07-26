@@ -15,14 +15,14 @@ export function SettingsThemePanel() {
   const { fontPack, setFontPack } = useFontPack();
 
   return (
-    <div className="flex flex-col gap-10">
-      <section className="flex flex-col gap-8">
-        <div className="space-y-2">
+    <div className="flex flex-col gap-8">
+      <section className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1">
           <h3 className="type-title text-text-primary">{tTheme("sectionTitle")}</h3>
-          <p className="type-body max-w-2xl text-text-muted">{tTheme("lead")}</p>
+          <p className="type-caption max-w-2xl text-text-muted">{tTheme("lead")}</p>
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2 sm:gap-6">
+        <div className="grid gap-3 sm:grid-cols-2">
           {THEME_PACKS.map((pack) => {
             const isSelected = themePack === pack.id;
             return (
@@ -41,13 +41,13 @@ export function SettingsThemePanel() {
         </div>
       </section>
 
-      <section className="flex flex-col gap-8">
-        <div className="space-y-2">
+      <section className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1">
           <h3 className="type-title text-text-primary">{tFont("sectionTitle")}</h3>
-          <p className="type-body max-w-2xl text-text-muted">{tFont("lead")}</p>
+          <p className="type-caption max-w-2xl text-text-muted">{tFont("lead")}</p>
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2 sm:gap-6">
+        <div className="grid gap-3 sm:grid-cols-2">
           {FONT_PACKS.map((pack) => {
             const isSelected = fontPack === pack.id;
             return (
@@ -67,6 +67,14 @@ export function SettingsThemePanel() {
         </div>
       </section>
     </div>
+  );
+}
+
+function SelectedBadge({ label }: { label: string }) {
+  return (
+    <span className="shrink-0 rounded-md border border-brand/35 bg-brand/12 px-2 py-0.5 type-caption-xs text-brand">
+      {label}
+    </span>
   );
 }
 
@@ -94,34 +102,27 @@ function ThemePackCard({
       aria-pressed={isSelected}
       data-theme-pack={packId}
       className={cn(
-        "flex w-full flex-col gap-6 rounded-2xl border px-6 py-6 text-start transition-[border-color,background-color,box-shadow] duration-200 sm:px-7 sm:py-7",
+        "flex w-full flex-col gap-1.5 rounded-xl border px-3.5 py-3 text-start transition-[border-color,background-color,box-shadow] duration-200",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-border) focus-visible:ring-offset-2 focus-visible:ring-offset-bg-card",
         isSelected
           ? "border-brand bg-bg-selected shadow-(--shadow-elevated)"
           : "border-border bg-bg-input/40 hover:border-accent-border hover:bg-bg-hover",
       )}
     >
-      <div className="flex items-start justify-between gap-4">
-        <div className="min-w-0 space-y-2.5">
-          <p className="type-body-strong text-text-primary">{title}</p>
-          <p className="type-caption leading-relaxed text-text-muted">{description}</p>
+      <div className="flex items-center gap-2.5">
+        <p className="min-w-0 flex-1 truncate type-label text-text-primary">{title}</p>
+        <div className="flex shrink-0 items-center gap-1.5" aria-hidden>
+          {swatches.map((hex) => (
+            <span
+              key={hex}
+              className="size-5 rounded-full border border-border shadow-(--shadow)"
+              style={{ backgroundColor: hex }}
+            />
+          ))}
         </div>
-        {isSelected ? (
-          <span className="shrink-0 rounded-lg border border-brand/35 bg-brand/12 px-2.5 py-1 type-caption-xs text-brand">
-            {selectedLabel}
-          </span>
-        ) : null}
+        {isSelected ? <SelectedBadge label={selectedLabel} /> : null}
       </div>
-
-      <div className="flex items-center gap-3 pt-1" aria-hidden>
-        {swatches.map((hex) => (
-          <span
-            key={hex}
-            className="size-8 rounded-full border border-border shadow-(--shadow)"
-            style={{ backgroundColor: hex }}
-          />
-        ))}
-      </div>
+      <p className="truncate type-caption text-text-muted">{description}</p>
     </button>
   );
 }
@@ -152,32 +153,25 @@ function FontPackCard({
       aria-pressed={isSelected}
       data-font-pack={packId}
       className={cn(
-        "flex w-full flex-col gap-6 rounded-2xl border px-6 py-6 text-start transition-[border-color,background-color,box-shadow] duration-200 sm:px-7 sm:py-7",
+        "flex w-full flex-col gap-1.5 rounded-xl border px-3.5 py-3 text-start transition-[border-color,background-color,box-shadow] duration-200",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-border) focus-visible:ring-offset-2 focus-visible:ring-offset-bg-card",
         isSelected
           ? "border-brand bg-bg-selected shadow-(--shadow-elevated)"
           : "border-border bg-bg-input/40 hover:border-accent-border hover:bg-bg-hover",
       )}
     >
-      <div className="flex items-start justify-between gap-4">
-        <div className="min-w-0 space-y-2.5">
-          <p className="type-body-strong text-text-primary">{title}</p>
-          <p className="type-caption leading-relaxed text-text-muted">{description}</p>
-        </div>
-        {isSelected ? (
-          <span className="shrink-0 rounded-lg border border-brand/35 bg-brand/12 px-2.5 py-1 type-caption-xs text-brand">
-            {selectedLabel}
-          </span>
-        ) : null}
+      <div className="flex items-center gap-2.5">
+        <p className="min-w-0 flex-1 truncate type-label text-text-primary">{title}</p>
+        <p
+          className="shrink-0 type-body-strong text-text-primary"
+          style={{ fontFamily: `var(${cssVariable})` }}
+          aria-hidden
+        >
+          {sample}
+        </p>
+        {isSelected ? <SelectedBadge label={selectedLabel} /> : null}
       </div>
-
-      <p
-        className="truncate type-h2 text-text-primary"
-        style={{ fontFamily: `var(${cssVariable})` }}
-        aria-hidden
-      >
-        {sample}
-      </p>
+      <p className="truncate type-caption text-text-muted">{description}</p>
     </button>
   );
 }

@@ -41,11 +41,11 @@ function ProjectOption({
       role="option"
       aria-selected={isSelected}
       onClick={onSelect}
-      className="flex w-full items-center gap-2.5 rounded-lg px-2 py-1.5 text-start transition-colors hover:bg-bg-hover"
+      className="flex w-full items-center gap-2 rounded-lg px-2 py-1 text-start transition-colors hover:bg-bg-hover"
     >
       <ProjectLogo project={project} size="sm" />
       <span className="min-w-0 flex-1">
-        <span className={cn("block truncate type-body", elevatedCardTitleClass)}>{project.businessName}</span>
+        <span className={cn("block truncate type-label", elevatedCardTitleClass)}>{project.businessName}</span>
         <span className={cn("block truncate type-caption-xs", elevatedCardMutedClass)}>
           {formatProjectHostname(project.websiteUrl)}
         </span>
@@ -88,9 +88,9 @@ export function ProjectSelector({ isCollapsed = false }: ProjectSelectorProps) {
     if (!selectedProject) return null;
 
     return (
-      <div className="shrink-0 px-2 pb-3 pt-1">
+      <div className="shrink-0 px-2 pb-2 pt-0.5">
         <div
-          className="flex items-center justify-center rounded-xl px-1 py-1"
+          className="flex items-center justify-center rounded-lg px-1 py-0.5"
           title={selectedProject.businessName}
           aria-label={t("triggerLabel", { name: selectedProject.businessName })}
         >
@@ -102,8 +102,8 @@ export function ProjectSelector({ isCollapsed = false }: ProjectSelectorProps) {
 
   if (projects.length === 0) {
     return (
-      <div className="shrink-0 px-3 pb-3 pt-1">
-        <div className={cn(elevatedCardSurfaceClass, "rounded-xl px-2.5 py-2.5")}>
+      <div className="shrink-0 px-3 pb-2 pt-0.5">
+        <div className={cn(elevatedCardSurfaceClass, "rounded-xl px-2 py-1.5")}>
           <p className={cn("type-caption", elevatedCardMutedClass)}>{t("emptyLabel")}</p>
         </div>
       </div>
@@ -112,7 +112,7 @@ export function ProjectSelector({ isCollapsed = false }: ProjectSelectorProps) {
 
   if (!selectedProject) {
     return (
-      <div className="shrink-0 px-3 pb-3 pt-1">
+      <div className="shrink-0 px-3 pb-2 pt-0.5">
         <div
           className={cn(
             elevatedCardSurfaceClass,
@@ -127,14 +127,14 @@ export function ProjectSelector({ isCollapsed = false }: ProjectSelectorProps) {
             aria-controls={listId}
             aria-label={t("selectPrompt")}
             onClick={() => setOpen((value) => !value)}
-            className="flex w-full items-center gap-2.5 px-2.5 py-2 text-start transition-colors hover:bg-bg-hover/60"
+            className="flex h-10 w-full items-center gap-2 px-2 text-start transition-colors hover:bg-bg-hover/60"
           >
             <span className="min-w-0 flex-1">
-              <span className={cn("block truncate type-body", elevatedCardMutedClass)}>{t("selectPrompt")}</span>
+              <span className={cn("block truncate type-label", elevatedCardMutedClass)}>{t("selectPrompt")}</span>
             </span>
             <IoChevronDown
               className={cn(
-                "size-4 shrink-0 transition-transform duration-300 ease-out",
+                "size-3.5 shrink-0 transition-transform duration-300 ease-out",
                 elevatedCardMutedClass,
                 open && "rotate-180",
               )}
@@ -153,9 +153,9 @@ export function ProjectSelector({ isCollapsed = false }: ProjectSelectorProps) {
                 id={listId}
                 role="listbox"
                 aria-label={t("listLabel")}
-                className="border-t border-border px-1.5 pb-1.5 pt-1"
+                className="border-t border-border px-1 pb-1 pt-0.5"
               >
-                <p className={cn("px-2 pb-1 pt-1 type-caption-xs", elevatedCardMutedClass)}>{t("listHeading")}</p>
+                <p className={cn("px-2 pb-0.5 pt-0.5 type-caption-xs", elevatedCardMutedClass)}>{t("listHeading")}</p>
                 <div className="flex flex-col gap-0.5">
                   {projects.map((project) => (
                     <ProjectOption
@@ -178,7 +178,7 @@ export function ProjectSelector({ isCollapsed = false }: ProjectSelectorProps) {
   }
 
   return (
-    <div className="shrink-0 px-3 pb-3 pt-1">
+    <div className="shrink-0 px-3 pb-2 pt-0.5">
       <div
         className={cn(
           elevatedCardSurfaceClass,
@@ -193,15 +193,17 @@ export function ProjectSelector({ isCollapsed = false }: ProjectSelectorProps) {
           aria-controls={listId}
           aria-label={t("triggerLabel", { name: selectedProject.businessName })}
           onClick={() => setOpen((value) => !value)}
-          className="flex w-full items-center gap-2.5 px-2.5 py-2 text-start transition-colors hover:bg-bg-hover/60"
+          className="flex h-10 w-full items-center gap-2 px-2 text-start transition-colors hover:bg-bg-hover/60"
         >
-          <ProjectLogo project={selectedProject} />
+          <ProjectLogo project={selectedProject} size="sm" />
           <span className="min-w-0 flex-1">
-            <span className={cn("block truncate type-body", elevatedCardTitleClass)}>{selectedProject.businessName}</span>
+            <span className={cn("block truncate type-label", elevatedCardTitleClass)}>
+              {selectedProject.businessName}
+            </span>
           </span>
           <IoChevronDown
             className={cn(
-              "size-4 shrink-0 transition-transform duration-300 ease-out",
+              "size-3.5 shrink-0 transition-transform duration-300 ease-out",
               elevatedCardMutedClass,
               open && "rotate-180",
             )}
@@ -220,9 +222,9 @@ export function ProjectSelector({ isCollapsed = false }: ProjectSelectorProps) {
               id={listId}
               role="listbox"
               aria-label={t("listLabel")}
-              className="border-t border-border px-1.5 pb-1.5 pt-1"
+              className="border-t border-border px-1 pb-1 pt-0.5"
             >
-              <p className={cn("px-2 pb-1 pt-1 type-caption-xs", elevatedCardMutedClass)}>{t("listHeading")}</p>
+              <p className={cn("px-2 pb-0.5 pt-0.5 type-caption-xs", elevatedCardMutedClass)}>{t("listHeading")}</p>
               <div className="flex flex-col gap-0.5">
                 {projects.map((project) => (
                   <ProjectOption

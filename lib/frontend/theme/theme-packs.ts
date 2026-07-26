@@ -2,7 +2,7 @@
 
 export const THEME_PACK_STORAGE_KEY = "dashboard-theme-pack";
 
-export const THEME_PACK_IDS = ["default", "glass-aurora"] as const;
+export const THEME_PACK_IDS = ["default", "glass-aurora", "carbon-ice", "ember-forge"] as const;
 
 export type TThemePackId = (typeof THEME_PACK_IDS)[number];
 
@@ -36,6 +36,18 @@ export const THEME_PACKS: readonly TThemePackMeta[] = [
     nameKey: "glass-aurora",
     descriptionKey: "glass-auroraDescription",
     swatches: ["#5ea0ff", "#8204ff", "#0a0f1f"],
+  },
+  {
+    id: "carbon-ice",
+    nameKey: "carbon-ice",
+    descriptionKey: "carbon-iceDescription",
+    swatches: ["#22d3ee", "#6366f1", "#0b0d12"],
+  },
+  {
+    id: "ember-forge",
+    nameKey: "ember-forge",
+    descriptionKey: "ember-forgeDescription",
+    swatches: ["#f59e0b", "#ea580c", "#1c1917"],
   },
 ] as const;
 

@@ -75,6 +75,10 @@ export interface Translation {
       defaultDescription: string;
       "glass-aurora": string;
       "glass-auroraDescription": string;
+      "carbon-ice": string;
+      "carbon-iceDescription": string;
+      "ember-forge": string;
+      "ember-forgeDescription": string;
     };
     fontPacks: {
       sectionTitle: string;
@@ -1041,6 +1045,12 @@ const translation: Translation = {
       "glass-aurora": "Glass Aurora",
       "glass-auroraDescription":
         "Premium Glassmorphism Theme With Soft Aurora Accents For A Futuristic SaaS Experience.",
+      "carbon-ice": "Carbon Ice",
+      "carbon-iceDescription":
+        "Cool Graphite Surfaces With Ice Cyan Accents For A Sharp Modern SaaS Look.",
+      "ember-forge": "Ember Forge",
+      "ember-forgeDescription":
+        "Warm Charcoal Surfaces With Molten Amber Copper Accents For Executive Presence.",
     },
     fontPacks: {
       sectionTitle: "Font",

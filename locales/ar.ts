@@ -76,6 +76,10 @@ const translation: Translation = {
       defaultDescription: "لوحة ألوان البرتقالي والبنفسجي للاستخدام اليومي.",
       "glass-aurora": "زجاج الشفق",
       "glass-auroraDescription": "سمة زجاجية فاخرة بلمسات شفق ناعمة لتجربة SaaS مستقبلية.",
+      "carbon-ice": "جليد الكربون",
+      "carbon-iceDescription": "أسطح جرافيت باردة بلمسات سماوية جليدية لمظهر SaaS حديث وحاد.",
+      "ember-forge": "حدادة الجمر",
+      "ember-forgeDescription": "أسطح فحمية دافئة بلمسات نحاس كهرماني لمظهر تنفيذي فاخر.",
     },
     fontPacks: {
       sectionTitle: "الخط",

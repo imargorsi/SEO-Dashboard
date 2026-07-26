@@ -3,6 +3,8 @@
 @import "sonner/dist/styles.css";
 @import "../styles/themes/default.css";
 @import "../styles/themes/glass-aurora.css";
+@import "../styles/themes/carbon-ice.css";
+@import "../styles/themes/ember-forge.css";
 
 /* Class-based dark mode for Tailwind `dark:` utilities */
 @custom-variant dark (&:where(.dark, .dark *));

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { Inter, Nunito, Plus_Jakarta_Sans, Ubuntu } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { AppProviders } from "@/components/providers/app-providers";
 import { FONT_PACK_BOOTSTRAP_SCRIPT } from "@/lib/frontend/theme/font-packs";
 import { THEME_PACK_BOOTSTRAP_SCRIPT } from "@/lib/frontend/theme/theme-packs";
@@ -70,6 +71,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: FONT_PACK_BOOTSTRAP_SCRIPT }}
         />
         <AppProviders>{children}</AppProviders>
+        <Analytics />
       </body>
     </html>
   );

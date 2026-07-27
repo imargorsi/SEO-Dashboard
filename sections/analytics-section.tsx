@@ -5,11 +5,10 @@ import { useTranslation } from "react-i18next";
 
 import { AnalyticsDimensionsTable } from "@/components/analytics/analytics-dimensions-table";
 import { AnalyticsSummaryCards } from "@/components/analytics/analytics-summary-cards";
+import { SeoActivityDateRangeFilter } from "@/components/seo-activities/seo-activity-date-range-filter";
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
 import { EmptyState } from "@/components/ui/empty-state";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useSelectedProject } from "@/context/selected-project-context";
 import { useProjectAccess } from "@/context/project-access-context";
 import {
@@ -17,8 +16,13 @@ import {
   useAnalyticsOverviewQuery,
 } from "@/features/analytics/analytics.api";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
+import type { TDateRange } from "@/lib/frontend/seo-activities/date-range.utils";
 import { notify } from "@/lib/frontend/feedback/notify";
-import { defaultAnalyticsDateRange } from "@/lib/integrations/date.utils";
+import {
+  ANALYTICS_DATE_PRESET_IDS,
+  matchAnalyticsDatePreset,
+  resolveAnalyticsDatePreset,
+} from "@/lib/integrations/date.utils";
 import { hasPermission, mergePermissions } from "@/lib/rbac/access";
 
 export function AnalyticsSection() {
@@ -29,9 +33,10 @@ export function AnalyticsSection() {
   const { projectPermissions } = useProjectAccess();
   const loadErrorNotified = useRef(false);
 
-  const defaultRange = useMemo(() => defaultAnalyticsDateRange(), []);
-  const [from, setFrom] = useState(defaultRange.from);
-  const [to, setTo] = useState(defaultRange.to);
+  const defaultRange = useMemo(() => resolveAnalyticsDatePreset("last_30_days"), []);
+  const [dateRange, setDateRange] = useState<TDateRange>(defaultRange);
+  const from = dateRange.from ?? "";
+  const to = dateRange.to ?? "";
 
   const permissions = useMemo(
     () => mergePermissions(authUser?.permissions ?? [], projectPermissions),
@@ -88,42 +93,32 @@ export function AnalyticsSection() {
   return (
     <div className="w-full min-w-0">
       <div className="space-y-4 px-4 py-4 sm:px-5 sm:py-5">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="space-y-1">
-            <Heading id="analytics-title" pageTitle>
-              {t("title")}
-            </Heading>
-            <Paragraph className="text-text-muted">{t("subtitle")}</Paragraph>
-          </div>
-
-          <div className="flex flex-wrap items-end gap-3">
-            <div className="space-y-1">
-              <Label htmlFor="analytics-from">{t("dateFrom")}</Label>
-              <Input
-                id="analytics-from"
-                type="date"
-                value={from}
-                onChange={(event) => setFrom(event.target.value)}
-                className="w-[160px]"
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="analytics-to">{t("dateTo")}</Label>
-              <Input
-                id="analytics-to"
-                type="date"
-                value={to}
-                onChange={(event) => setTo(event.target.value)}
-                className="w-[160px]"
-              />
-            </div>
-          </div>
+        <div className="space-y-1">
+          <Heading id="analytics-title" pageTitle>
+            {t("title")}
+          </Heading>
+          <Paragraph className="text-text-muted">{t("subtitle")}</Paragraph>
         </div>
 
         <AnalyticsSummaryCards
           overview={overviewQuery.data}
           isLoading={overviewQuery.isLoading}
         />
+
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="space-y-0.5">
+            <p className="type-title text-text-primary">{t("filteredSectionTitle")}</p>
+            <p className="type-caption text-text-muted">{t("filteredSectionBody")}</p>
+          </div>
+          <SeoActivityDateRangeFilter
+            value={dateRange}
+            onChange={setDateRange}
+            presets={ANALYTICS_DATE_PRESET_IDS}
+            i18nKeyPrefix="modules.analytics.dateFilter"
+            resolvePreset={resolveAnalyticsDatePreset}
+            matchPreset={matchAnalyticsDatePreset}
+          />
+        </div>
 
         <div className="grid gap-4 xl:grid-cols-2">
           <AnalyticsDimensionsTable

@@ -301,9 +301,9 @@ export const ANALYTICS_METRIC_CATALOG = [
     label: "Traffic By Channel Group",
     apiField: "sessionDefaultChannelGroup",
     clientValue: "Organic Vs Paid Vs Direct Vs Referral Vs Social At A Glance.",
-    inV1: false,
-    decision: "undecided",
-    notes: "High Client Value For “Where Does Traffic Come From?”.",
+    inV1: true,
+    decision: "include",
+    notes: "Stored As Dimension Type `channel_group` For Traffic Sources Donut.",
   },
   {
     id: "ga4.dim.sessionSource",
@@ -693,8 +693,9 @@ export const ANALYTICS_METRIC_CATALOG = [
     label: "Clicks Change Vs Prior Period",
     apiField: "delta(gsc.clicks)",
     clientValue: "Quick Win/Loss Story For Client Reporting.",
-    inV1: false,
-    decision: "undecided",
+    inV1: true,
+    decision: "include",
+    notes: "Top Cards Use This Month Vs Last Month (Independent Of Date Filter).",
   },
   {
     id: "derived.periodOverPeriodSessions",
@@ -705,7 +706,7 @@ export const ANALYTICS_METRIC_CATALOG = [
     apiField: "delta(ga4.sessions)",
     clientValue: "Traffic Trend Without Opening Raw Charts.",
     inV1: false,
-    decision: "undecided",
+    decision: "defer",
   },
   {
     id: "derived.topKeywordsSummary",

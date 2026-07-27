@@ -141,7 +141,7 @@ async function markIntegrationSynced(
 async function replaceDimensionRows(params: {
   projectId: Types.ObjectId;
   source: "gsc" | "ga4";
-  dimensionType: "query" | "page" | "country" | "device" | "landing_page";
+  dimensionType: "query" | "page" | "country" | "device" | "landing_page" | "channel_group";
   dates: string[];
   rows: Array<{
     date: string;
@@ -326,10 +326,11 @@ async function syncGa4Integration(
       );
     }
 
-    const [countries, landingPages, pages] = await Promise.all([
+    const [countries, landingPages, pages, channelGroups] = await Promise.all([
       fetchGa4TopDimensionsByDay(normalizedId, startDate, endDate, "country"),
       fetchGa4TopDimensionsByDay(normalizedId, startDate, endDate, "landingPage"),
       fetchGa4TopDimensionsByDay(normalizedId, startDate, endDate, "pagePath"),
+      fetchGa4TopDimensionsByDay(normalizedId, startDate, endDate, "sessionDefaultChannelGroup"),
     ]);
 
     if (!(await isSyncTargetStillValid(integrationId, expectedPropertyId))) {
@@ -361,6 +362,13 @@ async function syncGa4Integration(
         dimensionType: "page",
         dates: allDates,
         rows: pages,
+      }),
+      replaceDimensionRows({
+        projectId: integration.projectId,
+        source: "ga4",
+        dimensionType: "channel_group",
+        dates: allDates,
+        rows: channelGroups,
       }),
     ]);
 

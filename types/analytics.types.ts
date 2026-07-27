@@ -23,9 +23,34 @@ export type TGooglePropertyOption = {
   service: TGoogleIntegrationService;
 };
 
+/** One GSC KPI with fixed this-month vs last-month benchmark (not date-filter scoped). */
+export type TAnalyticsCardMetricDto = {
+  value: number | null;
+  previousValue: number | null;
+  /** Percent change vs previous period. For position, positive = improved (lower rank). */
+  changePercent: number | null;
+  /** Daily points for the current card window (This Month) — used for card sparklines. */
+  sparkline: number[];
+};
+
 export type TAnalyticsOverviewDto = {
+  /** Date-filter window used for `series` / filtered GA4 rollups. */
   from: string;
   to: string;
+  /**
+   * Top 4 GSC cards — always This Month vs Last Month (UTC).
+   * Independent of the page date filter.
+   */
+  cards: {
+    benchmark: "this_month_vs_last_month";
+    current: { from: string; to: string };
+    previous: { from: string; to: string };
+    clicks: TAnalyticsCardMetricDto;
+    impressions: TAnalyticsCardMetricDto;
+    ctr: TAnalyticsCardMetricDto;
+    position: TAnalyticsCardMetricDto;
+  };
+  /** @deprecated Prefer `cards` for summary UI. Kept for filtered range totals. */
   gsc: {
     clicks: number;
     impressions: number;
@@ -39,10 +64,13 @@ export type TAnalyticsOverviewDto = {
     engagedSessions: number;
     organicSessions: number;
   };
+  /** Daily series for the performance trend graph (date-filter scoped). */
   series: Array<{
     date: string;
     clicks: number | null;
     impressions: number | null;
+    ctr: number | null;
+    position: number | null;
     sessions: number | null;
     organicSessions: number | null;
   }>;
@@ -52,6 +80,8 @@ export type TAnalyticsOverviewDto = {
   };
 };
 
+export type TAnalyticsDimensionTrend = "up" | "down" | "flat";
+
 export type TAnalyticsDimensionRowDto = {
   dimensionValue: string;
   clicks: number | null;
@@ -60,6 +90,11 @@ export type TAnalyticsDimensionRowDto = {
   position: number | null;
   sessions: number | null;
   totalUsers: number | null;
+  /**
+   * Direction vs the immediately preceding equal-length window (primary metric:
+   * clicks for GSC, sessions for GA4). Null when prior data is missing.
+   */
+  trend: TAnalyticsDimensionTrend | null;
 };
 
 export type TAnalyticsDimensionsDto = {

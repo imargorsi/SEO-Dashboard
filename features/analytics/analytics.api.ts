@@ -42,7 +42,7 @@ export type TAnalyticsDimensionsParams = {
   from: string;
   to: string;
   source: "gsc" | "ga4";
-  dimensionType: "query" | "page" | "country" | "device" | "landing_page";
+  dimensionType: "query" | "page" | "country" | "device" | "landing_page" | "channel_group";
   limit?: number;
 };
 

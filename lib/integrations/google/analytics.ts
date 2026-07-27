@@ -141,7 +141,7 @@ async function fetchGa4DimensionRows(
   propertyId: string,
   startDate: string,
   endDate: string,
-  dimensionName: "country" | "landingPage" | "pagePath",
+  dimensionName: "country" | "landingPage" | "pagePath" | "sessionDefaultChannelGroup",
 ): Promise<TGa4DimensionRow[]> {
   const auth = createAnalyticsAuth();
   const dataApi = google.analyticsdata({ version: "v1beta", auth });
@@ -175,7 +175,7 @@ export async function fetchGa4TopDimensionsByDay(
   propertyId: string,
   startDate: string,
   endDate: string,
-  dimensionName: "country" | "landingPage" | "pagePath",
+  dimensionName: "country" | "landingPage" | "pagePath" | "sessionDefaultChannelGroup",
 ): Promise<TGa4DimensionRow[]> {
   const rows = await fetchGa4DimensionRows(propertyId, startDate, endDate, dimensionName);
   const byDate = new Map<string, TGa4DimensionRow[]>();

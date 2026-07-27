@@ -671,6 +671,29 @@ export interface Translation {
       loadError: string;
       dateFrom: string;
       dateTo: string;
+      filteredSectionTitle: string;
+      filteredSectionBody: string;
+      dateFilter: {
+        ariaLabel: string;
+        presetsHeading: string;
+        presets: {
+          last_15_days: string;
+          last_30_days: string;
+          last_90_days: string;
+          last_month: string;
+          this_month: string;
+        };
+        months: string[];
+        weekdays: { sun: string; mon: string; tue: string; wed: string; thu: string; fri: string; sat: string };
+        separator: string;
+        fromPlaceholder: string;
+        toPlaceholder: string;
+        reset: string;
+        cancel: string;
+        apply: string;
+        previousMonth: string;
+        nextMonth: string;
+      };
       summary: {
         clicks: string;
         impressions: string;
@@ -678,6 +701,9 @@ export interface Translation {
         position: string;
         sessions: string;
         organicSessions: string;
+        lastMonthLabel: string;
+        positionBetterSuffix: string;
+        positionWorseSuffix: string;
       };
       tables: {
         topQueries: string;
@@ -1729,13 +1755,42 @@ const translation: Translation = {
       loadError: "Failed To Load Analytics.",
       dateFrom: "From",
       dateTo: "To",
+      filteredSectionTitle: "Trends And Breakdowns",
+      filteredSectionBody: "Date Range Applies To Charts And Tables Below. Summary Cards Always Show This Month Vs Last Month.",
+      dateFilter: {
+        ariaLabel: "Analytics Date Range",
+        presetsHeading: "Quick Ranges",
+        presets: {
+          last_15_days: "Last 15 Days",
+          last_30_days: "Last 30 Days",
+          this_month: "This Month",
+          last_month: "Last Month",
+          last_90_days: "Last 90 Days",
+        },
+        months: [
+          "January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December",
+        ],
+        weekdays: { sun: "Su", mon: "Mo", tue: "Tu", wed: "We", thu: "Th", fri: "Fr", sat: "Sa" },
+        separator: "—",
+        fromPlaceholder: "Start",
+        toPlaceholder: "End",
+        reset: "Reset",
+        cancel: "Cancel",
+        apply: "Apply",
+        previousMonth: "Previous Month",
+        nextMonth: "Next Month",
+      },
       summary: {
-        clicks: "Clicks",
+        clicks: "Total Clicks",
         impressions: "Impressions",
-        ctr: "CTR",
-        position: "Avg Position",
+        ctr: "Avg. CTR",
+        position: "Avg. Position",
         sessions: "Sessions",
         organicSessions: "Organic Sessions",
+        lastMonthLabel: "Last Month",
+        positionBetterSuffix: "Better Than Prev Period",
+        positionWorseSuffix: "Worse Than Prev Period",
       },
       tables: {
         topQueries: "Top Queries",

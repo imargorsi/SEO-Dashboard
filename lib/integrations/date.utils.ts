@@ -46,3 +46,86 @@ export function inclusiveDaySpan(from: string, to: string): number {
   const end = parseUtcDateString(to).getTime();
   return Math.floor((end - start) / 86_400_000) + 1;
 }
+
+// ─── Analytics date range presets (end = UTC yesterday) ────────────────────
+
+import type { TDateRange, TDateRangePresetId } from "@/lib/frontend/seo-activities/date-range.utils";
+
+export const ANALYTICS_DATE_PRESET_IDS: readonly TDateRangePresetId[] = [
+  "last_15_days",
+  "last_30_days",
+  "this_month",
+  "last_month",
+  "last_90_days",
+] as const;
+
+export function resolveAnalyticsDatePreset(
+  preset: TDateRangePresetId,
+  now = new Date(),
+): TDateRange {
+  const yesterday = utcYesterdayString(now);
+
+  switch (preset) {
+    case "last_15_days":
+      return { from: addUtcDays(yesterday, -14), to: yesterday };
+    case "last_30_days":
+      return { from: addUtcDays(yesterday, -29), to: yesterday };
+    case "last_90_days":
+      return { from: addUtcDays(yesterday, -89), to: yesterday };
+    case "last_month": {
+      const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 1));
+      const start = toUtcDateString(d);
+      const end = toUtcDateString(
+        new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 0)),
+      );
+      return { from: start, to: end };
+    }
+    case "this_month": {
+      const start = toUtcDateString(
+        new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)),
+      );
+      return { from: start, to: yesterday };
+    }
+    case "all":
+    default:
+      return { from: addUtcDays(yesterday, -29), to: yesterday };
+  }
+}
+
+export function matchAnalyticsDatePreset(
+  range: TDateRange,
+  now = new Date(),
+): TDateRangePresetId | null {
+  for (const preset of ANALYTICS_DATE_PRESET_IDS) {
+    const resolved = resolveAnalyticsDatePreset(preset, now);
+    if (resolved.from === range.from && resolved.to === range.to) {
+      return preset;
+    }
+  }
+  return null;
+}
+
+/**
+ * Fixed ranges for the top 4 GSC summary cards.
+ * Current = this UTC month through yesterday; previous = full previous UTC calendar month.
+ * The page date filter must not change these windows.
+ */
+export function resolveAnalyticsCardBenchmarkRanges(now = new Date()): {
+  current: { from: string; to: string };
+  previous: { from: string; to: string };
+} {
+  const yesterday = utcYesterdayString(now);
+  const year = now.getUTCFullYear();
+  const month = now.getUTCMonth();
+
+  const currentFrom = toUtcDateString(new Date(Date.UTC(year, month, 1)));
+  const currentTo = yesterday < currentFrom ? currentFrom : yesterday;
+
+  const previousFrom = toUtcDateString(new Date(Date.UTC(year, month - 1, 1)));
+  const previousTo = toUtcDateString(new Date(Date.UTC(year, month, 0)));
+
+  return {
+    current: { from: currentFrom, to: currentTo },
+    previous: { from: previousFrom, to: previousTo },
+  };
+}

@@ -15,8 +15,12 @@ export const ANALYTICS_DIMENSION_TYPES = [
   "country",
   "device",
   "landing_page",
+  "channel_group",
 ] as const;
 export type TAnalyticsDimensionType = (typeof ANALYTICS_DIMENSION_TYPES)[number];
+
+/** Fixed benchmark window for the top GSC summary cards (not the date-filter graph). */
+export const ANALYTICS_CARD_BENCHMARK = "this_month_vs_last_month" as const;
 
 /** Top-N rows stored per dimension type per day. */
 export const ANALYTICS_DIMENSION_TOP_N = 100;

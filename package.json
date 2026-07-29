@@ -13,6 +13,7 @@
     "migrate:project-statuses": "npx tsx --env-file=.env.local scripts/migrate-project-statuses.ts",
     "migrate:user-statuses": "npx tsx --env-file=.env.local scripts/migrate-user-statuses.ts",
     "migrate:seo-activity-types": "npx tsx --env-file=.env.local scripts/migrate-seo-activity-types.ts",
+    "migrate:drop-seo-activity-index": "npx tsx --env-file=.env.local scripts/drop-stale-seo-activity-index.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },

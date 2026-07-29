@@ -61,11 +61,13 @@ export function ProjectSelector({ isCollapsed = false }: ProjectSelectorProps) {
   const { t } = useTranslation("translation", { keyPrefix: "projectSelector" });
   const { projects, selectedProject, setSelectedProjectId, isLoading } = useSelectedProject();
   const [open, setOpen] = useState(false);
+  const [prevIsCollapsed, setPrevIsCollapsed] = useState(isCollapsed);
   const listId = useId();
 
-  useEffect(() => {
+  if (isCollapsed !== prevIsCollapsed) {
+    setPrevIsCollapsed(isCollapsed);
     if (isCollapsed) setOpen(false);
-  }, [isCollapsed]);
+  }
 
   useEffect(() => {
     if (!open) return;
@@ -109,7 +111,7 @@ export function ProjectSelector({ isCollapsed = false }: ProjectSelectorProps) {
     : t("selectPrompt");
 
   return (
-    <div className="relative shrink-0 px-3 pb-2 pt-0.5">
+    <div className="shrink-0 px-3 pb-2 pt-0.5">
       <button
         type="button"
         aria-haspopup="listbox"
@@ -134,26 +136,31 @@ export function ProjectSelector({ isCollapsed = false }: ProjectSelectorProps) {
 
       <div
         className={cn(
-          "absolute inset-x-3 z-20 mt-1.5 overflow-hidden rounded-2xl border border-border/60 bg-bg-card/90 shadow-sm backdrop-blur-md transition-[opacity,transform] duration-200 dark:border-text-on-brand/25 dark:bg-bg-card/95",
-          open
-            ? "pointer-events-auto translate-y-0 opacity-100"
-            : "pointer-events-none -translate-y-1 opacity-0",
+          "grid transition-[grid-template-rows] duration-300 ease-in-out",
+          open ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
         )}
       >
-        <div id={listId} role="listbox" aria-label={t("listLabel")} className="max-h-64 overflow-y-auto p-1.5">
-          <p className="px-2.5 pb-1 pt-0.5 type-caption-xs text-text-muted">{t("listHeading")}</p>
-          <div className="flex flex-col gap-0.5">
-            {projects.map((project) => (
-              <ProjectOption
-                key={project.id}
-                project={project}
-                isSelected={project.id === selectedProject?.id}
-                onSelect={() => {
-                  setSelectedProjectId(project.id);
-                  setOpen(false);
-                }}
-              />
-            ))}
+        <div className="min-h-0 overflow-hidden">
+          <div
+            id={listId}
+            role="listbox"
+            aria-label={t("listLabel")}
+            className="mt-1.5 rounded-2xl border border-border/60 bg-bg-card/90 p-1.5 shadow-sm backdrop-blur-md dark:border-text-on-brand/25 dark:bg-bg-card/95"
+          >
+            <p className="px-2.5 pb-1 pt-0.5 type-caption-xs text-text-muted">{t("listHeading")}</p>
+            <div className="themed-scrollbar flex max-h-34 flex-col gap-0.5 overflow-y-auto pe-0.5">
+              {projects.map((project) => (
+                <ProjectOption
+                  key={project.id}
+                  project={project}
+                  isSelected={project.id === selectedProject?.id}
+                  onSelect={() => {
+                    setSelectedProjectId(project.id);
+                    setOpen(false);
+                  }}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>

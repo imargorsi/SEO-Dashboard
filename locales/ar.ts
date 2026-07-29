@@ -18,8 +18,6 @@ const translation: Translation = {
     closeMenu: "إغلاق القائمة",
     collapseSidebar: "طي الشريط الجانبي",
     expandSidebar: "توسيع الشريط الجانبي",
-    sectionGeneral: "عام",
-    sectionMySpace: "مساحتي",
     dashboard: "لوحة التحكم",
     users: "المستخدمون",
     rolesPermissions: "الأدوار والصلاحيات",

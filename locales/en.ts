@@ -16,8 +16,6 @@ export interface Translation {
     closeMenu: string;
     collapseSidebar: string;
     expandSidebar: string;
-    sectionGeneral: string;
-    sectionMySpace: string;
     dashboard: string;
     users: string;
     rolesPermissions: string;
@@ -986,8 +984,6 @@ const translation: Translation = {
     closeMenu: "Close Menu",
     collapseSidebar: "Collapse Sidebar",
     expandSidebar: "Expand Sidebar",
-    sectionGeneral: "General",
-    sectionMySpace: "My Space",
     dashboard: "Dashboard",
     users: "Users",
     rolesPermissions: "Roles & Permissions",

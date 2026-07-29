@@ -16,7 +16,7 @@ export function SignInAuthCardShell({ ariaLabelledBy, children, topToolbar }: Si
       className="relative flex flex-1 flex-col justify-center bg-transparent px-6 py-10 sm:px-10 lg:px-14 lg:py-12"
       aria-labelledby={ariaLabelledBy}
     >
-      <div className="mx-auto w-full max-w-104">
+      <div className="mx-auto w-full max-w-120">
         <div className={cn(authFormCardSurfaceClass, "p-7 sm:p-8")}>
           {topToolbar ? <div className="-mt-1 mb-5 flex justify-end">{topToolbar}</div> : null}
           {children}

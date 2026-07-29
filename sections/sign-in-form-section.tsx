@@ -34,7 +34,7 @@ export function SignInFormSection({
       ariaLabelledBy="sign-in-heading"
       topToolbar={<LanguageSwitcher tone="ghost" size="sm" />}
     >
-      <Heading id="sign-in-heading" heroTitle >
+      <Heading id="sign-in-heading" pageTitle>
         {t("title")}
       </Heading>
       <Paragraph className="mt-2 text-sm font-normal leading-relaxed text-text-secondary">{t("subtitle")}</Paragraph>

@@ -1,8 +1,8 @@
-import { get } from "@vercel/blob";
 import { NextResponse } from "next/server";
 import { withApiHandler } from "@/lib/api/handler";
 import { ApiResponse } from "@/lib/api/response";
 import { hasValidImageSignature } from "@/lib/auth/signed-url";
+import { getR2Object } from "@/lib/storage/r2-client";
 
 export const GET = withApiHandler(async (request) => {
   if (!hasValidImageSignature(request.url)) {
@@ -18,14 +18,14 @@ export const GET = withApiHandler(async (request) => {
     });
   }
 
-  const blob = await get(pathname, { access: "private" });
-  if (!blob || blob.statusCode !== 200) {
+  const object = await getR2Object(pathname);
+  if (!object) {
     return ApiResponse.error("Image Not Found.", {}, 404);
   }
 
-  return new NextResponse(blob.stream, {
+  return new NextResponse(object.stream, {
     headers: {
-      "Content-Type": blob.blob.contentType,
+      "Content-Type": object.contentType,
       "Cache-Control": "private, max-age=0, must-revalidate",
       "X-Content-Type-Options": "nosniff",
     },

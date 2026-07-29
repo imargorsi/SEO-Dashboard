@@ -29,12 +29,12 @@ export function SignInHeroSection() {
           priority
         />
 
-        <div className="space-y-4">
+        <div>
           <Heading id="sign-in-hero-heading" heroTitle>
             {t("heroTitleStart")}{" "}
             <span className="text-gradient-primary">{t("heroTitleAccent")}</span>
           </Heading>
-          <Paragraph medium className="max-w-md leading-relaxed">
+          <Paragraph medium className="mt-6! max-w-md leading-relaxed">
             {t("heroLead")}
           </Paragraph>
         </div>

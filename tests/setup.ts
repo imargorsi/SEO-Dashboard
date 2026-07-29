@@ -9,7 +9,10 @@ let usesExternalDatabase = false;
 const TEST_ENV = {
   APP_KEY: "base64:dGVzdC1hcHAta2V5LWZvci1sb2NhbC1kZXYtMDEyMzQ1Njc4",
   APP_URL: "http://localhost:3000",
-  BLOB_READ_WRITE_TOKEN: "test-blob-token",
+  R2_ACCOUNT_ID: "test-r2-account",
+  R2_ACCESS_KEY_ID: "test-r2-access-key",
+  R2_SECRET_ACCESS_KEY: "test-r2-secret-key",
+  R2_BUCKET_NAME: "test-r2-bucket",
   MAIL_MAILER: "log",
 } as const;
 

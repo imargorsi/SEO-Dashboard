@@ -4,7 +4,7 @@ import path from "path";
 export default defineConfig({
   test: {
     environment: "node",
-    setupFiles: ["./tests/mocks/vercel-blob.ts", "./tests/setup.ts"],
+    setupFiles: ["./tests/mocks/r2-storage.ts", "./tests/setup.ts"],
     fileParallelism: false,
   },
   resolve: {

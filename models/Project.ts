@@ -20,7 +20,7 @@ const projectSchema = new Schema(
 
     // --- Optional business information ---
     businessAddress: { type: String, default: null, trim: true },
-    /** Company logo — Vercel Blob private path stored as `blob:{pathname}`. */
+    /** Company logo — R2 private object path stored as `blob:{pathname}`. */
     logoImage: { type: String, default: null, trim: true },
     /** Stored as string to preserve country codes and formatting. */
     pocContactNumber: { type: String, default: null, trim: true },

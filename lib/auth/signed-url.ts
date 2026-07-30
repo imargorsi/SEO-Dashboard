@@ -43,7 +43,11 @@ export function hasValidSignature(requestUrl: string): boolean {
     return false;
   }
 
-  const canonical = buildCanonicalUrl(url.origin, url.pathname, url.searchParams);
+  // Always verify against APP_URL — behind Hostinger/LiteSpeed proxies `request.url`
+  // origin is often http://127.0.0.1 or another internal host, which would never match
+  // the signature created with `createSignedImageUrl` / email verification links.
+  const origin = env.appUrl().replace(/\/$/, "");
+  const canonical = buildCanonicalUrl(origin, url.pathname, url.searchParams);
   const expected = crypto.createHmac("sha256", appKeyBytes()).update(canonical).digest("hex");
 
   try {

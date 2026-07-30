@@ -40,7 +40,7 @@ export type CreateProjectInput = z.infer<typeof createProjectSchema>;
 const updateStringListSchema = z.array(z.string().trim().min(1).max(255)).nullable().optional();
 const updateCompetitorListSchema = z.array(z.string().trim().min(1).max(2048)).nullable().optional();
 
-/** PATCH /api/v1/projects/{id} — partial body (business name, owner, and POC email are locked). */
+/** PATCH /api/v1/projects/{id} — partial body (business name and POC email are locked). */
 export const updateProjectSchema = z.object({
   websiteUrl: websiteUrlSchema.optional(),
   businessAddress: optionalText,
@@ -51,8 +51,10 @@ export const updateProjectSchema = z.object({
   targetLocations: updateStringListSchema,
   seoGoals: z.array(z.enum(SEO_GOALS)).nullable().optional(),
   competitorUrls: updateCompetitorListSchema,
+  /** `super_admin` only — reassigns project owner membership + syncs `pocEmail`. */
+  ownerUserId: z.string().trim().min(1).optional(),
 });
 
 export type UpdateProjectInput = z.infer<typeof updateProjectSchema>;
 
-export const LOCKED_PROJECT_UPDATE_FIELDS = ["businessName", "pocEmail", "ownerUserId"] as const;
+export const LOCKED_PROJECT_UPDATE_FIELDS = ["businessName", "pocEmail"] as const;

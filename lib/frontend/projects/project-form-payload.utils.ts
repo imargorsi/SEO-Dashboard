@@ -41,8 +41,12 @@ export function toCreateProjectPayload(
   };
 }
 
-export function toUpdateProjectPayload(values: TProjectCreateFormValues): TUpdateProjectPayload {
+export function toUpdateProjectPayload(
+  values: TProjectCreateFormValues,
+  isAdmin = false,
+): TUpdateProjectPayload {
   return {
+    ...(isAdmin ? { ownerUserId: optionalText(values.ownerUserId) ?? undefined } : {}),
     websiteUrl: normalizeWebsiteUrl(values.websiteUrl),
     businessAddress: optionalText(values.businessAddress),
     pocContactNumber: optionalPhone(values.pocContactNumber),

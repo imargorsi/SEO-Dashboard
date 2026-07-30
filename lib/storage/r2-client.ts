@@ -35,10 +35,15 @@ export async function putR2Object(
   body: File,
   contentType: string,
 ): Promise<void> {
+  // R2 rejects streaming uploads without Content-Length (411 MissingContentLength).
+  const buffer = Buffer.from(await body.arrayBuffer());
   const response = await r2Client().fetch(objectUrl(pathname), {
     method: "PUT",
-    body,
-    headers: { "Content-Type": contentType },
+    body: buffer,
+    headers: {
+      "Content-Type": contentType || "application/octet-stream",
+      "Content-Length": String(buffer.byteLength),
+    },
   });
 
   if (!response.ok) {

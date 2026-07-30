@@ -92,7 +92,7 @@ export function ProjectCreateStepBusiness({ hook }: ProjectCreateStepBusinessPro
             />
           )}
         />
-        {isAdmin && !isEdit ? (
+        {isAdmin ? (
           <Controller
             control={control}
             name="ownerUserId"

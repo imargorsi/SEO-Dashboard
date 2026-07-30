@@ -47,10 +47,10 @@ function fieldStepIndex(): Record<keyof TProjectCreateFormValues, number> {
   };
 }
 
-function stepFields(isAdmin: boolean, isEdit: boolean): Array<Array<keyof TProjectCreateFormValues>> {
+function stepFields(isAdmin: boolean, _isEdit: boolean): Array<Array<keyof TProjectCreateFormValues>> {
   return [
     [
-      ...(isAdmin && !isEdit ? (["ownerUserId"] as const) : []),
+      ...(isAdmin ? (["ownerUserId"] as const) : []),
       "businessName",
       "websiteUrl",
       "businessAddress",
@@ -78,7 +78,7 @@ export function useProjectCreateForm(authUser: AuthUser, options: TUseProjectFor
   const logoFileRef = useRef<File | null>(null);
   const [logoPreviewUrl, setLogoPreviewUrl] = useState<string | null>(initialLogoUrl);
   const isAdmin = isSuperAdmin(authUser.roles);
-  const ownerOptionsQuery = useProjectOwnerOptions(isAdmin && !isEdit);
+  const ownerOptionsQuery = useProjectOwnerOptions(isAdmin);
   const steps = useMemo(() => stepFields(isAdmin, isEdit), [isAdmin, isEdit]);
   const stepLabels = useMemo(
     () => PROJECT_FORM_STEP_LABEL_KEYS.map((key) => t(key)),
@@ -189,7 +189,7 @@ export function useProjectCreateForm(authUser: AuthUser, options: TUseProjectFor
 
         await updateMutation.mutateAsync({
           projectId,
-          payload: toUpdateProjectPayload(values),
+          payload: toUpdateProjectPayload(values, isAdmin),
           companyLogoFile: logoFileRef.current,
         });
         notify.success(t("editSuccessFallback"));

@@ -71,6 +71,8 @@ export type TUpdateProjectPayload = {
   targetLocations?: string[];
   seoGoals?: TSeoGoal[];
   competitorUrls?: string[];
+  /** `super_admin` only — reassigns project owner. */
+  ownerUserId?: string;
 };
 
 export type TUpdateProjectMutationInput = {
@@ -174,6 +176,7 @@ export function useUpdateProjectMutation() {
     onSuccess: (_data, variables) => {
       void queryClient.invalidateQueries({ queryKey: projectKeys.all });
       void queryClient.invalidateQueries({ queryKey: projectKeys.detail(variables.projectId) });
+      void queryClient.invalidateQueries({ queryKey: projectKeys.access(variables.projectId) });
     },
   });
 }

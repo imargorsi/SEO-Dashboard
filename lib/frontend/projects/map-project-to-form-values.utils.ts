@@ -21,7 +21,7 @@ export const EMPTY_PROJECT_FORM_VALUES: TProjectCreateFormValues = {
 
 export function mapProjectDetailToFormValues(project: TProjectDetail): TProjectCreateFormValues {
   return {
-    ownerUserId: "",
+    ownerUserId: project.owner?.id ?? "",
     businessName: project.businessName,
     websiteUrl: project.websiteUrl,
     businessAddress: project.businessAddress ?? "",

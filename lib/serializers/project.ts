@@ -1,7 +1,6 @@
 import type { ProjectDocument } from "@/models/Project";
 import { serializeStoredImageUrl } from "@/lib/serializers/stored-image";
 import type {
-  TProjectBusinessHours,
   TProjectDetail,
   TProjectInvitee,
   TProjectListItem,
@@ -14,16 +13,6 @@ export type ProjectDetailDto = TProjectDetail;
 function serializeTimestamp(value: Date | null | undefined): string | null {
   if (!value) return null;
   return value.toISOString();
-}
-
-function serializeBusinessHours(
-  value: ProjectDocument["businessHours"],
-): TProjectBusinessHours {
-  if (!value) return null;
-  return {
-    opensAt: value.opensAt ?? null,
-    closesAt: value.closesAt ?? null,
-  };
 }
 
 /** Compact shape for project selector / list views. */
@@ -59,7 +48,6 @@ export function serializeProject(
     primaryServiceToPromote: project.primaryServiceToPromote,
     idealCustomerProfile: project.idealCustomerProfile,
     targetLocations: project.targetLocations,
-    businessHours: serializeBusinessHours(project.businessHours),
     seoGoals: project.seoGoals,
     competitorUrls: project.competitorUrls,
     status: project.status,

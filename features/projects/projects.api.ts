@@ -8,7 +8,6 @@ import type { TProjectStatusAction } from "@/lib/projects/project-card-actions.u
 import type { TProjectDetail, TProjectListItem } from "@/types/project.types";
 
 export type {
-  TProjectBusinessHours,
   TProjectDetail,
   TProjectListItem,
   TProjectOwnerSummary,
@@ -57,10 +56,6 @@ export type TCreateProjectPayload = {
   primaryServiceToPromote?: string | null;
   idealCustomerProfile?: string | null;
   targetLocations?: string[];
-  businessHours?: {
-    opensAt?: string | null;
-    closesAt?: string | null;
-  } | null;
   seoGoals?: TSeoGoal[];
   competitorUrls?: string[];
   ownerUserId?: string;
@@ -74,10 +69,6 @@ export type TUpdateProjectPayload = {
   primaryServiceToPromote?: string | null;
   idealCustomerProfile?: string | null;
   targetLocations?: string[];
-  businessHours?: {
-    opensAt?: string | null;
-    closesAt?: string | null;
-  } | null;
   seoGoals?: TSeoGoal[];
   competitorUrls?: string[];
 };

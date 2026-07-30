@@ -3,7 +3,7 @@
 import { IoGlobeOutline } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 
-import { ProjectActions } from "@/components/projects/project-actions";
+import { ProjectActionButton, ProjectActions } from "@/components/projects/project-actions";
 import { ProjectStatusChip } from "@/components/projects/project-status-chip";
 import { ActiveInactiveToggle } from "@/components/ui/active-inactive-toggle";
 import { UserAvatar } from "@/components/ui/user-avatar";
@@ -15,6 +15,7 @@ import {
   elevatedCardSurfaceClass,
   elevatedCardTitleClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
+import { buildProjectCardActions } from "@/lib/projects/project-card-actions.utils";
 import { cn } from "@/lib/utils";
 
 type ProjectCardProps = {
@@ -56,6 +57,16 @@ export function ProjectCard({
   const canToggleActiveInactive =
     isSuperAdmin && (project.status === "active" || project.status === "inactive");
   const isActive = project.status === "active";
+  const pendingApprovalActions =
+    isSuperAdmin && project.status === "pending"
+      ? buildProjectCardActions({
+          status: project.status,
+          projectId: project.id,
+          isSuperAdmin,
+          canViewDetails: false,
+          canEditProject: false,
+        }).filter((action) => action.id === "approve" || action.id === "reject")
+      : [];
 
   return (
     <article className={cn(elevatedCardSurfaceClass, "rounded-3xl p-5 sm:p-6")}>
@@ -84,19 +95,36 @@ export function ProjectCard({
         </p>
       </div>
 
-      <div className="mt-6 min-w-0">
-        <p className={cn("type-caption-xs uppercase tracking-[0.08em]", elevatedCardMutedClass)}>
-          {t("projectOwnerLabel")}
-        </p>
-        <div className="mt-2.5 flex items-center gap-2">
-          <UserAvatar
-            name={ownerName}
-            imageUrl={project.owner?.profileImage ?? null}
-            size="sm"
-            variant="photo"
-          />
-          <p className={cn("truncate type-body", elevatedCardTitleClass)}>{ownerName}</p>
+      <div className="mt-6 flex items-end justify-between gap-3">
+        <div className="min-w-0">
+          <p className={cn("type-caption-xs uppercase tracking-[0.08em]", elevatedCardMutedClass)}>
+            {t("projectOwnerLabel")}
+          </p>
+          <div className="mt-2.5 flex items-center gap-2">
+            <UserAvatar
+              name={ownerName}
+              imageUrl={project.owner?.profileImage ?? null}
+              size="sm"
+              variant="photo"
+            />
+            <p className={cn("truncate type-body", elevatedCardTitleClass)}>{ownerName}</p>
+          </div>
         </div>
+
+        {pendingApprovalActions.length > 0 ? (
+          <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
+            {pendingApprovalActions.map((action) => (
+              <ProjectActionButton
+                key={action.id}
+                action={action}
+                label={tActions(action.labelKey)}
+                isLoading={isPending}
+                size="big"
+                onStatusAction={handleStatusAction}
+              />
+            ))}
+          </div>
+        ) : null}
       </div>
 
       <ProjectActions
@@ -110,6 +138,7 @@ export function ProjectCard({
         onInviteUsers={onInviteUsers}
         onDeleteProject={onDeleteProject}
         includeActiveInactiveToggle={false}
+        includePendingApprovalActions={false}
         withCardFooter
       />
     </article>

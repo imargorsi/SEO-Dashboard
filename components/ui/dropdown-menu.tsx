@@ -18,7 +18,13 @@ function useDropdownMenu() {
   return ctx;
 }
 
-function DropdownMenu({ children }: { children: React.ReactNode }) {
+function DropdownMenu({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   const [open, setOpen] = React.useState(false);
   const rootRef = React.useRef<HTMLDivElement>(null);
 
@@ -41,7 +47,9 @@ function DropdownMenu({ children }: { children: React.ReactNode }) {
 
   return (
     <DropdownMenuContext.Provider value={{ open, setOpen, rootRef }}>
-      <div ref={rootRef} className="relative inline-flex">{children}</div>
+      <div ref={rootRef} className={cn("relative inline-flex", className)}>
+        {children}
+      </div>
     </DropdownMenuContext.Provider>
   );
 }

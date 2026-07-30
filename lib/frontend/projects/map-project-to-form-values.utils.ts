@@ -15,8 +15,6 @@ export const EMPTY_PROJECT_FORM_VALUES: TProjectCreateFormValues = {
   primaryServiceToPromote: "",
   idealCustomerProfile: "",
   targetLocations: "",
-  opensAt: "",
-  closesAt: "",
   seoGoals: [],
   competitorUrls: "",
 };
@@ -32,8 +30,6 @@ export function mapProjectDetailToFormValues(project: TProjectDetail): TProjectC
     primaryServiceToPromote: project.primaryServiceToPromote ?? "",
     idealCustomerProfile: project.idealCustomerProfile ?? "",
     targetLocations: joinCommaSeparated(project.targetLocations),
-    opensAt: project.businessHours?.opensAt ?? "",
-    closesAt: project.businessHours?.closesAt ?? "",
     seoGoals: [...project.seoGoals],
     competitorUrls: joinCommaSeparated(project.competitorUrls),
   };

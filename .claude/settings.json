@@ -31,7 +31,16 @@
       "Bash(curl -sf http://localhost:3004)",
       "Bash(lsof -ti:3004 -sTCP:LISTEN)",
       "Bash(taskkill /PID 28180 /F)",
-      "PowerShell(taskkill /PID 28180 /F)"
+      "PowerShell(taskkill /PID 28180 /F)",
+      "PowerShell(taskkill /PID 14268 /F)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000 --max-time 2)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3004 --max-time 2)",
+      "Bash(curl -s http://localhost:3000 --max-time 3)",
+      "Bash(node -e \"console.log\\(require\\('playwright/package.json'\\).version\\)\")",
+      "Bash(npm pack *)",
+      "Bash(xargs -I{} echo {})",
+      "Bash(node scratch-check.mjs)",
+      "Bash(rm scratch-check.mjs)"
     ]
   }
 }

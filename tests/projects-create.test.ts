@@ -150,4 +150,15 @@ describe("POST /projects — createProject", () => {
       }),
     ).toThrow();
   });
+
+  it("normalizes bare website domains and accepts competitor names", () => {
+    const parsed = createProjectSchema.parse({
+      businessName: "Bare Domain Co",
+      websiteUrl: "example.com",
+      competitorUrls: ["https://rival.example.com", "Local Rival"],
+    });
+
+    expect(parsed.websiteUrl).toBe("https://example.com");
+    expect(parsed.competitorUrls).toEqual(["https://rival.example.com", "Local Rival"]);
+  });
 });

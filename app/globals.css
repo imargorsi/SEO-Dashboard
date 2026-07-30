@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "shadcn/tailwind.css";
 @import "sonner/dist/styles.css";
+@import "flag-icons/css/flag-icons.min.css";
 @import "../styles/themes/default.css";
 @import "../styles/themes/glass-aurora.css";
 @import "../styles/themes/carbon-ice.css";

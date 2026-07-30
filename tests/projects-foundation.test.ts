@@ -117,16 +117,14 @@ describe("Projects foundation", () => {
       primaryServiceToPromote: "Local SEO",
       idealCustomerProfile: "Small businesses in retail",
       targetLocations: ["Austin", "Dallas"],
-      businessHours: { opensAt: "09:00", closesAt: "17:00" },
       seoGoals: ["grow_brand_awareness", "improve_local_visibility"],
-      competitorUrls: ["https://competitor.example.com"],
+      competitorUrls: ["https://competitor.example.com", "Local Rival Co"],
     });
 
     expect(project.pocEmail).toBe("onboard@example.com");
     expect(project.servicesOffered).toEqual(["SEO audits", "Content marketing"]);
     expect(project.seoGoals).toEqual(["grow_brand_awareness", "improve_local_visibility"]);
-    expect(project.businessHours?.opensAt).toBe("09:00");
-    expect(project.competitorUrls).toHaveLength(1);
+    expect(project.competitorUrls).toEqual(["https://competitor.example.com", "Local Rival Co"]);
   });
 
   it("rejects invalid seo goals", async () => {

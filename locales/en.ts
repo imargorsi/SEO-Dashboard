@@ -42,6 +42,10 @@ export interface Translation {
     hidePassword: string;
     pickImage: string;
     changeImage: string;
+    fileTooLarge: string;
+    searchCountry: string;
+    noCountriesFound: string;
+    removeChip: string;
   };
   userMenu: {
     openMenu: string;
@@ -311,6 +315,20 @@ export interface Translation {
         increase_online_orders: string;
         improve_local_visibility: string;
       };
+      seoGoalDescriptions: {
+        grow_brand_awareness: string;
+        outrank_competitors: string;
+        get_more_calls: string;
+        increase_online_orders: string;
+        improve_local_visibility: string;
+      };
+      seoGoalTooltips: {
+        grow_brand_awareness: string;
+        outrank_competitors: string;
+        get_more_calls: string;
+        increase_online_orders: string;
+        improve_local_visibility: string;
+      };
       listCard: {
         projectOwnerLabel: string;
         projectOwnerFallback: string;
@@ -351,7 +369,6 @@ export interface Translation {
         timelineApproved: string;
         timelineRejected: string;
         timelineUpdated: string;
-        businessHours: string;
         noValue: string;
         noServices: string;
         noLocations: string;
@@ -376,9 +393,7 @@ export interface Translation {
         lead: string;
         editTitle: string;
         editLead: string;
-        sectionBusinessTitle: string;
         sectionBusinessLead: string;
-        sectionSeoTitle: string;
         sectionSeoLead: string;
         sectionGoogleTitle: string;
         sectionGoogleLead: string;
@@ -394,24 +409,22 @@ export interface Translation {
         websiteUrlPh: string;
         businessAddress: string;
         businessAddressPh: string;
-        companyLogo: string;
         companyLogoHint: string;
+        companyLogoUploadLabel: string;
         pocContactNumber: string;
         pocContactNumberPh: string;
         pocEmail: string;
-        sectionServiceTitle: string;
+        pocEmailPh: string;
         sectionServiceLead: string;
         servicesOffered: string;
         servicesOfferedPh: string;
+        servicesOfferedHelp: string;
         primaryServiceToPromote: string;
         primaryServiceToPromotePh: string;
+        primaryServiceEmpty: string;
         idealCustomerProfile: string;
         idealCustomerProfilePh: string;
-        sectionOperationsTitle: string;
         sectionOperationsLead: string;
-        opensAt: string;
-        closesAt: string;
-        valTime: string;
         sectionMarketingTitle: string;
         sectionMarketingLead: string;
         websiteLogin: string;
@@ -434,10 +447,10 @@ export interface Translation {
         googleSearchConsoleSharedDesc: string;
         googleBusinessProfileShared: string;
         googleBusinessProfileSharedDesc: string;
-        sectionCompetitorsTitle: string;
         sectionCompetitorsLead: string;
         competitorUrls: string;
         competitorUrlsPh: string;
+        competitorUrlsHelp: string;
         industryNiche: string;
         industryNichePh: string;
         industryNicheLoading: string;
@@ -1009,6 +1022,10 @@ const translation: Translation = {
     hidePassword: "Hide password",
     pickImage: "Upload Image",
     changeImage: "Change Image",
+    fileTooLarge: "This File Is Larger Than {{max}} MB. Please Choose A Smaller File.",
+    searchCountry: "Search Country…",
+    noCountriesFound: "No Countries Found.",
+    removeChip: "Remove {{value}}",
   },
   userMenu: {
     openMenu: "Account menu",
@@ -1276,11 +1293,25 @@ const translation: Translation = {
         },
       },
       seoGoals: {
-        grow_brand_awareness: "Grow Brand Awareness",
-        outrank_competitors: "Outrank Competitors",
-        get_more_calls: "Get More Calls",
-        increase_online_orders: "Increase Online Orders",
-        improve_local_visibility: "Improve Local Visibility",
+        grow_brand_awareness: "Increase Brand Visibility",
+        outrank_competitors: "Outperform Competitors",
+        get_more_calls: "Generate More Leads",
+        increase_online_orders: "Increase Online Sales",
+        improve_local_visibility: "Strengthen Local Presence",
+      },
+      seoGoalDescriptions: {
+        grow_brand_awareness: "Build Awareness And Improve Your Presence In Organic Search Results.",
+        outrank_competitors: "Track Competitors, Identify Opportunities, And Gain A Competitive Edge.",
+        get_more_calls: "Drive Qualified Enquiries, Calls, And Contact Form Submissions.",
+        increase_online_orders: "Improve Organic Traffic That Converts Into Purchases And Revenue.",
+        improve_local_visibility: "Improve Visibility In Local Search Results, Google Maps, And Nearby Searches.",
+      },
+      seoGoalTooltips: {
+        grow_brand_awareness: "Grow Your Online Presence And Improve Brand Recognition Through Organic Search.",
+        outrank_competitors: "Monitor Competitors' Rankings, Keywords, And Backlink Strategies.",
+        get_more_calls: "Optimise Your Website To Attract Qualified Enquiries And Conversions.",
+        increase_online_orders: "Improve Product Visibility And Drive More Revenue From Organic Traffic.",
+        improve_local_visibility: "Boost Visibility In Local Search Results And Google Business Profile.",
       },
       listCard: {
         projectOwnerLabel: "Project Owner",
@@ -1311,7 +1342,7 @@ const translation: Translation = {
         sectionLocationsTitle: "Target Locations",
         sectionLocationsLead: "Geographic Areas This Project Focuses On.",
         sectionCompetitorsTitle: "Competitors",
-        sectionCompetitorsLead: "Competitor Websites Provided For Benchmarking.",
+        sectionCompetitorsLead: "Competitor Names Or Websites Provided For Benchmarking.",
         sidebarMembersTitle: "Project Members",
         memberOwnerBadge: "Project Owner",
         memberUserBadge: "Project User",
@@ -1322,7 +1353,6 @@ const translation: Translation = {
         timelineApproved: "Approved",
         timelineRejected: "Rejected",
         timelineUpdated: "Last Updated",
-        businessHours: "Business Hours",
         noValue: "Not Provided",
         noServices: "No Services Listed.",
         noLocations: "No Target Locations Listed.",
@@ -1341,48 +1371,49 @@ const translation: Translation = {
         declineSuccess: "Invitation Declined.",
         declineError: "Could Not Decline Invitation.",
       },
-      createLead: "Add Your Business Information To Start This Project.",
+      createLead:
+        "Set Up Your Business Profile To Start Tracking Your Website's SEO Performance, Rankings, And Growth Opportunities.",
       createForm: {
-        title: "Project details",
-        lead: "Fill in the business basics, SEO goals, and access information for this project.",
+        title: "Project Details",
+        lead: "Fill In The Business Basics, SEO Goals, And Access Information For This Project.",
         editTitle: "Edit Project",
         editLead: "Update The Project's Business Details, SEO Goals, And Access Information.",
-        sectionBusinessTitle: "Business basics",
-        sectionBusinessLead: "Tell us what the business does and who it serves.",
-        sectionSeoTitle: "SEO Goals",
-        sectionSeoLead: "Select The Outcomes This Project Should Drive. Pick All That Apply.",
-        sectionGoogleTitle: "Google tools",
-        sectionGoogleLead: "Which Google products are connected for this site?",
-        sectionCmsTitle: "CMS access",
-        sectionCmsLead: "Optional login details so we can deploy SEO changes.",
-        businessName: "Business name",
-        businessNamePh: "Saudia Marketing",
+        sectionBusinessLead:
+          "Tell Us About Your Business So We Can Personalise Your SEO Dashboard And Generate Accurate Insights.",
+        sectionSeoLead:
+          "Configure Your SEO Goals And Competitors To Personalise Your Dashboard, Reporting, And Optimisation Strategy.",
+        sectionGoogleTitle: "Google Tools",
+        sectionGoogleLead: "Which Google Products Are Connected For This Site?",
+        sectionCmsTitle: "CMS Access",
+        sectionCmsLead: "Optional Login Details So We Can Deploy SEO Changes.",
+        businessName: "Business Name",
+        businessNamePh: "E.g. Example Ltd",
         ownerUserId: "Project Owner",
         ownerUserPlaceholder: "Select A Project Owner",
         ownerUserLoadError: "Could Not Load Users. Try Again.",
         ownerUserEmpty: "No Verified Users Available To Assign.",
         websiteUrl: "Website URL",
-        websiteUrlPh: "https://www.saudiamarketing.sa",
+        websiteUrlPh: "example.com",
         businessAddress: "Business Address",
-        businessAddressPh: "King Fahd Road, Al Olaya, Riyadh, Saudi Arabia",
-        companyLogo: "Company Logo",
-        companyLogoHint: "JPG, PNG, WEBP, Or GIF. Max 5 MB.",
+        businessAddressPh: "Street Address, City, State/Province, Country",
+        companyLogoHint: "Upload Your Brand Logo. JPG, PNG, WEBP, Or GIF (Maximum 5 MB).",
+        companyLogoUploadLabel: "Upload Company Logo",
         pocContactNumber: "Contact Number",
-        pocContactNumberPh: "+966 55 123 4567",
-        pocEmail: "Contact Email",
-        sectionServiceTitle: "Service Information",
-        sectionServiceLead: "Add Services And Customer Profile Details.",
-        servicesOffered: "Services Offered",
-        servicesOfferedPh: "SEO, Content Marketing, Google Ads",
-        primaryServiceToPromote: "Primary Service To Promote",
-        primaryServiceToPromotePh: "Google Maps SEO",
-        idealCustomerProfile: "Ideal Customer Profile",
-        idealCustomerProfilePh: "SMEs In Riyadh And Jeddah",
-        sectionOperationsTitle: "Operations",
-        sectionOperationsLead: "Add Locations And Optional Business Hours.",
-        opensAt: "Business Opens At",
-        closesAt: "Business Closes At",
-        valTime: "Use 24-Hour Time (HH:mm).",
+        pocContactNumberPh: "5X XXX XXXX",
+        pocEmail: "Business Email",
+        pocEmailPh: "contact@example.com",
+        sectionServiceLead:
+          "Define Your Business Offerings And Target Audience To Receive Personalised SEO Recommendations And Market Insights.",
+        servicesOffered: "Services / Products Offered",
+        servicesOfferedPh: "E.g. SEO, Web Design, PPC Advertising, Content Marketing",
+        servicesOfferedHelp: "Press Enter Or Comma To Add. Backspace Removes The Last Tag.",
+        primaryServiceToPromote: "Primary Service / Product",
+        primaryServiceToPromotePh: "Select A Primary Service / Product",
+        primaryServiceEmpty: "Add Services Above First",
+        idealCustomerProfile: "Ideal Customer",
+        idealCustomerProfilePh: "E.g. Small And Medium-Sized Businesses Looking To Grow Their Online Presence",
+        sectionOperationsLead:
+          "Tell Us Where Your Business Operates So We Can Personalise Local Search Tracking And Location-Based SEO.",
         sectionMarketingTitle: "Marketing Access",
         sectionMarketingLead: "Mark Which Channel Access Has Been Shared.",
         websiteLogin: "Website Login",
@@ -1405,17 +1436,18 @@ const translation: Translation = {
         googleSearchConsoleSharedDesc: "The Client Has Shared Google Search Console Access.",
         googleBusinessProfileShared: "Google Business Profile Shared",
         googleBusinessProfileSharedDesc: "The Client Has Shared Google Business Profile Access.",
-        sectionCompetitorsTitle: "Competitors",
-        sectionCompetitorsLead: "Add Competitor URLs As A Comma Separated List.",
-        competitorUrls: "Competitor URLs",
-        competitorUrlsPh: "https://competitor-riyadh.sa, https://competitor-jeddah.sa",
-        industryNiche: "Industry niche",
-        industryNichePh: "Select an industry",
-        industryNicheLoading: "Loading industries…",
-        industryNicheLoadError: "Could not load industries. Try again later.",
-        targetLocations: "Target locations",
-        targetLocationsPh: "Riyadh, Jeddah, Dammam",
-        targetLocationsHelp: "Press Enter or comma to add. Backspace removes the last tag.",
+        sectionCompetitorsLead:
+          "Add The Names Or Websites Of Your Main Competitors So We Can Benchmark Your SEO Performance And Uncover Opportunities.",
+        competitorUrls: "Competitor Names Or URLs",
+        competitorUrlsPh: "Enter Your Competitor Names Or URLs: https://competitor1.com, Competitor 2, https://competitor3.com",
+        competitorUrlsHelp: "Press Enter Or Comma To Add. Backspace Removes The Last Tag.",
+        industryNiche: "Industry Niche",
+        industryNichePh: "Select An Industry",
+        industryNicheLoading: "Loading Industries…",
+        industryNicheLoadError: "Could Not Load Industries. Try Again Later.",
+        targetLocations: "Target Locations",
+        targetLocationsPh: "E.g. Riyadh, Jeddah, Dammam, Saudi Arabia",
+        targetLocationsHelp: "Press Enter Or Comma To Add. Backspace Removes The Last Tag.",
         isB2b: "B2B",
         isB2bDesc: "Sells to other businesses.",
         isB2c: "B2C",
@@ -1448,12 +1480,12 @@ const translation: Translation = {
         cmsPasswordPh: "••••••••",
         cmsPasswordEditPh: "Leave blank to keep current",
         cmsPasswordEditHelp: "Only enter a value if you want to change the saved password.",
-        submit: "Create project",
+        submit: "Create Project",
         submitting: "Creating…",
         editSubmit: "Save Changes",
         editSubmitting: "Saving…",
         successTitle: "Project Saved",
-        successFallback: "The Project Was Created.",
+        successFallback: "Project Created Successfully.",
         editSuccessTitle: "Project Updated",
         editSuccessFallback: "The Project Was Updated.",
         errorTitle: "Could Not Create Project",
@@ -1464,9 +1496,9 @@ const translation: Translation = {
           "You are not a member of any project yet. Complete onboarding or ask a project owner to invite you.",
         nextStep: "Next Step",
         previousStep: "Back",
-        stepBasicInformation: "Basic Information",
-        stepServiceInformation: "Service Information",
-        stepSeo: "SEO",
+        stepBasicInformation: "Business Information",
+        stepServiceInformation: "Business Details",
+        stepSeo: "SEO Configuration",
         stepInviteUsers: "Invite Users",
         sectionInviteUsersTitle: "Invite Users",
         sectionInviteUsersLead:
@@ -1492,9 +1524,9 @@ const translation: Translation = {
         stepValidationError: "Fix Required Fields Before Moving To The Next Step.",
         valRequired: "This field is required.",
         valMin: "Use at least 2 characters.",
-        valUrl: "Enter a valid URL (https://…).",
+        valUrl: "Enter a valid website URL (e.g. example.com).",
         valTargetLocations: "Add at least one location.",
-        valSeoGoals: "Select at least one SEO goal.",
+        valSeoGoals: "Select at least one SEO objective.",
         backToList: "Back to projects",
         backToProject: "Back To Project",
         editForbiddenTitle: "You Cannot Edit This Project",

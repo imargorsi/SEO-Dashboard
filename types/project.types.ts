@@ -16,11 +16,6 @@ export type TProjectInvitee = {
   invitedByUserId: string | null;
 };
 
-export type TProjectBusinessHours = {
-  opensAt: string | null;
-  closesAt: string | null;
-} | null;
-
 export type TProjectListItem = {
   id: string;
   businessName: string;
@@ -43,7 +38,6 @@ export type TProjectDetail = {
   primaryServiceToPromote: string | null;
   idealCustomerProfile: string | null;
   targetLocations: string[];
-  businessHours: TProjectBusinessHours;
   seoGoals: TSeoGoal[];
   competitorUrls: string[];
   status: ProjectStatus;

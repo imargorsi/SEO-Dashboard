@@ -42,8 +42,6 @@ function fieldStepIndex(): Record<keyof TProjectCreateFormValues, number> {
     primaryServiceToPromote: 1,
     idealCustomerProfile: 1,
     targetLocations: 1,
-    opensAt: 1,
-    closesAt: 1,
     seoGoals: 2,
     competitorUrls: 2,
   };
@@ -58,14 +56,7 @@ function stepFields(isAdmin: boolean, isEdit: boolean): Array<Array<keyof TProje
       "businessAddress",
       "pocContactNumber",
     ],
-    [
-      "servicesOffered",
-      "primaryServiceToPromote",
-      "idealCustomerProfile",
-      "targetLocations",
-      "opensAt",
-      "closesAt",
-    ],
+    ["servicesOffered", "primaryServiceToPromote", "idealCustomerProfile", "targetLocations"],
     ["seoGoals", "competitorUrls"],
   ];
 }
@@ -218,8 +209,8 @@ export function useProjectCreateForm(authUser: AuthUser, options: TUseProjectFor
           ownerUserId: error.errors.ownerUserId?.[0],
           businessName: error.errors.businessName?.[0],
           websiteUrl: error.errors.websiteUrl?.[0],
-          opensAt: error.errors["businessHours.opensAt"]?.[0],
-          closesAt: error.errors["businessHours.closesAt"]?.[0],
+          pocContactNumber: error.errors.pocContactNumber?.[0],
+          competitorUrls: error.errors["competitorUrls.0"]?.[0] ?? error.errors.competitorUrls?.[0],
           seoGoals: error.errors["seoGoals.0"]?.[0] ?? error.errors.seoGoals?.[0],
         };
 

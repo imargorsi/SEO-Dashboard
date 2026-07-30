@@ -1,4 +1,5 @@
 import type { CreateProjectInput, UpdateProjectInput } from "@/schemas/project";
+import { normalizeWebsiteUrl } from "@/lib/projects/website-url.utils";
 
 export function emptyToNull(value: string | null | undefined): string | null {
   if (value == null) return null;
@@ -6,30 +7,16 @@ export function emptyToNull(value: string | null | undefined): string | null {
   return trimmed === "" ? null : trimmed;
 }
 
-function mapBusinessHours(input: NonNullable<CreateProjectInput["businessHours"]>) {
-  const mapped = {
-    opensAt: emptyToNull(input.opensAt),
-    closesAt: emptyToNull(input.closesAt),
-  };
-
-  if (!mapped.opensAt && !mapped.closesAt) {
-    return null;
-  }
-
-  return mapped;
-}
-
 export function mapCreateProjectFields(input: CreateProjectInput) {
   return {
     businessName: input.businessName.trim(),
-    websiteUrl: input.websiteUrl.trim(),
+    websiteUrl: normalizeWebsiteUrl(input.websiteUrl),
     businessAddress: emptyToNull(input.businessAddress),
     pocContactNumber: emptyToNull(input.pocContactNumber),
     servicesOffered: input.servicesOffered ?? [],
     primaryServiceToPromote: emptyToNull(input.primaryServiceToPromote),
     idealCustomerProfile: emptyToNull(input.idealCustomerProfile),
     targetLocations: input.targetLocations ?? [],
-    businessHours: input.businessHours ? mapBusinessHours(input.businessHours) : null,
     seoGoals: input.seoGoals ?? [],
     competitorUrls: input.competitorUrls ?? [],
   };
@@ -42,7 +29,7 @@ export function mapUpdateProjectFields(
   const update: Record<string, unknown> = {};
 
   if (presentFields.has("websiteUrl") && input.websiteUrl !== undefined) {
-    update.websiteUrl = input.websiteUrl.trim();
+    update.websiteUrl = normalizeWebsiteUrl(input.websiteUrl);
   }
 
   if (presentFields.has("businessAddress")) {
@@ -67,11 +54,6 @@ export function mapUpdateProjectFields(
 
   if (presentFields.has("targetLocations")) {
     update.targetLocations = input.targetLocations ?? [];
-  }
-
-  if (presentFields.has("businessHours")) {
-    update.businessHours =
-      input.businessHours == null ? null : mapBusinessHours(input.businessHours);
   }
 
   if (presentFields.has("seoGoals")) {

@@ -8,7 +8,11 @@ import {
 } from "@/components/projects/detail/project-detail-info-card";
 import { ProjectDetailMembersCard } from "@/components/projects/detail/project-detail-members-card";
 import type { TProjectDetail } from "@/features/projects/projects.api";
-import { formatProjectDate } from "@/lib/frontend/projects/project-detail-display.utils";
+import {
+  formatProjectDate,
+  isHttpUrl,
+  toExternalHref,
+} from "@/lib/frontend/projects/project-detail-display.utils";
 import {
   elevatedCardBodyClass,
   elevatedCardMutedClass,
@@ -102,20 +106,28 @@ export function ProjectDetailSidebar({ project }: ProjectDetailSidebarProps) {
           <p className={cn("type-body", elevatedCardMutedClass)}>{t("noCompetitors")}</p>
         ) : (
           <ul className="space-y-2">
-            {project.competitorUrls.map((url) => (
-              <li key={url}>
-                <a
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cn(
-                    "type-body break-all text-brand underline-offset-4 transition-colors hover:underline",
+            {project.competitorUrls.map((competitor) => {
+              const linkable = isHttpUrl(competitor);
+
+              return (
+                <li key={competitor}>
+                  {linkable ? (
+                    <a
+                      href={toExternalHref(competitor)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={cn(
+                        "type-body break-all text-brand underline-offset-4 transition-colors hover:underline",
+                      )}
+                    >
+                      {competitor}
+                    </a>
+                  ) : (
+                    <span className={cn("type-body break-all", elevatedCardBodyClass)}>{competitor}</span>
                   )}
-                >
-                  {url}
-                </a>
-              </li>
-            ))}
+                </li>
+              );
+            })}
           </ul>
         )}
       </ProjectDetailInfoCard>

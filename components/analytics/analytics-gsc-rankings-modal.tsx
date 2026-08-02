@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import { IoClose } from "react-icons/io5";
@@ -34,7 +34,11 @@ export function AnalyticsGscRankingsModal({
   });
   const titleId = useId();
   const descriptionId = useId();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   const dimensionType = i18nKey === "topQueries" ? "query" : "page";
   const enabled = open && Boolean(projectId) && Boolean(from && to);
@@ -52,10 +56,6 @@ export function AnalyticsGscRankingsModal({
   );
 
   const rows = query.data?.rows ?? [];
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     if (!open) return;

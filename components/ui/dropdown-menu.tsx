@@ -21,12 +21,26 @@ function useDropdownMenu() {
 function DropdownMenu({
   children,
   className,
+  open: openProp,
+  onOpenChange,
 }: {
   children: React.ReactNode;
   className?: string;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }) {
-  const [open, setOpen] = React.useState(false);
+  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(false);
+  const isControlled = openProp !== undefined;
+  const open = isControlled ? Boolean(openProp) : uncontrolledOpen;
   const rootRef = React.useRef<HTMLDivElement>(null);
+
+  const setOpen = React.useCallback(
+    (next: boolean) => {
+      if (!isControlled) setUncontrolledOpen(next);
+      onOpenChange?.(next);
+    },
+    [isControlled, onOpenChange],
+  );
 
   React.useEffect(() => {
     if (!open) return;
@@ -43,11 +57,11 @@ function DropdownMenu({
       document.removeEventListener("pointerdown", onPointerDown);
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [open]);
+  }, [open, setOpen]);
 
   return (
     <DropdownMenuContext.Provider value={{ open, setOpen, rootRef }}>
-      <div ref={rootRef} className={cn("relative inline-flex", className)}>
+      <div ref={rootRef} className={cn("relative inline-flex", open && "z-50", className)}>
         {children}
       </div>
     </DropdownMenuContext.Provider>

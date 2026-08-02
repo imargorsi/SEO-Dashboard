@@ -78,16 +78,19 @@ export function DashboardSidebar({ onClose }: DashboardSidebarProps) {
         <Link
           href="/dashboard"
           className={cn(
-            "flex min-w-0 items-center justify-center rounded-lg px-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-border) focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar",
-            isCollapsed ? "w-auto" : "w-full justify-start",
+            "flex min-w-0 items-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-border) focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar",
+            isCollapsed ? "w-auto justify-center px-1" : "w-full justify-center",
+            onClose && !isCollapsed && "pe-10",
           )}
           aria-label={tLayout("appName")}
         >
           <AppLogo
             priority
             variant={isCollapsed ? "mark" : "full"}
-            className={cn("w-auto shrink-0", isCollapsed ? "size-7" : "h-8")}
-            width={isCollapsed ? 28 : 60}
+            className={cn(
+              isCollapsed ? "size-7 shrink-0" : "mx-auto h-8 w-auto max-w-full",
+            )}
+            width={isCollapsed ? 28 : 160}
             height={isCollapsed ? 28 : 24}
           />
         </Link>

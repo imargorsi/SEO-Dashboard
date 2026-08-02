@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "SEO Dashboard",
   description: "SEO Dashboard",
   icons: {
-    icon: "/favicon.svg",
+    icon: `/favicon.png?v=2`,
   },
 };
 

@@ -1,5 +1,12 @@
+"use client";
+
 import Image from "next/image";
 
+import { useThemePack } from "@/components/providers/theme-pack-provider";
+import {
+  THEME_PACK_LOGO_REVISION,
+  themePackLogoSrc,
+} from "@/lib/frontend/theme/theme-packs";
 import { cn } from "@/lib/utils";
 
 type AppLogoProps = {
@@ -7,7 +14,7 @@ type AppLogoProps = {
   className?: string;
   height?: number;
   priority?: boolean;
-  /** `full` = wordmark; `mark` = brand icon only (favicon). */
+  /** `full` = theme wordmark; `mark` = brand icon only (favicon). */
   variant?: "full" | "mark";
   width?: number;
 };
@@ -15,19 +22,22 @@ type AppLogoProps = {
 export function AppLogo({
   alt = "",
   className,
-  height = 24,
+  height = 40,
   priority = false,
   variant = "full",
-  width = 60,
+  width = 160,
 }: AppLogoProps) {
+  const { themePack } = useThemePack();
+
   if (variant === "mark") {
     return (
       <Image
-        src="/favicon.svg"
+        src={`/favicon.png?v=${THEME_PACK_LOGO_REVISION}`}
         alt={alt}
         width={width}
         height={height}
         priority={priority}
+        unoptimized
         className={cn(className)}
         aria-hidden={alt ? undefined : true}
       />
@@ -35,25 +45,16 @@ export function AppLogo({
   }
 
   return (
-    <>
-      <Image
-        src="/light-logo.svg"
-        alt={alt}
-        width={width}
-        height={height}
-        priority={priority}
-        className={cn(className, "dark:hidden")}
-        aria-hidden={alt ? undefined : true}
-      />
-      <Image
-        src="/Logo.svg"
-        alt={alt}
-        width={width}
-        height={height}
-        priority={priority}
-        className={cn(className, "hidden dark:block")}
-        aria-hidden={alt ? undefined : true}
-      />
-    </>
+    <Image
+      key={themePack}
+      src={themePackLogoSrc(themePack)}
+      alt={alt}
+      width={width}
+      height={height}
+      priority={priority}
+      unoptimized
+      className={cn("object-contain", className)}
+      aria-hidden={alt ? undefined : true}
+    />
   );
 }

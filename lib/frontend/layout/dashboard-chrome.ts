@@ -19,6 +19,12 @@ export const toolbarFilterChipClass =
 export const elevatedCardSurfaceClass =
   "border border-(--border-elevated) bg-bg-card-elevated text-(--text-on-elevated) shadow-(--shadow-elevated) backdrop-blur-md transition-shadow duration-200 hover:shadow-[0_0_0_1px_var(--accent-border)]";
 
+/** Analytics module panels — shared radius + breathing room. */
+export const analyticsPanelClass = "rounded-3xl p-5 sm:p-6";
+
+/** Page/section title + description — keep hierarchy readable (flex gap, not tight leading collapse). */
+export const analyticsHeadingStackClass = "flex flex-col gap-1.5";
+
 export const elevatedCardTitleClass = "text-(--text-on-elevated)";
 
 export const elevatedCardBodyClass = "text-(--text-on-elevated-secondary)";
@@ -33,9 +39,9 @@ export const sidebarShellExpandedClass = "md:w-60";
 
 export const sidebarShellCollapsedClass = "md:w-[4.5rem]";
 
-/** RankRadar logo mark + wordmark in the sidebar header. */
+/** RankRadar / Crawlx wordmark in the sidebar header — height grows with full-width logo. */
 export const sidebarBrandRowClass =
-  "relative flex h-[4.25rem] shrink-0 items-center justify-center px-4";
+  "relative flex min-h-[4.25rem] shrink-0 items-center justify-center px-3 py-2 md:px-4";
 
 export const sidebarBrandRowCollapsedClass = "md:px-2";
 

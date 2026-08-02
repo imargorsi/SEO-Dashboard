@@ -1,10 +1,6 @@
 import type { AnalyticsDimensionsQuery, AnalyticsOverviewQuery } from "@/schemas/analytics";
 import { AnalyticsDailyMetric, AnalyticsDimensionRow } from "@/models";
-import {
-  addUtcDays,
-  inclusiveDaySpan,
-  resolveAnalyticsCardBenchmarkRanges,
-} from "@/lib/integrations/date.utils";
+import { addUtcDays, inclusiveDaySpan } from "@/lib/integrations/date.utils";
 import { getProjectIntegrationsMap } from "@/lib/integrations/sync-analytics";
 import type {
   TAnalyticsCardMetricDto,
@@ -31,33 +27,8 @@ function average(values: number[]): number | null {
   return values.reduce((sum, value) => sum + value, 0) / values.length;
 }
 
-function percentChange(current: number | null, previous: number | null): number | null {
-  if (current == null || previous == null) return null;
-  if (previous === 0) return current === 0 ? 0 : null;
-  return ((current - previous) / Math.abs(previous)) * 100;
-}
-
-/** Position: lower is better — positive changePercent means improvement. */
-function positionChangePercent(current: number | null, previous: number | null): number | null {
-  if (current == null || previous == null) return null;
-  if (previous === 0) return null;
-  return ((previous - current) / Math.abs(previous)) * 100;
-}
-
-function cardMetric(
-  current: number | null,
-  previous: number | null,
-  sparkline: number[],
-  invertForImprovement = false,
-): TAnalyticsCardMetricDto {
-  return {
-    value: current,
-    previousValue: previous,
-    changePercent: invertForImprovement
-      ? positionChangePercent(current, previous)
-      : percentChange(current, previous),
-    sparkline,
-  };
+function cardMetric(value: number | null, sparkline: number[]): TAnalyticsCardMetricDto {
+  return { value, sparkline };
 }
 
 function buildCardSparklines(
@@ -198,30 +169,17 @@ export async function getAnalyticsOverview(
   projectId: string,
   query: AnalyticsOverviewQuery,
 ): Promise<TAnalyticsOverviewDto> {
-  const cardRanges = resolveAnalyticsCardBenchmarkRanges();
-  const earliest = [cardRanges.previous.from, cardRanges.current.from, query.from].sort()[0]!;
-  const latest = [cardRanges.previous.to, cardRanges.current.to, query.to].sort().at(-1)!;
-
   const [allMetrics, integrations] = await Promise.all([
     AnalyticsDailyMetric.find({
       projectId,
-      date: { $gte: earliest, $lte: latest },
+      date: { $gte: query.from, $lte: query.to },
     }).sort({ date: 1 }),
     getProjectIntegrationsMap(projectId),
   ]);
 
-  const currentCardMetrics = allMetrics.filter(
-    (m) => m.date >= cardRanges.current.from && m.date <= cardRanges.current.to,
-  );
-  const previousCardMetrics = allMetrics.filter(
-    (m) => m.date >= cardRanges.previous.from && m.date <= cardRanges.previous.to,
-  );
-  const filteredMetrics = allMetrics.filter((m) => m.date >= query.from && m.date <= query.to);
-
-  const currentGsc = aggregateGscTotals(currentCardMetrics);
-  const previousGsc = aggregateGscTotals(previousCardMetrics);
+  const filteredMetrics = allMetrics;
   const filteredGsc = aggregateGscTotals(filteredMetrics);
-  const sparklines = buildCardSparklines(currentCardMetrics);
+  const sparklines = buildCardSparklines(filteredMetrics);
 
   let sessions = 0;
   let totalUsers = 0;
@@ -277,17 +235,10 @@ export async function getAnalyticsOverview(
     from: query.from,
     to: query.to,
     cards: {
-      benchmark: "this_month_vs_last_month",
-      current: cardRanges.current,
-      previous: cardRanges.previous,
-      clicks: cardMetric(currentGsc.clicks, previousGsc.clicks, sparklines.clicks),
-      impressions: cardMetric(
-        currentGsc.impressions,
-        previousGsc.impressions,
-        sparklines.impressions,
-      ),
-      ctr: cardMetric(currentGsc.ctr, previousGsc.ctr, sparklines.ctr),
-      position: cardMetric(currentGsc.position, previousGsc.position, sparklines.position, true),
+      clicks: cardMetric(filteredGsc.clicks, sparklines.clicks),
+      impressions: cardMetric(filteredGsc.impressions, sparklines.impressions),
+      ctr: cardMetric(filteredGsc.ctr, sparklines.ctr),
+      position: cardMetric(filteredGsc.position, sparklines.position),
     },
     gsc: filteredGsc,
     ga4: {

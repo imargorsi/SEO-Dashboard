@@ -23,28 +23,19 @@ export type TGooglePropertyOption = {
   service: TGoogleIntegrationService;
 };
 
-/** One GSC KPI with fixed this-month vs last-month benchmark (not date-filter scoped). */
+/** One GSC KPI for the selected date range (no period comparison). */
 export type TAnalyticsCardMetricDto = {
   value: number | null;
-  previousValue: number | null;
-  /** Percent change vs previous period. For position, positive = improved (lower rank). */
-  changePercent: number | null;
-  /** Daily points for the current card window (This Month) — used for card sparklines. */
+  /** Daily points for the selected date range — used for card sparklines. */
   sparkline: number[];
 };
 
 export type TAnalyticsOverviewDto = {
-  /** Date-filter window used for `series` / filtered GA4 rollups. */
+  /** Selected date window for cards, series, and filtered GA4 rollups. */
   from: string;
   to: string;
-  /**
-   * Top 4 GSC cards — always This Month vs Last Month (UTC).
-   * Independent of the page date filter.
-   */
+  /** Top 4 GSC cards for the same `from`/`to` window. */
   cards: {
-    benchmark: "this_month_vs_last_month";
-    current: { from: string; to: string };
-    previous: { from: string; to: string };
     clicks: TAnalyticsCardMetricDto;
     impressions: TAnalyticsCardMetricDto;
     ctr: TAnalyticsCardMetricDto;
@@ -64,7 +55,7 @@ export type TAnalyticsOverviewDto = {
     engagedSessions: number;
     organicSessions: number;
   };
-  /** Daily series for the performance trend graph (date-filter scoped). */
+  /** Daily series for the performance trend graph. */
   series: Array<{
     date: string;
     clicks: number | null;

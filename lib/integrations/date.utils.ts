@@ -104,28 +104,3 @@ export function matchAnalyticsDatePreset(
   }
   return null;
 }
-
-/**
- * Fixed ranges for the top 4 GSC summary cards.
- * Current = this UTC month through yesterday; previous = full previous UTC calendar month.
- * The page date filter must not change these windows.
- */
-export function resolveAnalyticsCardBenchmarkRanges(now = new Date()): {
-  current: { from: string; to: string };
-  previous: { from: string; to: string };
-} {
-  const yesterday = utcYesterdayString(now);
-  const year = now.getUTCFullYear();
-  const month = now.getUTCMonth();
-
-  const currentFrom = toUtcDateString(new Date(Date.UTC(year, month, 1)));
-  const currentTo = yesterday < currentFrom ? currentFrom : yesterday;
-
-  const previousFrom = toUtcDateString(new Date(Date.UTC(year, month - 1, 1)));
-  const previousTo = toUtcDateString(new Date(Date.UTC(year, month, 0)));
-
-  return {
-    current: { from: currentFrom, to: currentTo },
-    previous: { from: previousFrom, to: previousTo },
-  };
-}

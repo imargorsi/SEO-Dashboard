@@ -77,6 +77,47 @@ async function fetchDimensions(
   return envelope.data;
 }
 
+/** Max rows per dimension sheet (API cap). */
+export const ANALYTICS_EXPORT_DIMENSION_LIMIT = 100;
+
+export type TAnalyticsExportBundle = {
+  overview: TAnalyticsOverviewDto;
+  queries: TAnalyticsDimensionsDto;
+  pages: TAnalyticsDimensionsDto;
+  channels: TAnalyticsDimensionsDto;
+  countries: TAnalyticsDimensionsDto;
+};
+
+/** Fetch overview + dimension breakdowns for Excel export. */
+export async function fetchAnalyticsReportForExport(
+  projectId: string,
+  params: TAnalyticsOverviewParams,
+): Promise<TAnalyticsExportBundle> {
+  const shared = { from: params.from, to: params.to, limit: ANALYTICS_EXPORT_DIMENSION_LIMIT };
+  const [overview, queries, pages, channels, countries] = await Promise.all([
+    fetchOverview(projectId, params),
+    fetchDimensions(projectId, { ...shared, source: "gsc", dimensionType: "query" }),
+    fetchDimensions(projectId, { ...shared, source: "gsc", dimensionType: "page" }),
+    fetchDimensions(projectId, {
+      ...shared,
+      source: "ga4",
+      dimensionType: "channel_group",
+    }),
+    fetchDimensions(projectId, { ...shared, source: "ga4", dimensionType: "country" }),
+  ]);
+
+  return { overview, queries, pages, channels, countries };
+}
+
+export function useAnalyticsExportMutation(projectId: string | null | undefined) {
+  return useMutation({
+    mutationFn: (params: TAnalyticsOverviewParams) => {
+      if (!projectId) throw new Error("Missing project id");
+      return fetchAnalyticsReportForExport(projectId, params);
+    },
+  });
+}
+
 export function useAnalyticsOverviewQuery(
   projectId: string | null | undefined,
   params: TAnalyticsOverviewParams,

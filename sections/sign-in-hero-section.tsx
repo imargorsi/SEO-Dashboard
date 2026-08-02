@@ -23,9 +23,9 @@ export function SignInHeroSection() {
       <div className="relative z-10 mx-auto w-full max-w-xl text-text-primary">
         <AppLogo
           alt={tLayout("appName")}
-          className="mb-10 block h-auto w-64 max-w-full"
-          width={220}
-          height={40}
+          className="mb-10 block h-auto w-72 max-w-full"
+          width={288}
+          height={72}
           priority
         />
 

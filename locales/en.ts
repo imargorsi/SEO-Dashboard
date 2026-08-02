@@ -682,8 +682,26 @@ export interface Translation {
       loadError: string;
       dateFrom: string;
       dateTo: string;
-      filteredSectionTitle: string;
-      filteredSectionBody: string;
+      export: {
+        excel: string;
+        exporting: string;
+        success: string;
+        empty: string;
+        errorFallback: string;
+        metric: string;
+        value: string;
+        date: string;
+        channel: string;
+        country: string;
+        sheets: {
+          summary: string;
+          dailyTrend: string;
+          topQueries: string;
+          topPages: string;
+          trafficSources: string;
+          countries: string;
+        };
+      };
       dateFilter: {
         ariaLabel: string;
         presetsHeading: string;
@@ -712,9 +730,77 @@ export interface Translation {
         position: string;
         sessions: string;
         organicSessions: string;
-        lastMonthLabel: string;
-        positionBetterSuffix: string;
-        positionWorseSuffix: string;
+      };
+      topQueries: {
+        title: string;
+        viewAll: string;
+        loading: string;
+        emptyTitle: string;
+        emptyBody: string;
+        modalTitle: string;
+        modalSubtitle: string;
+        modalClose: string;
+        modalRowCount: string;
+        columns: {
+          dimension: string;
+          clicks: string;
+          impressions: string;
+          ctr: string;
+          position: string;
+        };
+      };
+      topPages: {
+        title: string;
+        viewAll: string;
+        loading: string;
+        emptyTitle: string;
+        emptyBody: string;
+        modalTitle: string;
+        modalSubtitle: string;
+        modalClose: string;
+        modalRowCount: string;
+        columns: {
+          dimension: string;
+          clicks: string;
+          impressions: string;
+          ctr: string;
+          position: string;
+        };
+      };
+      trafficSources: {
+        title: string;
+        totalLabel: string;
+        legendAria: string;
+        loading: string;
+        emptyTitle: string;
+        emptyBody: string;
+      };
+      demographics: {
+        title: string;
+        subtitle: string;
+        metricHint: string;
+        listAria: string;
+        mapAria: string;
+        mapUnavailable: string;
+        loading: string;
+        emptyTitle: string;
+        emptyBody: string;
+      };
+      trendChart: {
+        title: string;
+        subtitle: string;
+        tabsAria: string;
+        tabs: {
+          clicks: string;
+          impressions: string;
+          ctr: string;
+          position: string;
+        };
+        changeIncrease: string;
+        changeDecrease: string;
+        changeFlat: string;
+        emptyTitle: string;
+        emptyBody: string;
       };
       tables: {
         topQueries: string;
@@ -1198,7 +1284,7 @@ const translation: Translation = {
       disconnect: "Disconnect",
       propertyLabel: "Property",
       propertyPlaceholder: "Select A Property",
-      propertyRequired: "Property Id Is Required.",
+      propertyRequired: "Property ID Is Required.",
       gscPropertyPlaceholder: "https://example.com/",
       ga4PropertyPlaceholder: "properties/123456789",
       lastSynced: "Last Synced {{value}}",
@@ -1783,8 +1869,26 @@ const translation: Translation = {
       loadError: "Failed To Load Analytics.",
       dateFrom: "From",
       dateTo: "To",
-      filteredSectionTitle: "Trends And Breakdowns",
-      filteredSectionBody: "Date Range Applies To Charts And Tables Below. Summary Cards Always Show This Month Vs Last Month.",
+      export: {
+        excel: "Export Excel",
+        exporting: "Exporting…",
+        success: "Excel Report Downloaded.",
+        empty: "No Analytics Data Matches The Current Filters.",
+        errorFallback: "Could Not Export Analytics. Try Again.",
+        metric: "Metric",
+        value: "Value",
+        date: "Date",
+        channel: "Channel",
+        country: "Country",
+        sheets: {
+          summary: "Summary",
+          dailyTrend: "Daily Trend",
+          topQueries: "Top Queries",
+          topPages: "Top Pages",
+          trafficSources: "Traffic Sources",
+          countries: "Countries",
+        },
+      },
       dateFilter: {
         ariaLabel: "Analytics Date Range",
         presetsHeading: "Quick Ranges",
@@ -1816,9 +1920,77 @@ const translation: Translation = {
         position: "Avg. Position",
         sessions: "Sessions",
         organicSessions: "Organic Sessions",
-        lastMonthLabel: "Last Month",
-        positionBetterSuffix: "Better Than Prev Period",
-        positionWorseSuffix: "Worse Than Prev Period",
+      },
+      topQueries: {
+        title: "Top Search Queries",
+        viewAll: "View All Queries",
+        loading: "Loading…",
+        emptyTitle: "No Search Queries",
+        emptyBody: "Connect Search Console And Sync To Populate This Table.",
+        modalTitle: "All Top Search Queries",
+        modalSubtitle: "Full Ranking List For The Selected Date Range.",
+        modalClose: "Close",
+        modalRowCount: "{{count}} Queries",
+        columns: {
+          dimension: "Query",
+          clicks: "Clicks",
+          impressions: "Impressions",
+          ctr: "CTR",
+          position: "Position",
+        },
+      },
+      topPages: {
+        title: "Top Pages",
+        viewAll: "View All Pages",
+        loading: "Loading…",
+        emptyTitle: "No Pages",
+        emptyBody: "Connect Search Console And Sync To Populate This Table.",
+        modalTitle: "All Top Pages",
+        modalSubtitle: "Full Ranking List For The Selected Date Range.",
+        modalClose: "Close",
+        modalRowCount: "{{count}} Pages",
+        columns: {
+          dimension: "Page",
+          clicks: "Clicks",
+          impressions: "Impressions",
+          ctr: "CTR",
+          position: "Position",
+        },
+      },
+      trafficSources: {
+        title: "Traffic Sources",
+        totalLabel: "Total",
+        legendAria: "Traffic Source Breakdown",
+        loading: "Loading…",
+        emptyTitle: "No Traffic Sources",
+        emptyBody: "Connect Google Analytics And Sync To Populate This Chart.",
+      },
+      demographics: {
+        title: "User Demographics",
+        subtitle: "Where Users Engage By Territory.",
+        metricHint: "Total Users In The Selected Date Range.",
+        listAria: "Top Countries By Users",
+        mapAria: "World Map Of Users By Country",
+        mapUnavailable: "Map Unavailable",
+        loading: "Loading…",
+        emptyTitle: "No Geographic Data",
+        emptyBody: "Connect Google Analytics And Sync To Populate This Map.",
+      },
+      trendChart: {
+        title: "SEO Performance Trend",
+        subtitle: "Comparing Search Clicks And Organic Impressions Over Time.",
+        tabsAria: "Performance Metric",
+        tabs: {
+          clicks: "Clicks",
+          impressions: "Impressions",
+          ctr: "CTR",
+          position: "Position",
+        },
+        changeIncrease: "Increase",
+        changeDecrease: "Decrease",
+        changeFlat: "No Change",
+        emptyTitle: "No Trend Data",
+        emptyBody: "Connect Search Console And Sync To Populate This Chart.",
       },
       tables: {
         topQueries: "Top Queries",

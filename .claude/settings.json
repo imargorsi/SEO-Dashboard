@@ -17,7 +17,30 @@
       "Bash(git stash *)",
       "Bash(npx prettier *)",
       "Bash(git check-ignore *)",
-      "Bash(grep -n \"### Roles$\\\\|roles-table.tsx\\\\|role-detail-sheet.tsx\\\\|role-routes.utils.ts\\\\|Implemented ✅\\\\|Not built yet\\\\|^Status: 🟡\" doc/modules/04-admin-roles-permissions.md)"
+      "Bash(grep -n \"### Roles$\\\\|roles-table.tsx\\\\|role-detail-sheet.tsx\\\\|role-routes.utils.ts\\\\|Implemented ✅\\\\|Not built yet\\\\|^Status: 🟡\" doc/modules/04-admin-roles-permissions.md)",
+      "Bash(lsof -ti:3001 -sTCP:LISTEN)",
+      "Bash(curl -sf http://localhost:3002)",
+      "Bash(powershell -Command \"Stop-Process -Id 27740 -Force\")",
+      "Bash(node measure-row.mjs)",
+      "Bash(node check-scroll.mjs)",
+      "Bash(node -e ' *)",
+      "Bash(lsof -ti:3002 -sTCP:LISTEN)",
+      "Bash(curl -sf http://localhost:3003)",
+      "Bash(lsof -ti:3003 -sTCP:LISTEN)",
+      "Bash(powershell -Command \"Stop-Process -Id 15728 -Force\")",
+      "Bash(curl -sf http://localhost:3004)",
+      "Bash(lsof -ti:3004 -sTCP:LISTEN)",
+      "Bash(taskkill /PID 28180 /F)",
+      "PowerShell(taskkill /PID 28180 /F)",
+      "PowerShell(taskkill /PID 14268 /F)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000 --max-time 2)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3004 --max-time 2)",
+      "Bash(curl -s http://localhost:3000 --max-time 3)",
+      "Bash(node -e \"console.log\\(require\\('playwright/package.json'\\).version\\)\")",
+      "Bash(npm pack *)",
+      "Bash(xargs -I{} echo {})",
+      "Bash(node scratch-check.mjs)",
+      "Bash(rm scratch-check.mjs)"
     ]
   }
 }

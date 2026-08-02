@@ -6,6 +6,7 @@ import type { AuthContext } from "@/lib/auth/guards";
 import { getProjectForUser } from "@/lib/projects/get-project";
 import { mapUpdateProjectFields } from "@/lib/projects/project-field-map.utils";
 import { deleteStoredProjectLogo } from "@/lib/projects/project-logo-storage";
+import { reassignProjectOwner } from "@/lib/projects/reassign-project-owner";
 import { serializeProject } from "@/lib/serializers/project";
 import { resolveOwnerMap } from "@/lib/projects/resolve-project-owner.utils";
 import { resolveProjectInvitees } from "@/lib/projects/resolve-project-invitees";
@@ -35,6 +36,12 @@ export async function updateProject(
     );
   }
 
+  let didReassignOwner = false;
+  if (presentFields.has("ownerUserId")) {
+    await reassignProjectOwner(auth, project, input.ownerUserId);
+    didReassignOwner = true;
+  }
+
   const patch = mapUpdateProjectFields(input, presentFields);
   const previousLogo = project.logoImage;
 
@@ -42,13 +49,16 @@ export async function updateProject(
     patch.logoImage = options.logoImage;
   }
 
-  if (Object.keys(patch).length === 0) {
+  if (Object.keys(patch).length === 0 && !options?.logoImage && !didReassignOwner) {
     throw ValidationError.fromFieldErrors({
       _: ["At Least One Field Must Be Provided."],
     });
   }
 
-  project.set(patch);
+  if (Object.keys(patch).length > 0) {
+    project.set(patch);
+  }
+
   await project.save();
 
   if (options?.logoImage && previousLogo && previousLogo !== options.logoImage) {

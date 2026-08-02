@@ -42,30 +42,21 @@ function fieldStepIndex(): Record<keyof TProjectCreateFormValues, number> {
     primaryServiceToPromote: 1,
     idealCustomerProfile: 1,
     targetLocations: 1,
-    opensAt: 1,
-    closesAt: 1,
     seoGoals: 2,
     competitorUrls: 2,
   };
 }
 
-function stepFields(isAdmin: boolean, isEdit: boolean): Array<Array<keyof TProjectCreateFormValues>> {
+function stepFields(isAdmin: boolean, _isEdit: boolean): Array<Array<keyof TProjectCreateFormValues>> {
   return [
     [
-      ...(isAdmin && !isEdit ? (["ownerUserId"] as const) : []),
+      ...(isAdmin ? (["ownerUserId"] as const) : []),
       "businessName",
       "websiteUrl",
       "businessAddress",
       "pocContactNumber",
     ],
-    [
-      "servicesOffered",
-      "primaryServiceToPromote",
-      "idealCustomerProfile",
-      "targetLocations",
-      "opensAt",
-      "closesAt",
-    ],
+    ["servicesOffered", "primaryServiceToPromote", "idealCustomerProfile", "targetLocations"],
     ["seoGoals", "competitorUrls"],
   ];
 }
@@ -87,7 +78,7 @@ export function useProjectCreateForm(authUser: AuthUser, options: TUseProjectFor
   const logoFileRef = useRef<File | null>(null);
   const [logoPreviewUrl, setLogoPreviewUrl] = useState<string | null>(initialLogoUrl);
   const isAdmin = isSuperAdmin(authUser.roles);
-  const ownerOptionsQuery = useProjectOwnerOptions(isAdmin && !isEdit);
+  const ownerOptionsQuery = useProjectOwnerOptions(isAdmin);
   const steps = useMemo(() => stepFields(isAdmin, isEdit), [isAdmin, isEdit]);
   const stepLabels = useMemo(
     () => PROJECT_FORM_STEP_LABEL_KEYS.map((key) => t(key)),
@@ -198,7 +189,7 @@ export function useProjectCreateForm(authUser: AuthUser, options: TUseProjectFor
 
         await updateMutation.mutateAsync({
           projectId,
-          payload: toUpdateProjectPayload(values),
+          payload: toUpdateProjectPayload(values, isAdmin),
           companyLogoFile: logoFileRef.current,
         });
         notify.success(t("editSuccessFallback"));
@@ -218,8 +209,8 @@ export function useProjectCreateForm(authUser: AuthUser, options: TUseProjectFor
           ownerUserId: error.errors.ownerUserId?.[0],
           businessName: error.errors.businessName?.[0],
           websiteUrl: error.errors.websiteUrl?.[0],
-          opensAt: error.errors["businessHours.opensAt"]?.[0],
-          closesAt: error.errors["businessHours.closesAt"]?.[0],
+          pocContactNumber: error.errors.pocContactNumber?.[0],
+          competitorUrls: error.errors["competitorUrls.0"]?.[0] ?? error.errors.competitorUrls?.[0],
           seoGoals: error.errors["seoGoals.0"]?.[0] ?? error.errors.seoGoals?.[0],
         };
 

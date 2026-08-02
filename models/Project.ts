@@ -2,16 +2,6 @@ import mongoose, { Schema, type InferSchemaType, type Model, type Types } from "
 
 import { PROJECT_STATUSES, SEO_GOALS } from "@/lib/projects/constants";
 
-const businessHoursSchema = new Schema(
-  {
-    /** Local time, e.g. `09:00` (24h). */
-    opensAt: { type: String, default: null, trim: true },
-    /** Local time, e.g. `17:00` (24h). */
-    closesAt: { type: String, default: null, trim: true },
-  },
-  { _id: false },
-);
-
 const projectSchema = new Schema(
   {
     // --- Required (Module 2) ---
@@ -20,7 +10,7 @@ const projectSchema = new Schema(
 
     // --- Optional business information ---
     businessAddress: { type: String, default: null, trim: true },
-    /** Company logo — Vercel Blob private path stored as `blob:{pathname}`. */
+    /** Company logo — R2 private object path stored as `blob:{pathname}`. */
     logoImage: { type: String, default: null, trim: true },
     /** Stored as string to preserve country codes and formatting. */
     pocContactNumber: { type: String, default: null, trim: true },
@@ -32,7 +22,6 @@ const projectSchema = new Schema(
     primaryServiceToPromote: { type: String, default: null, trim: true },
     idealCustomerProfile: { type: String, default: null, trim: true },
     targetLocations: { type: [String], default: [] },
-    businessHours: { type: businessHoursSchema, default: null },
 
     // --- Business goals (multi-select enum) ---
     seoGoals: {
@@ -58,8 +47,6 @@ const projectSchema = new Schema(
 projectSchema.index({ status: 1, createdAt: -1 });
 projectSchema.index({ createdByUserId: 1 });
 
-export type ProjectBusinessHours = InferSchemaType<typeof businessHoursSchema>;
-
 export type ProjectDocument = InferSchemaType<typeof projectSchema> &
   mongoose.Document & {
     businessName: string;
@@ -72,7 +59,6 @@ export type ProjectDocument = InferSchemaType<typeof projectSchema> &
     primaryServiceToPromote: string | null;
     idealCustomerProfile: string | null;
     targetLocations: string[];
-    businessHours: ProjectBusinessHours | null;
     seoGoals: (typeof SEO_GOALS)[number][];
     competitorUrls: string[];
     status: (typeof PROJECT_STATUSES)[number];

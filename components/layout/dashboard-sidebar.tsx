@@ -14,18 +14,12 @@ import { useProjectAccess } from "@/context/project-access-context";
 import { useSelectedProject } from "@/context/selected-project-context";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
 import { buildSidebarNavItems } from "@/lib/frontend/layout/build-sidebar-nav";
-import {
-  isSidebarNavItemActive,
-  SIDEBAR_NAV_GROUP_ORDER,
-  type SidebarNavGroup,
-} from "@/lib/frontend/layout/sidebar-nav";
+import { isSidebarNavItemActive } from "@/lib/frontend/layout/sidebar-nav";
 import {
   sidebarBrandRowClass,
   sidebarBrandRowCollapsedClass,
   sidebarCollapseToggleClass,
   sidebarCollapseToggleCollapsedClass,
-  sidebarNavGroupClass,
-  sidebarNavGroupLabelClass,
   sidebarNavIconWellActiveClass,
   sidebarNavIconWellClass,
   sidebarNavIconWellInactiveClass,
@@ -40,11 +34,6 @@ import {
 } from "@/lib/frontend/layout/dashboard-chrome";
 import { isSuperAdmin } from "@/lib/rbac/access";
 import { cn } from "@/lib/utils";
-
-const SIDEBAR_GROUP_LABEL_KEY: Record<SidebarNavGroup, "sectionGeneral" | "sectionMySpace"> = {
-  general: "sectionGeneral",
-  mySpace: "sectionMySpace",
-};
 
 type DashboardSidebarProps = {
   onClose?: () => void;
@@ -73,15 +62,6 @@ export function DashboardSidebar({ onClose }: DashboardSidebarProps) {
     if (!user || !canRenderNav) return [];
     return buildSidebarNavItems(user.permissions, projectPermissions, user.roles);
   }, [canRenderNav, projectPermissions, user]);
-
-  const navGroups = useMemo(
-    () =>
-      SIDEBAR_NAV_GROUP_ORDER.map((group) => ({
-        group,
-        items: navItems.filter((item) => item.group === group),
-      })).filter((entry) => entry.items.length > 0),
-    [navItems],
-  );
 
   const collapseLabel = isCollapsed ? tNav("expandSidebar") : tNav("collapseSidebar");
 
@@ -126,73 +106,58 @@ export function DashboardSidebar({ onClose }: DashboardSidebarProps) {
       {showProjectSelector ? <ProjectSelector isCollapsed={isCollapsed} /> : null}
 
       <nav className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto pb-3 pt-1", isCollapsed ? "px-2" : "px-3")}>
-        <div className="flex flex-col gap-3">
-          {navGroups.map(({ group, items }, groupIndex) => (
-            <div
-              key={group}
-              className={cn(
-                sidebarNavGroupClass,
-                groupIndex > 0 && "border-t border-border/50 pt-3",
-              )}
-            >
-              {!isCollapsed ? (
-                <p className={sidebarNavGroupLabelClass}>{tNav(SIDEBAR_GROUP_LABEL_KEY[group])}</p>
-              ) : null}
-              <ul className="flex flex-col" role="list">
-                {items.map((item, itemIndex) => {
-                  const isActive = isSidebarNavItemActive(pathname, item);
-                  const Icon = item.icon;
-                  const label = tNav(item.labelKey);
-                  const isLast = itemIndex === items.length - 1;
+        <ul className="flex flex-col" role="list">
+          {navItems.map((item, itemIndex) => {
+            const isActive = isSidebarNavItemActive(pathname, item);
+            const Icon = item.icon;
+            const label = tNav(item.labelKey);
+            const isLast = itemIndex === navItems.length - 1;
 
-                  return (
-                    <li
-                      key={item.labelKey}
-                      className={cn(!isLast && sidebarNavItemDividerClass, !isLast && "mb-1 pb-1")}
+            return (
+              <li
+                key={item.labelKey}
+                className={cn(!isLast && sidebarNavItemDividerClass, !isLast && "mb-1 pb-1")}
+              >
+                <Link
+                  href={item.path}
+                  title={isCollapsed ? label : undefined}
+                  aria-label={isCollapsed ? label : undefined}
+                  aria-current={isActive ? "page" : undefined}
+                  className={cn(
+                    sidebarNavLinkClass,
+                    isCollapsed && sidebarNavLinkCollapsedClass,
+                    isActive ? sidebarNavLinkActiveClass : sidebarNavLinkInactiveClass,
+                  )}
+                >
+                  <span
+                    className={cn(
+                      sidebarNavIconWellClass,
+                      isActive ? sidebarNavIconWellActiveClass : sidebarNavIconWellInactiveClass,
+                    )}
+                  >
+                    <Icon className="size-3.5" aria-hidden />
+                  </span>
+                  <span className={cn("min-w-0 flex-1 truncate", isCollapsed && "md:hidden")}>
+                    {label}
+                  </span>
+                  {item.badge != null ? (
+                    <span
+                      className={cn(
+                        "ms-auto inline-flex min-w-[18px] items-center justify-center rounded-full px-1.5 py-0.5 type-overline",
+                        isCollapsed && "md:hidden",
+                        isActive
+                          ? "bg-text-on-brand/20 text-text-on-brand"
+                          : "bg-destructive text-text-on-brand",
+                      )}
                     >
-                      <Link
-                        href={item.path}
-                        title={isCollapsed ? label : undefined}
-                        aria-label={isCollapsed ? label : undefined}
-                        aria-current={isActive ? "page" : undefined}
-                        className={cn(
-                          sidebarNavLinkClass,
-                          isCollapsed && sidebarNavLinkCollapsedClass,
-                          isActive ? sidebarNavLinkActiveClass : sidebarNavLinkInactiveClass,
-                        )}
-                      >
-                        <span
-                          className={cn(
-                            sidebarNavIconWellClass,
-                            isActive ? sidebarNavIconWellActiveClass : sidebarNavIconWellInactiveClass,
-                          )}
-                        >
-                          <Icon className="size-3.5" aria-hidden />
-                        </span>
-                        <span className={cn("min-w-0 flex-1 truncate", isCollapsed && "md:hidden")}>
-                          {label}
-                        </span>
-                        {item.badge != null ? (
-                          <span
-                            className={cn(
-                              "ms-auto inline-flex min-w-[18px] items-center justify-center rounded-full px-1.5 py-0.5 type-overline",
-                              isCollapsed && "md:hidden",
-                              isActive
-                                ? "bg-text-on-brand/20 text-text-on-brand"
-                                : "bg-destructive text-text-on-brand",
-                            )}
-                          >
-                            {item.badge}
-                          </span>
-                        ) : null}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
-        </div>
+                      {item.badge}
+                    </span>
+                  ) : null}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
 
         {sidebar ? (
           <div className="mt-auto pt-3">

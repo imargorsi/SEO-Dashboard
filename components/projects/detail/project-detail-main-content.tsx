@@ -10,10 +10,7 @@ import {
 } from "@/components/projects/detail/project-detail-info-card";
 import type { TProjectDetail } from "@/features/projects/projects.api";
 import { SEO_GOALS } from "@/lib/projects/constants";
-import {
-  displayDetailValue,
-  formatBusinessHours,
-} from "@/lib/frontend/projects/project-detail-display.utils";
+import { displayDetailValue } from "@/lib/frontend/projects/project-detail-display.utils";
 import { SEO_GOAL_ICONS } from "@/lib/frontend/projects/seo-goal-icons";
 import {
   elevatedCardBodyClass,
@@ -44,10 +41,6 @@ export function ProjectDetailMainContent({ project }: ProjectDetailMainContentPr
           <ProjectDetailField
             label={tForm("primaryServiceToPromote")}
             value={displayDetailValue(project.primaryServiceToPromote)}
-          />
-          <ProjectDetailField
-            label={tDetail("businessHours")}
-            value={formatBusinessHours(project.businessHours, tDetail("noValue"))}
           />
         </div>
       </ProjectDetailInfoCard>

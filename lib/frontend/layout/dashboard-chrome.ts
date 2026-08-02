@@ -75,8 +75,3 @@ export const sidebarProjectSelectorClass =
 export const sidebarProjectSelectorOpenClass = "border-accent-border dark:border-text-on-brand/50";
 
 export const sidebarNavItemDividerClass = "border-b border-border/40";
-
-export const sidebarNavGroupClass = "flex flex-col gap-1";
-
-export const sidebarNavGroupLabelClass =
-  "px-2.5 pb-0.5 pt-1 type-caption-xs text-text-muted";

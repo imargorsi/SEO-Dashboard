@@ -3,16 +3,24 @@
 import { cn } from "@/lib/utils";
 import {
   forwardRef,
+  useEffect,
+  useRef,
   useState,
   type ChangeEvent,
   type ComponentPropsWithoutRef,
   type FocusEvent,
+  type KeyboardEvent,
   type Ref,
-  type ChangeEventHandler,
 } from "react";
-import { IoEye, IoEyeOff } from "react-icons/io5";
+import { IoClose, IoEye, IoEyeOff } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 import SelectDropdownArrowIcon from "@/components/icons/input-select-dropdown-arrow";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export type InputType =
   | "text"
@@ -52,8 +60,17 @@ export interface ReusableInputProps extends NativeControlProps {
   error?: string;
   className?: string;
   autoComplete?: string;
+  /** Renders `value` as a comma-separated list of removable chips instead of plain text. */
+  chips?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   onBlur?: (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+}
+
+function parseChipValues(value: string): string[] {
+  return value
+    .split(",")
+    .map((chip) => chip.trim())
+    .filter(Boolean);
 }
 
 type ControlElement = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
@@ -74,6 +91,115 @@ function mergeRefs(
   refs.forEach((ref) => assignRef(node, ref));
 }
 
+type SelectFieldProps = {
+  id: string;
+  name?: string;
+  value?: string | number;
+  placeholder?: string;
+  options: Option[];
+  required: boolean;
+  disabled: boolean;
+  showError: boolean;
+  controlClassName: string;
+  onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  onBlur?: (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  setControlRef: (node: ControlElement | null) => void;
+};
+
+function SelectField({
+  id,
+  name,
+  value,
+  placeholder,
+  options,
+  required,
+  disabled,
+  showError,
+  controlClassName,
+  onChange,
+  onBlur,
+  setControlRef,
+}: SelectFieldProps) {
+  const isControlled = value !== undefined;
+  const [uncontrolledValue, setUncontrolledValue] = useState("");
+  const currentValue = String(isControlled ? value : uncontrolledValue);
+  const selectableOptions = options.filter((option) => String(option.value) !== "");
+  const selected = selectableOptions.find((option) => String(option.value) === currentValue);
+  const displayLabel = selected?.label ?? placeholder ?? "";
+
+  useEffect(() => {
+    if (!isControlled) return;
+    setUncontrolledValue(String(value));
+  }, [isControlled, value]);
+
+  function emitChange(next: string) {
+    if (!isControlled) setUncontrolledValue(next);
+    onChange?.({
+      target: { name, value: next },
+    } as unknown as ChangeEvent<HTMLSelectElement>);
+  }
+
+  return (
+    <>
+      <input
+        id={id}
+        name={name}
+        type="hidden"
+        value={currentValue}
+        required={required}
+        disabled={disabled}
+        aria-invalid={showError}
+        aria-describedby={showError ? `${id}-error` : undefined}
+        onChange={() => undefined}
+        onBlur={(e) => onBlur?.(e as unknown as FocusEvent<HTMLSelectElement>)}
+        ref={setControlRef as Ref<HTMLInputElement>}
+      />
+      <DropdownMenu className="w-full">
+        <DropdownMenuTrigger
+          id={`${id}-trigger`}
+          disabled={disabled}
+          aria-invalid={showError}
+          aria-describedby={showError ? `${id}-error` : undefined}
+          className={cn(
+            controlClassName,
+            "flex w-full items-center justify-between gap-2 pe-3 text-start",
+            !selected && "text-text-placeholder",
+            disabled && "cursor-not-allowed",
+          )}
+        >
+          <span className="min-w-0 truncate">{displayLabel}</span>
+          <SelectDropdownArrowIcon className="shrink-0 text-text-muted" />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="top-full mt-2 w-full min-w-full rounded-xl border-border bg-bg-input p-1 shadow-(--shadow)">
+          {selectableOptions.length === 0 ? (
+            <p className="px-2.5 py-3 text-center type-caption text-text-muted">{placeholder}</p>
+          ) : (
+            <div className="themed-scrollbar max-h-45 overflow-y-auto">
+              {selectableOptions.map((option) => {
+                const optionValue = String(option.value);
+                const isSelected = optionValue === currentValue;
+
+                return (
+                  <DropdownMenuItem
+                    key={optionValue}
+                    onSelect={() => emitChange(optionValue)}
+                    className={cn(
+                      "h-9 rounded-lg type-body",
+                      isSelected && "bg-bg-selected text-text-primary",
+                    )}
+                  >
+                    <span className="min-w-0 flex-1 truncate text-start">{option.label}</span>
+                  </DropdownMenuItem>
+                );
+              })}
+            </div>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
+  );
+}
+
 export const Input = forwardRef<ControlElement, ReusableInputProps>(function Input(props, forwardedRef) {
   const {
     id,
@@ -90,6 +216,7 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
     error = "",
     className = "",
     autoComplete,
+    chips = false,
     onChange,
     onBlur,
     ref: registerRef,
@@ -98,6 +225,8 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
 
   const isPassword = type === "password";
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [chipDraft, setChipDraft] = useState("");
+  const chipInputRef = useRef<HTMLInputElement>(null);
   const inputType = isPassword ? (passwordVisible ? "text" : "password") : type;
   const { t } = useTranslation("translation", { keyPrefix: "form" });
 
@@ -114,7 +243,42 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
 
   const valueProps = value !== undefined ? { value: value as string | number } : {};
   const controlClassName = cn(baseClasses, borderClass);
-  const setControlRef = (node: ControlElement | null) => mergeRefs(node, forwardedRef, registerRef);
+  const setControlRef = (node: ControlElement | null) => mergeRefs(node, forwardedRef, registerRef, chipInputRef);
+
+  const chipValues = chips ? parseChipValues(typeof value === "string" ? value : "") : [];
+
+  function emitChipsChange(nextChips: string[]) {
+    onChange?.({ target: { name, value: nextChips.join(", ") } } as unknown as ChangeEvent<HTMLInputElement>);
+  }
+
+  function removeChip(chip: string) {
+    emitChipsChange(chipValues.filter((c) => c !== chip));
+  }
+
+  function handleChipKeyDown(e: KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault();
+      const next = chipDraft.trim();
+      setChipDraft("");
+      if (!next) return;
+      if (chipValues.some((c) => c.toLowerCase() === next.toLowerCase())) return;
+      emitChipsChange([...chipValues, next]);
+      return;
+    }
+    if (e.key === "Backspace" && chipDraft === "" && chipValues.length > 0) {
+      e.preventDefault();
+      emitChipsChange(chipValues.slice(0, -1));
+    }
+  }
+
+  function handleChipBlur(e: FocusEvent<HTMLInputElement>) {
+    const next = chipDraft.trim();
+    if (next && !chipValues.some((c) => c.toLowerCase() === next.toLowerCase())) {
+      setChipDraft("");
+      emitChipsChange([...chipValues, next]);
+    }
+    handleBlur(e);
+  }
 
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
@@ -131,7 +295,55 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
         </label>
       ) : null}
 
-      {type === "textarea" ? (
+      {chips ? (
+        <div
+          onClick={() => chipInputRef.current?.focus()}
+          className={cn(
+            "flex w-full flex-wrap items-center gap-1.5 rounded-xl border bg-bg-input px-2 py-1.5 transition focus-within:border-[var(--accent-border)] focus-within:ring-2 focus-within:ring-brand/25",
+            borderClass,
+            disabled && "cursor-not-allowed opacity-60",
+          )}
+        >
+          {chipValues.map((chip) => (
+            <span
+              key={chip}
+              className="inline-flex max-w-full items-center gap-1 rounded-2xl border border-brand/45 bg-brand/15 py-1 ps-2.5 pe-1 shadow-(--shadow)"
+            >
+              <span className="min-w-0 truncate type-body text-text-primary">{chip}</span>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  removeChip(chip);
+                }}
+                disabled={disabled}
+                className="inline-flex size-5 shrink-0 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-brand/20 hover:text-text-primary disabled:pointer-events-none disabled:opacity-60"
+                aria-label={t("removeChip", { value: chip })}
+              >
+                <IoClose className="size-3.5" aria-hidden />
+              </button>
+            </span>
+          ))}
+          <input
+            id={id}
+            name={name}
+            type="text"
+            value={chipDraft}
+            placeholder={chipValues.length === 0 ? placeholder : undefined}
+            required={required && chipValues.length === 0}
+            readOnly={readOnly}
+            disabled={disabled}
+            aria-invalid={showError}
+            aria-describedby={showError ? `${id}-error` : undefined}
+            onChange={(e) => setChipDraft(e.target.value)}
+            onKeyDown={handleChipKeyDown}
+            onBlur={handleChipBlur}
+            ref={setControlRef}
+            className="type-body min-w-24 flex-1 bg-transparent px-1 py-1 text-text-primary outline-none placeholder:text-text-placeholder disabled:cursor-not-allowed"
+            autoComplete={autoComplete}
+          />
+        </div>
+      ) : type === "textarea" ? (
         <textarea
           id={id}
           name={name}
@@ -150,37 +362,20 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
           {...valueProps}
         />
       ) : type === "select" ? (
-        <div className="relative">
-          <select
-            id={id}
-            name={name}
-            required={required}
-            disabled={disabled}
-            aria-invalid={showError}
-            aria-describedby={showError ? `${id}-error` : undefined}
-            onChange={onChange as ChangeEventHandler<HTMLSelectElement>}
-            onBlur={handleBlur}
-            ref={setControlRef}
-            className={cn(
-              controlClassName,
-              "appearance-none bg-bg-input pe-10",
-              value === "" ? "text-text-placeholder" : ""
-            )}
-            {...valueProps}
-          >
-            <option value="" disabled>
-              {placeholder || "Select an option"}
-            </option>
-            {options.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-          <span className="pointer-events-none absolute inset-e-3 top-1/2 -translate-y-1/2">
-            <SelectDropdownArrowIcon />
-          </span>
-        </div>
+        <SelectField
+          id={id}
+          name={name}
+          value={value}
+          placeholder={placeholder}
+          options={options}
+          required={required}
+          disabled={disabled || readOnly}
+          showError={showError}
+          controlClassName={controlClassName}
+          onChange={onChange}
+          onBlur={onBlur}
+          setControlRef={setControlRef}
+        />
       ) : (
         <div className={cn(isPassword && "relative")}>
           <input

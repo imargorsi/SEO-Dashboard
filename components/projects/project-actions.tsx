@@ -145,13 +145,19 @@ type ProjectActionsProps = {
   onDeleteProject?: () => void;
   size?: TProjectActionSize;
   withCardFooter?: boolean;
-  /** When false, activate/deactivate is handled elsewhere (e.g. beside project owner). */
+  /** When false, activate/deactivate is handled elsewhere (e.g. beside status chip). */
   includeActiveInactiveToggle?: boolean;
+  /** When false, approve/decline is handled elsewhere (e.g. beside project owner). */
+  includePendingApprovalActions?: boolean;
   className?: string;
 };
 
 function isActiveInactiveAction(action: TProjectCardActionConfig): boolean {
   return action.id === "activate" || action.id === "deactivate";
+}
+
+function isPendingApprovalAction(action: TProjectCardActionConfig): boolean {
+  return action.id === "approve" || action.id === "reject";
 }
 
 export function ProjectActions({
@@ -167,6 +173,7 @@ export function ProjectActions({
   size = "small",
   withCardFooter = false,
   includeActiveInactiveToggle = false,
+  includePendingApprovalActions = true,
   className,
 }: ProjectActionsProps) {
   const { t } = useTranslation("translation", { keyPrefix: "modules.projects.cardActions" });
@@ -189,7 +196,11 @@ export function ProjectActions({
   const toggleAction = includeActiveInactiveToggle
     ? statusActions.find(isActiveInactiveAction)
     : undefined;
-  const buttonStatusActions = statusActions.filter((action) => !isActiveInactiveAction(action));
+  const buttonStatusActions = statusActions.filter((action) => {
+    if (isActiveInactiveAction(action)) return false;
+    if (!includePendingApprovalActions && isPendingApprovalAction(action)) return false;
+    return true;
+  });
   const isBig = size === "big";
   const isActive = status === "active";
   const showDivider = isBig && buttonStatusActions.length > 0 && generalActions.length > 0;

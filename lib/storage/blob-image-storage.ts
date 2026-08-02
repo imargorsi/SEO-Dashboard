@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { del, put } from "@vercel/blob";
+import { assertR2Configured, deleteR2Object, putR2Object } from "@/lib/storage/r2-client";
 
 const MIME_TO_EXTENSION: Record<string, string> = {
   "image/jpeg": "jpg",
@@ -16,12 +16,6 @@ export const IMAGE_ALLOWED_MIME_TYPES = new Set([
   "image/webp",
   "image/gif",
 ]);
-
-function assertBlobConfigured(): void {
-  if (!process.env.BLOB_READ_WRITE_TOKEN) {
-    throw new Error("BLOB_READ_WRITE_TOKEN is required for image uploads.");
-  }
-}
 
 function extensionForFile(file: File): string | null {
   const fromMime = MIME_TO_EXTENSION[file.type];
@@ -55,7 +49,7 @@ export function validateImageFile(file: File): string | null {
 }
 
 export async function storeBlobImage(relativePath: string, file: File): Promise<string> {
-  assertBlobConfigured();
+  assertR2Configured();
 
   const extension = extensionForFile(file);
   if (!extension) {
@@ -65,25 +59,13 @@ export async function storeBlobImage(relativePath: string, file: File): Promise<
   const filename = `${crypto.randomUUID()}.${extension}`;
   const pathname = `${relativePath.replace(/\/$/, "")}/${filename}`;
 
-  const uploaded = await put(pathname, file, {
-    access: "private",
-    addRandomSuffix: false,
-  });
+  await putR2Object(pathname, file, file.type || "application/octet-stream");
 
-  return `blob:${uploaded.pathname}`;
+  return `blob:${pathname}`;
 }
 
 export async function deleteStoredImage(storedPath: string | null | undefined): Promise<void> {
-  if (!storedPath) return;
+  if (!storedPath || !storedPath.startsWith("blob:")) return;
 
-  if (!process.env.BLOB_READ_WRITE_TOKEN) return;
-
-  if (storedPath.startsWith("blob:")) {
-    await del(storedPath.slice("blob:".length)).catch(() => undefined);
-    return;
-  }
-
-  if (storedPath.startsWith("http://") || storedPath.startsWith("https://")) {
-    await del(storedPath).catch(() => undefined);
-  }
+  await deleteR2Object(storedPath.slice("blob:".length)).catch(() => undefined);
 }

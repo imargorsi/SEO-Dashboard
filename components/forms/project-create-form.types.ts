@@ -10,8 +10,6 @@ export type TProjectCreateFormValues = {
   primaryServiceToPromote: string;
   idealCustomerProfile: string;
   targetLocations: string;
-  opensAt: string;
-  closesAt: string;
   seoGoals: TSeoGoal[];
   competitorUrls: string;
 };

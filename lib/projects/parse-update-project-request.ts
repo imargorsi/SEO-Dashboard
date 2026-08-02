@@ -21,7 +21,6 @@ function assertNoLockedUpdateFields(raw: Record<string, unknown>): void {
       const messages: Record<(typeof LOCKED_PROJECT_UPDATE_FIELDS)[number], string> = {
         businessName: "Business Name Cannot Be Changed.",
         pocEmail: "Contact Email Cannot Be Changed.",
-        ownerUserId: "Project Owner Cannot Be Changed.",
       };
       errors[field] = [messages[field]];
     }

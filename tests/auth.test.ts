@@ -145,6 +145,10 @@ describe("Auth API parity", () => {
     const url = createSignedVerificationUrl(user._id.toString(), user.email);
     expect(hasValidSignature(url)).toBe(true);
 
+    // Behind a reverse proxy the request origin often differs from APP_URL.
+    const proxied = url.replace(new URL(url).origin, "http://127.0.0.1:3000");
+    expect(hasValidSignature(proxied)).toBe(true);
+
     const request = new Request(url);
     const { GET } = await import("@/app/email/verify/[id]/[hash]/route");
     const response = await GET(request, {

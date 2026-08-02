@@ -4,7 +4,7 @@ import { createSignedImageUrl } from "@/lib/auth/signed-url";
  * Converts a stored image reference (MongoDB) into a client-loadable URL.
  *
  * Stored formats:
- * - Vercel Blob: `blob:{pathname}` (private object)
+ * - R2 object storage: `blob:{pathname}` (private object)
  * - External URL: `http://` or `https://` (passthrough)
  */
 export function serializeStoredImageUrl(storedImage: string | null | undefined): string | null {

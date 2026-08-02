@@ -1,5 +1,6 @@
 import type { TCreateProjectPayload, TUpdateProjectPayload } from "@/features/projects/projects.api";
 import type { TProjectCreateFormValues } from "@/components/forms/project-create-form.types";
+import { normalizeWebsiteUrl } from "@/lib/projects/website-url.utils";
 
 export function splitCommaSeparated(value: string): string[] {
   return value
@@ -13,42 +14,46 @@ export function optionalText(value: string): string | null {
   return trimmed ? trimmed : null;
 }
 
+/** Dial-code-only values (e.g. "+966") mean the user never entered a number. */
+export function optionalPhone(value: string): string | null {
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  if (/^\+\d{1,4}$/.test(trimmed)) return null;
+  return trimmed;
+}
+
 export function toCreateProjectPayload(
   values: TProjectCreateFormValues,
   isAdmin: boolean,
 ): TCreateProjectPayload {
-  const opensAt = optionalText(values.opensAt);
-  const closesAt = optionalText(values.closesAt);
-
   return {
     ...(isAdmin ? { ownerUserId: optionalText(values.ownerUserId) ?? undefined } : {}),
     businessName: values.businessName.trim(),
-    websiteUrl: values.websiteUrl.trim(),
+    websiteUrl: normalizeWebsiteUrl(values.websiteUrl),
     businessAddress: optionalText(values.businessAddress),
-    pocContactNumber: optionalText(values.pocContactNumber),
+    pocContactNumber: optionalPhone(values.pocContactNumber),
     servicesOffered: splitCommaSeparated(values.servicesOffered),
     primaryServiceToPromote: optionalText(values.primaryServiceToPromote),
     idealCustomerProfile: optionalText(values.idealCustomerProfile),
     targetLocations: splitCommaSeparated(values.targetLocations),
-    businessHours: opensAt || closesAt ? { opensAt, closesAt } : null,
     seoGoals: values.seoGoals,
     competitorUrls: splitCommaSeparated(values.competitorUrls),
   };
 }
 
-export function toUpdateProjectPayload(values: TProjectCreateFormValues): TUpdateProjectPayload {
-  const opensAt = optionalText(values.opensAt);
-  const closesAt = optionalText(values.closesAt);
-
+export function toUpdateProjectPayload(
+  values: TProjectCreateFormValues,
+  isAdmin = false,
+): TUpdateProjectPayload {
   return {
-    websiteUrl: values.websiteUrl.trim(),
+    ...(isAdmin ? { ownerUserId: optionalText(values.ownerUserId) ?? undefined } : {}),
+    websiteUrl: normalizeWebsiteUrl(values.websiteUrl),
     businessAddress: optionalText(values.businessAddress),
-    pocContactNumber: optionalText(values.pocContactNumber),
+    pocContactNumber: optionalPhone(values.pocContactNumber),
     servicesOffered: splitCommaSeparated(values.servicesOffered),
     primaryServiceToPromote: optionalText(values.primaryServiceToPromote),
     idealCustomerProfile: optionalText(values.idealCustomerProfile),
     targetLocations: splitCommaSeparated(values.targetLocations),
-    businessHours: opensAt || closesAt ? { opensAt, closesAt } : null,
     seoGoals: values.seoGoals,
     competitorUrls: splitCommaSeparated(values.competitorUrls),
   };

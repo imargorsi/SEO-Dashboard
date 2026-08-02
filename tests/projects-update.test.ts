@@ -6,7 +6,7 @@ import { parseUpdateProjectRequest } from "@/lib/projects/parse-update-project-r
 import { buildUpdateProjectResponse, updateProject } from "@/lib/projects/update-project";
 import { SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
 import { seedSystemRoles } from "@/lib/rbac/seed-roles";
-import { Project, User } from "@/models";
+import { Project, ProjectMember, Role, User } from "@/models";
 import { authContextFor, projectInput } from "@/tests/helpers/project-test-utils";
 
 vi.mock("@/lib/projects/project-logo-storage", async (importOriginal) => {
@@ -366,17 +366,111 @@ describe("PATCH /projects/{id} — updateProject", () => {
     ).rejects.toMatchObject({
       errors: { pocEmail: ["Contact Email Cannot Be Changed."] },
     });
+  });
+
+  it("allows super_admin to reassign project owner and syncs pocEmail", async () => {
+    await seedSystemRoles();
+
+    const admin = await User.create({
+      name: "Admin",
+      email: "admin-reassign@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [SUPER_ADMIN_ROLE],
+    });
+
+    const originalOwner = await User.create({
+      name: "Original Owner",
+      email: "original-owner@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+    });
+
+    const nextOwner = await User.create({
+      name: "Next Owner",
+      email: "next-owner@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+    });
+
+    const { project } = await createProject(
+      authContextFor(admin),
+      projectInput({
+        businessName: "Reassign Co",
+        websiteUrl: "https://reassign.example.com",
+        ownerUserId: originalOwner._id.toString(),
+      }),
+    );
+
+    expect(project.pocEmail).toBe("original-owner@example.com");
+
+    const { project: updated } = await updateProject(
+      authContextFor(admin),
+      project._id.toString(),
+      { ownerUserId: nextOwner._id.toString() },
+      new Set(["ownerUserId"]),
+    );
+
+    expect(updated.pocEmail).toBe("next-owner@example.com");
+
+    const ownerRole = await Role.findOne({ slug: "project_owner" }).select("_id");
+    const userRole = await Role.findOne({ slug: "project_user" }).select("_id");
+
+    const nextOwnerMembership = await ProjectMember.findOne({
+      projectId: project._id,
+      userId: nextOwner._id,
+      status: "active",
+    });
+    expect(nextOwnerMembership?.roleId.toString()).toBe(ownerRole?._id.toString());
+
+    const previousOwnerMembership = await ProjectMember.findOne({
+      projectId: project._id,
+      userId: originalOwner._id,
+      status: "active",
+    });
+    expect(previousOwnerMembership?.roleId.toString()).toBe(userRole?._id.toString());
+  });
+
+  it("rejects owner reassignment from a non-admin member", async () => {
+    await seedSystemRoles();
+
+    const owner = await User.create({
+      name: "Owner",
+      email: "owner-locked@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+    });
+
+    const other = await User.create({
+      name: "Other",
+      email: "other-locked@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+    });
+
+    const { project } = await createProject(
+      authContextFor(owner),
+      projectInput({
+        businessName: "Locked Owner Co",
+        websiteUrl: "https://locked-owner.example.com",
+      }),
+    );
 
     await expect(
-      parseUpdateProjectRequest(
-        new Request("http://localhost/api/v1/projects/1", {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ownerUserId: "507f1f77bcf86cd799439011" }),
-        }),
+      updateProject(
+        authContextFor(owner),
+        project._id.toString(),
+        { ownerUserId: other._id.toString() },
+        new Set(["ownerUserId"]),
       ),
     ).rejects.toMatchObject({
-      errors: { ownerUserId: ["Project Owner Cannot Be Changed."] },
+      errors: {
+        ownerUserId: expect.arrayContaining([expect.stringMatching(/admins/i)]),
+      },
     });
   });
 });

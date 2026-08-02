@@ -74,10 +74,27 @@ export const sidebarNavLinkActiveClass =
 export const sidebarNavLinkInactiveClass =
   "border border-transparent bg-transparent text-text-secondary hover:border-border hover:bg-bg-card/80 hover:text-text-primary";
 
-/** Project selector trigger — same glass pill language as toolbar filters / nav. */
-export const sidebarProjectSelectorClass =
-  "flex w-full items-center gap-2.5 rounded-full border border-border/60 bg-bg-card/40 px-2.5 py-1.5 type-label text-text-primary shadow-sm backdrop-blur-md backdrop-saturate-150 transition-[border-color,background-color] duration-200 hover:border-border hover:bg-bg-hover/55 dark:border-text-on-brand/35 dark:bg-text-on-brand/10";
+/** Project selector — one shell that expands over sidebar content. */
+export const sidebarProjectSelectorShellClass =
+  "flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-bg-card/40 shadow-sm backdrop-blur-md backdrop-saturate-150 transition-[border-color,background-color,box-shadow,max-height] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] dark:border-text-on-brand/35 dark:bg-text-on-brand/10";
 
-export const sidebarProjectSelectorOpenClass = "border-accent-border dark:border-text-on-brand/50";
+export const sidebarProjectSelectorShellOpenClass =
+  "border-border/80 bg-bg-card-elevated shadow-(--shadow-elevated) dark:border-text-on-brand/40 dark:bg-bg-card-elevated";
 
-export const sidebarNavItemDividerClass = "border-b border-border/40";
+export const sidebarProjectSelectorTriggerClass =
+  "flex w-full shrink-0 items-center gap-3 px-3 py-2.5 type-label text-text-primary transition-colors duration-200 hover:bg-bg-hover/40";
+
+export const sidebarProjectSelectorExpandClass =
+  "grid min-h-0 transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]";
+
+export const sidebarProjectSelectorOptionClass =
+  "flex w-full items-center gap-3 rounded-xl px-3 py-3 text-start transition-colors duration-200 ease-out";
+
+export const sidebarProjectSelectorListClass =
+  "themed-scrollbar flex max-h-[min(40rem,calc(100svh-11rem))] flex-col gap-2 overflow-y-auto px-2 pb-2.5 pe-1 pt-1";
+
+export const sidebarNavGroupLabelClass =
+  "px-2.5 pb-2 type-overline tracking-wide text-text-muted";
+
+export const sidebarNavGroupClass =
+  "flex flex-col gap-1.5 border-t border-border/55 pb-4 pt-7 first:border-t-0 first:pt-0 last:pb-0 dark:border-text-on-brand/12";

@@ -51,21 +51,7 @@ export const THEME_PACKS: readonly TThemePackMeta[] = [
   },
 ] as const;
 
-/**
- * Full wordmark per pack — files live at `public/brand/{packId}.png`
- * (filename matches `THEME_PACK_IDS`). Collapsed mark still uses `/favicon.png`.
- *
- * Bump `THEME_PACK_LOGO_REVISION` whenever brand PNGs are replaced so browsers
- * and Next/`Image` do not keep a stale cached copy of the same path.
- */
-export const THEME_PACK_LOGO_REVISION = "2";
-
-export function themePackLogoSrc(packId: TThemePackId): string {
-  return `/brand/${packId}.png?v=${THEME_PACK_LOGO_REVISION}`;
-}
-
 const themePackListeners = new Set<() => void>();
-
 function emitThemePackChange(): void {
   themePackListeners.forEach((listener) => listener());
 }

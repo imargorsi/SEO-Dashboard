@@ -1,16 +1,21 @@
 import type { ReactNode } from "react";
 
+import { AuthFormToolbar } from "@/components/auth/auth-form-toolbar";
 import { authFormCardSurfaceClass } from "@/lib/frontend/layout/auth-chrome";
 import { cn } from "@/lib/utils";
 
 type SignInAuthCardShellProps = {
   ariaLabelledBy: string;
   children: ReactNode;
-  /** Language switcher — top-end inside the auth card */
-  topToolbar?: ReactNode;
+  /** Defaults to theme + language controls. Pass `null` to hide. */
+  topToolbar?: ReactNode | null;
 };
 
-export function SignInAuthCardShell({ ariaLabelledBy, children, topToolbar }: SignInAuthCardShellProps) {
+export function SignInAuthCardShell({
+  ariaLabelledBy,
+  children,
+  topToolbar = <AuthFormToolbar />,
+}: SignInAuthCardShellProps) {
   return (
     <section
       className="relative flex flex-1 flex-col justify-center bg-transparent px-6 py-10 sm:px-10 lg:px-14 lg:py-12"

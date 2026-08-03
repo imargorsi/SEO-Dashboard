@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { AppLogo } from "@/components/layout/app-logo";
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
-import { authHeroPanelClass } from "@/lib/frontend/layout/auth-chrome";
+import { authHeroCopyClass, authHeroPanelClass } from "@/lib/frontend/layout/auth-chrome";
 import { cn } from "@/lib/utils";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
 
@@ -20,9 +20,10 @@ export function SignInHeroSection() {
       )}
       aria-labelledby="sign-in-hero-heading"
     >
-      <div className="relative z-10 mx-auto w-full max-w-xl text-text-primary">
+      <div className={cn("relative z-10 mx-auto w-full max-w-xl", authHeroCopyClass)}>
         <AppLogo
           alt={tLayout("appName")}
+          surface="onDark"
           className="mb-10 block h-auto w-72 max-w-full"
           width={288}
           height={49}
@@ -30,11 +31,11 @@ export function SignInHeroSection() {
         />
 
         <div>
-          <Heading id="sign-in-hero-heading" heroTitle>
+          <Heading id="sign-in-hero-heading" heroTitle className="text-(--auth-hero-fg)">
             {t("heroTitleStart")}{" "}
-            <span className="text-gradient-primary">{t("heroTitleAccent")}</span>
+            <span className="text-brand">{t("heroTitleAccent")}</span>
           </Heading>
-          <Paragraph medium className="mt-6! max-w-md leading-relaxed">
+          <Paragraph medium className="mt-6! max-w-md leading-relaxed text-(--auth-hero-muted)">
             {t("heroLead")}
           </Paragraph>
         </div>
@@ -42,15 +43,15 @@ export function SignInHeroSection() {
         <ul className="mt-9 list-none space-y-4 p-0">
           <li className="flex gap-3">
             <IoCheckmarkCircleOutline className="mt-0.5 size-5 shrink-0 text-brand" aria-hidden />
-            <Paragraph className="leading-relaxed">{t("heroPoint1")}</Paragraph>
+            <Paragraph className="leading-relaxed text-(--auth-hero-muted)">{t("heroPoint1")}</Paragraph>
           </li>
           <li className="flex gap-3">
             <IoCheckmarkCircleOutline className="mt-0.5 size-5 shrink-0 text-brand" aria-hidden />
-            <Paragraph className="leading-relaxed">{t("heroPoint2")}</Paragraph>
+            <Paragraph className="leading-relaxed text-(--auth-hero-muted)">{t("heroPoint2")}</Paragraph>
           </li>
           <li className="flex gap-3">
             <IoCheckmarkCircleOutline className="mt-0.5 size-5 shrink-0 text-brand" aria-hidden />
-            <Paragraph className="leading-relaxed">{t("heroPoint3")}</Paragraph>
+            <Paragraph className="leading-relaxed text-(--auth-hero-muted)">{t("heroPoint3")}</Paragraph>
           </li>
         </ul>
       </div>

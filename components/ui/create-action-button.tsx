@@ -30,9 +30,9 @@ export type TCreateActionButtonProps = TCreateActionButtonAsLink | TCreateAction
 const createActionSurfaceClass = cn(
   "create-action-btn group relative inline-flex h-10 shrink-0 items-center justify-center gap-2 overflow-hidden",
   "rounded-full px-4 type-label font-semibold tracking-tight text-text-on-brand",
-  "bg-gradient-button",
-  "transition-[transform,filter,box-shadow] duration-200 ease-out",
-  "hover:brightness-[1.04] active:scale-[0.985]",
+  "bg-brand hover:bg-brand/90",
+  "transition-[transform,background-color,box-shadow] duration-200 ease-out",
+  "active:scale-[0.985]",
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-border)] focus-visible:ring-offset-2 focus-visible:ring-offset-bg-main",
   "disabled:pointer-events-none disabled:opacity-55",
 );
@@ -40,10 +40,6 @@ const createActionSurfaceClass = cn(
 function CreateActionContent({ children }: { children: ReactNode }) {
   return (
     <>
-      <span
-        className="pointer-events-none absolute inset-0 bg-linear-to-b from-text-on-brand/18 to-transparent"
-        aria-hidden
-      />
       <span
         className={cn(
           "relative z-10 inline-flex size-5 shrink-0 items-center justify-center rounded-full",
@@ -65,10 +61,7 @@ function isCreateActionLink(
   return typeof props.href === "string" && props.href.length > 0;
 }
 
-/**
- * Primary create / add CTA — modern SaaS treatment:
- * brand gradient, frosted + chip, inset highlight, soft brand depth shadow.
- */
+/** Primary create / add CTA — solid brand fill for a calm premium SaaS look. */
 export function CreateActionButton(props: TCreateActionButtonProps) {
   const { children, className } = props;
 

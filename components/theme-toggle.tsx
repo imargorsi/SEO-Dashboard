@@ -84,7 +84,7 @@ export function ThemeToggle({
       type="button"
       onClick={() => setTheme(isDark ? "light" : "dark")}
       className={cn(
-        "group relative inline-flex shrink-0 items-center justify-center overflow-hidden border transition-[border-color,background-color,transform,box-shadow,color] duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.96] before:pointer-events-none before:absolute before:inset-0 before:opacity-0 before:transition-opacity before:duration-200 before:bg-gradient-primary",
+        "group relative inline-flex shrink-0 items-center justify-center overflow-hidden border transition-[border-color,background-color,transform,box-shadow,color] duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.96] before:pointer-events-none before:absolute before:inset-0 before:opacity-0 before:transition-opacity before:duration-200 before:bg-brand/25",
         sizeClass[size],
         chromeControlToneClass[tone],
         isDark ? "before:opacity-70" : "before:opacity-0",

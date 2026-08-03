@@ -86,8 +86,8 @@ const translation: Translation = {
       "glass-auroraDescription": "سمة زجاجية فاخرة بلمسات شفق ناعمة لتجربة SaaS مستقبلية.",
       "carbon-ice": "جليد الكربون",
       "carbon-iceDescription": "أسطح جرافيت باردة بلمسات سماوية جليدية لمظهر SaaS حديث وحاد.",
-      "ember-forge": "حدادة الجمر",
-      "ember-forgeDescription": "أسطح فحمية دافئة بلمسات نحاس كهرماني لمظهر تنفيذي فاخر.",
+      "lumen-slate": "سليت لومين",
+      "lumen-slateDescription": "أسطح سليت نظيفة بوضوح تركوازي وعمق نيلي لمساحة عمل وكالة فاخرة.",
     },
     fontPacks: {
       sectionTitle: "الخط",

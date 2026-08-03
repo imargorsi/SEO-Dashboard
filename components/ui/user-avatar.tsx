@@ -94,7 +94,7 @@ export function UserAvatar({
           ? isLogo
             ? "border border-border bg-bg-card"
             : "bg-bg-hover"
-          : "bg-gradient-primary text-text-on-brand",
+          : "bg-brand text-text-on-brand",
         className,
       )}
       aria-hidden

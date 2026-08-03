@@ -187,7 +187,7 @@ export function ProjectSelector({ isCollapsed = false }: ProjectSelectorProps) {
               id={listId}
               role="listbox"
               aria-label={t("listLabel")}
-              className="border-t border-border/50 dark:border-text-on-brand/15"
+              className="border-t border-border/50 dark:border-text-primary/15"
             >
               <p className="px-3 pb-2 pt-2.5 type-overline tracking-wide text-text-muted">
                 {t("listHeading")}

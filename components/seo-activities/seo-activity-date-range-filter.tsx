@@ -280,7 +280,7 @@ export function SeoActivityDateRangeFilter({
                           "flex h-8 items-center justify-center rounded-lg type-caption transition-colors",
                           day.inCurrentMonth ? "text-text-primary" : "text-text-muted/50",
                           inRange && !selected && "bg-bg-selected text-text-primary",
-                          selected && "bg-gradient-button text-text-on-brand",
+                          selected && "bg-brand text-text-on-brand",
                           !selected && "hover:bg-bg-hover",
                         )}
                       >

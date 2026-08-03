@@ -6,7 +6,7 @@ export const ACTION_ICON_WELL: Record<TProjectCardActionTone, string> = {
   destructive: "border-status-rejected/35 bg-status-rejected/12 text-status-rejected",
   muted: "border-border bg-bg-card text-text-secondary",
   brand: "border-brand/35 bg-brand/12 text-brand",
-  default: "border-brand/30 bg-gradient-button/15 text-brand",
+  default: "border-brand/30 bg-brand/15 text-brand",
 };
 
 export const ACTION_BUTTON_TONE: Record<TProjectCardActionTone, string> = {

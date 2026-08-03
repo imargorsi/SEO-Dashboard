@@ -23,27 +23,24 @@ html[data-theme="PLACEHOLDER"] {
   --brand: var(--color-secondary);
 
   --gradient-mid: color-mix(in srgb, var(--color-secondary) 35%, var(--color-brand-primary) 65%);
-  --gradient-button: linear-gradient(90deg, var(--color-secondary), var(--color-brand-primary));
-  --gradient-button-hover: linear-gradient(
-    90deg,
-    color-mix(in srgb, var(--color-secondary) 88%, white 12%),
-    color-mix(in srgb, var(--color-brand-primary) 88%, white 12%)
-  );
+  /* Primary CTAs are solid brand. Keep --gradient-primary for rare brand/chart moments only. */
+  --gradient-button: var(--color-secondary);
+  --gradient-button-hover: color-mix(in srgb, var(--color-secondary) 88%, white 12%);
   --gradient-primary: linear-gradient(135deg, var(--color-secondary), var(--gradient-mid), var(--color-brand-primary));
   --glow-brand: color-mix(in srgb, var(--color-secondary) 22%, transparent);
-  --motion-btn-bg: var(--gradient-button);
+  --motion-btn-bg: var(--color-secondary);
 
-  /* —— Surfaces (override when derived look is wrong) —— */
-  --bg-main: #faf9fc;
-  --bg-sidebar: color-mix(in srgb, var(--bg-main) 65%, var(--color-primary) 35%);
+  /* —— Surfaces: tinted canvas + solid white sections —— */
+  --bg-main: #eeeaf4;
+  --bg-sidebar: color-mix(in srgb, var(--bg-main) 55%, var(--color-primary) 45%);
   --bg-card: #ffffff;
   --bg-card-elevated: #ffffff;
   --border-elevated: color-mix(in srgb, var(--color-brand-primary) 14%, var(--color-primary) 86%);
-  --shadow-elevated: 0 1px 2px rgba(26, 22, 40, 0.03), 0 6px 16px color-mix(in srgb, var(--color-brand-primary) 5%, transparent);
+  --shadow-elevated: 0 1px 2px rgba(26, 22, 40, 0.04), 0 6px 16px color-mix(in srgb, var(--color-brand-primary) 6%, transparent);
   --bg-input: color-mix(in srgb, var(--color-primary) 55%, white 45%);
   --bg-hover: var(--color-primary);
   --bg-selected: color-mix(in srgb, var(--color-secondary) 10%, transparent);
-  --bg-divider: color-mix(in srgb, var(--color-contrast) 8%, transparent);
+  --bg-divider: color-mix(in srgb, var(--color-contrast) 12%, transparent);
 
   /* —— Text —— */
   --text-primary: var(--color-contrast);
@@ -87,15 +84,11 @@ html.dark[data-theme="PLACEHOLDER"] {
   --brand: var(--color-secondary);
 
   --gradient-mid: color-mix(in srgb, var(--color-secondary) 35%, var(--color-brand-primary) 65%);
-  --gradient-button: linear-gradient(90deg, var(--color-secondary), var(--color-brand-primary));
-  --gradient-button-hover: linear-gradient(
-    90deg,
-    color-mix(in srgb, var(--color-secondary) 88%, white 12%),
-    color-mix(in srgb, var(--color-brand-primary) 88%, white 12%)
-  );
+  --gradient-button: var(--color-secondary);
+  --gradient-button-hover: color-mix(in srgb, var(--color-secondary) 88%, white 12%);
   --gradient-primary: linear-gradient(135deg, var(--color-secondary), var(--gradient-mid), var(--color-brand-primary));
   --glow-brand: color-mix(in srgb, var(--color-secondary) 25%, transparent);
-  --motion-btn-bg: var(--gradient-button);
+  --motion-btn-bg: var(--color-secondary);
 
   --bg-main: var(--color-contrast);
   --bg-sidebar: var(--color-contrast);
@@ -116,6 +109,7 @@ html.dark[data-theme="PLACEHOLDER"] {
   --text-muted: rgba(255, 255, 255, 0.5);
   --text-placeholder: rgba(255, 255, 255, 0.35);
   --text-disabled: rgba(255, 255, 255, 0.2);
+  /* CTA label on gradients — white OR dark ink if accents are bright. Not for glass chrome. */
   --text-on-brand: #ffffff;
   --text-on-elevated: var(--text-primary);
   --text-on-elevated-secondary: var(--text-secondary);
@@ -132,6 +126,15 @@ html.dark[data-theme="PLACEHOLDER"] {
   --accent-bg: var(--bg-selected);
   --accent-border: color-mix(in srgb, var(--color-secondary) 45%, transparent);
   --social-bg: color-mix(in srgb, var(--bg-sidebar) 72%, transparent);
+
+  /* Frosted chrome — from --text-primary, never --text-on-brand */
+  --text-inverse: var(--text-primary);
+  --surface-inverse-hover: color-mix(in srgb, var(--text-primary) 15%, transparent);
+  --ring-inverse: color-mix(in srgb, var(--text-primary) 60%, transparent);
+  --border-chrome-pill: color-mix(in srgb, var(--text-primary) 35%, transparent);
+  --shadow-chrome-pill: inset 0 1px 0 color-mix(in srgb, var(--text-primary) 12%, transparent);
+  --text-chrome-muted: color-mix(in srgb, var(--text-primary) 45%, transparent);
+  --surface-panel-header: color-mix(in srgb, var(--text-primary) 4%, var(--bg-elevated));
 
   --primary: var(--color-secondary);
   --ring: var(--color-secondary);

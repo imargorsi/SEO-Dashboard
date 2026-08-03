@@ -2,7 +2,7 @@
 
 export const THEME_PACK_STORAGE_KEY = "dashboard-theme-pack";
 
-export const THEME_PACK_IDS = ["default", "glass-aurora", "carbon-ice", "ember-forge"] as const;
+export const THEME_PACK_IDS = ["default", "glass-aurora", "carbon-ice", "lumen-slate"] as const;
 
 export type TThemePackId = (typeof THEME_PACK_IDS)[number];
 
@@ -13,6 +13,7 @@ const THEME_PACK_ALIASES: Record<string, TThemePackId> = {
   obsidian: "default",
   "obsidian-focus": "default",
   "sunset-pulse": "default",
+  "ember-forge": "lumen-slate",
 };
 
 export type TThemePackMeta = {
@@ -44,10 +45,10 @@ export const THEME_PACKS: readonly TThemePackMeta[] = [
     swatches: ["#22d3ee", "#6366f1", "#0b0d12"],
   },
   {
-    id: "ember-forge",
-    nameKey: "ember-forge",
-    descriptionKey: "ember-forgeDescription",
-    swatches: ["#f59e0b", "#ea580c", "#1c1917"],
+    id: "lumen-slate",
+    nameKey: "lumen-slate",
+    descriptionKey: "lumen-slateDescription",
+    swatches: ["#0d9488", "#818cf8", "#070a10"],
   },
 ] as const;
 
@@ -113,6 +114,11 @@ export function migrateStoredThemePackIfNeeded(): void {
 
 export function applyThemePackToDocument(packId: TThemePackId): void {
   document.documentElement.setAttribute("data-theme", packId);
+}
+
+/** Optional brand preview asset under `public/brand/{id}.png`. */
+export function themePackLogoSrc(packId: TThemePackId): string {
+  return `/brand/${packId}.png`;
 }
 
 /** Inline bootstrap — run before paint to avoid theme flash. Keep in sync via THEME_PACK_IDS + aliases. */

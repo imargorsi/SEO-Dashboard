@@ -14,11 +14,13 @@ npm test
 
 ## Documentation
 
-Internal docs live in **`doc/`** (local/agent use).
+Internal docs live in **`doc/`** and root **`AGENTS.md`** (local/agent use — gitignored, not shipped in production deploys).
 
 | Start | Path |
 |-------|------|
-| Agent hub | `doc/AGENTS.md` |
+| Agent hub | `AGENTS.md` |
+| Theming + typography | `doc/theming-typography.md` |
+| Theme packs | `doc/theme-packs.md` |
 | Product modules (1–12) | `doc/modules/README.md` |
 | RBAC model | `doc/rbac.md` |
 | Migration tracker | `doc/migration.md` |

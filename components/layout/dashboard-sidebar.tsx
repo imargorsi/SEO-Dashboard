@@ -140,28 +140,22 @@ export function DashboardSidebar({ onClose }: DashboardSidebarProps) {
       <div className={cn(sidebarBrandRowClass, isCollapsed && sidebarBrandRowCollapsedClass)}>
         <Link
           href="/dashboard"
-          className={cn(
-            "flex min-w-0 items-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-border) focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar",
-            isCollapsed ? "w-auto justify-center px-1" : "w-full justify-center",
-            onClose && !isCollapsed && "pe-10",
-          )}
+          className="inline-flex max-w-full items-center justify-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-border) focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar"
           aria-label={tLayout("appName")}
         >
           <AppLogo
             priority
             variant={isCollapsed ? "mark" : "full"}
-            className={cn(
-              isCollapsed ? "size-7 shrink-0" : "mx-auto h-8 w-auto max-w-full",
-            )}
-            width={isCollapsed ? 28 : 160}
-            height={isCollapsed ? 28 : 24}
+            className={isCollapsed ? "size-7" : "h-8 max-w-[calc(100%-0.5rem)]"}
+            width={isCollapsed ? 28 : 168}
+            height={isCollapsed ? 28 : 29}
           />
         </Link>
         {onClose ? (
           <button
             type="button"
             onClick={onClose}
-            className="absolute inset-e-4 top-1/2 inline-flex size-8 -translate-y-1/2 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-bg-hover hover:text-text-primary md:hidden"
+            className="absolute inset-e-3 top-1/2 z-10 inline-flex size-8 -translate-y-1/2 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-bg-hover hover:text-text-primary md:hidden"
             aria-label={tNav("closeMenu")}
           >
             <IoClose className="size-4" aria-hidden />

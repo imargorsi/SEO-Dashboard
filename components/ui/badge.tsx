@@ -9,7 +9,7 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: "border-transparent bg-gradient-button text-text-on-brand [a&]:hover:brightness-105",
+        default: "border-transparent bg-brand text-text-on-brand [a&]:hover:bg-brand/90",
         secondary:
           "border-transparent bg-[var(--btn-secondary-bg)] text-[var(--btn-secondary-fg)] [a&]:hover:bg-[var(--btn-secondary-bg-hover)]",
         outline: "border-border bg-bg-hover text-text-primary",

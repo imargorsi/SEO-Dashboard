@@ -30,7 +30,7 @@ export function ProjectCreateStepper({ labels, current }: ProjectCreateStepperPr
                 className={cn(
                   "flex size-8 shrink-0 items-center justify-center rounded-full type-caption-xs font-semibold sm:size-9",
                   isActive
-                    ? "bg-gradient-button text-text-on-brand"
+                    ? "bg-brand text-text-on-brand"
                     : isDone
                       ? "border border-border bg-bg-hover text-text-secondary"
                       : "border border-border bg-bg-hover text-text-muted",

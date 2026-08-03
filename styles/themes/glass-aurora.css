@@ -12,26 +12,24 @@ html[data-theme="glass-aurora"] {
   --brand: var(--color-secondary);
 
   --gradient-mid: #6b5cff;
-  --gradient-button: linear-gradient(90deg, #4f8cff, #8204ff);
-  --gradient-button-hover: linear-gradient(
-    90deg,
-    color-mix(in srgb, #4f8cff 88%, white 12%),
-    color-mix(in srgb, #8204ff 88%, white 12%)
-  );
+  /* CTAs use solid --color-secondary; keep primary gradient for rare brand/chart moments only. */
+  --gradient-button: var(--color-secondary);
+  --gradient-button-hover: color-mix(in srgb, var(--color-secondary) 88%, white 12%);
   --gradient-primary: linear-gradient(135deg, #4f8cff, #6b5cff, #8204ff);
   --glow-brand: rgba(79, 140, 255, 0.26);
-  --motion-btn-bg: var(--gradient-button);
+  --motion-btn-bg: var(--color-secondary);
 
-  --bg-main: #f9fbff;
-  --bg-sidebar: #eef2ff;
-  --bg-card: #ffffffb3;
-  --bg-card-elevated: #ffffffb3;
+  --bg-main: #e8eefc;
+  --bg-sidebar: #dde5fb;
+  /* Solid white sections on tinted canvas — translucent white washes out in light mode */
+  --bg-card: #ffffff;
+  --bg-card-elevated: #ffffff;
   --border-elevated: color-mix(in srgb, var(--color-brand-primary) 12%, var(--color-primary) 88%);
-  --shadow-elevated: 0 1px 2px rgba(11, 16, 32, 0.03), 0 6px 16px rgba(79, 140, 255, 0.06);
+  --shadow-elevated: 0 1px 2px rgba(11, 16, 32, 0.04), 0 6px 16px rgba(79, 140, 255, 0.07);
   --bg-input: color-mix(in srgb, var(--color-primary) 55%, white 45%);
   --bg-hover: var(--color-primary);
   --bg-selected: color-mix(in srgb, var(--color-secondary) 12%, transparent);
-  --bg-divider: color-mix(in srgb, #0b1020 8%, transparent);
+  --bg-divider: color-mix(in srgb, #0b1020 12%, transparent);
 
   --text-primary: #0b1020;
   --text-secondary: color-mix(in srgb, #0b1020 72%, transparent);
@@ -81,7 +79,7 @@ html[data-theme="glass-aurora"] {
   --auth-form-border: var(--border);
   --auth-form-ring: transparent;
   --auth-form-shadow: var(--shadow-elevated);
-  --auth-form-highlight: var(--gradient-button);
+  --auth-form-highlight: transparent;
 
   --background: var(--bg-main);
   --foreground: var(--text-primary);
@@ -108,15 +106,11 @@ html.dark[data-theme="glass-aurora"] {
   --brand: var(--color-secondary);
 
   --gradient-mid: #6b5cff;
-  --gradient-button: linear-gradient(90deg, #5ea0ff, #8204ff);
-  --gradient-button-hover: linear-gradient(
-    90deg,
-    color-mix(in srgb, #5ea0ff 88%, white 12%),
-    color-mix(in srgb, #8204ff 88%, white 12%)
-  );
+  --gradient-button: var(--color-secondary);
+  --gradient-button-hover: color-mix(in srgb, var(--color-secondary) 88%, white 12%);
   --gradient-primary: linear-gradient(135deg, #5ea0ff, #6b5cff, #8204ff);
   --glow-brand: rgba(94, 160, 255, 0.3);
-  --motion-btn-bg: var(--gradient-button);
+  --motion-btn-bg: var(--color-secondary);
 
   /* Distinct from Default dark (#1a1628) — deep blue-black */
   --bg-main: #060a18;
@@ -161,17 +155,17 @@ html.dark[data-theme="glass-aurora"] {
   --motion-orbit-color: color-mix(in srgb, var(--color-secondary) 90%, white 10%);
 
   --surface-chrome-pill: color-mix(in srgb, var(--color-contrast) 78%, transparent);
-  --border-chrome-pill: color-mix(in srgb, var(--text-on-brand) 28%, transparent);
-  --shadow-chrome-pill: inset 0 1px 0 color-mix(in srgb, var(--text-on-brand) 10%, transparent);
+  --border-chrome-pill: color-mix(in srgb, var(--text-primary) 28%, transparent);
+  --shadow-chrome-pill: inset 0 1px 0 color-mix(in srgb, var(--text-primary) 10%, transparent);
   --text-chrome-muted: var(--text-muted);
-  --surface-panel-header: color-mix(in srgb, var(--text-on-brand) 4%, var(--bg-elevated));
+  --surface-panel-header: color-mix(in srgb, var(--text-primary) 4%, var(--bg-elevated));
 
   --auth-video-scrim: color-mix(in srgb, var(--color-contrast) 40%, transparent);
   --auth-form-bg: var(--bg-card);
   --auth-form-border: var(--border);
   --auth-form-ring: transparent;
   --auth-form-shadow: var(--shadow-elevated);
-  --auth-form-highlight: var(--gradient-button);
+  --auth-form-highlight: transparent;
 
   color-scheme: dark;
 

@@ -71,7 +71,7 @@ export function TableListSort({
 
       <DropdownMenuContent
         align="start"
-        className="top-full z-50 mt-2 min-w-56 rounded-2xl border border-border/60 bg-bg-card/95 p-1.5 shadow-(--shadow-elevated) backdrop-blur-xl dark:border-text-on-brand/25 dark:bg-bg-card/95"
+        className="top-full z-50 mt-2 min-w-56 rounded-2xl border border-border/60 bg-bg-card/95 p-1.5 shadow-(--shadow-elevated) backdrop-blur-xl dark:border-text-primary/25 dark:bg-bg-card/95"
       >
         <p className="px-2.5 pb-1.5 pt-1 type-caption text-text-muted">{label}</p>
         {options.map((option, index) => {

@@ -59,6 +59,8 @@ export interface ReusableInputProps extends NativeControlProps {
   /** Validation message from RHF: `errors.field?.message` */
   error?: string;
   className?: string;
+  /** Merged onto the native control (and chip shell) — use for auth glass surfaces. */
+  controlClassName?: string;
   autoComplete?: string;
   /** Renders `value` as a comma-separated list of removable chips instead of plain text. */
   chips?: boolean;
@@ -219,6 +221,7 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
     disabled = false,
     error = "",
     className = "",
+    controlClassName: controlClassNameProp,
     autoComplete,
     chips = false,
     onSelectOpenChange,
@@ -247,7 +250,7 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
   };
 
   const valueProps = value !== undefined ? { value: value as string | number } : {};
-  const controlClassName = cn(baseClasses, borderClass);
+  const controlClassName = cn(baseClasses, borderClass, controlClassNameProp);
   const setControlRef = (node: ControlElement | null) => mergeRefs(node, forwardedRef, registerRef, chipInputRef);
 
   const chipValues = chips ? parseChipValues(typeof value === "string" ? value : "") : [];
@@ -306,6 +309,7 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
           className={cn(
             "flex w-full flex-wrap items-center gap-1.5 rounded-xl border bg-bg-input px-2 py-1.5 transition focus-within:border-[var(--accent-border)] focus-within:ring-2 focus-within:ring-brand/25",
             borderClass,
+            controlClassNameProp,
             disabled && "cursor-not-allowed opacity-60",
           )}
         >

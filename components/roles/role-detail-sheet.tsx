@@ -39,7 +39,7 @@ function PermissionActionChip({ action, label }: { action: string; label: string
       aria-label={label}
       className={cn(
         "inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-border/60 bg-bg-card/50 text-text-primary shadow-sm backdrop-blur-md transition-colors",
-        "dark:border-text-on-brand/35 dark:bg-text-on-brand/12",
+        "dark:border-text-primary/35 dark:bg-text-primary/12",
         "[&_svg]:size-3.5 [&_svg]:shrink-0",
       )}
     >
@@ -86,7 +86,7 @@ function GrantedPermissionModules({
         return (
           <li
             key={module.slug}
-            className="flex items-center gap-3 rounded-2xl border border-border/50 bg-bg-card/40 px-3 py-2.5 shadow-sm backdrop-blur-md dark:border-text-on-brand/20 dark:bg-text-on-brand/6"
+            className="flex items-center gap-3 rounded-2xl border border-border/50 bg-bg-card/40 px-3 py-2.5 shadow-sm backdrop-blur-md dark:border-text-primary/20 dark:bg-text-primary/6"
           >
             <span className={cn(detailIconWellClass, "size-8 shrink-0")} aria-hidden>
               <ModuleIcon className="size-3.5" />
@@ -120,9 +120,9 @@ export function RoleDetailSheet({ roleId, open, onOpenChange }: TRoleDetailSheet
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="right"
-        className="w-[min(100%,28rem)] border-border/60 bg-bg-card/85 shadow-(--shadow-elevated) backdrop-blur-xl sm:max-w-lg dark:border-text-on-brand/20 dark:bg-bg-card/90"
+        className="w-[min(100%,28rem)] border-border/60 bg-bg-card/85 shadow-(--shadow-elevated) backdrop-blur-xl sm:max-w-lg dark:border-text-primary/20 dark:bg-bg-card/90"
       >
-        <SheetHeader className="border-border/50 bg-transparent dark:border-text-on-brand/12">
+        <SheetHeader className="border-border/50 bg-transparent dark:border-text-primary/12">
           <SheetTitle>{t("title")}</SheetTitle>
           <SheetDescription>{t("lead")}</SheetDescription>
         </SheetHeader>

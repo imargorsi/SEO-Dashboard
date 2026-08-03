@@ -5,7 +5,7 @@
 @import "../styles/themes/default.css";
 @import "../styles/themes/glass-aurora.css";
 @import "../styles/themes/carbon-ice.css";
-@import "../styles/themes/ember-forge.css";
+@import "../styles/themes/lumen-slate.css";
 
 /* Class-based dark mode for Tailwind `dark:` utilities */
 @custom-variant dark (&:where(.dark, .dark *));
@@ -57,29 +57,25 @@ html[data-font="inter"] {
   --color-brand-primary: #8204ff;
   --brand: var(--color-secondary);
 
-  /* Brand gradient — merge of secondary (orange) + brand-primary (purple) */
+  /* Brand gradient — reserved for rare brand moments (logo mark, charts). UI CTAs use solid --brand. */
   --gradient-mid: #c64bff;
   --gradient-primary: linear-gradient(135deg, var(--color-secondary), var(--gradient-mid), var(--color-brand-primary));
-  --gradient-button: linear-gradient(90deg, var(--color-secondary), var(--color-brand-primary));
-  --gradient-button-hover: linear-gradient(
-    90deg,
-    color-mix(in srgb, var(--color-secondary) 88%, white 12%),
-    color-mix(in srgb, var(--color-brand-primary) 88%, white 12%)
-  );
+  --gradient-button: var(--color-secondary);
+  --gradient-button-hover: color-mix(in srgb, var(--color-secondary) 88%, white 12%);
   --gradient-chart-fill: linear-gradient(180deg, color-mix(in srgb, var(--color-secondary) 55%, transparent), transparent);
   --glow-brand: rgba(255, 121, 82, 0.22);
 
-  /* Light surfaces — premium grey-white */
-  --bg-main: #faf9fc;
-  --bg-sidebar: color-mix(in srgb, var(--bg-main) 65%, var(--color-primary) 35%);
+  /* Light surfaces — tinted canvas + solid white sections (clear separation) */
+  --bg-main: #eeeaf4;
+  --bg-sidebar: color-mix(in srgb, var(--bg-main) 55%, var(--color-primary) 45%);
   --bg-card: #ffffff;
   --bg-card-elevated: #ffffff;
   --border-elevated: color-mix(in srgb, var(--color-brand-primary) 14%, var(--color-primary) 86%);
-  --shadow-elevated: 0 1px 2px rgba(26, 22, 40, 0.03), 0 6px 16px rgba(130, 4, 255, 0.05);
+  --shadow-elevated: 0 1px 2px rgba(26, 22, 40, 0.04), 0 6px 16px rgba(130, 4, 255, 0.06);
   --bg-input: color-mix(in srgb, var(--color-primary) 55%, white 45%);
   --bg-hover: var(--color-primary);
   --bg-selected: color-mix(in srgb, var(--color-secondary) 10%, transparent);
-  --bg-divider: color-mix(in srgb, var(--color-contrast) 8%, transparent);
+  --bg-divider: color-mix(in srgb, var(--color-contrast) 12%, transparent);
 
   /* Text — one ink + muted grey for descriptions / outlines */
   --text-primary: var(--color-contrast);
@@ -87,6 +83,11 @@ html[data-font="inter"] {
   --text-muted: color-mix(in srgb, var(--color-contrast) 50%, transparent);
   --text-placeholder: color-mix(in srgb, var(--color-contrast) 35%, transparent);
   --text-disabled: color-mix(in srgb, var(--color-contrast) 20%, transparent);
+  /*
+    Label color ON brand/gradient fills. May be white OR dark ink when the pack
+    uses bright CTAs (e.g. Carbon Ice). Never use this for frosted glass
+    borders/fills — use --text-primary / --border instead.
+  */
   --text-on-brand: #ffffff;
   --text-on-elevated: var(--text-primary);
   --text-on-elevated-secondary: var(--text-secondary);
@@ -115,7 +116,7 @@ html[data-font="inter"] {
   --shadow: rgba(26, 22, 40, 0.08) 0 10px 15px -3px, rgba(26, 22, 40, 0.05) 0 4px 6px -2px;
   --hero-mesh-opacity: 0.35;
   --motion-orbit-color: var(--color-secondary);
-  --motion-btn-bg: var(--gradient-button);
+  --motion-btn-bg: var(--color-secondary);
   --motion-btn-fg: var(--text-on-brand);
   --motion-btn-border: transparent;
   --destructive: #e5484d;
@@ -151,13 +152,15 @@ html[data-font="inter"] {
   --text-chrome-muted: var(--text-muted);
   --surface-panel-header: color-mix(in srgb, var(--social-bg) 40%, var(--bg-elevated));
 
-  /* Auth — full-screen video scrim + form card uses standard dark surfaces */
+  /* Auth — video scrim + hero ink (video is always dark photography) */
   --auth-video-scrim: color-mix(in srgb, var(--color-contrast) 30%, transparent);
+  --auth-hero-fg: #ffffff;
+  --auth-hero-muted: color-mix(in srgb, #ffffff 75%, transparent);
   --auth-form-bg: var(--bg-card);
   --auth-form-border: var(--border);
   --auth-form-ring: transparent;
   --auth-form-shadow: var(--shadow-elevated);
-  --auth-form-highlight: var(--gradient-button);
+  --auth-form-highlight: transparent;
 
   --sans: var(--font-app-stack);
   --heading: var(--font-app-stack);
@@ -266,18 +269,27 @@ html[data-font="inter"] {
 
   /* Status colors inherit from :root — unchanged in dark mode */
 
+  /*
+    Frosted chrome / inverse — always from --text-primary (light ink on dark UI).
+    Never from --text-on-brand: packs may set that to dark CTA ink (e.g. Carbon Ice).
+  */
+  --text-inverse: var(--text-primary);
+  --surface-inverse-hover: color-mix(in srgb, var(--text-primary) 15%, transparent);
+  --ring-inverse: color-mix(in srgb, var(--text-primary) 60%, transparent);
   --surface-chrome-pill: color-mix(in srgb, var(--color-contrast) 78%, transparent);
-  --border-chrome-pill: color-mix(in srgb, var(--text-on-brand) 35%, transparent);
-  --shadow-chrome-pill: inset 0 1px 0 color-mix(in srgb, var(--text-on-brand) 12%, transparent);
-  --text-chrome-muted: color-mix(in srgb, var(--text-on-brand) 45%, transparent);
-  --surface-panel-header: color-mix(in srgb, var(--text-on-brand) 4%, var(--bg-elevated));
+  --border-chrome-pill: color-mix(in srgb, var(--text-primary) 35%, transparent);
+  --shadow-chrome-pill: inset 0 1px 0 color-mix(in srgb, var(--text-primary) 12%, transparent);
+  --text-chrome-muted: color-mix(in srgb, var(--text-primary) 45%, transparent);
+  --surface-panel-header: color-mix(in srgb, var(--text-primary) 4%, var(--bg-elevated));
 
   --auth-video-scrim: color-mix(in srgb, var(--color-contrast) 36%, transparent);
+  --auth-hero-fg: #ffffff;
+  --auth-hero-muted: color-mix(in srgb, #ffffff 75%, transparent);
   --auth-form-bg: var(--bg-card);
   --auth-form-border: var(--border);
   --auth-form-ring: transparent;
   --auth-form-shadow: var(--shadow-elevated);
-  --auth-form-highlight: var(--gradient-button);
+  --auth-form-highlight: transparent;
 
   color-scheme: dark;
 
@@ -500,15 +512,18 @@ code {
   }
 
   .bg-gradient-primary {
-    background-image: var(--gradient-primary);
+    background-color: var(--color-secondary);
+    background-image: none;
   }
 
   .bg-gradient-button {
-    background-image: var(--gradient-button);
+    background-color: var(--color-secondary);
+    background-image: none;
   }
 
   .bg-gradient-button-hover {
-    background-image: var(--gradient-button-hover);
+    background-color: var(--gradient-button-hover);
+    background-image: none;
   }
 
   .bg-gradient-chart-fill {
@@ -516,10 +531,8 @@ code {
   }
 
   .text-gradient-primary {
-    background-image: var(--gradient-primary);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: var(--color-secondary);
+    background-image: none;
   }
 
   .shadow-glow-brand {
@@ -534,19 +547,19 @@ code {
     box-shadow: 0 0 0 3px var(--glow-brand);
   }
 
-  /* Primary create CTA — inset highlight + soft brand depth (no neon glow). */
+  /* Primary create CTA — soft depth from solid brand (no multi-hue glow). */
   .create-action-btn {
     box-shadow:
-      inset 0 1px 0 color-mix(in srgb, var(--text-on-brand) 26%, transparent),
+      inset 0 1px 0 color-mix(in srgb, var(--text-on-brand) 22%, transparent),
       0 1px 2px color-mix(in srgb, var(--color-contrast) 10%, transparent),
-      0 8px 18px color-mix(in srgb, var(--color-brand-primary) 24%, transparent);
+      0 6px 16px color-mix(in srgb, var(--color-secondary) 22%, transparent);
   }
 
   .create-action-btn:hover {
     box-shadow:
-      inset 0 1px 0 color-mix(in srgb, var(--text-on-brand) 32%, transparent),
+      inset 0 1px 0 color-mix(in srgb, var(--text-on-brand) 28%, transparent),
       0 2px 4px color-mix(in srgb, var(--color-contrast) 12%, transparent),
-      0 10px 22px color-mix(in srgb, var(--color-brand-primary) 30%, transparent);
+      0 8px 18px color-mix(in srgb, var(--color-secondary) 28%, transparent);
   }
 }
 

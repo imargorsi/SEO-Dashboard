@@ -9,15 +9,15 @@ const buttonVariants = cva(
     variants: {
       variant: {
         gradient:
-          "bg-gradient-button text-text-on-brand shadow-xs hover:bg-gradient-button-hover hover:brightness-105",
+          "bg-brand text-text-on-brand shadow-xs hover:bg-brand/90",
         default:
-          "bg-gradient-button text-text-on-brand shadow-xs hover:bg-gradient-button-hover hover:brightness-105",
+          "bg-brand text-text-on-brand shadow-xs hover:bg-brand/90",
         primary:
-          "bg-gradient-button text-text-on-brand shadow-xs hover:bg-gradient-button-hover hover:brightness-105",
+          "bg-brand text-text-on-brand shadow-xs hover:bg-brand/90",
         destructive:
           "bg-destructive text-text-on-brand hover:bg-destructive/90 focus-visible:ring-destructive/30",
         outlined:
-          "border border-text-on-brand/80 bg-transparent text-text-primary shadow-xs hover:bg-bg-hover",
+          "border border-border bg-transparent text-text-primary shadow-xs hover:bg-bg-hover",
         outline:
           "border border-border bg-bg-card text-text-primary shadow-xs hover:bg-bg-hover",
         secondary:

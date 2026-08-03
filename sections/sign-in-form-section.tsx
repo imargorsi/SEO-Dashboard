@@ -1,18 +1,17 @@
 "use client";
 
-import type { FieldErrors, UseFormRegister } from "react-hook-form";
-import Link from "next/link";
-import { useTranslation } from "react-i18next";
-import { FcGoogle } from "react-icons/fc";
-import { SignInAuthCardShell } from "@/components/sign-in-auth-card-shell";
-import { LanguageSwitcher } from "@/components/language-switcher";
-import { Heading } from "@/components/heading";
-import { Input } from "@/components/input";
-import { Paragraph } from "@/components/paragraph";
+import { AuthInput } from "@/components/auth/auth-input";
 import { AuthSubmitButton } from "@/components/auth/auth-submit-button";
+import { SignInAuthCardShell } from "@/components/sign-in-auth-card-shell";
+import { Heading } from "@/components/heading";
+import { Paragraph } from "@/components/paragraph";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import type { SignInValues } from "@/sections/sign-in.types";
+import { FcGoogle } from "react-icons/fc";
+import type { FieldErrors, UseFormRegister } from "react-hook-form";
+import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 type SignInFormSectionProps = {
   register: UseFormRegister<SignInValues>;
@@ -30,17 +29,14 @@ export function SignInFormSection({
   const { t } = useTranslation("translation", { keyPrefix: "auth.signIn" });
 
   return (
-    <SignInAuthCardShell
-      ariaLabelledBy="sign-in-heading"
-      topToolbar={<LanguageSwitcher tone="ghost" size="sm" />}
-    >
+    <SignInAuthCardShell ariaLabelledBy="sign-in-heading">
       <Heading id="sign-in-heading" pageTitle>
         {t("title")}
       </Heading>
       <Paragraph className="mt-2 text-sm font-normal leading-relaxed text-text-secondary">{t("subtitle")}</Paragraph>
 
       <form className="mt-7 flex flex-col gap-4.5" onSubmit={onValidSubmit} noValidate>
-        <Input
+        <AuthInput
           id="sign-in-email"
           label={t("email")}
           type="email"
@@ -57,7 +53,7 @@ export function SignInFormSection({
           })}
         />
 
-        <Input
+        <AuthInput
           id="sign-in-password"
           label={t("password")}
           type="password"

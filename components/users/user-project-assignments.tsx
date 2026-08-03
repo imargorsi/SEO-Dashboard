@@ -39,7 +39,7 @@ export function UserProjectAssignments({ projects, className }: UserProjectAssig
         return (
           <li
             key={`${project.id}-${project.membership_role}-${project.membership_status}`}
-            className="rounded-2xl border border-border/50 bg-bg-card/40 p-3.5 shadow-sm backdrop-blur-md dark:border-text-on-brand/20 dark:bg-text-on-brand/6"
+            className="rounded-2xl border border-border/50 bg-bg-card/40 p-3.5 shadow-sm backdrop-blur-md dark:border-text-primary/20 dark:bg-text-primary/6"
           >
             <div className="flex items-start justify-between gap-3">
               <ProjectIdentity

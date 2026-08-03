@@ -1,17 +1,6 @@
-"use client";
-
 import Image from "next/image";
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
-
-/** White wordmark — dark surfaces. */
-const APP_LOGO_DARK_SRC = "/Logo.svg";
-/** Dark wordmark — light surfaces. */
-const APP_LOGO_LIGHT_SRC = "/light-logo.svg";
-/** Collapsed mark (favicon). */
-const APP_LOGO_MARK_SRC = "/favicon.png";
 
 type AppLogoProps = {
   alt?: string;
@@ -20,6 +9,12 @@ type AppLogoProps = {
   priority?: boolean;
   /** `full` = wordmark; `mark` = brand icon only (favicon). */
   variant?: "full" | "mark";
+  /**
+   * `auto` — follow light/dark class.
+   * `onDark` — always light wordmark (video / dark photography).
+   * `onLight` — always dark wordmark.
+   */
+  surface?: "auto" | "onDark" | "onLight";
   width?: number;
 };
 
@@ -34,16 +29,9 @@ export function AppLogo({
   height,
   priority = false,
   variant = "full",
+  surface = "auto",
   width,
 }: AppLogoProps) {
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    const id = requestAnimationFrame(() => setMounted(true));
-    return () => cancelAnimationFrame(id);
-  }, []);
-
   if (variant === "mark") {
     const markWidth = width ?? MARK_SIZE;
     const markHeight = height ?? MARK_SIZE;
@@ -54,8 +42,7 @@ export function AppLogo({
         width={markWidth}
         height={markHeight}
         priority={priority}
-        unoptimized
-        className={cn(className)}
+        className={cn("block", className)}
         aria-hidden={alt ? undefined : true}
       />
     );
@@ -64,8 +51,36 @@ export function AppLogo({
   const fullWidth = width ?? FULL_LOGO_WIDTH;
   const fullHeight = height ?? FULL_LOGO_HEIGHT;
 
+  if (surface === "onDark") {
+    return (
+      <Image
+        src="/crawllex-light.png"
+        alt={alt}
+        width={fullWidth}
+        height={fullHeight}
+        priority={priority}
+        className={cn("block h-auto max-h-full w-auto max-w-full", className)}
+        aria-hidden={alt ? undefined : true}
+      />
+    );
+  }
+
+  if (surface === "onLight") {
+    return (
+      <Image
+        src="/crawllex-dark.png"
+        alt={alt}
+        width={fullWidth}
+        height={fullHeight}
+        priority={priority}
+        className={cn("block h-auto max-h-full w-auto max-w-full", className)}
+        aria-hidden={alt ? undefined : true}
+      />
+    );
+  }
+
   return (
-    <>
+    <span className={cn("relative inline-flex shrink-0 items-center justify-center", className)}>
       {/* Black wordmark — light surfaces */}
       <Image
         src="/crawllex-dark.png"
@@ -73,7 +88,7 @@ export function AppLogo({
         width={fullWidth}
         height={fullHeight}
         priority={priority}
-        className={cn(className, "dark:hidden")}
+        className="block h-auto max-h-full w-auto max-w-full dark:hidden"
         aria-hidden={alt ? undefined : true}
       />
       {/* White wordmark — dark surfaces */}
@@ -83,9 +98,9 @@ export function AppLogo({
         width={fullWidth}
         height={fullHeight}
         priority={priority}
-        className={cn(className, "hidden dark:block")}
+        className="hidden h-auto max-h-full w-auto max-w-full dark:block"
         aria-hidden={alt ? undefined : true}
       />
-    </>
+    </span>
   );
 }

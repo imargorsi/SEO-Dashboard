@@ -261,7 +261,7 @@ export function AnalyticsSummaryCards({
             key={card.id}
             className={cn(
               "group relative isolate flex min-h-48 flex-col overflow-hidden rounded-3xl",
-              "border border-text-on-brand/10 dark:border-text-on-brand/12",
+              "border border-border/60 dark:border-text-primary/12",
               "bg-bg-card/28 backdrop-blur-2xl backdrop-saturate-150",
               "pt-4 sm:pt-5",
               "transition-[transform,box-shadow] duration-200",

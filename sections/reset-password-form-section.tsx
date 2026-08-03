@@ -3,13 +3,12 @@
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
+import { AuthInput } from "@/components/auth/auth-input";
+import { AuthSubmitButton } from "@/components/auth/auth-submit-button";
 import { SignInAuthCardShell } from "@/components/sign-in-auth-card-shell";
 import { Heading } from "@/components/heading";
-import { Input } from "@/components/input";
 import { Paragraph } from "@/components/paragraph";
-import { AuthSubmitButton } from "@/components/auth/auth-submit-button";
 import { Spinner } from "@/components/ui/spinner";
-import { LanguageSwitcher } from "@/components/language-switcher";
 import type { ResetPasswordValues } from "@/sections/reset-password.types";
 
 type ResetPasswordFormSectionProps = {
@@ -32,10 +31,7 @@ export function ResetPasswordFormSection({
   const { t } = useTranslation("translation", { keyPrefix: "auth.resetPassword" });
 
   return (
-    <SignInAuthCardShell
-      ariaLabelledBy="reset-password-heading"
-      topToolbar={<LanguageSwitcher tone="ghost" size="sm" />}
-    >
+    <SignInAuthCardShell ariaLabelledBy="reset-password-heading">
       <Heading id="reset-password-heading" pageTitle>
         {t("title")}
       </Heading>
@@ -59,7 +55,7 @@ export function ResetPasswordFormSection({
             <Paragraph className="mt-7 text-sm font-normal leading-relaxed text-text-secondary">{t("submitSuccess")}</Paragraph>
           ) : (
             <form className="mt-7 flex flex-col gap-4.5" onSubmit={onValidSubmit} noValidate>
-              <Input
+              <AuthInput
                 id="reset-password-new"
                 label={t("password")}
                 type="password"
@@ -73,7 +69,7 @@ export function ResetPasswordFormSection({
                 })}
               />
 
-              <Input
+              <AuthInput
                 id="reset-password-confirm"
                 label={t("confirmPassword")}
                 type="password"

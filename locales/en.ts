@@ -85,8 +85,8 @@ export interface Translation {
       "glass-auroraDescription": string;
       "carbon-ice": string;
       "carbon-iceDescription": string;
-      "ember-forge": string;
-      "ember-forgeDescription": string;
+      "lumen-slate": string;
+      "lumen-slateDescription": string;
     };
     fontPacks: {
       sectionTitle: string;
@@ -1312,9 +1312,9 @@ const translation: Translation = {
       "carbon-ice": "Carbon Ice",
       "carbon-iceDescription":
         "Cool Graphite Surfaces With Ice Cyan Accents For A Sharp Modern SaaS Look.",
-      "ember-forge": "Ember Forge",
-      "ember-forgeDescription":
-        "Warm Charcoal Surfaces With Molten Amber Copper Accents For Executive Presence.",
+      "lumen-slate": "Lumen Slate",
+      "lumen-slateDescription":
+        "Clean Slate Surfaces With Teal Clarity And Indigo Depth For A Premium Agency Workspace.",
     },
     fontPacks: {
       sectionTitle: "Font",

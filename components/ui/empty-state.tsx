@@ -4,6 +4,10 @@ import { IoFolderOpenOutline } from "react-icons/io5";
 
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
+import {
+  emptyStateIconWellClass,
+  emptyStateShellClass,
+} from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
 export type TEmptyStateProps = {
@@ -14,7 +18,7 @@ export type TEmptyStateProps = {
   children?: ReactNode;
 };
 
-/** Shared dashboard empty / no-data state. Use across modules with icon, title, and description. */
+/** Shared dashboard empty / no-data state — glassy icon well + spaced copy. */
 export function EmptyState({
   icon: Icon = IoFolderOpenOutline,
   title,
@@ -25,20 +29,26 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "flex w-full flex-col items-center justify-center px-4 py-12 text-center sm:py-14",
+        "flex w-full flex-col items-center justify-center px-4 py-10 sm:py-12",
         className,
       )}
       role="status"
       aria-live="polite"
     >
-      <Icon className="mb-5 size-10 text-text-muted/55" aria-hidden />
+      <div className={emptyStateShellClass}>
+        <span className={emptyStateIconWellClass} aria-hidden>
+          <Icon className="size-6" />
+        </span>
 
-      <Heading sectionTitle className="text-text-primary">
-        {title}
-      </Heading>
-      <Paragraph className="mt-2 max-w-md text-text-muted">{description}</Paragraph>
+        <div className="mt-6 flex flex-col items-center gap-2.5">
+          <Heading sectionTitle className="text-text-primary">
+            {title}
+          </Heading>
+          <Paragraph className="max-w-sm text-text-muted">{description}</Paragraph>
+        </div>
 
-      {children ? <div className="mt-7">{children}</div> : null}
+        {children ? <div className="mt-7">{children}</div> : null}
+      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
-# SEO Dashboard
+# Crawllex
 
-Full-stack **Next.js** application for SEO operations — projects, analytics, activities, leads, and reports.
+**Crawllex** — full-stack **Next.js** SEO operations platform for projects, analytics, activities, leads, and reports.
 
 ## Quick start
 

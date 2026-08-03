@@ -33,7 +33,7 @@ export const sidebarShellExpandedClass = "md:w-60";
 
 export const sidebarShellCollapsedClass = "md:w-[4.5rem]";
 
-/** RankRadar logo mark + wordmark in the sidebar header. */
+/** Crawllex logo mark + wordmark in the sidebar header. */
 export const sidebarBrandRowClass =
   "relative flex h-[4.25rem] shrink-0 items-center justify-center px-4";
 

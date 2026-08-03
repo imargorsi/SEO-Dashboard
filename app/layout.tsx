@@ -7,8 +7,9 @@ import { THEME_PACK_BOOTSTRAP_SCRIPT } from "@/lib/frontend/theme/theme-packs";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SEO Dashboard",
-  description: "SEO Dashboard",
+  title: "Crawllex",
+  description: "Crawllex — SEO Operations Platform",
+  metadataBase: new URL("https://crawllex.com"),
   icons: {
     icon: "/favicon.png",
   },

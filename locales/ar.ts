@@ -2,7 +2,7 @@ import type { Translation } from "./en";
 
 const translation: Translation = {
   layout: {
-    appName: "RankRadar",
+    appName: "Crawllex",
   },
   projectSelector: {
     triggerLabel: "المشروع المحدد: {{name}}",
@@ -892,7 +892,7 @@ const translation: Translation = {
   auth: {
     signIn: {
       title: "مرحبًا بعودتك",
-      subtitle: "سجّل الدخول إلى مساحة العمل لديك. لوحة SEO جاهزة.",
+      subtitle: "سجّل الدخول إلى مساحة العمل لديك. لوحة Crawllex جاهزة.",
       email: "البريد الإلكتروني",
       password: "كلمة المرور",
       submit: "تسجيل الدخول",
@@ -944,7 +944,7 @@ const translation: Translation = {
     },
     register: {
       title: "ابدأ رحلتك",
-      subtitle: "سجّل باسمك وبريدك الإلكتروني. جهّز مشروعك الأول بعد تسجيل الدخول.",
+      subtitle: "سجّل باسمك وبريدك الإلكتروني للبدء مع Crawllex. جهّز مشروعك الأول بعد تسجيل الدخول.",
       fullName: "الاسم الكامل",
       fullNamePh: "جين دو",
       fullNameMin: "أدخل حرفين على الأقل.",

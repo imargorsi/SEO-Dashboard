@@ -981,7 +981,7 @@ export interface Translation {
 
 const translation: Translation = {
   layout: {
-    appName: "RankRadar",
+    appName: "Crawllex",
   },
   projectSelector: {
     triggerLabel: "Selected Project: {{name}}",
@@ -1379,7 +1379,7 @@ const translation: Translation = {
         editTitle: "Edit Project",
         editLead: "Update The Project's Business Details, SEO Goals, And Access Information.",
         sectionBusinessLead:
-          "Tell Us About Your Business So We Can Personalise Your SEO Dashboard And Generate Accurate Insights.",
+          "Tell Us About Your Business So We Can Personalise Your Crawllex Workspace And Generate Accurate Insights.",
         sectionSeoLead:
           "Configure Your SEO Goals And Competitors To Personalise Your Dashboard, Reporting, And Optimisation Strategy.",
         sectionGoogleTitle: "Google Tools",
@@ -1882,7 +1882,7 @@ const translation: Translation = {
   auth: {
     signIn: {
       title: "Welcome Back",
-      subtitle: "Log in to your workspace. Your SEO dashboard is ready.",
+      subtitle: "Log In To Your Workspace. Your Crawllex Dashboard Is Ready.",
       email: "Email",
       password: "Password",
       submit: "Log In",
@@ -1934,7 +1934,7 @@ const translation: Translation = {
     },
     register: {
       title: "Create An Account",
-      subtitle: "Create an account to get started with Rank Radar",
+      subtitle: "Create An Account To Get Started With Crawllex",
       fullName: "Full name",
       fullNamePh: "Jane Doe",
       fullNameMin: "Enter at least 2 characters.",

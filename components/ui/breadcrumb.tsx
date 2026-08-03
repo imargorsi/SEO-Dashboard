@@ -63,7 +63,7 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
       data-slot="breadcrumb-page"
       aria-current="page"
       className={cn(
-        "inline-flex max-w-[min(100%,18rem)] items-center truncate rounded-lg border px-2.5 py-1 text-sm font-semibold leading-none text-text-primary sm:max-w-md",
+        "inline-flex max-w-[min(100%,18rem)] items-center truncate rounded-full border px-2.5 py-1 text-sm font-semibold leading-none text-text-primary sm:max-w-md",
         breadcrumbPageClass,
         className
       )}

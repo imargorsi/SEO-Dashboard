@@ -2,7 +2,6 @@ import type { IconType } from "react-icons";
 import {
   IoAnalyticsOutline,
   IoBriefcaseOutline,
-  IoNewspaperOutline,
   IoOptionsOutline,
   IoPeopleOutline,
   IoPersonCircleOutline,
@@ -17,10 +16,12 @@ export type SidebarNavLabelKey =
   | "analytics"
   | "seoActivities"
   | "leads"
-  | "reports"
   | "users"
   | "rolesPermissions"
   | "settings";
+
+
+export type SidebarNavGroupId = "general" | "reporting" | "settings";
 
 export type SidebarNavItem = {
   path: string;
@@ -35,7 +36,19 @@ export type SidebarNavDefinition = SidebarNavItem & {
   /** `.view` permission required; `null` = always visible (e.g. settings). */
   viewPermission: string | null;
   permissionScope: "platform" | "project";
+  group: SidebarNavGroupId;
 };
+
+export type SidebarNavGroup = {
+  id: SidebarNavGroupId;
+  items: SidebarNavItem[];
+};
+
+export const SIDEBAR_NAV_GROUP_ORDER: readonly SidebarNavGroupId[] = [
+  "general",
+  "reporting",
+  "settings",
+] as const;
 
 /** Same nav for all roles — visibility is permission-driven. */
 export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
@@ -45,6 +58,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
     icon: IoSpeedometerOutline,
     viewPermission: "dashboard.view",
     permissionScope: "project",
+    group: "general",
   },
   {
     path: "/projects",
@@ -52,34 +66,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
     icon: IoBriefcaseOutline,
     viewPermission: null,
     permissionScope: "project",
-  },
-  {
-    path: "/analytics",
-    labelKey: "analytics",
-    icon: IoAnalyticsOutline,
-    viewPermission: "analytics.view",
-    permissionScope: "project",
-  },
-  {
-    path: "/seo-activities",
-    labelKey: "seoActivities",
-    icon: IoRocketOutline,
-    viewPermission: "seo_activities.view",
-    permissionScope: "project",
-  },
-  {
-    path: "/leads",
-    labelKey: "leads",
-    icon: IoPeopleOutline,
-    viewPermission: "leads.view",
-    permissionScope: "project",
-  },
-  {
-    path: "/reports",
-    labelKey: "reports",
-    icon: IoNewspaperOutline,
-    viewPermission: "reports.view",
-    permissionScope: "project",
+    group: "general",
   },
   {
     path: "/users",
@@ -87,6 +74,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
     icon: IoPersonCircleOutline,
     viewPermission: "admin.users.view",
     permissionScope: "platform",
+    group: "general",
   },
   {
     path: "/roles",
@@ -94,6 +82,31 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
     icon: IoShieldCheckmarkOutline,
     viewPermission: "admin.roles.view",
     permissionScope: "platform",
+    group: "general",
+  },
+  {
+    path: "/analytics",
+    labelKey: "analytics",
+    icon: IoAnalyticsOutline,
+    viewPermission: "analytics.view",
+    permissionScope: "project",
+    group: "reporting",
+  },
+  {
+    path: "/leads",
+    labelKey: "leads",
+    icon: IoPeopleOutline,
+    viewPermission: "leads.view",
+    permissionScope: "project",
+    group: "reporting",
+  },
+  {
+    path: "/seo-activities",
+    labelKey: "seoActivities",
+    icon: IoRocketOutline,
+    viewPermission: "seo_activities.view",
+    permissionScope: "project",
+    group: "reporting",
   },
   {
     path: "/settings",
@@ -101,6 +114,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
     icon: IoOptionsOutline,
     viewPermission: null,
     permissionScope: "platform",
+    group: "settings",
   },
 ];
 

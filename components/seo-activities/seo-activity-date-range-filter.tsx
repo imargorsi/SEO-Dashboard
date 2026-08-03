@@ -23,6 +23,14 @@ type TSeoActivityDateRangeFilterProps = {
   value: TDateRange;
   onChange: (range: TDateRange) => void;
   className?: string;
+  /** Override preset list (default: all SEO activity presets). */
+  presets?: readonly TDateRangePresetId[];
+  /** Override i18n keyPrefix (default: `modules.seoActivities.dateFilter`). */
+  i18nKeyPrefix?: string;
+  /** Custom preset resolver (default: `resolveDateRangePreset`). */
+  resolvePreset?: (preset: TDateRangePresetId, now?: Date) => TDateRange;
+  /** Custom preset matcher (default: `matchDateRangePreset`). */
+  matchPreset?: (range: TDateRange, now?: Date) => TDateRangePresetId | null;
 };
 
 type TPopupPosition = {
@@ -39,8 +47,13 @@ export function SeoActivityDateRangeFilter({
   value,
   onChange,
   className,
+  presets = DATE_RANGE_PRESET_IDS,
+  i18nKeyPrefix = "modules.seoActivities.dateFilter",
+  resolvePreset = resolveDateRangePreset,
+  matchPreset = matchDateRangePreset,
 }: TSeoActivityDateRangeFilterProps) {
-  const { t } = useTranslation("translation", { keyPrefix: "modules.seoActivities.dateFilter" });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { t } = useTranslation("translation", { keyPrefix: i18nKeyPrefix as any }) as { t: (...args: any[]) => string };
   const rootRef = useRef<HTMLDivElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
@@ -50,8 +63,8 @@ export function SeoActivityDateRangeFilter({
   const [viewMonth, setViewMonth] = useState(() => new Date().getMonth());
   const [position, setPosition] = useState<TPopupPosition | null>(null);
 
-  const activePreset = matchDateRangePreset(value);
-  const draftPreset = matchDateRangePreset(draft);
+  const activePreset = matchPreset(value);
+  const draftPreset = matchPreset(draft);
 
   const triggerLabel = useMemo(() => {
     if (activePreset) return t(`presets.${activePreset}`);
@@ -61,7 +74,7 @@ export function SeoActivityDateRangeFilter({
     });
   }, [activePreset, t, value]);
 
-  const monthLabels = t("months", { returnObjects: true }) as string[];
+  const monthLabels = t("months", { returnObjects: true }) as unknown as string[];
   const monthLabel = monthLabels[viewMonth] ?? "";
   const calendarDays = useMemo(
     () => buildMonthCalendarDays(viewYear, viewMonth),
@@ -136,7 +149,7 @@ export function SeoActivityDateRangeFilter({
   }, [open]);
 
   function applyPreset(preset: TDateRangePresetId) {
-    setDraft(resolveDateRangePreset(preset));
+    setDraft(resolvePreset(preset));
     setSelectingEnd(false);
   }
 
@@ -172,7 +185,7 @@ export function SeoActivityDateRangeFilter({
   }
 
   function onReset() {
-    const cleared = resolveDateRangePreset("all");
+    const cleared = resolvePreset(presets[0]!);
     setDraft(cleared);
     onChange(cleared);
     setOpen(false);
@@ -194,7 +207,7 @@ export function SeoActivityDateRangeFilter({
                   className="flex gap-1 overflow-x-auto sm:flex-col sm:overflow-visible"
                   aria-label={t("presetsHeading")}
                 >
-                  {DATE_RANGE_PRESET_IDS.map((preset) => {
+                  {presets.map((preset) => {
                     const isActive = draftPreset === preset;
                     return (
                       <button

@@ -2,14 +2,15 @@
 
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { IoEyeOutline, IoTrashOutline } from "react-icons/io5";
-import { PiPencilThin } from "react-icons/pi";
+import { LuCircleDot, LuKeyRound, LuShield, LuUsers } from "react-icons/lu";
 
 import type { TAppTableColumn } from "@/components/table/app-table";
 import { TableRowIconActions } from "@/components/table/table-row-icon-actions";
 import { ActiveInactiveToggle } from "@/components/ui/active-inactive-toggle";
 import { Badge } from "@/components/ui/badge";
-import { StatusIndicator } from "@/components/ui/status-indicator";
+import { StatusChip } from "@/components/ui/status-chip";
+import { tableGlassChipClass } from "@/lib/frontend/layout/dashboard-chrome";
+import { roleActionIcon } from "@/lib/frontend/roles/permission-action-icon.utils";
 import { getBadgeToneClassName } from "@/lib/frontend/theme/status-colors";
 import { isActiveRoleStatus } from "@/lib/roles/constants";
 import type { TAdminRoleListItem } from "@/types/admin-role.types";
@@ -28,6 +29,12 @@ type TUseRolesTableColumnsInput = {
   isStatusMutationPending?: boolean;
 };
 
+function RoleActionGlyph({ action }: { action: string }) {
+  const Icon = roleActionIcon(action);
+  if (!Icon) return null;
+  return <Icon className="size-4" aria-hidden />;
+}
+
 export function useRolesTableColumns({
   onViewRole,
   onEditRole,
@@ -45,6 +52,7 @@ export function useRolesTableColumns({
       {
         key: "role",
         label: t("colRole"),
+        headerIcon: LuShield,
         render: (item) => (
           <div className="min-w-0">
             <p className="type-body-strong text-text-primary truncate">{item.name}</p>
@@ -55,15 +63,17 @@ export function useRolesTableColumns({
       {
         key: "permissions",
         label: t("colPermissions"),
+        headerIcon: LuKeyRound,
         render: (item) => (
-          <Badge variant="outline" className="type-caption-xs tabular-nums">
+          <span className={tableGlassChipClass}>
             {t("permissionsCount", { count: item.permissions_count })}
-          </Badge>
+          </span>
         ),
       },
       {
         key: "members",
         label: t("colMembers"),
+        headerIcon: LuUsers,
         render: (item) => <span className="type-body text-text-primary tabular-nums">{item.members_count}</span>,
       },
       {
@@ -81,11 +91,15 @@ export function useRolesTableColumns({
       {
         key: "status",
         label: t("colStatus"),
+        headerIcon: LuCircleDot,
         render: (item) => {
           const status = isActiveRoleStatus(item.status) ? "active" : "inactive";
 
           return (
-            <StatusIndicator status={status} label={status === "active" ? t("statusActive") : t("statusInactive")} />
+            <StatusChip
+              colorKey={status}
+              label={status === "active" ? t("statusActive") : t("statusInactive")}
+            />
           );
         },
       },
@@ -107,13 +121,13 @@ export function useRolesTableColumns({
                 actions={[
                   {
                     key: "view",
-                    icon: <IoEyeOutline className="size-4" aria-hidden />,
+                    icon: <RoleActionGlyph action="view" />,
                     label: t("viewRole", { name: item.name }),
                     onClick: onViewRole ? () => onViewRole(item.id) : undefined,
                   },
                   {
                     key: "edit",
-                    icon: <PiPencilThin className="size-4" aria-hidden />,
+                    icon: <RoleActionGlyph action="edit" />,
                     label: t("editRole", { name: item.name }),
                     onClick: onEditRole ? () => onEditRole(item.id) : undefined,
                   },
@@ -121,7 +135,7 @@ export function useRolesTableColumns({
                     ? [
                         {
                           key: "delete",
-                          icon: <IoTrashOutline className="size-4" aria-hidden />,
+                          icon: <RoleActionGlyph action="delete" />,
                           label: t("deleteRole", { name: item.name }),
                           onClick: () => onDeleteRole(item),
                           className: "text-destructive hover:bg-destructive/10 hover:text-destructive",

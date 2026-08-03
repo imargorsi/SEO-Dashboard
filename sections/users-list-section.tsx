@@ -22,9 +22,11 @@ import {
   useUserStatusActionMutation,
   useUsersQuery,
 } from "@/features/users/users.api";
+import { useDetailSheetState } from "@/hooks/use-detail-sheet-state.hook";
 import { useQueryParams } from "@/hooks/use-query-params.hook";
 import { ApiError } from "@/lib/frontend/api/errors";
 import { notify } from "@/lib/frontend/feedback/notify";
+import { analyticsHeadingStackClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { parseUsersListQuery } from "@/lib/frontend/users/users-list-query.utils";
 import { userCanCreate, userCanDelete, userCanUpdate, userCanView } from "@/lib/frontend/users/acl";
 import { USER_ROUTES } from "@/lib/frontend/users/user-routes.utils";
@@ -43,7 +45,14 @@ export function UsersListSection() {
   const canCreate = useMemo(() => userCanCreate(authUser?.permissions), [authUser]);
   const canUpdate = useMemo(() => userCanUpdate(authUser?.permissions), [authUser]);
   const canDelete = useMemo(() => userCanDelete(authUser?.permissions), [authUser]);
-  const [selectedUser, setSelectedUser] = useState<TAdminUserListItem | null>(null);
+  const {
+    selected: selectedUser,
+    setSelected: setSelectedUser,
+    isOpen: isDetailOpen,
+    open: openDetail,
+    onOpenChange: onDetailOpenChange,
+    clear: clearDetail,
+  } = useDetailSheetState<TAdminUserListItem>();
   const [deleteTarget, setDeleteTarget] = useState<TAdminUserListItem | null>(null);
   const statusMutation = useUserStatusActionMutation();
   const deleteMutation = useDeleteUserMutation();
@@ -76,8 +85,16 @@ export function UsersListSection() {
 
   const sortOptions = useMemo(
     () => [
-      { value: "newest", label: t("table.sortNewest") },
-      { value: "oldest", label: t("table.sortOldest") },
+      {
+        value: "newest",
+        label: t("table.sortByNewest"),
+        shortLabel: t("table.sortNewest"),
+      },
+      {
+        value: "oldest",
+        label: t("table.sortByOldest"),
+        shortLabel: t("table.sortOldest"),
+      },
     ],
     [t],
   );
@@ -130,9 +147,12 @@ export function UsersListSection() {
     [deleteQueryParams, setQueryParams],
   );
 
-  const onViewUser = useCallback((user: TAdminUserListItem) => {
-    setSelectedUser(user);
-  }, []);
+  const onViewUser = useCallback(
+    (user: TAdminUserListItem) => {
+      openDetail(user);
+    },
+    [openDetail],
+  );
 
   const onEditUser = useCallback(
     (user: TAdminUserListItem) => {
@@ -157,19 +177,15 @@ export function UsersListSection() {
         notify.error(ApiError.messageFrom(error, t("table.statusActionError")));
       }
     },
-    [statusMutation, t],
+    [setSelectedUser, statusMutation, t],
   );
-
-  const onDetailOpenChange = useCallback((open: boolean) => {
-    if (!open) setSelectedUser(null);
-  }, []);
 
   async function confirmDelete() {
     if (!deleteTarget) return;
     try {
       const result = await deleteMutation.mutateAsync(deleteTarget.id);
       setDeleteTarget(null);
-      if (selectedUser?.id === deleteTarget.id) setSelectedUser(null);
+      if (selectedUser?.id === deleteTarget.id) clearDetail();
       notify.success(result.message?.trim() || t("table.deleteSuccess"));
     } catch (error) {
       notify.error(ApiError.messageFrom(error, t("table.deleteErrorFallback")));
@@ -178,43 +194,46 @@ export function UsersListSection() {
 
   return (
     <div className="w-full min-w-0">
-      <div className="space-y-5 px-4 py-6 sm:px-6">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="space-y-1">
+      <div className="flex flex-col gap-6 px-4 py-6 sm:gap-7 sm:px-6 sm:py-7">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+          <div className={cn(analyticsHeadingStackClass, "max-w-2xl")}>
             <Heading id="users-list-title" pageTitle>
               {t("title")}
             </Heading>
             <Paragraph className="text-text-muted">{t("subtitle")}</Paragraph>
           </div>
 
-          {canCreate ? (
-            <CreateActionButton href={USER_ROUTES.create}>{t("table.createUser")}</CreateActionButton>
-          ) : null}
-        </div>
-
-        {canView ? (
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                <TableListSearch
-                  value={listQuery.search}
-                  onChange={onSearchChange}
-                  placeholder={t("table.searchPlaceholder")}
-                  isLoading={isFetching}
-                />
-                <TableListSort
-                  value={listQuery.newest ? "newest" : "oldest"}
-                  onChange={onNewestChange}
-                  options={sortOptions}
-                  ariaLabel={t("table.sortToggle", {
-                    direction: listQuery.newest ? t("table.sortNewest") : t("table.sortOldest"),
-                  })}
-                />
-              </div>
+          <div className="flex flex-wrap items-center justify-end gap-3">
+            {canView ? (
               <UserStatusFilter
                 activeStatus={listQuery.status}
                 counts={statusCounts}
                 onStatusChange={onStatusFilterChange}
+              />
+            ) : null}
+            {canCreate ? (
+              <CreateActionButton href={USER_ROUTES.create}>{t("table.createUser")}</CreateActionButton>
+            ) : null}
+          </div>
+        </div>
+
+        {canView ? (
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <TableListSearch
+                value={listQuery.search}
+                onChange={onSearchChange}
+                placeholder={t("table.searchPlaceholder")}
+                isLoading={isFetching}
+              />
+              <TableListSort
+                value={listQuery.newest ? "newest" : "oldest"}
+                onChange={onNewestChange}
+                options={sortOptions}
+                label={t("table.sortBy")}
+                ariaLabel={t("table.sortToggle", {
+                  direction: listQuery.newest ? t("table.sortNewest") : t("table.sortOldest"),
+                })}
               />
             </div>
 
@@ -242,7 +261,7 @@ export function UsersListSection() {
 
       <UserDetailSheet
         user={selectedUser}
-        open={Boolean(selectedUser)}
+        open={isDetailOpen}
         onOpenChange={onDetailOpenChange}
       />
 

@@ -16,6 +16,9 @@ export interface Translation {
     closeMenu: string;
     collapseSidebar: string;
     expandSidebar: string;
+    groupGeneral: string;
+    groupReporting: string;
+    groupSettings: string;
     dashboard: string;
     users: string;
     rolesPermissions: string;
@@ -23,7 +26,6 @@ export interface Translation {
     analytics: string;
     seoActivities: string;
     leads: string;
-    reports: string;
     settings: string;
   };
   breadcrumb: {
@@ -36,6 +38,9 @@ export interface Translation {
     emptyTitle: string;
     emptyBody: string;
     loading: string;
+  };
+  ui: {
+    close: string;
   };
   form: {
     showPassword: string;
@@ -68,6 +73,7 @@ export interface Translation {
     categoriesHeading: string;
     categories: {
       theme: string;
+      integrations: string;
     };
     themePacks: {
       sectionTitle: string;
@@ -94,6 +100,58 @@ export interface Translation {
       nunitoDescription: string;
       inter: string;
       interDescription: string;
+    };
+    integrations: {
+      lead: string;
+      projectContext: string;
+      selectProjectTitle: string;
+      selectProjectBody: string;
+      refresh: string;
+      connect: string;
+      update: string;
+      disconnect: string;
+      propertyLabel: string;
+      propertyPlaceholder: string;
+      propertyRequired: string;
+      gscPropertyPlaceholder: string;
+      ga4PropertyPlaceholder: string;
+      lastSynced: string;
+      connectSuccess: string;
+      connectError: string;
+      updateSuccess: string;
+      updateError: string;
+      disconnectSuccess: string;
+      disconnectError: string;
+      syncSuccess: string;
+      syncError: string;
+      refreshSuccess: string;
+      refreshError: string;
+      confirmCancel: string;
+      confirmConnectTitle: string;
+      confirmConnectBody: string;
+      confirmConnect: string;
+      confirmUpdateTitle: string;
+      confirmUpdateBody: string;
+      confirmUpdate: string;
+      confirmDisconnectTitle: string;
+      confirmDisconnectBody: string;
+      confirmDisconnect: string;
+      confirmRefreshTitle: string;
+      confirmRefreshBody: string;
+      confirmRefresh: string;
+      services: {
+        gsc: string;
+        ga4: string;
+      };
+      serviceLead: {
+        gsc: string;
+        ga4: string;
+      };
+      status: {
+        connected: string;
+        disconnected: string;
+        error: string;
+      };
     };
   };
   profile: {
@@ -187,6 +245,33 @@ export interface Translation {
         errorFallback: string;
         editSuccessFallback: string;
         editErrorFallback: string;
+        membershipAssignError: string;
+      };
+      memberships: {
+        title: string;
+        lead: string;
+        count: string;
+        empty: string;
+        projectLabel: string;
+        projectPh: string;
+        roleLabel: string;
+        rolePh: string;
+        add: string;
+        removeAria: string;
+        statusInvited: string;
+        assignSuccess: string;
+        assignError: string;
+        updateSuccess: string;
+        updateError: string;
+        removeSuccess: string;
+        removeError: string;
+        confirmUpdateTitle: string;
+        confirmUpdateBody: string;
+        confirmUpdate: string;
+        confirmRemoveTitle: string;
+        confirmRemoveBody: string;
+        confirmRemove: string;
+        confirmCancel: string;
       };
       assignments: {
         noProjects: string;
@@ -203,6 +288,8 @@ export interface Translation {
       detail: {
         title: string;
         lead: string;
+        accountTitle: string;
+        accountLead: string;
         email: string;
         createdAt: string;
         updatedAt: string;
@@ -220,9 +307,12 @@ export interface Translation {
       table: {
         searchPlaceholder: string;
         sortLabel: string;
+        sortBy: string;
         sortToggle: string;
         sortNewest: string;
         sortOldest: string;
+        sortByNewest: string;
+        sortByOldest: string;
         colUser: string;
         colProjects: string;
         colStatus: string;
@@ -232,6 +322,8 @@ export interface Translation {
         statusInactive: string;
         projectsCount_one: string;
         projectsCount_other: string;
+        projectsLabel_one: string;
+        projectsLabel_other: string;
         lastActionVerified: string;
         lastActionCreated: string;
         showingUsers: string;
@@ -623,6 +715,149 @@ export interface Translation {
     };
     analytics: {
       title: string;
+      subtitle: string;
+      selectProjectTitle: string;
+      selectProjectBody: string;
+      noAccessTitle: string;
+      noAccessBody: string;
+      loadError: string;
+      dateFrom: string;
+      dateTo: string;
+      export: {
+        excel: string;
+        exporting: string;
+        success: string;
+        empty: string;
+        errorFallback: string;
+        metric: string;
+        value: string;
+        date: string;
+        channel: string;
+        country: string;
+        sheets: {
+          summary: string;
+          dailyTrend: string;
+          topQueries: string;
+          topPages: string;
+          trafficSources: string;
+          countries: string;
+        };
+      };
+      dateFilter: {
+        ariaLabel: string;
+        presetsHeading: string;
+        presets: {
+          last_15_days: string;
+          last_30_days: string;
+          last_90_days: string;
+          last_month: string;
+          this_month: string;
+        };
+        months: string[];
+        weekdays: { sun: string; mon: string; tue: string; wed: string; thu: string; fri: string; sat: string };
+        separator: string;
+        fromPlaceholder: string;
+        toPlaceholder: string;
+        reset: string;
+        cancel: string;
+        apply: string;
+        previousMonth: string;
+        nextMonth: string;
+      };
+      summary: {
+        clicks: string;
+        impressions: string;
+        ctr: string;
+        position: string;
+        sessions: string;
+        organicSessions: string;
+      };
+      topQueries: {
+        title: string;
+        viewAll: string;
+        loading: string;
+        emptyTitle: string;
+        emptyBody: string;
+        modalTitle: string;
+        modalSubtitle: string;
+        modalClose: string;
+        modalRowCount: string;
+        columns: {
+          dimension: string;
+          clicks: string;
+          impressions: string;
+          ctr: string;
+          position: string;
+        };
+      };
+      topPages: {
+        title: string;
+        viewAll: string;
+        loading: string;
+        emptyTitle: string;
+        emptyBody: string;
+        modalTitle: string;
+        modalSubtitle: string;
+        modalClose: string;
+        modalRowCount: string;
+        columns: {
+          dimension: string;
+          clicks: string;
+          impressions: string;
+          ctr: string;
+          position: string;
+        };
+      };
+      trafficSources: {
+        title: string;
+        totalLabel: string;
+        legendAria: string;
+        loading: string;
+        emptyTitle: string;
+        emptyBody: string;
+      };
+      demographics: {
+        title: string;
+        subtitle: string;
+        metricHint: string;
+        listAria: string;
+        mapAria: string;
+        mapUnavailable: string;
+        loading: string;
+        emptyTitle: string;
+        emptyBody: string;
+      };
+      trendChart: {
+        title: string;
+        subtitle: string;
+        tabsAria: string;
+        tabs: {
+          clicks: string;
+          impressions: string;
+          ctr: string;
+          position: string;
+        };
+        changeIncrease: string;
+        changeDecrease: string;
+        changeFlat: string;
+        emptyTitle: string;
+        emptyBody: string;
+      };
+      tables: {
+        topQueries: string;
+        topPages: string;
+        geoTraffic: string;
+        dimension: string;
+        clicks: string;
+        impressions: string;
+        ctr: string;
+        position: string;
+        sessions: string;
+        users: string;
+        loading: string;
+        emptyTitle: string;
+        emptyBody: string;
+      };
     };
     seoActivities: {
       title: string;
@@ -770,9 +1005,6 @@ export interface Translation {
     leads: {
       title: string;
     };
-    reports: {
-      title: string;
-    };
     roles: {
       title: string;
       subtitle: string;
@@ -795,6 +1027,9 @@ export interface Translation {
         descriptionPh: string;
         systemRoleNameLocked: string;
         permsHeading: string;
+        permsLead: string;
+        permsModulesHeading: string;
+        permsModuleLead: string;
         permsSelectAll: string;
         permsClearAll: string;
         permsCount: string;
@@ -819,16 +1054,23 @@ export interface Translation {
         delete: string;
         invite: string;
         remove: string;
+        disconnect: string;
+        refresh: string;
       };
       detail: {
         title: string;
         lead: string;
         loading: string;
+        overviewTitle: string;
+        overviewLead: string;
+        description: string;
+        noDescription: string;
         members: string;
         permissionsCount: string;
         createdAt: string;
         updatedAt: string;
         permissionsTitle: string;
+        permissionsLead: string;
         noPermissions: string;
       };
       statusFilter: {
@@ -840,9 +1082,12 @@ export interface Translation {
       table: {
         searchPlaceholder: string;
         sortLabel: string;
+        sortBy: string;
         sortToggle: string;
         sortNewest: string;
         sortOldest: string;
+        sortByNewest: string;
+        sortByOldest: string;
         colRole: string;
         colPermissions: string;
         colMembers: string;
@@ -997,6 +1242,9 @@ const translation: Translation = {
     closeMenu: "Close Menu",
     collapseSidebar: "Collapse Sidebar",
     expandSidebar: "Expand Sidebar",
+    groupGeneral: "General",
+    groupReporting: "Reporting",
+    groupSettings: "Settings",
     dashboard: "Dashboard",
     users: "Users",
     rolesPermissions: "Roles & Permissions",
@@ -1004,7 +1252,6 @@ const translation: Translation = {
     analytics: "Analytics",
     seoActivities: "SEO Activities",
     leads: "Leads",
-    reports: "Reports",
     settings: "Settings",
   },
   breadcrumb: {
@@ -1016,6 +1263,9 @@ const translation: Translation = {
     emptyTitle: "No Records Found",
     emptyBody: "There Is Nothing To Show Here Yet. Create A New Entry Or Check Back Later.",
     loading: "Loading…",
+  },
+  ui: {
+    close: "Close",
   },
   form: {
     showPassword: "Show password",
@@ -1048,6 +1298,7 @@ const translation: Translation = {
     categoriesHeading: "Categories",
     categories: {
       theme: "Theme",
+      integrations: "Integrations",
     },
     themePacks: {
       sectionTitle: "Color Theme",
@@ -1077,6 +1328,58 @@ const translation: Translation = {
       nunitoDescription: "Rounded Soft Sans For A Friendly, Approachable Interface Feel.",
       inter: "Inter",
       interDescription: "Modern UI Sans Optimized For Dense Screens And Long Reading.",
+    },
+    integrations: {
+      lead: "Link Search Console And GA4 Properties For The Selected Project. Only Platform Admins Can Manage These Connections.",
+      projectContext: "Selected Project: {{name}}",
+      selectProjectTitle: "Select A Project",
+      selectProjectBody: "Choose A Project From The Sidebar Before Linking Google Properties.",
+      refresh: "Refresh Data",
+      connect: "Connect",
+      update: "Update",
+      disconnect: "Disconnect",
+      propertyLabel: "Property",
+      propertyPlaceholder: "Select A Property",
+      propertyRequired: "Property ID Is Required.",
+      gscPropertyPlaceholder: "https://example.com/",
+      ga4PropertyPlaceholder: "properties/123456789",
+      lastSynced: "Last Synced {{value}}",
+      connectSuccess: "Integration Connected.",
+      connectError: "Failed To Connect Integration.",
+      updateSuccess: "Integration Updated.",
+      updateError: "Failed To Update Integration.",
+      disconnectSuccess: "Integration Disconnected.",
+      disconnectError: "Failed To Disconnect Integration.",
+      syncSuccess: "Analytics Sync Completed.",
+      syncError: "Failed To Sync Analytics.",
+      refreshSuccess: "Analytics Sync Completed.",
+      refreshError: "Failed To Sync Analytics.",
+      confirmCancel: "Cancel",
+      confirmConnectTitle: "Connect Property?",
+      confirmConnectBody: "Link This {{service}} Property To The Selected Project And Start Syncing Cached Analytics.",
+      confirmConnect: "Connect Property",
+      confirmUpdateTitle: "Update Property?",
+      confirmUpdateBody: "Replace The Linked {{service}} Property For This Project. Cached Analytics For The Previous Property Will Be Cleared And A Fresh Backfill Will Start.",
+      confirmUpdate: "Update Property",
+      confirmDisconnectTitle: "Disconnect Property?",
+      confirmDisconnectBody: "Remove The {{service}} Link For This Project And Clear Cached Analytics For That Source.",
+      confirmDisconnect: "Disconnect",
+      confirmRefreshTitle: "Refresh Analytics Data?",
+      confirmRefreshBody: "Pull The Latest Search Console And GA4 Metrics For This Project. Manual Refresh Is Limited To Once Per Hour.",
+      confirmRefresh: "Refresh Data",
+      services: {
+        gsc: "Search Console",
+        ga4: "Google Analytics 4",
+      },
+      serviceLead: {
+        gsc: "Connect The Search Console Property Used For Organic Search Performance.",
+        ga4: "Connect The GA4 Property Used For Sessions And Traffic Breakdowns.",
+      },
+      status: {
+        connected: "Connected",
+        disconnected: "Disconnected",
+        error: "Error",
+      },
     },
   },
   profile: {
@@ -1171,6 +1474,33 @@ const translation: Translation = {
         errorFallback: "Could Not Create User. Try Again.",
         editSuccessFallback: "User Updated Successfully.",
         editErrorFallback: "Could Not Update User. Try Again.",
+        membershipAssignError: "User Created, But Project Assignment Failed. Finish Assignments On The Edit Page.",
+      },
+      memberships: {
+        title: "Project Assignments",
+        lead: "Assign This User To Projects With A Project Role. Changes On Edit Save Immediately.",
+        count: "{{count}} Assigned",
+        empty: "No Projects Assigned Yet.",
+        projectLabel: "Project",
+        projectPh: "Select Project",
+        roleLabel: "Role",
+        rolePh: "Select Role",
+        add: "Add",
+        removeAria: "Remove {{name}}",
+        statusInvited: "Invite Pending",
+        assignSuccess: "Project Assignment Saved.",
+        assignError: "Could Not Save Project Assignment.",
+        updateSuccess: "Project Role Updated.",
+        updateError: "Could Not Update Project Role.",
+        removeSuccess: "Project Assignment Removed.",
+        removeError: "Could Not Remove Project Assignment.",
+        confirmUpdateTitle: "Update Project Role?",
+        confirmUpdateBody: "Change The Role On {{name}} To {{role}}.",
+        confirmUpdate: "Update Role",
+        confirmRemoveTitle: "Remove Project Assignment?",
+        confirmRemoveBody: "Remove This User From {{name}}. They Will Lose Project Access.",
+        confirmRemove: "Remove Assignment",
+        confirmCancel: "Cancel",
       },
       assignments: {
         noProjects: "No Projects Assigned",
@@ -1187,6 +1517,8 @@ const translation: Translation = {
       detail: {
         title: "User Details",
         lead: "Account Information And Project Memberships From The Current List.",
+        accountTitle: "Account Information",
+        accountLead: "Core Profile Fields For This User.",
         email: "Email",
         createdAt: "Created",
         updatedAt: "Last Updated",
@@ -1204,9 +1536,12 @@ const translation: Translation = {
       table: {
         searchPlaceholder: "Search Users...",
         sortLabel: "Sort",
+        sortBy: "Sort By",
         sortToggle: "Sort By {{direction}}",
         sortNewest: "Newest",
         sortOldest: "Oldest",
+        sortByNewest: "Sort Users By Newest",
+        sortByOldest: "Sort Users By Oldest",
         colUser: "User",
         colProjects: "Projects",
         colStatus: "Status",
@@ -1216,6 +1551,8 @@ const translation: Translation = {
         statusInactive: "Inactive",
         projectsCount_one: "{{count}} Project",
         projectsCount_other: "{{count}} Projects",
+        projectsLabel_one: "Project",
+        projectsLabel_other: "Projects",
         lastActionVerified: "Email Verified",
         lastActionCreated: "Account Created",
         showingUsers: "Showing {{from}} To {{to}} Of {{total}} Users",
@@ -1616,6 +1953,152 @@ const translation: Translation = {
     },
     analytics: {
       title: "Analytics",
+      subtitle: "Search Console And Analytics Performance For The Selected Project.",
+      selectProjectTitle: "Select A Project",
+      selectProjectBody: "Choose A Project From The Sidebar To View Analytics.",
+      noAccessTitle: "Analytics Access Required",
+      noAccessBody: "You Do Not Have Permission To View Analytics For This Project.",
+      loadError: "Failed To Load Analytics.",
+      dateFrom: "From",
+      dateTo: "To",
+      export: {
+        excel: "Export Excel",
+        exporting: "Exporting…",
+        success: "Excel Report Downloaded.",
+        empty: "No Analytics Data Matches The Current Filters.",
+        errorFallback: "Could Not Export Analytics. Try Again.",
+        metric: "Metric",
+        value: "Value",
+        date: "Date",
+        channel: "Channel",
+        country: "Country",
+        sheets: {
+          summary: "Summary",
+          dailyTrend: "Daily Trend",
+          topQueries: "Top Queries",
+          topPages: "Top Pages",
+          trafficSources: "Traffic Sources",
+          countries: "Countries",
+        },
+      },
+      dateFilter: {
+        ariaLabel: "Analytics Date Range",
+        presetsHeading: "Quick Ranges",
+        presets: {
+          last_15_days: "Last 15 Days",
+          last_30_days: "Last 30 Days",
+          this_month: "This Month",
+          last_month: "Last Month",
+          last_90_days: "Last 90 Days",
+        },
+        months: [
+          "January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December",
+        ],
+        weekdays: { sun: "Su", mon: "Mo", tue: "Tu", wed: "We", thu: "Th", fri: "Fr", sat: "Sa" },
+        separator: "—",
+        fromPlaceholder: "Start",
+        toPlaceholder: "End",
+        reset: "Reset",
+        cancel: "Cancel",
+        apply: "Apply",
+        previousMonth: "Previous Month",
+        nextMonth: "Next Month",
+      },
+      summary: {
+        clicks: "Total Clicks",
+        impressions: "Impressions",
+        ctr: "Avg. CTR",
+        position: "Avg. Position",
+        sessions: "Sessions",
+        organicSessions: "Organic Sessions",
+      },
+      topQueries: {
+        title: "Top Search Queries",
+        viewAll: "View All Queries",
+        loading: "Loading…",
+        emptyTitle: "No Search Queries",
+        emptyBody: "Connect Search Console And Sync To Populate This Table.",
+        modalTitle: "All Top Search Queries",
+        modalSubtitle: "Full Ranking List For The Selected Date Range.",
+        modalClose: "Close",
+        modalRowCount: "{{count}} Queries",
+        columns: {
+          dimension: "Query",
+          clicks: "Clicks",
+          impressions: "Impressions",
+          ctr: "CTR",
+          position: "Position",
+        },
+      },
+      topPages: {
+        title: "Top Pages",
+        viewAll: "View All Pages",
+        loading: "Loading…",
+        emptyTitle: "No Pages",
+        emptyBody: "Connect Search Console And Sync To Populate This Table.",
+        modalTitle: "All Top Pages",
+        modalSubtitle: "Full Ranking List For The Selected Date Range.",
+        modalClose: "Close",
+        modalRowCount: "{{count}} Pages",
+        columns: {
+          dimension: "Page",
+          clicks: "Clicks",
+          impressions: "Impressions",
+          ctr: "CTR",
+          position: "Position",
+        },
+      },
+      trafficSources: {
+        title: "Traffic Sources",
+        totalLabel: "Total",
+        legendAria: "Traffic Source Breakdown",
+        loading: "Loading…",
+        emptyTitle: "No Traffic Sources",
+        emptyBody: "Connect Google Analytics And Sync To Populate This Chart.",
+      },
+      demographics: {
+        title: "User Demographics",
+        subtitle: "Where Users Engage By Territory.",
+        metricHint: "Total Users In The Selected Date Range.",
+        listAria: "Top Countries By Users",
+        mapAria: "World Map Of Users By Country",
+        mapUnavailable: "Map Unavailable",
+        loading: "Loading…",
+        emptyTitle: "No Geographic Data",
+        emptyBody: "Connect Google Analytics And Sync To Populate This Map.",
+      },
+      trendChart: {
+        title: "SEO Performance Trend",
+        subtitle: "Comparing Search Clicks And Organic Impressions Over Time.",
+        tabsAria: "Performance Metric",
+        tabs: {
+          clicks: "Clicks",
+          impressions: "Impressions",
+          ctr: "CTR",
+          position: "Position",
+        },
+        changeIncrease: "Increase",
+        changeDecrease: "Decrease",
+        changeFlat: "No Change",
+        emptyTitle: "No Trend Data",
+        emptyBody: "Connect Search Console And Sync To Populate This Chart.",
+      },
+      tables: {
+        topQueries: "Top Queries",
+        topPages: "Top Pages",
+        geoTraffic: "Geographic Traffic",
+        dimension: "Dimension",
+        clicks: "Clicks",
+        impressions: "Impressions",
+        ctr: "CTR",
+        position: "Position",
+        sessions: "Sessions",
+        users: "Users",
+        loading: "Loading…",
+        emptyTitle: "No Analytics Rows",
+        emptyBody: "Connect Integrations And Sync To Populate This Table.",
+      },
     },
     seoActivities: {
       title: "SEO Activities",
@@ -1763,9 +2246,6 @@ const translation: Translation = {
     leads: {
       title: "Leads",
     },
-    reports: {
-      title: "Reports",
-    },
     roles: {
       title: "Roles & Permissions",
       subtitle: "Manage Role Templates And Their Permission Sets.",
@@ -1788,6 +2268,9 @@ const translation: Translation = {
         descriptionPh: "What This Role Is For…",
         systemRoleNameLocked: "System Role Names Can't Be Changed. You Can Still Edit The Description And Permissions.",
         permsHeading: "Select Permissions",
+        permsLead: "Choose Which Modules And Actions This Role Can Access.",
+        permsModulesHeading: "Modules",
+        permsModuleLead: "Toggle The Actions Available For This Module.",
         permsSelectAll: "Select All",
         permsClearAll: "Clear All",
         permsCount: "{{selected}} Of {{total}} Selected",
@@ -1812,16 +2295,23 @@ const translation: Translation = {
         delete: "Delete",
         invite: "Invite",
         remove: "Remove",
+        disconnect: "Disconnect",
+        refresh: "Refresh",
       },
       detail: {
         title: "Role Details",
         lead: "Permission Summary For This Role.",
         loading: "Loading Role…",
+        overviewTitle: "Role Overview",
+        overviewLead: "Membership And Permission Counts For This Role.",
+        description: "Description",
+        noDescription: "No Description Provided.",
         members: "Members",
         permissionsCount: "Permissions",
         createdAt: "Created",
         updatedAt: "Last Updated",
         permissionsTitle: "Granted Permissions",
+        permissionsLead: "Modules And Actions This Role Can Perform.",
         noPermissions: "No Permissions Granted.",
       },
       statusFilter: {
@@ -1833,9 +2323,12 @@ const translation: Translation = {
       table: {
         searchPlaceholder: "Search Roles...",
         sortLabel: "Sort",
+        sortBy: "Sort By",
         sortToggle: "Sort By {{direction}}",
         sortNewest: "Newest",
         sortOldest: "Oldest",
+        sortByNewest: "Sort Roles By Newest",
+        sortByOldest: "Sort Roles By Oldest",
         colRole: "Role",
         colPermissions: "Permissions",
         colMembers: "Members",

@@ -2,13 +2,19 @@
 
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { IoEyeOutline, IoTrashOutline } from "react-icons/io5";
+import {
+  IoCheckmarkCircleOutline,
+  IoEyeOutline,
+  IoTimeOutline,
+  IoTrashOutline,
+} from "react-icons/io5";
+import { LuCircleDot, LuClock, LuFolder, LuUser } from "react-icons/lu";
 import { PiPencilThin } from "react-icons/pi";
 
 import type { TAppTableColumn } from "@/components/table/app-table";
 import { TableRowIconActions } from "@/components/table/table-row-icon-actions";
 import { ActiveInactiveToggle } from "@/components/ui/active-inactive-toggle";
-import { StatusIndicator } from "@/components/ui/status-indicator";
+import { StatusChip } from "@/components/ui/status-chip";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { formatLastActionTime } from "@/lib/frontend/date/format-relative-date.utils";
 import { isActiveUserStatus } from "@/lib/users/constants";
@@ -46,6 +52,7 @@ export function useUsersTableColumns({
       {
         key: "user",
         label: t("colUser"),
+        headerIcon: LuUser,
         render: (item) => (
           <div className="flex min-w-0 items-center gap-3">
             <UserAvatar name={item.name} imageUrl={item.profile_image} size="md" variant="photo" />
@@ -59,36 +66,54 @@ export function useUsersTableColumns({
       {
         key: "projects",
         label: t("colProjects"),
-        render: (item) => (
-          <span className="type-body text-text-primary tabular-nums">
-            {t("projectsCount", { count: item.projects.length })}
-          </span>
-        ),
+        headerIcon: LuFolder,
+        render: (item) => {
+          const count = item.projects.length;
+
+          return (
+            <span className="inline-flex items-baseline gap-1.5 type-body text-text-primary">
+              <span className="tabular-nums">{count}</span>
+              <span>{t("projectsLabel", { count })}</span>
+            </span>
+          );
+        },
       },
       {
         key: "status",
         label: t("colStatus"),
+        headerIcon: LuCircleDot,
         render: (item) => {
           const status = isActiveUserStatus(item.status) ? "active" : "inactive";
 
           return (
-            <StatusIndicator status={status} label={status === "active" ? t("statusActive") : t("statusInactive")} />
+            <StatusChip
+              colorKey={status}
+              label={status === "active" ? t("statusActive") : t("statusInactive")}
+            />
           );
         },
       },
       {
         key: "lastAction",
         label: t("colLastAction"),
+        headerIcon: LuClock,
         render: (item) => {
           const isVerified = Boolean(item.email_verified_at);
           const lastActionAt = isVerified ? item.updated_at : item.created_at;
 
           return (
             <div className="min-w-0">
-              <p className="type-body text-text-primary">
-                {isVerified ? t("lastActionVerified") : t("lastActionCreated")}
-              </p>
-              <p className="type-caption text-text-muted">{formatLastActionTime(lastActionAt)}</p>
+              <div className="flex items-center gap-2">
+                {isVerified ? (
+                  <IoCheckmarkCircleOutline className="size-4 shrink-0 text-status-active" aria-hidden />
+                ) : (
+                  <IoTimeOutline className="size-4 shrink-0 text-text-muted" aria-hidden />
+                )}
+                <p className="type-body text-text-primary">
+                  {isVerified ? t("lastActionVerified") : t("lastActionCreated")}
+                </p>
+              </div>
+              <p className="type-caption text-text-muted ps-6">{formatLastActionTime(lastActionAt)}</p>
             </div>
           );
         },

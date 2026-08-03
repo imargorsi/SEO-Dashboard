@@ -1,25 +1,60 @@
-import type { SidebarNavItem } from "@/lib/frontend/layout/sidebar-nav";
-import { SIDEBAR_NAV_DEFINITIONS } from "@/lib/frontend/layout/sidebar-nav";
+import type { SidebarNavGroup, SidebarNavItem } from "@/lib/frontend/layout/sidebar-nav";
+import {
+  SIDEBAR_NAV_DEFINITIONS,
+  SIDEBAR_NAV_GROUP_ORDER,
+} from "@/lib/frontend/layout/sidebar-nav";
 import { hasAnyPermission } from "@/lib/rbac/access";
 import { permissionsForScope } from "@/lib/rbac/scope-permissions";
+
+function isNavDefinitionVisible(
+  item: (typeof SIDEBAR_NAV_DEFINITIONS)[number],
+  platformPermissions: readonly string[],
+  projectPermissions: readonly string[],
+  roles: readonly string[],
+): boolean {
+  if (item.viewPermission === null) return true;
+
+  const permissions = permissionsForScope(
+    item.permissionScope,
+    platformPermissions,
+    projectPermissions,
+    roles,
+  );
+
+  return hasAnyPermission(permissions, [item.viewPermission]);
+}
+
+function toSidebarNavItem(
+  item: (typeof SIDEBAR_NAV_DEFINITIONS)[number],
+): SidebarNavItem {
+  const { viewPermission: _viewPermission, permissionScope: _scope, group: _group, ...navItem } =
+    item;
+  return navItem;
+}
 
 export function buildSidebarNavItems(
   platformPermissions: readonly string[],
   projectPermissions: readonly string[],
   roles: readonly string[],
 ): SidebarNavItem[] {
-  return SIDEBAR_NAV_DEFINITIONS.filter((item) => {
-    if (item.viewPermission === null) return true;
+  return SIDEBAR_NAV_DEFINITIONS.filter((item) =>
+    isNavDefinitionVisible(item, platformPermissions, projectPermissions, roles),
+  ).map(toSidebarNavItem);
+}
 
-    const permissions = permissionsForScope(
-      item.permissionScope,
-      platformPermissions,
-      projectPermissions,
-      roles,
-    );
+export function buildSidebarNavGroups(
+  platformPermissions: readonly string[],
+  projectPermissions: readonly string[],
+  roles: readonly string[],
+): SidebarNavGroup[] {
+  const visible = SIDEBAR_NAV_DEFINITIONS.filter((item) =>
+    isNavDefinitionVisible(item, platformPermissions, projectPermissions, roles),
+  );
 
-    return hasAnyPermission(permissions, [item.viewPermission]);
-  }).map(({ viewPermission: _viewPermission, permissionScope: _scope, ...item }) => item);
+  return SIDEBAR_NAV_GROUP_ORDER.map((groupId) => ({
+    id: groupId,
+    items: visible.filter((item) => item.group === groupId).map(toSidebarNavItem),
+  })).filter((group) => group.items.length > 0);
 }
 
 export function hasProjectWorkspace(

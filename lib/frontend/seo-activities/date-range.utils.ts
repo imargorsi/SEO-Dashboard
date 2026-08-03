@@ -7,6 +7,7 @@ export type TDateRangePresetId =
   | "all"
   | "last_15_days"
   | "last_30_days"
+  | "last_90_days"
   | "last_month"
   | "this_month"
   | "last_year"
@@ -64,6 +65,8 @@ export function resolveDateRangePreset(preset: TDateRangePresetId, now = new Dat
       return { from: toIsoDate(addDays(today, -14)), to: toIsoDate(today) };
     case "last_30_days":
       return { from: toIsoDate(addDays(today, -29)), to: toIsoDate(today) };
+    case "last_90_days":
+      return { from: toIsoDate(addDays(today, -89)), to: toIsoDate(today) };
     case "last_month": {
       const start = new Date(today.getFullYear(), today.getMonth() - 1, 1);
       const end = new Date(today.getFullYear(), today.getMonth(), 0);

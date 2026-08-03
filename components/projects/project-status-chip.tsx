@@ -1,11 +1,8 @@
 "use client";
 
+import { StatusChip } from "@/components/ui/status-chip";
 import type { ProjectStatus } from "@/lib/projects/constants";
-import {
-  getProjectStatusColorKey,
-  getStatusChipClassName,
-} from "@/lib/frontend/theme/status-colors";
-import { cn } from "@/lib/utils";
+import { getProjectStatusColorKey } from "@/lib/frontend/theme/status-colors";
 
 const STATUS_LABELS: Record<ProjectStatus, string> = {
   pending: "Pending Approval",
@@ -21,14 +18,10 @@ type ProjectStatusChipProps = {
 
 export function ProjectStatusChip({ status, className }: ProjectStatusChipProps) {
   return (
-    <span
-      className={cn(
-        "inline-flex items-center rounded-full border px-3 py-1 type-overline uppercase tracking-[0.08em]",
-        getStatusChipClassName(getProjectStatusColorKey(status)),
-        className,
-      )}
-    >
-      {STATUS_LABELS[status]}
-    </span>
+    <StatusChip
+      colorKey={getProjectStatusColorKey(status)}
+      label={STATUS_LABELS[status]}
+      className={className}
+    />
   );
 }

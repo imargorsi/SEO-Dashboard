@@ -13,7 +13,7 @@ type TSettingsCategoriesLayoutProps = {
 };
 
 const panelHeaderClass =
-  "flex h-14 items-center border-b border-border px-4 sm:px-5";
+  "flex h-14 items-center border-b border-border/50 px-4 sm:px-5";
 
 export function SettingsCategoriesLayout({
   categories,
@@ -34,11 +34,12 @@ export function SettingsCategoriesLayout({
   return (
     <div
       className={cn(
-        "grid min-h-112 gap-0 overflow-hidden rounded-2xl border border-border bg-bg-card",
+        "grid min-h-112 gap-0 overflow-visible rounded-3xl border border-border/40",
+        "bg-bg-card/45 shadow-(--shadow-elevated) backdrop-blur-md",
         "lg:grid-cols-[240px_1fr]",
       )}
     >
-      <aside className="border-b border-border bg-bg-input/30 lg:border-b-0 lg:border-e">
+      <aside className="border-b border-border/50 bg-bg-card/25 lg:border-b-0 lg:border-e lg:border-border/40">
         <div className={panelHeaderClass}>
           <h2 className="type-title text-text-primary">{t("categoriesHeading")}</h2>
         </div>
@@ -58,10 +59,10 @@ export function SettingsCategoriesLayout({
                 onClick={() => setSelectedCategoryId(category.id)}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
-                  "flex shrink-0 items-center gap-2.5 rounded-xl px-3 py-2.5 text-start type-body-strong transition-colors lg:w-full lg:shrink",
+                  "flex shrink-0 items-center gap-2.5 rounded-xl border px-3 py-2.5 text-start type-body-strong transition-colors lg:w-full lg:shrink",
                   isActive
-                    ? "bg-bg-selected text-text-primary"
-                    : "text-text-secondary hover:bg-bg-hover hover:text-text-primary",
+                    ? "border-border/50 bg-bg-selected text-text-primary shadow-sm"
+                    : "border-transparent text-text-secondary hover:border-border/40 hover:bg-bg-hover/60 hover:text-text-primary",
                 )}
               >
                 <Icon className="size-4 shrink-0" aria-hidden />
@@ -72,13 +73,13 @@ export function SettingsCategoriesLayout({
         </nav>
       </aside>
 
-      <div className="min-w-0">
+      <div className="min-w-0 overflow-visible">
         <div className={panelHeaderClass}>
           <h2 className="type-title text-text-primary">
             {t(`categories.${activeCategory.labelKey}`)}
           </h2>
         </div>
-        <div className="p-5 sm:p-6">{renderPanel(activeCategory.id)}</div>
+        <div className="overflow-visible p-5 sm:p-6">{renderPanel(activeCategory.id)}</div>
       </div>
     </div>
   );

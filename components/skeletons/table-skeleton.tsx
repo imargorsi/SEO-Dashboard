@@ -18,7 +18,7 @@ export function TableSkeleton({
   const body = (
     <div className="w-full" role="status" aria-live="polite" aria-busy="true">
       <span className="sr-only">Loading</span>
-      <div className="flex items-center gap-3 border-b border-border bg-bg-input px-3 py-2.5 sm:px-4">
+      <div className="flex items-center gap-3 border-b border-border/55 bg-transparent px-3 py-3 sm:px-4">
         {Array.from({ length: columns }).map((_, index) => (
           <Skeleton
             key={`head-${index}`}
@@ -30,9 +30,9 @@ export function TableSkeleton({
           />
         ))}
       </div>
-      <div className="divide-y divide-border">
+      <div className="divide-y divide-border/55">
         {Array.from({ length: rows }).map((_, rowIndex) => (
-          <div key={`row-${rowIndex}`} className="flex items-center gap-3 px-3 py-2.5 sm:px-4">
+          <div key={`row-${rowIndex}`} className="flex items-center gap-3 px-3 py-3 sm:px-4">
             {Array.from({ length: columns }).map((_, colIndex) => (
               <Skeleton
                 key={`cell-${rowIndex}-${colIndex}`}
@@ -54,7 +54,7 @@ export function TableSkeleton({
   if (!withChrome) return body;
 
   return (
-    <div className={cn("overflow-hidden rounded-2xl border border-border bg-bg-card", className)}>
+    <div className={cn("overflow-hidden rounded-xl border border-border/50 bg-bg-card/30 shadow-sm backdrop-blur-xl", className)}>
       {body}
     </div>
   );

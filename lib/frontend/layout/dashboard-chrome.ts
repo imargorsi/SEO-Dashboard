@@ -11,13 +11,58 @@ export const dashboardNavIconClass =
 export const toolbarFilterShellClass =
   "inline-flex max-w-full flex-wrap items-center gap-1.5 rounded-full border border-border/60 bg-bg-card/40 p-2 shadow-sm backdrop-blur-md backdrop-saturate-150 dark:border-text-on-brand/40 dark:bg-text-on-brand/10";
 
+/** Single glassy control (search, sort trigger) — same surface language as filter chip shells. */
+export const toolbarFilterControlClass =
+  "box-border h-11 rounded-full border border-border/60 bg-bg-card/40 shadow-sm backdrop-blur-md backdrop-saturate-150 transition-[border-color,background-color] duration-200 dark:border-text-on-brand/40 dark:bg-text-on-brand/10";
+
 /** Smaller chips leave a clearer gap inside the outlined shell. */
 export const toolbarFilterChipClass =
   "inline-flex h-8 items-center gap-2 rounded-full px-3 type-label leading-none transition-colors";
 
+/** Glassy detail / sheet panels — match list chrome without elevated solid fills. */
+export const detailIconWellClass =
+  "inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-border/60 bg-bg-card/40 text-brand shadow-sm backdrop-blur-md backdrop-saturate-150 dark:border-text-on-brand/40 dark:bg-text-on-brand/14 dark:text-text-primary";
+
+/** List table — transparent glass shell over page background. */
+export const tableShellClass =
+  "overflow-hidden rounded-xl border border-border/50 bg-bg-card/30 shadow-sm backdrop-blur-xl backdrop-saturate-150 transition-opacity duration-200 dark:border-text-on-brand/20 dark:bg-text-on-brand/[0.04]";
+
+export const tableHeaderRowClass =
+  "border-border/55 bg-transparent hover:bg-transparent dark:border-text-on-brand/12";
+
+export const tableHeaderCellClass =
+  "h-12 px-3 type-label tracking-wide text-text-secondary sm:px-4";
+
+/** Continuous glass body rows — hairline dividers, no pill cards. */
+export const tableBodyRowClass =
+  "border-border/55 bg-transparent transition-colors hover:bg-bg-hover/40 dark:border-text-on-brand/12";
+
+export const tableBodyCellClass = "px-3 py-3 type-body text-text-primary sm:px-4";
+
+export const tablePaginationBarClass =
+  "flex flex-col gap-2 border-t border-border/50 px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between sm:px-4 dark:border-text-on-brand/12";
+
+/** Row action icon buttons — compact glass pills. */
+export const tableRowIconActionClass =
+  "inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-border/70 bg-bg-card/50 text-text-primary shadow-sm backdrop-blur-md transition-[border-color,background-color,color,box-shadow] duration-200 hover:border-accent-border hover:bg-bg-hover hover:text-text-primary hover:shadow-md dark:border-text-on-brand/35 dark:bg-text-on-brand/12 dark:hover:border-text-on-brand/50 dark:hover:bg-text-on-brand/18";
+
+/** Inline glass chip for table cell counts / labels — same surface language as row icon actions. */
+export const tableGlassChipClass =
+  "inline-flex items-center rounded-full border border-border/70 bg-bg-card/50 px-2.5 py-1 type-caption-xs tabular-nums text-text-primary shadow-sm backdrop-blur-md dark:border-text-on-brand/35 dark:bg-text-on-brand/12";
+
+/** Pagination controls — compact outline chips. */
+export const tablePaginationIconActionClass =
+  "size-7 min-w-7 rounded-full border border-border/60 bg-transparent p-0 type-caption text-text-secondary shadow-none transition-[border-color,background-color,color] duration-200 hover:border-accent-border hover:bg-bg-hover/50 hover:text-text-primary disabled:opacity-40 dark:border-text-on-brand/25 dark:hover:border-text-on-brand/40 dark:hover:bg-text-on-brand/10";
+
 /** Elevated card/panel surface — tuned in globals.css (`--bg-card-elevated`, `--border-elevated`, `--shadow-elevated`). */
 export const elevatedCardSurfaceClass =
   "border border-(--border-elevated) bg-bg-card-elevated text-(--text-on-elevated) shadow-(--shadow-elevated) backdrop-blur-md transition-shadow duration-200 hover:shadow-[0_0_0_1px_var(--accent-border)]";
+
+/** Analytics module panels — shared radius + breathing room. */
+export const analyticsPanelClass = "rounded-3xl p-5 sm:p-6";
+
+/** Page/section title + description — keep hierarchy readable (flex gap, not tight leading collapse). */
+export const analyticsHeadingStackClass = "flex flex-col gap-1.5";
 
 export const elevatedCardTitleClass = "text-(--text-on-elevated)";
 
@@ -35,7 +80,7 @@ export const sidebarShellCollapsedClass = "md:w-[4.5rem]";
 
 /** Crawllex logo mark + wordmark in the sidebar header. */
 export const sidebarBrandRowClass =
-  "relative flex h-[4.25rem] shrink-0 items-center justify-center px-4";
+  "relative flex min-h-[4.25rem] shrink-0 items-center justify-center px-3 py-2 md:px-4";
 
 export const sidebarBrandRowCollapsedClass = "md:px-2";
 
@@ -47,13 +92,13 @@ export const sidebarCollapseToggleCollapsedClass = "md:justify-center md:px-0";
 
 /** Circular icon well inside sidebar nav rows. */
 export const sidebarNavIconWellClass =
-  "inline-flex size-7 shrink-0 items-center justify-center rounded-full border transition-[background-color,border-color,color] duration-200";
+  "inline-flex size-7 shrink-0 items-center justify-center rounded-full border shadow-sm backdrop-blur-md backdrop-saturate-150 transition-[background-color,border-color,color,box-shadow] duration-200";
 
 export const sidebarNavIconWellActiveClass =
-  "border-transparent bg-text-on-brand/20 text-text-on-brand";
+  "border-text-on-brand bg-text-on-brand/20 text-text-on-brand shadow-none backdrop-blur-none";
 
 export const sidebarNavIconWellInactiveClass =
-  "border-border/80 bg-bg-card text-text-muted group-hover:border-accent-border group-hover:bg-bg-hover group-hover:text-text-primary";
+  "border-border/70 bg-bg-card/50 text-text-primary shadow-sm dark:border-text-on-brand/35 dark:bg-text-on-brand/12 group-hover:border-accent-border group-hover:bg-bg-hover group-hover:text-text-primary group-hover:shadow-md dark:group-hover:border-text-on-brand/50 dark:group-hover:bg-text-on-brand/18";
 
 /** Nav link: soft pill + circular icon wells. */
 export const sidebarNavLinkClass =
@@ -68,10 +113,27 @@ export const sidebarNavLinkActiveClass =
 export const sidebarNavLinkInactiveClass =
   "border border-transparent bg-transparent text-text-secondary hover:border-border hover:bg-bg-card/80 hover:text-text-primary";
 
-/** Project selector trigger — same glass pill language as toolbar filters / nav. */
-export const sidebarProjectSelectorClass =
-  "flex w-full items-center gap-2.5 rounded-full border border-border/60 bg-bg-card/40 px-2.5 py-1.5 type-label text-text-primary shadow-sm backdrop-blur-md backdrop-saturate-150 transition-[border-color,background-color] duration-200 hover:border-border hover:bg-bg-hover/55 dark:border-text-on-brand/35 dark:bg-text-on-brand/10";
+/** Project selector — one shell that expands over sidebar content. */
+export const sidebarProjectSelectorShellClass =
+  "flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-bg-card/40 shadow-sm backdrop-blur-md backdrop-saturate-150 transition-[border-color,background-color,box-shadow,max-height] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] dark:border-text-on-brand/35 dark:bg-text-on-brand/10";
 
-export const sidebarProjectSelectorOpenClass = "border-accent-border dark:border-text-on-brand/50";
+export const sidebarProjectSelectorShellOpenClass =
+  "border-border/80 bg-bg-card-elevated shadow-(--shadow-elevated) dark:border-text-on-brand/40 dark:bg-bg-card-elevated";
 
-export const sidebarNavItemDividerClass = "border-b border-border/40";
+export const sidebarProjectSelectorTriggerClass =
+  "flex w-full shrink-0 items-center gap-3 px-3 py-2.5 type-label text-text-primary transition-colors duration-200 hover:bg-bg-hover/40";
+
+export const sidebarProjectSelectorExpandClass =
+  "grid min-h-0 transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]";
+
+export const sidebarProjectSelectorOptionClass =
+  "flex w-full items-center gap-3 rounded-xl px-3 py-3 text-start transition-colors duration-200 ease-out";
+
+export const sidebarProjectSelectorListClass =
+  "themed-scrollbar flex max-h-[min(40rem,calc(100svh-11rem))] flex-col gap-2 overflow-y-auto px-2 pb-2.5 pe-1 pt-1";
+
+export const sidebarNavGroupLabelClass =
+  "px-2.5 pb-2 type-overline tracking-wide text-text-muted";
+
+export const sidebarNavGroupClass =
+  "flex flex-col gap-1.5 border-t border-border/55 pb-4 pt-7 first:border-t-0 first:pt-0 last:pb-0 dark:border-text-on-brand/12";

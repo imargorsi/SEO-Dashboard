@@ -1,11 +1,18 @@
 /**
- * Locked v1 permission catalog — see doc/rbac.md
+ * Locked permission catalog — see doc/rbac.md
+ *
+ * Project role matrix (system + custom templates):
+ * - Dashboard / Analytics / Leads: view only (mutate hidden until features exist)
+ * - Projects / SEO Activities: view, create, update, delete
+ * - Integrations (Settings → Google link for selected project): view, disconnect, refresh, update
+ * - Members: view, invite, remove
+ *
+ * Platform `admin.*` keys are for `super_admin` evaluation only — never on project Role documents.
  *
  * Not in catalog (always allowed for authenticated users):
  * - Profile / edit-profile / change password (Module 12)
  *
- * Deferred (not in v1 matrix):
- * - plan, settings (project settings)
+ * Out of scope for this product: packaged Client Reports (handled separately — not a module here).
  */
 
 export const PERMISSION_ACTIONS = ["view", "create", "update", "delete"] as const;
@@ -14,20 +21,25 @@ export type PermissionAction = (typeof PERMISSION_ACTIONS)[number];
 export const MEMBER_PERMISSION_ACTIONS = ["view", "invite", "remove"] as const;
 export type MemberPermissionAction = (typeof MEMBER_PERMISSION_ACTIONS)[number];
 
-/** Project-scoped modules in the role matrix (v1). */
+export const INTEGRATION_PERMISSION_ACTIONS = ["view", "disconnect", "refresh", "update"] as const;
+export type IntegrationPermissionAction = (typeof INTEGRATION_PERMISSION_ACTIONS)[number];
+
+export const VIEW_ONLY_ACTIONS = ["view"] as const;
+
+/** Project-scoped modules in the role matrix. */
 export const PROJECT_MODULE_SLUGS = [
   "dashboard",
   "projects",
   "analytics",
   "seo_activities",
   "leads",
-  "reports",
+  "integrations",
   "members",
 ] as const;
 
 export type ProjectModuleSlug = (typeof PROJECT_MODULE_SLUGS)[number];
 
-export type CrudModuleSlug = Exclude<ProjectModuleSlug, "members">;
+export type CrudModuleSlug = Exclude<ProjectModuleSlug, "members" | "integrations">;
 
 export type PermissionModuleDefinition = {
   slug: string;
@@ -36,12 +48,12 @@ export type PermissionModuleDefinition = {
 };
 
 export const PROJECT_PERMISSION_MODULES: readonly PermissionModuleDefinition[] = [
-  { slug: "dashboard", label: "Dashboard", actions: PERMISSION_ACTIONS },
+  { slug: "dashboard", label: "Dashboard", actions: VIEW_ONLY_ACTIONS },
   { slug: "projects", label: "Projects", actions: PERMISSION_ACTIONS },
-  { slug: "analytics", label: "Analytics", actions: PERMISSION_ACTIONS },
+  { slug: "analytics", label: "Analytics", actions: VIEW_ONLY_ACTIONS },
   { slug: "seo_activities", label: "SEO Activities", actions: PERMISSION_ACTIONS },
-  { slug: "leads", label: "Leads", actions: PERMISSION_ACTIONS },
-  { slug: "reports", label: "Reports", actions: PERMISSION_ACTIONS },
+  { slug: "leads", label: "Leads", actions: VIEW_ONLY_ACTIONS },
+  { slug: "integrations", label: "Integrations", actions: INTEGRATION_PERMISSION_ACTIONS },
   { slug: "members", label: "Members", actions: MEMBER_PERMISSION_ACTIONS },
 ];
 
@@ -61,12 +73,12 @@ export function memberPermission(action: MemberPermissionAction): string {
   return `members.${action}`;
 }
 
-export function adminPermission(module: AdminModuleSlug, action: PermissionAction): string {
-  return `admin.${module}.${action}`;
+export function integrationPermission(action: IntegrationPermissionAction): string {
+  return `integrations.${action}`;
 }
 
-export function allCrudPermissions(module: CrudModuleSlug): string[] {
-  return PERMISSION_ACTIONS.map((action) => projectPermission(module, action));
+export function adminPermission(module: AdminModuleSlug, action: PermissionAction): string {
+  return `admin.${module}.${action}`;
 }
 
 export function allMemberPermissions(): string[] {
@@ -98,25 +110,14 @@ export function allProjectCatalogPermissions(): string[] {
   return permissions;
 }
 
-const PROJECT_OWNER_MODULES: readonly CrudModuleSlug[] = [
-  "dashboard",
-  "projects",
-  "analytics",
-  "seo_activities",
-  "leads",
-  "reports",
-];
-
-/** Default seeded permissions for `project_owner`. */
+/** Default seeded permissions for `project_owner` — full project matrix. */
 export function defaultProjectOwnerPermissions(): string[] {
-  const permissions = PROJECT_OWNER_MODULES.flatMap((module) => allCrudPermissions(module));
-  return [...permissions, ...allMemberPermissions()];
+  return allProjectCatalogPermissions();
 }
 
-/** Default seeded permissions for `project_user` — view on modules + members.view only. */
+/** Default seeded permissions for `project_user` — view on every project module. */
 export function defaultProjectUserPermissions(): string[] {
-  const viewPermissions = PROJECT_OWNER_MODULES.map((module) => projectPermission(module, "view"));
-  return [...viewPermissions, memberPermission("view")];
+  return PROJECT_PERMISSION_MODULES.map((mod) => `${mod.slug}.view`);
 }
 
 export function isKnownPermission(permission: string): boolean {

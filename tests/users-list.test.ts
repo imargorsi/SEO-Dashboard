@@ -76,6 +76,8 @@ describe("GET /users — listUsers", () => {
     expect(item!.projects).toEqual([
       expect.objectContaining({
         name: "Owner Project",
+        website_url: "https://owner.example.com",
+        image_url: null,
         membership_role: PROJECT_OWNER_ROLE,
         membership_status: "active",
         status: "pending",

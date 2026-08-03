@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { ValidationError } from "@/lib/api/http-errors";
 import { ApiResponse } from "@/lib/api/response";
 import { isHiddenFromAdminRoleUi } from "@/lib/rbac/roles";
-import { assertKnownPermissions } from "@/lib/roles/assert-known-permissions";
+import { assertKnownPermissions, sanitizeProjectPermissions } from "@/lib/roles/assert-known-permissions";
 import { getAdminRoleById } from "@/lib/roles/get-role";
 import { escapeRegex, isDuplicateKeyError } from "@/lib/roles/role-mutation.utils";
 import { resolveRoleMemberCounts } from "@/lib/roles/resolve-role-member-counts";
@@ -48,7 +48,7 @@ export async function updateRole(
     role.name = name;
   }
 
-  const permissions = [...new Set(input.permissions)];
+  const permissions = sanitizeProjectPermissions(input.permissions);
   assertKnownPermissions(permissions);
 
   role.description = input.description.trim();

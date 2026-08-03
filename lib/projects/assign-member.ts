@@ -1,13 +1,16 @@
 import type { Types } from "mongoose";
 
+import { ValidationError } from "@/lib/api/http-errors";
 import type { ProjectMemberStatus } from "@/lib/projects/constants";
-import { resolveProjectRoleBySlug } from "@/lib/projects/resolve-role";
+import { resolveProjectRoleById, resolveProjectRoleBySlug } from "@/lib/projects/resolve-role";
 import { ProjectMember, type ProjectMemberDocument } from "@/models/ProjectMember";
 
 export type AssignProjectMemberInput = {
   projectId: Types.ObjectId | string;
   userId: Types.ObjectId | string;
-  roleSlug: string;
+  /** Prefer `roleId` for admin assignment; `roleSlug` kept for create/invite flows. */
+  roleId?: string;
+  roleSlug?: string;
   status?: ProjectMemberStatus;
   invitedByUserId?: Types.ObjectId | string | null;
 };
@@ -19,7 +22,15 @@ export type AssignProjectMemberInput = {
 export async function assignProjectMember(
   input: AssignProjectMemberInput,
 ): Promise<ProjectMemberDocument> {
-  const role = await resolveProjectRoleBySlug(input.roleSlug);
+  if (!input.roleId && !input.roleSlug) {
+    throw ValidationError.fromFieldErrors({
+      roleId: ["A Project Role Is Required."],
+    });
+  }
+
+  const role = input.roleId
+    ? await resolveProjectRoleById(input.roleId)
+    : await resolveProjectRoleBySlug(input.roleSlug!);
 
   const $set: {
     roleId: Types.ObjectId;

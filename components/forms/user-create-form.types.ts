@@ -1,3 +1,5 @@
+import type { TAdminUserProjectAssignment } from "@/types/admin-user.types";
+
 export type TUserCreateFormValues = {
   name: string;
   email: string;
@@ -10,4 +12,6 @@ export type TUserFormProps = {
   userId?: string;
   initialValues?: TUserCreateFormValues;
   initialProfileImageUrl?: string | null;
+  /** Existing project memberships (edit). */
+  initialProjects?: TAdminUserProjectAssignment[];
 };

@@ -1,32 +1,27 @@
 "use client";
 
-import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
+import {
+  IoCalendarOutline,
+  IoCheckmarkCircleOutline,
+  IoMailOutline,
+  IoRefreshOutline,
+} from "react-icons/io5";
 
+import { DetailFieldRow, DetailSectionHeading } from "@/components/ui/detail-field-row";
+import { StatusChip } from "@/components/ui/status-chip";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { UserProjectAssignments } from "@/components/users/user-project-assignments";
-import { StatusIndicator } from "@/components/ui/status-indicator";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { formatShortDate } from "@/lib/frontend/date/format-relative-date.utils";
-import { elevatedCardMutedClass, elevatedCardSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { isActiveUserStatus } from "@/lib/users/constants";
 import type { TAdminUserListItem } from "@/types/admin-user.types";
-import { cn } from "@/lib/utils";
 
 type UserDetailSheetProps = {
   user: TAdminUserListItem | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 };
-
-function DetailField({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <div className="space-y-1">
-      <p className={cn("type-caption-xs tracking-[0.08em] uppercase", elevatedCardMutedClass)}>{label}</p>
-      <div className="type-body text-text-primary">{children}</div>
-    </div>
-  );
-}
 
 export function UserDetailSheet({ user, open, onOpenChange }: UserDetailSheetProps) {
   const { t, i18n } = useTranslation("translation", { keyPrefix: "modules.users.detail" });
@@ -36,46 +31,63 @@ export function UserDetailSheet({ user, open, onOpenChange }: UserDetailSheetPro
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-[min(100%,28rem)] sm:max-w-lg">
-        <SheetHeader>
+      <SheetContent
+        side="right"
+        className="w-[min(100%,28rem)] border-border/60 bg-bg-card/85 shadow-(--shadow-elevated) backdrop-blur-xl sm:max-w-lg dark:border-text-on-brand/20 dark:bg-bg-card/90"
+      >
+        <SheetHeader className="border-border/50 bg-transparent dark:border-text-on-brand/12">
           <SheetTitle>{t("title")}</SheetTitle>
           <SheetDescription>{t("lead")}</SheetDescription>
         </SheetHeader>
 
         {user ? (
-          <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto px-5 py-5">
-            <section className={cn(elevatedCardSurfaceClass, "rounded-2xl p-4")}>
-              <div className="flex items-start gap-3">
-                <UserAvatar name={user.name} imageUrl={user.profile_image} size="lg" variant="photo" />
-                <div className="min-w-0 space-y-1">
-                  <p className="type-body-strong text-text-primary truncate">{user.name}</p>
-                  <p className="type-caption text-text-muted truncate">{user.email}</p>
-                  <StatusIndicator
-                    status={accountStatus}
+          <div className="themed-scrollbar flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto px-5 py-5">
+            <section>
+              <div className="flex items-center gap-3.5">
+                <UserAvatar
+                  name={user.name}
+                  imageUrl={user.profile_image}
+                  size="lg"
+                  variant="photo"
+                  className="shrink-0"
+                />
+                <div className="flex min-w-0 flex-1 items-start justify-between gap-3">
+                  <div className="min-w-0 space-y-1">
+                    <p className="truncate type-title leading-snug text-text-primary">{user.name}</p>
+                    <p className="truncate type-caption leading-snug text-text-muted">{user.email}</p>
+                  </div>
+                  <StatusChip
+                    className="mt-0.5 shrink-0"
+                    colorKey={accountStatus}
                     label={accountStatus === "active" ? tTable("statusActive") : tTable("statusInactive")}
-                    className="mt-1"
                   />
                 </div>
               </div>
             </section>
 
-            <section className="space-y-4">
-              <DetailField label={t("email")}>{user.email}</DetailField>
-              <DetailField label={t("createdAt")}>{formatShortDate(user.created_at, i18n.language)}</DetailField>
-              <DetailField label={t("updatedAt")}>{formatShortDate(user.updated_at, i18n.language)}</DetailField>
-              <DetailField label={t("emailVerifiedAt")}>
-                {user.email_verified_at
-                  ? formatShortDate(user.email_verified_at, i18n.language)
-                  : t("emailNotVerified")}
-              </DetailField>
+            <section className="space-y-3">
+              <DetailSectionHeading title={t("accountTitle")} description={t("accountLead")} />
+              <div>
+                <DetailFieldRow icon={IoMailOutline} label={t("email")}>
+                  {user.email}
+                </DetailFieldRow>
+                <DetailFieldRow icon={IoCalendarOutline} label={t("createdAt")}>
+                  {formatShortDate(user.created_at, i18n.language)}
+                </DetailFieldRow>
+                <DetailFieldRow icon={IoRefreshOutline} label={t("updatedAt")}>
+                  {formatShortDate(user.updated_at, i18n.language)}
+                </DetailFieldRow>
+                <DetailFieldRow icon={IoCheckmarkCircleOutline} label={t("emailVerifiedAt")}>
+                  {user.email_verified_at
+                    ? formatShortDate(user.email_verified_at, i18n.language)
+                    : t("emailNotVerified")}
+                </DetailFieldRow>
+              </div>
             </section>
 
-            <section className="border-border space-y-3 border-t pt-5">
-              <div className="space-y-1">
-                <h3 className="type-label text-text-primary">{t("projectsTitle")}</h3>
-                <p className="type-caption text-text-muted">{t("projectsLead")}</p>
-              </div>
-              <UserProjectAssignments projects={user.projects} variant="cards" />
+            <section className="space-y-3">
+              <DetailSectionHeading title={t("projectsTitle")} description={t("projectsLead")} />
+              <UserProjectAssignments projects={user.projects} />
             </section>
           </div>
         ) : null}

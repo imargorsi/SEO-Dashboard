@@ -63,6 +63,8 @@ export function RolesTable({
       isFetching={isFetching}
       emptyTitle={tTable("emptyTitle")}
       emptyBody={tTable("emptyBody")}
+      onRowClick={onViewRole ? (item) => onViewRole(item.id) : undefined}
+      getRowClickLabel={onViewRole ? (item) => tTable("viewRole", { name: item.name }) : undefined}
       pagination={{
         page: query.page,
         perPage: query.per_page,

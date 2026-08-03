@@ -52,7 +52,6 @@ export const THEME_PACKS: readonly TThemePackMeta[] = [
 ] as const;
 
 const themePackListeners = new Set<() => void>();
-
 function emitThemePackChange(): void {
   themePackListeners.forEach((listener) => listener());
 }

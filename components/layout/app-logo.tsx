@@ -1,6 +1,17 @@
+"use client";
+
 import Image from "next/image";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
+
+/** White wordmark — dark surfaces. */
+const APP_LOGO_DARK_SRC = "/Logo.svg";
+/** Dark wordmark — light surfaces. */
+const APP_LOGO_LIGHT_SRC = "/light-logo.svg";
+/** Collapsed mark (favicon). */
+const APP_LOGO_MARK_SRC = "/favicon.png";
 
 type AppLogoProps = {
   alt?: string;
@@ -25,6 +36,14 @@ export function AppLogo({
   variant = "full",
   width,
 }: AppLogoProps) {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
   if (variant === "mark") {
     const markWidth = width ?? MARK_SIZE;
     const markHeight = height ?? MARK_SIZE;
@@ -35,6 +54,7 @@ export function AppLogo({
         width={markWidth}
         height={markHeight}
         priority={priority}
+        unoptimized
         className={cn(className)}
         aria-hidden={alt ? undefined : true}
       />

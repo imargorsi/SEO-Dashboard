@@ -10,6 +10,7 @@ import {
   IoPersonAddOutline,
   IoTrashOutline,
 } from "react-icons/io5";
+import { LuBriefcase, LuCircleDot, LuUser } from "react-icons/lu";
 import { PiPencilThin } from "react-icons/pi";
 
 import type { TAppTableColumn } from "@/components/table/app-table";
@@ -71,6 +72,7 @@ export function useProjectsTableColumns({
       {
         key: "project",
         label: t("table.colBusinessName"),
+        headerIcon: LuBriefcase,
         render: (item) => (
           <div className="flex min-w-0 items-center gap-3">
             <UserAvatar
@@ -89,6 +91,7 @@ export function useProjectsTableColumns({
       {
         key: "owner",
         label: tCard("projectOwnerLabel"),
+        headerIcon: LuUser,
         render: (item) => {
           const ownerName = item.owner?.name?.trim() || tCard("projectOwnerFallback");
           return (
@@ -107,6 +110,7 @@ export function useProjectsTableColumns({
       {
         key: "status",
         label: t("table.colStatus"),
+        headerIcon: LuCircleDot,
         render: (item) => <ProjectStatusChip status={item.status} />,
       },
       {

@@ -13,17 +13,22 @@ import { useDashboardSidebar } from "@/context/dashboard-sidebar-context";
 import { useProjectAccess } from "@/context/project-access-context";
 import { useSelectedProject } from "@/context/selected-project-context";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
-import { buildSidebarNavItems } from "@/lib/frontend/layout/build-sidebar-nav";
-import { isSidebarNavItemActive } from "@/lib/frontend/layout/sidebar-nav";
+import { buildSidebarNavGroups } from "@/lib/frontend/layout/build-sidebar-nav";
+import {
+  isSidebarNavItemActive,
+  type SidebarNavGroupId,
+  type SidebarNavItem,
+} from "@/lib/frontend/layout/sidebar-nav";
 import {
   sidebarBrandRowClass,
   sidebarBrandRowCollapsedClass,
   sidebarCollapseToggleClass,
   sidebarCollapseToggleCollapsedClass,
+  sidebarNavGroupClass,
+  sidebarNavGroupLabelClass,
   sidebarNavIconWellActiveClass,
   sidebarNavIconWellClass,
   sidebarNavIconWellInactiveClass,
-  sidebarNavItemDividerClass,
   sidebarNavLinkActiveClass,
   sidebarNavLinkClass,
   sidebarNavLinkCollapsedClass,
@@ -35,9 +40,67 @@ import {
 import { isSuperAdmin } from "@/lib/rbac/access";
 import { cn } from "@/lib/utils";
 
+const GROUP_LABEL_KEY: Record<SidebarNavGroupId, "groupGeneral" | "groupReporting" | "groupSettings"> = {
+  general: "groupGeneral",
+  reporting: "groupReporting",
+  settings: "groupSettings",
+};
+
 type DashboardSidebarProps = {
   onClose?: () => void;
 };
+
+function SidebarNavLink({
+  item,
+  isCollapsed,
+  pathname,
+  label,
+}: {
+  item: SidebarNavItem;
+  isCollapsed: boolean;
+  pathname: string;
+  label: string;
+}) {
+  const isActive = isSidebarNavItemActive(pathname, item);
+  const Icon = item.icon;
+
+  return (
+    <Link
+      href={item.path}
+      title={isCollapsed ? label : undefined}
+      aria-label={isCollapsed ? label : undefined}
+      aria-current={isActive ? "page" : undefined}
+      className={cn(
+        sidebarNavLinkClass,
+        isCollapsed && sidebarNavLinkCollapsedClass,
+        isActive ? sidebarNavLinkActiveClass : sidebarNavLinkInactiveClass,
+      )}
+    >
+      <span
+        className={cn(
+          sidebarNavIconWellClass,
+          isActive ? sidebarNavIconWellActiveClass : sidebarNavIconWellInactiveClass,
+        )}
+      >
+        <Icon className="size-3.5" aria-hidden />
+      </span>
+      <span className={cn("min-w-0 flex-1 truncate", isCollapsed && "md:hidden")}>{label}</span>
+      {item.badge != null ? (
+        <span
+          className={cn(
+            "ms-auto inline-flex min-w-4.5 items-center justify-center rounded-full px-1.5 py-0.5 type-overline",
+            isCollapsed && "md:hidden",
+            isActive
+              ? "bg-text-on-brand/20 text-text-on-brand"
+              : "bg-destructive text-text-on-brand",
+          )}
+        >
+          {item.badge}
+        </span>
+      ) : null}
+    </Link>
+  );
+}
 
 export function DashboardSidebar({ onClose }: DashboardSidebarProps) {
   const { t: tNav } = useTranslation("translation", { keyPrefix: "nav" });
@@ -58,9 +121,9 @@ export function DashboardSidebar({ onClose }: DashboardSidebarProps) {
     return hasProjectContext && !isProjectAccessLoading;
   }, [hasProjectContext, isPlatformAdmin, isProjectAccessLoading, user]);
 
-  const navItems = useMemo(() => {
+  const navGroups = useMemo(() => {
     if (!user || !canRenderNav) return [];
-    return buildSidebarNavItems(user.permissions, projectPermissions, user.roles);
+    return buildSidebarNavGroups(user.permissions, projectPermissions, user.roles);
   }, [canRenderNav, projectPermissions, user]);
 
   const collapseLabel = isCollapsed ? tNav("expandSidebar") : tNav("collapseSidebar");
@@ -78,17 +141,20 @@ export function DashboardSidebar({ onClose }: DashboardSidebarProps) {
         <Link
           href="/dashboard"
           className={cn(
-            "flex min-w-0 items-center justify-center rounded-lg px-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-border) focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar",
-            isCollapsed ? "w-auto" : "w-full justify-start",
+            "flex min-w-0 items-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-border) focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar",
+            isCollapsed ? "w-auto justify-center px-1" : "w-full justify-center",
+            onClose && !isCollapsed && "pe-10",
           )}
           aria-label={tLayout("appName")}
         >
           <AppLogo
             priority
             variant={isCollapsed ? "mark" : "full"}
-            className={cn("w-auto shrink-0", isCollapsed ? "size-7" : "h-8")}
-            width={isCollapsed ? 28 : 188}
-            height={isCollapsed ? 28 : 32}
+            className={cn(
+              isCollapsed ? "size-7 shrink-0" : "mx-auto h-8 w-auto max-w-full",
+            )}
+            width={isCollapsed ? 28 : 160}
+            height={isCollapsed ? 28 : 24}
           />
         </Link>
         {onClose ? (
@@ -105,59 +171,28 @@ export function DashboardSidebar({ onClose }: DashboardSidebarProps) {
 
       {showProjectSelector ? <ProjectSelector isCollapsed={isCollapsed} /> : null}
 
-      <nav className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto pb-3 pt-1", isCollapsed ? "px-2" : "px-3")}>
-        <ul className="flex flex-col" role="list">
-          {navItems.map((item, itemIndex) => {
-            const isActive = isSidebarNavItemActive(pathname, item);
-            const Icon = item.icon;
-            const label = tNav(item.labelKey);
-            const isLast = itemIndex === navItems.length - 1;
-
-            return (
-              <li
-                key={item.labelKey}
-                className={cn(!isLast && sidebarNavItemDividerClass, !isLast && "mb-1 pb-1")}
-              >
-                <Link
-                  href={item.path}
-                  title={isCollapsed ? label : undefined}
-                  aria-label={isCollapsed ? label : undefined}
-                  aria-current={isActive ? "page" : undefined}
-                  className={cn(
-                    sidebarNavLinkClass,
-                    isCollapsed && sidebarNavLinkCollapsedClass,
-                    isActive ? sidebarNavLinkActiveClass : sidebarNavLinkInactiveClass,
-                  )}
-                >
-                  <span
-                    className={cn(
-                      sidebarNavIconWellClass,
-                      isActive ? sidebarNavIconWellActiveClass : sidebarNavIconWellInactiveClass,
-                    )}
-                  >
-                    <Icon className="size-3.5" aria-hidden />
-                  </span>
-                  <span className={cn("min-w-0 flex-1 truncate", isCollapsed && "md:hidden")}>
-                    {label}
-                  </span>
-                  {item.badge != null ? (
-                    <span
-                      className={cn(
-                        "ms-auto inline-flex min-w-[18px] items-center justify-center rounded-full px-1.5 py-0.5 type-overline",
-                        isCollapsed && "md:hidden",
-                        isActive
-                          ? "bg-text-on-brand/20 text-text-on-brand"
-                          : "bg-destructive text-text-on-brand",
-                      )}
-                    >
-                      {item.badge}
-                    </span>
-                  ) : null}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+      <nav className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto pb-3 pt-2", isCollapsed ? "px-2" : "px-3")}>
+        <div className="flex flex-col">
+          {navGroups.map((group) => (
+            <div key={group.id} className={sidebarNavGroupClass}>
+              <p className={cn(sidebarNavGroupLabelClass, isCollapsed && "md:sr-only")}>
+                {tNav(GROUP_LABEL_KEY[group.id])}
+              </p>
+              <ul className="flex flex-col gap-1" role="list">
+                {group.items.map((item) => (
+                  <li key={item.labelKey}>
+                    <SidebarNavLink
+                      item={item}
+                      isCollapsed={isCollapsed}
+                      pathname={pathname}
+                      label={tNav(item.labelKey)}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
 
         {sidebar ? (
           <div className="mt-auto pt-3">

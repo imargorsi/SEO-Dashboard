@@ -18,19 +18,22 @@ describe("RBAC permission catalog", () => {
       "analytics",
       "seo_activities",
       "leads",
-      "reports",
+      "integrations",
       "members",
     ]);
   });
 
-  it("seeds project_owner with full CRUD on operational modules and members", () => {
+  it("seeds project_owner with trimmed matrix actions", () => {
     const permissions = defaultProjectOwnerPermissions();
 
     expect(permissions).toContain("dashboard.view");
-    expect(permissions).toContain("dashboard.create");
-    expect(permissions).toContain("reports.delete");
+    expect(permissions).not.toContain("dashboard.create");
+    expect(permissions).toContain("seo_activities.create");
+    expect(permissions).toContain("integrations.view");
+    expect(permissions).toContain("integrations.update");
+    expect(permissions).toContain("integrations.disconnect");
+    expect(permissions).toContain("integrations.refresh");
     expect(permissions).toContain("members.invite");
-    expect(permissions).toContain("members.remove");
     expect(permissions).not.toContain("admin.companies.view");
   });
 
@@ -38,8 +41,8 @@ describe("RBAC permission catalog", () => {
     const permissions = defaultProjectUserPermissions();
 
     expect(permissions).toContain("dashboard.view");
-    expect(permissions).toContain("reports.view");
-    expect(permissions).not.toContain("dashboard.create");
+    expect(permissions).toContain("integrations.view");
+    expect(permissions).not.toContain("integrations.update");
     expect(permissions).not.toContain("members.invite");
     expect(permissions).toContain("members.view");
   });
@@ -52,7 +55,7 @@ describe("RBAC permission catalog", () => {
       "Analytics",
       "SEO Activities",
       "Leads",
-      "Reports",
+      "Integrations",
       "Members",
     ]);
   });

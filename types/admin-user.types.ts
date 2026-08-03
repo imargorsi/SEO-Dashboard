@@ -1,8 +1,12 @@
 export type TAdminUserProjectAssignment = {
   id: string;
   name: string;
+  website_url: string;
+  image_url: string | null;
   /** Project workflow status. */
   status: "pending" | "active" | "inactive" | "rejected";
+  role_id: string;
+  role_name: string;
   membership_role: "project_owner" | "project_user" | string;
   membership_status: "active" | "invited" | "removed";
 };
@@ -27,6 +31,7 @@ export type TAdminUserDetail = {
   profile_image: string | null;
   status: "active" | "inactive";
   email_verified_at: string | null;
+  projects: TAdminUserProjectAssignment[];
   created_at: string;
   updated_at: string;
 };

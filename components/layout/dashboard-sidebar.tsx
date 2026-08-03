@@ -87,8 +87,8 @@ export function DashboardSidebar({ onClose }: DashboardSidebarProps) {
             priority
             variant={isCollapsed ? "mark" : "full"}
             className={cn("w-auto shrink-0", isCollapsed ? "size-7" : "h-8")}
-            width={isCollapsed ? 28 : 60}
-            height={isCollapsed ? 28 : 24}
+            width={isCollapsed ? 28 : 188}
+            height={isCollapsed ? 28 : 32}
           />
         </Link>
         {onClose ? (

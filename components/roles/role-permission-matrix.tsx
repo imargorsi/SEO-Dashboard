@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { roleActionIcon } from "@/lib/frontend/roles/permission-action-icon.utils";
 import { actionLabelKey, capitalizeAction, modulePermission } from "@/lib/frontend/roles/permission-labels.utils";
 import { cn } from "@/lib/utils";
 import type { TPermissionModule } from "@/types/permission-catalog.types";
@@ -123,6 +124,7 @@ export function RolePermissionMatrix({
             const checked = selectedSet.has(permission);
             const labelKey = actionLabelKey(action);
             const label = labelKey ? tActions(labelKey) : capitalizeAction(action);
+            const ActionIcon = roleActionIcon(action);
 
             return (
               <label
@@ -138,7 +140,8 @@ export function RolePermissionMatrix({
                   disabled={disabled}
                   onChange={(event) => togglePermission(permission, event.target.checked)}
                 />
-                {label}
+                {ActionIcon ? <ActionIcon className="size-4 shrink-0 text-text-muted" aria-hidden /> : null}
+                <span>{label}</span>
               </label>
             );
           })}

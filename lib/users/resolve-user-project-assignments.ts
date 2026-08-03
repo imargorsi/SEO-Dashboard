@@ -1,6 +1,7 @@
 import type { Types } from "mongoose";
 
 import type { ProjectMemberStatus, ProjectStatus } from "@/lib/projects/constants";
+import { serializeStoredImageUrl } from "@/lib/serializers/stored-image";
 import type { TAdminUserProjectAssignment } from "@/types/admin-user.types";
 import { Project } from "@/models/Project";
 import { ProjectMember } from "@/models/ProjectMember";
@@ -25,7 +26,7 @@ export async function resolveUserProjectAssignments(
 
   const [roles, projects] = await Promise.all([
     Role.find({ _id: { $in: roleIds } }).select("slug").lean(),
-    Project.find({ _id: { $in: projectIds } }).select("businessName status").lean(),
+    Project.find({ _id: { $in: projectIds } }).select("businessName websiteUrl logoImage status").lean(),
   ]);
 
   const slugByRoleId = new Map(roles.map((role) => [role._id.toString(), role.slug]));
@@ -34,6 +35,8 @@ export async function resolveUserProjectAssignments(
       project._id.toString(),
       {
         name: project.businessName,
+        websiteUrl: project.websiteUrl,
+        logoImage: project.logoImage,
         status: project.status as ProjectStatus,
       },
     ]),
@@ -48,6 +51,8 @@ export async function resolveUserProjectAssignments(
     const assignment: TAdminUserProjectAssignment = {
       id: membership.projectId.toString(),
       name: project.name,
+      website_url: project.websiteUrl,
+      image_url: serializeStoredImageUrl(project.logoImage),
       status: project.status,
       membership_role: slugByRoleId.get(membership.roleId.toString()) ?? "project_user",
       membership_status: membership.status as ProjectMemberStatus,

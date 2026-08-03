@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { IoTrashOutline } from "react-icons/io5";
 
 import { RoleDetailSheet } from "@/components/roles/role-detail-sheet";
 import { RoleStatusFilter } from "@/components/roles/role-status-filter";
@@ -22,9 +21,11 @@ import {
   useRoleStatusActionMutation,
   useRolesQuery,
 } from "@/features/roles/roles.api";
+import { useDetailSheetState } from "@/hooks/use-detail-sheet-state.hook";
 import { useQueryParams } from "@/hooks/use-query-params.hook";
 import { ApiError } from "@/lib/frontend/api/errors";
 import { roleCanCreate, roleCanDelete, roleCanUpdate, roleCanView } from "@/lib/frontend/roles/acl";
+import { roleActionIcon } from "@/lib/frontend/roles/permission-action-icon.utils";
 import { ROLE_ROUTES } from "@/lib/frontend/roles/role-routes.utils";
 import { parseRolesListQuery } from "@/lib/frontend/roles/roles-list-query.utils";
 import { notify } from "@/lib/frontend/feedback/notify";
@@ -32,6 +33,8 @@ import { isActiveRoleStatus, type TRoleStatus } from "@/lib/roles/constants";
 import { EMPTY_ROLE_STATUS_COUNTS } from "@/lib/roles/role-status-filter.utils";
 import type { TAdminRoleListItem } from "@/types/admin-role.types";
 import { cn } from "@/lib/utils";
+
+const DeleteRoleIcon = roleActionIcon("delete")!;
 
 export function RolesListSection() {
   const router = useRouter();
@@ -43,7 +46,13 @@ export function RolesListSection() {
   const canView = useMemo(() => roleCanView(authUser?.permissions), [authUser]);
   const canUpdate = useMemo(() => roleCanUpdate(authUser?.permissions), [authUser]);
   const canDelete = useMemo(() => roleCanDelete(authUser?.permissions), [authUser]);
-  const [selectedRoleId, setSelectedRoleId] = useState<string | null>(null);
+  const {
+    selected: selectedRoleId,
+    isOpen: isDetailOpen,
+    open: openDetail,
+    onOpenChange: onDetailOpenChange,
+    clear: clearDetail,
+  } = useDetailSheetState<string>();
   const [deleteTarget, setDeleteTarget] = useState<TAdminRoleListItem | null>(null);
   const statusMutation = useRoleStatusActionMutation();
   const deleteMutation = useDeleteRoleMutation();
@@ -76,8 +85,16 @@ export function RolesListSection() {
 
   const sortOptions = useMemo(
     () => [
-      { value: "newest", label: t("table.sortNewest") },
-      { value: "oldest", label: t("table.sortOldest") },
+      {
+        value: "newest",
+        label: t("table.sortByNewest"),
+        shortLabel: t("table.sortNewest"),
+      },
+      {
+        value: "oldest",
+        label: t("table.sortByOldest"),
+        shortLabel: t("table.sortOldest"),
+      },
     ],
     [t],
   );
@@ -130,9 +147,12 @@ export function RolesListSection() {
     [deleteQueryParams, setQueryParams],
   );
 
-  const onViewRole = useCallback((roleId: string) => {
-    setSelectedRoleId(roleId);
-  }, []);
+  const onViewRole = useCallback(
+    (roleId: string) => {
+      openDetail(roleId);
+    },
+    [openDetail],
+  );
 
   const onEditRole = useCallback(
     (roleId: string) => {
@@ -140,10 +160,6 @@ export function RolesListSection() {
     },
     [router],
   );
-
-  const onDetailOpenChange = useCallback((open: boolean) => {
-    if (!open) setSelectedRoleId(null);
-  }, []);
 
   const onToggleRoleStatus = useCallback(
     async (role: TAdminRoleListItem) => {
@@ -166,7 +182,7 @@ export function RolesListSection() {
     try {
       const result = await deleteMutation.mutateAsync(deleteTarget.id);
       setDeleteTarget(null);
-      if (selectedRoleId === deleteTarget.id) setSelectedRoleId(null);
+      if (selectedRoleId === deleteTarget.id) clearDetail();
       notify.success(result.message?.trim() || t("table.deleteSuccess"));
     } catch (error) {
       notify.error(ApiError.messageFrom(error, t("table.deleteErrorFallback")));
@@ -184,34 +200,37 @@ export function RolesListSection() {
             <Paragraph className="text-text-muted">{t("subtitle")}</Paragraph>
           </div>
 
-          {canCreate ? (
-            <CreateActionButton href={ROLE_ROUTES.create}>{t("table.createRole")}</CreateActionButton>
-          ) : null}
-        </div>
-
-        {canView ? (
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                <TableListSearch
-                  value={listQuery.search}
-                  onChange={onSearchChange}
-                  placeholder={t("table.searchPlaceholder")}
-                  isLoading={isFetching}
-                />
-                <TableListSort
-                  value={listQuery.newest ? "newest" : "oldest"}
-                  onChange={onNewestChange}
-                  options={sortOptions}
-                  ariaLabel={t("table.sortToggle", {
-                    direction: listQuery.newest ? t("table.sortNewest") : t("table.sortOldest"),
-                  })}
-                />
-              </div>
+          <div className="flex flex-wrap items-center justify-end gap-3">
+            {canView ? (
               <RoleStatusFilter
                 activeStatus={listQuery.status}
                 counts={statusCounts}
                 onStatusChange={onStatusFilterChange}
+              />
+            ) : null}
+            {canCreate ? (
+              <CreateActionButton href={ROLE_ROUTES.create}>{t("table.createRole")}</CreateActionButton>
+            ) : null}
+          </div>
+        </div>
+
+        {canView ? (
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <TableListSearch
+                value={listQuery.search}
+                onChange={onSearchChange}
+                placeholder={t("table.searchPlaceholder")}
+                isLoading={isFetching}
+              />
+              <TableListSort
+                value={listQuery.newest ? "newest" : "oldest"}
+                onChange={onNewestChange}
+                options={sortOptions}
+                label={t("table.sortBy")}
+                ariaLabel={t("table.sortToggle", {
+                  direction: listQuery.newest ? t("table.sortNewest") : t("table.sortOldest"),
+                })}
               />
             </div>
 
@@ -236,12 +255,12 @@ export function RolesListSection() {
         ) : null}
       </div>
 
-      <RoleDetailSheet roleId={selectedRoleId} open={Boolean(selectedRoleId)} onOpenChange={onDetailOpenChange} />
+      <RoleDetailSheet roleId={selectedRoleId} open={isDetailOpen} onOpenChange={onDetailOpenChange} />
 
       <ConfirmDialog
         open={Boolean(deleteTarget)}
         onOpenChange={(open) => !open && setDeleteTarget(null)}
-        icon={IoTrashOutline}
+        icon={DeleteRoleIcon}
         title={t("table.deleteTitle")}
         description={t("table.deleteBody")}
         action={

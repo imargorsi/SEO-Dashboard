@@ -3,7 +3,10 @@
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 
 import { Button } from "@/components/ui/button";
-import { tableRowIconActionClass } from "@/components/table/table-row-icon-actions";
+import {
+  tablePaginationBarClass,
+  tablePaginationIconActionClass,
+} from "@/lib/frontend/layout/dashboard-chrome";
 import { getPaginationRange, getVisiblePages } from "@/lib/frontend/table/pagination.utils";
 import { cn } from "@/lib/utils";
 
@@ -34,25 +37,20 @@ export function AppTablePagination({
   const visiblePages = getVisiblePages(safePage, lastPage);
 
   return (
-    <div
-      className={cn(
-        "flex flex-col gap-2 border-t border-border px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between sm:px-4",
-        className,
-      )}
-    >
+    <div className={cn(tablePaginationBarClass, className)}>
       <p className="type-caption text-text-muted tabular-nums">{summaryLabel}</p>
 
       <div className="flex items-center justify-end gap-1">
         <Button
           type="button"
-          variant="outline"
+          variant="ghost"
           size="icon-sm"
-          className={tableRowIconActionClass}
+          className={tablePaginationIconActionClass}
           aria-label={previousPageLabel}
           disabled={safePage <= 1}
           onClick={() => onPageChange(safePage - 1)}
         >
-          <IoChevronBack className="size-4" aria-hidden />
+          <IoChevronBack className="size-3.5" aria-hidden />
         </Button>
 
         {visiblePages.map((pageNumber) => {
@@ -62,13 +60,12 @@ export function AppTablePagination({
             <Button
               key={pageNumber}
               type="button"
-              variant={isActive ? "primary" : "outline"}
+              variant="ghost"
               size="icon-sm"
               className={cn(
-                "min-w-7",
-                isActive
-                  ? "bg-brand text-text-on-brand hover:brightness-105"
-                  : tableRowIconActionClass,
+                tablePaginationIconActionClass,
+                isActive &&
+                  "border-transparent bg-brand text-text-on-brand hover:border-transparent hover:bg-brand hover:text-text-on-brand hover:brightness-105",
               )}
               aria-label={pageNumberLabel(pageNumber)}
               aria-current={isActive ? "page" : undefined}
@@ -81,14 +78,14 @@ export function AppTablePagination({
 
         <Button
           type="button"
-          variant="outline"
+          variant="ghost"
           size="icon-sm"
-          className={tableRowIconActionClass}
+          className={tablePaginationIconActionClass}
           aria-label={nextPageLabel}
           disabled={safePage >= lastPage}
           onClick={() => onPageChange(safePage + 1)}
         >
-          <IoChevronForward className="size-4" aria-hidden />
+          <IoChevronForward className="size-3.5" aria-hidden />
         </Button>
       </div>
     </div>

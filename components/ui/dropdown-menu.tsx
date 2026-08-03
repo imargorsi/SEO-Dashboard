@@ -102,7 +102,7 @@ function DropdownMenuContent({
       role="menu"
       data-slot="dropdown-menu-content"
       className={cn(
-        "absolute z-50 mt-1 min-w-[10rem] overflow-hidden rounded-md border border-[var(--border)] bg-[var(--bg-elevated)] p-1 text-[var(--text)] shadow-md",
+        "absolute top-full z-50 mt-1.5 min-w-[10rem] overflow-hidden rounded-md border border-[var(--border)] bg-[var(--bg-elevated)] p-1 text-[var(--text)] shadow-md",
         align === "end" ? "end-0" : "start-0",
         className
       )}

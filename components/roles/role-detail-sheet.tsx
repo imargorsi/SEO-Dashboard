@@ -1,18 +1,25 @@
 "use client";
 
-import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
+import {
+  IoCalendarOutline,
+  IoKeyOutline,
+  IoPeopleOutline,
+  IoRefreshOutline,
+  IoShieldOutline,
+} from "react-icons/io5";
 
-import { RoleScopeBadge } from "@/components/roles/role-scope-badge";
+import { DetailFieldRow, DetailSectionHeading } from "@/components/ui/detail-field-row";
 import { SheetContentSkeleton } from "@/components/skeletons/dashboard-page-skeleton";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { Badge } from "@/components/ui/badge";
-import { StatusIndicator } from "@/components/ui/status-indicator";
+import { StatusChip } from "@/components/ui/status-chip";
 import { usePermissionCatalogQuery } from "@/features/permissions/permissions.api";
 import { useRoleQuery } from "@/features/roles/roles.api";
 import { formatShortDate } from "@/lib/frontend/date/format-relative-date.utils";
-import { elevatedCardMutedClass, elevatedCardSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
+import { detailIconWellClass, tableRowIconActionClass } from "@/lib/frontend/layout/dashboard-chrome";
+import { roleActionIcon } from "@/lib/frontend/roles/permission-action-icon.utils";
 import { actionLabelKey, capitalizeAction, modulePermission } from "@/lib/frontend/roles/permission-labels.utils";
+import { adminPermission, type AdminModuleSlug } from "@/lib/rbac/permission-catalog";
 import { isActiveRoleStatus } from "@/lib/roles/constants";
 import { cn } from "@/lib/utils";
 
@@ -22,28 +29,88 @@ type TRoleDetailSheetProps = {
   onOpenChange: (open: boolean) => void;
 };
 
-function DetailField({ label, children }: { label: string; children: ReactNode }) {
+function PermissionActionChip({ action, label }: { action: string; label: string }) {
+  const Icon = roleActionIcon(action);
+
   return (
-    <div className="space-y-1">
-      <p className={cn("type-caption-xs tracking-[0.08em] uppercase", elevatedCardMutedClass)}>{label}</p>
-      <div className="type-body text-text-primary">{children}</div>
-    </div>
+    <span
+      title={label}
+      aria-label={label}
+      className={cn(tableRowIconActionClass, "size-7 [&_svg]:size-3.5 [&_svg]:shrink-0")}
+    >
+      {Icon ? <Icon aria-hidden /> : <span className="type-caption-xs font-semibold">{label}</span>}
+    </span>
+  );
+}
+
+type TPermissionModuleGroup = {
+  slug: string;
+  label: string;
+  actions: readonly string[];
+};
+
+function GrantedPermissionModules({
+  modules,
+  permissions,
+  scope,
+}: {
+  modules: TPermissionModuleGroup[];
+  permissions: string[];
+  scope: "project" | "admin";
+}) {
+  const { t: tActions } = useTranslation("translation", { keyPrefix: "modules.roles.actions" });
+
+  const rows = modules.flatMap((module) => {
+    const grantedActions = module.actions.filter((action) => {
+      const key =
+        scope === "admin"
+          ? adminPermission(module.slug as AdminModuleSlug, action as "view" | "create" | "update" | "delete")
+          : modulePermission(module.slug, action);
+      return permissions.includes(key);
+    });
+    if (grantedActions.length === 0) return [];
+    return [{ module, grantedActions }];
+  });
+
+  if (rows.length === 0) return null;
+
+  return (
+    <ul className="flex flex-col gap-2.5">
+      {rows.map(({ module, grantedActions }) => (
+        <li key={module.slug} className="flex items-center gap-3">
+          <p className="w-30 shrink-0 truncate type-body-strong text-text-primary sm:w-36">
+            {module.label}
+          </p>
+          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
+            {grantedActions.map((action) => {
+              const labelKey = actionLabelKey(action);
+              const label = labelKey ? tActions(labelKey) : capitalizeAction(action);
+              return <PermissionActionChip key={action} action={action} label={label} />;
+            })}
+          </div>
+        </li>
+      ))}
+    </ul>
   );
 }
 
 export function RoleDetailSheet({ roleId, open, onOpenChange }: TRoleDetailSheetProps) {
   const { t, i18n } = useTranslation("translation", { keyPrefix: "modules.roles.detail" });
   const { t: tTable } = useTranslation("translation", { keyPrefix: "modules.roles.table" });
-  const { t: tActions } = useTranslation("translation", { keyPrefix: "modules.roles.actions" });
-  const { data: role, isLoading } = useRoleQuery(roleId ?? undefined, { enabled: open });
-  const { data: catalog } = usePermissionCatalogQuery({ enabled: open });
+  const { data: role, isLoading } = useRoleQuery(roleId ?? undefined, { enabled: open && Boolean(roleId) });
+  const { data: catalog } = usePermissionCatalogQuery({ enabled: open && Boolean(roleId) });
 
-  const modules = catalog?.project_modules ?? [];
+  const projectModules = catalog?.project_modules ?? [];
+  const adminModules = catalog?.admin_modules ?? [];
+  const roleStatus = role && isActiveRoleStatus(role.status) ? "active" : "inactive";
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-[min(100%,28rem)] sm:max-w-lg">
-        <SheetHeader>
+      <SheetContent
+        side="right"
+        className="w-[min(100%,28rem)] border-border/60 bg-bg-card/85 shadow-(--shadow-elevated) backdrop-blur-xl sm:max-w-lg dark:border-text-on-brand/20 dark:bg-bg-card/90"
+      >
+        <SheetHeader className="border-border/50 bg-transparent dark:border-text-on-brand/12">
           <SheetTitle>{t("title")}</SheetTitle>
           <SheetDescription>{t("lead")}</SheetDescription>
         </SheetHeader>
@@ -53,65 +120,67 @@ export function RoleDetailSheet({ roleId, open, onOpenChange }: TRoleDetailSheet
             <SheetContentSkeleton />
           </div>
         ) : (
-          <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto px-5 py-5">
-            <section className={cn(elevatedCardSurfaceClass, "rounded-2xl p-4")}>
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <p className="type-body-strong text-text-primary">{role.name}</p>
-                <div className="flex items-center gap-1.5">
-                  {role.is_system ? <Badge variant="outline">{tTable("systemYes")}</Badge> : null}
-                  <RoleScopeBadge
-                    scope={role.scope}
-                    label={role.scope === "platform" ? tTable("scopePlatform") : tTable("scopeProject")}
+          <div className="themed-scrollbar flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto px-5 py-5">
+            <section>
+              <div className="flex items-center gap-3.5">
+                <span className={cn(detailIconWellClass, "size-12 shrink-0")} aria-hidden>
+                  <IoShieldOutline className="size-5" />
+                </span>
+                <div className="flex min-w-0 flex-1 items-start justify-between gap-3">
+                  <div className="min-w-0 space-y-1">
+                    <p className="truncate type-title leading-snug text-text-primary">{role.name}</p>
+                    <p className="truncate type-caption leading-snug text-text-muted">{role.slug}</p>
+                  </div>
+                  <StatusChip
+                    className="mt-0.5 shrink-0"
+                    colorKey={roleStatus}
+                    label={roleStatus === "active" ? tTable("statusActive") : tTable("statusInactive")}
                   />
                 </div>
               </div>
-              <p className="type-caption text-text-muted mt-1">{role.slug}</p>
-              <StatusIndicator
-                className="mt-2"
-                status={isActiveRoleStatus(role.status) ? "active" : "inactive"}
-                label={isActiveRoleStatus(role.status) ? tTable("statusActive") : tTable("statusInactive")}
+            </section>
+
+            <section className="space-y-3">
+              <DetailSectionHeading
+                title={t("description")}
+                description={role.description?.trim() ? role.description : t("noDescription")}
               />
-              {role.description ? <p className="type-body text-text-secondary mt-3">{role.description}</p> : null}
             </section>
 
-            <section className="grid grid-cols-2 gap-4">
-              <DetailField label={t("members")}>{role.members_count}</DetailField>
-              <DetailField label={t("permissionsCount")}>{role.permissions.length}</DetailField>
-              <DetailField label={t("createdAt")}>{formatShortDate(role.created_at, i18n.language)}</DetailField>
-              <DetailField label={t("updatedAt")}>{formatShortDate(role.updated_at, i18n.language)}</DetailField>
+            <section className="space-y-3">
+              <DetailSectionHeading title={t("overviewTitle")} description={t("overviewLead")} />
+              <div>
+                <DetailFieldRow icon={IoPeopleOutline} label={t("members")}>
+                  {role.members_count}
+                </DetailFieldRow>
+                <DetailFieldRow icon={IoKeyOutline} label={t("permissionsCount")}>
+                  {role.permissions.length}
+                </DetailFieldRow>
+                <DetailFieldRow icon={IoCalendarOutline} label={t("createdAt")}>
+                  {formatShortDate(role.created_at, i18n.language)}
+                </DetailFieldRow>
+                <DetailFieldRow icon={IoRefreshOutline} label={t("updatedAt")}>
+                  {formatShortDate(role.updated_at, i18n.language)}
+                </DetailFieldRow>
+              </div>
             </section>
 
-            <section className="border-border space-y-3 border-t pt-5">
-              <h3 className="type-label text-text-primary">{t("permissionsTitle")}</h3>
-
+            <section className="space-y-3">
+              <DetailSectionHeading title={t("permissionsTitle")} description={t("permissionsLead")} />
               {role.permissions.length === 0 ? (
                 <p className="type-body text-text-muted">{t("noPermissions")}</p>
               ) : (
-                <div className="space-y-3">
-                  {modules.map((module) => {
-                    const grantedActions = module.actions.filter((action) =>
-                      role.permissions.includes(modulePermission(module.slug, action))
-                    );
-                    if (grantedActions.length === 0) return null;
-
-                    return (
-                      <div key={module.slug} className="space-y-1.5">
-                        <p className="type-body-strong text-text-primary">{module.label}</p>
-                        <div className="flex flex-wrap gap-1.5">
-                          {grantedActions.map((action) => {
-                            const labelKey = actionLabelKey(action);
-                            const label = labelKey ? tActions(labelKey) : capitalizeAction(action);
-
-                            return (
-                              <Badge key={action} variant="outline" className="type-caption-xs">
-                                {label}
-                              </Badge>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    );
-                  })}
+                <div className="space-y-5">
+                  <GrantedPermissionModules
+                    modules={projectModules}
+                    permissions={role.permissions}
+                    scope="project"
+                  />
+                  <GrantedPermissionModules
+                    modules={adminModules}
+                    permissions={role.permissions}
+                    scope="admin"
+                  />
                 </div>
               )}
             </section>

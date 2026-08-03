@@ -2,10 +2,14 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
+import { useTranslation } from "react-i18next";
 import { IoClose } from "react-icons/io5";
 
 import { cn } from "@/lib/utils";
+import { SHEET_TRANSITION_MS } from "@/lib/frontend/layout/sheet.constants";
 import { overlayClass, surfacePanelHeaderClass } from "@/lib/frontend/theme/chrome-tones";
+
+export { SHEET_TRANSITION_MS };
 
 type SheetContextValue = {
   open: boolean;
@@ -38,7 +42,7 @@ function Sheet({
       if (!isControlled) setInternalOpen(next);
       onOpenChange?.(next);
     },
-    [isControlled, onOpenChange]
+    [isControlled, onOpenChange],
   );
 
   return (
@@ -52,6 +56,9 @@ function SheetContent({
   children,
 }: React.ComponentProps<"div"> & { side?: "right" | "left" }) {
   const { open, setOpen } = useSheet();
+  const { t } = useTranslation("translation", { keyPrefix: "ui" });
+  const [isPresent, setIsPresent] = React.useState(open);
+  const [isVisible, setIsVisible] = React.useState(false);
   const mounted = React.useSyncExternalStore(
     () => () => {},
     () => true,
@@ -67,23 +74,52 @@ function SheetContent({
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [open, setOpen]);
 
-  if (!mounted || !open) return null;
+  React.useEffect(() => {
+    if (open) {
+      setIsPresent(true);
+      let innerFrame = 0;
+      const outerFrame = requestAnimationFrame(() => {
+        innerFrame = requestAnimationFrame(() => setIsVisible(true));
+      });
+      return () => {
+        cancelAnimationFrame(outerFrame);
+        cancelAnimationFrame(innerFrame);
+      };
+    }
 
-  const sideClass =
-    side === "left"
-      ? "inset-y-0 left-0 border-e"
-      : "inset-y-0 right-0 border-s";
+    setIsVisible(false);
+    const timeout = window.setTimeout(() => setIsPresent(false), SHEET_TRANSITION_MS);
+    return () => window.clearTimeout(timeout);
+  }, [open]);
+
+  if (!mounted || !isPresent) return null;
+
+  const isLeft = side === "left";
+  const sideClass = isLeft ? "inset-y-0 left-0 border-e" : "inset-y-0 right-0 border-s";
+  const hiddenTransform = isLeft ? "-translate-x-full" : "translate-x-full";
 
   return createPortal(
     <>
-      <div className={cn("fixed inset-0 z-50 backdrop-blur-[1px]", overlayClass)} aria-hidden onClick={() => setOpen(false)} />
+      {/* Overlay stays interactive until unmount so exit clicks cannot hit the page underneath. */}
+      <div
+        className={cn(
+          "fixed inset-0 z-50 backdrop-blur-[1px] transition-opacity duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          overlayClass,
+          isVisible ? "opacity-100" : "opacity-0",
+        )}
+        aria-hidden
+        onClick={() => setOpen(false)}
+      />
       <div
         role="dialog"
         aria-modal="true"
         className={cn(
           "fixed z-50 flex h-full w-[min(100%,24rem)] flex-col gap-0 border-border bg-bg-card shadow-(--shadow) sm:max-w-md",
+          "transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform",
           sideClass,
-          className
+          isVisible ? "translate-x-0" : hiddenTransform,
+          !isVisible && "pointer-events-none",
+          className,
         )}
       >
         {children}
@@ -93,11 +129,11 @@ function SheetContent({
           onClick={() => setOpen(false)}
         >
           <IoClose className="size-4" aria-hidden />
-          <span className="sr-only">Close</span>
+          <span className="sr-only">{t("close")}</span>
         </button>
       </div>
     </>,
-    document.body
+    document.body,
   );
 }
 
@@ -107,7 +143,7 @@ function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
       className={cn(
         "flex flex-col gap-1 border-b border-border px-5 py-4 pe-12 text-start",
         surfacePanelHeaderClass,
-        className
+        className,
       )}
       {...props}
     />
@@ -119,7 +155,7 @@ function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
     <div
       className={cn(
         "mt-auto flex flex-col gap-2 border-t border-border px-5 py-4 sm:flex-row sm:justify-end",
-        className
+        className,
       )}
       {...props}
     />
@@ -127,11 +163,11 @@ function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 function SheetTitle({ className, ...props }: React.ComponentProps<"h2">) {
-  return <h2 className={cn("text-base font-semibold text-text-primary", className)} {...props} />;
+  return <h2 className={cn("type-title text-text-primary", className)} {...props} />;
 }
 
 function SheetDescription({ className, ...props }: React.ComponentProps<"p">) {
-  return <p className={cn("text-xs text-text-muted", className)} {...props} />;
+  return <p className={cn("type-caption text-text-muted", className)} {...props} />;
 }
 
 const SheetTrigger = () => null;

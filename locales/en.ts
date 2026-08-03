@@ -40,6 +40,9 @@ export interface Translation {
     emptyBody: string;
     loading: string;
   };
+  ui: {
+    close: string;
+  };
   form: {
     showPassword: string;
     hidePassword: string;
@@ -257,6 +260,8 @@ export interface Translation {
       detail: {
         title: string;
         lead: string;
+        accountTitle: string;
+        accountLead: string;
         email: string;
         createdAt: string;
         updatedAt: string;
@@ -274,9 +279,12 @@ export interface Translation {
       table: {
         searchPlaceholder: string;
         sortLabel: string;
+        sortBy: string;
         sortToggle: string;
         sortNewest: string;
         sortOldest: string;
+        sortByNewest: string;
+        sortByOldest: string;
         colUser: string;
         colProjects: string;
         colStatus: string;
@@ -286,6 +294,8 @@ export interface Translation {
         statusInactive: string;
         projectsCount_one: string;
         projectsCount_other: string;
+        projectsLabel_one: string;
+        projectsLabel_other: string;
         lastActionVerified: string;
         lastActionCreated: string;
         showingUsers: string;
@@ -1021,11 +1031,16 @@ export interface Translation {
         title: string;
         lead: string;
         loading: string;
+        overviewTitle: string;
+        overviewLead: string;
+        description: string;
+        noDescription: string;
         members: string;
         permissionsCount: string;
         createdAt: string;
         updatedAt: string;
         permissionsTitle: string;
+        permissionsLead: string;
         noPermissions: string;
       };
       statusFilter: {
@@ -1037,9 +1052,12 @@ export interface Translation {
       table: {
         searchPlaceholder: string;
         sortLabel: string;
+        sortBy: string;
         sortToggle: string;
         sortNewest: string;
         sortOldest: string;
+        sortByNewest: string;
+        sortByOldest: string;
         colRole: string;
         colPermissions: string;
         colMembers: string;
@@ -1216,6 +1234,9 @@ const translation: Translation = {
     emptyTitle: "No Records Found",
     emptyBody: "There Is Nothing To Show Here Yet. Create A New Entry Or Check Back Later.",
     loading: "Loading…",
+  },
+  ui: {
+    close: "Close",
   },
   form: {
     showPassword: "Show password",
@@ -1438,6 +1459,8 @@ const translation: Translation = {
       detail: {
         title: "User Details",
         lead: "Account Information And Project Memberships From The Current List.",
+        accountTitle: "Account Information",
+        accountLead: "Core Profile Fields For This User.",
         email: "Email",
         createdAt: "Created",
         updatedAt: "Last Updated",
@@ -1455,9 +1478,12 @@ const translation: Translation = {
       table: {
         searchPlaceholder: "Search Users...",
         sortLabel: "Sort",
+        sortBy: "Sort By",
         sortToggle: "Sort By {{direction}}",
         sortNewest: "Newest",
         sortOldest: "Oldest",
+        sortByNewest: "Sort Users By Newest",
+        sortByOldest: "Sort Users By Oldest",
         colUser: "User",
         colProjects: "Projects",
         colStatus: "Status",
@@ -1467,6 +1493,8 @@ const translation: Translation = {
         statusInactive: "Inactive",
         projectsCount_one: "{{count}} Project",
         projectsCount_other: "{{count}} Projects",
+        projectsLabel_one: "Project",
+        projectsLabel_other: "Projects",
         lastActionVerified: "Email Verified",
         lastActionCreated: "Account Created",
         showingUsers: "Showing {{from}} To {{to}} Of {{total}} Users",
@@ -2214,11 +2242,16 @@ const translation: Translation = {
         title: "Role Details",
         lead: "Permission Summary For This Role.",
         loading: "Loading Role…",
+        overviewTitle: "Role Overview",
+        overviewLead: "Membership And Permission Counts For This Role.",
+        description: "Description",
+        noDescription: "No Description Provided.",
         members: "Members",
         permissionsCount: "Permissions",
         createdAt: "Created",
         updatedAt: "Last Updated",
         permissionsTitle: "Granted Permissions",
+        permissionsLead: "Modules And Actions This Role Can Perform.",
         noPermissions: "No Permissions Granted.",
       },
       statusFilter: {
@@ -2230,9 +2263,12 @@ const translation: Translation = {
       table: {
         searchPlaceholder: "Search Roles...",
         sortLabel: "Sort",
+        sortBy: "Sort By",
         sortToggle: "Sort By {{direction}}",
         sortNewest: "Newest",
         sortOldest: "Oldest",
+        sortByNewest: "Sort Roles By Newest",
+        sortByOldest: "Sort Roles By Oldest",
         colRole: "Role",
         colPermissions: "Permissions",
         colMembers: "Members",

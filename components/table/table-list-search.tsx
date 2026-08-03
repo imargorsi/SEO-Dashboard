@@ -8,6 +8,7 @@ import {
   DEFAULT_TABLE_SEARCH_DEBOUNCE_MS,
   useDebouncedValue,
 } from "@/hooks/use-debounced-value.hook";
+import { toolbarFilterControlClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
 type TTableListSearchProps = {
@@ -63,11 +64,12 @@ export function TableListSearch({
   }, [debouncedSearchValue, onChange, value]);
 
   const isDebouncing = searchValue.trim() !== (value?.trim() ?? "");
+  const showSpinner = isLoading || isDebouncing;
 
   return (
-    <div className={cn("relative w-full sm:max-w-2xl", className)}>
+    <div className={cn("relative w-full sm:w-[26rem]", className)}>
       <IoSearch
-        className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-text-muted"
+        className="pointer-events-none absolute top-1/2 start-3 z-10 size-4 -translate-y-1/2 text-text-muted"
         aria-hidden
       />
       <input
@@ -77,10 +79,13 @@ export function TableListSearch({
         onChange={(event) => setSearchValue(event.target.value)}
         placeholder={placeholder}
         aria-label={ariaLabel ?? placeholder}
-        className="box-border h-10 w-full rounded-xl border-2 border-text-muted/50 bg-transparent pr-10 pl-10 type-body text-text-primary outline-none placeholder:text-text-placeholder focus-visible:border-text-secondary/70 focus-visible:ring-2 focus-visible:ring-accent-border"
+        className={cn(
+          toolbarFilterControlClass,
+          "w-full bg-bg-card/40 pe-10 ps-10 type-body text-text-primary outline-none placeholder:text-text-placeholder hover:bg-bg-hover/40 focus-visible:border-accent-border focus-visible:ring-2 focus-visible:ring-accent-border",
+        )}
       />
-      {isLoading || isDebouncing ? (
-        <Spinner className="absolute top-1/2 right-3 size-4 -translate-y-1/2 text-text-muted" />
+      {showSpinner ? (
+        <Spinner className="absolute top-1/2 end-3 z-10 size-4 -translate-y-1/2 text-text-muted" />
       ) : null}
     </div>
   );

@@ -46,6 +46,10 @@ export const tablePaginationBarClass =
 export const tableRowIconActionClass =
   "inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-border/70 bg-bg-card/50 text-text-primary shadow-sm backdrop-blur-md transition-[border-color,background-color,color,box-shadow] duration-200 hover:border-accent-border hover:bg-bg-hover hover:text-text-primary hover:shadow-md dark:border-text-on-brand/35 dark:bg-text-on-brand/12 dark:hover:border-text-on-brand/50 dark:hover:bg-text-on-brand/18";
 
+/** Inline glass chip for table cell counts / labels — same surface language as row icon actions. */
+export const tableGlassChipClass =
+  "inline-flex items-center rounded-full border border-border/70 bg-bg-card/50 px-2.5 py-1 type-caption-xs tabular-nums text-text-primary shadow-sm backdrop-blur-md dark:border-text-on-brand/35 dark:bg-text-on-brand/12";
+
 /** Pagination controls — compact outline chips. */
 export const tablePaginationIconActionClass =
   "size-7 min-w-7 rounded-full border border-border/60 bg-transparent p-0 type-caption text-text-secondary shadow-none transition-[border-color,background-color,color] duration-200 hover:border-accent-border hover:bg-bg-hover/50 hover:text-text-primary disabled:opacity-40 dark:border-text-on-brand/25 dark:hover:border-text-on-brand/40 dark:hover:bg-text-on-brand/10";
@@ -91,7 +95,7 @@ export const sidebarNavIconWellClass =
   "inline-flex size-7 shrink-0 items-center justify-center rounded-full border shadow-sm backdrop-blur-md backdrop-saturate-150 transition-[background-color,border-color,color,box-shadow] duration-200";
 
 export const sidebarNavIconWellActiveClass =
-  "border-transparent bg-text-on-brand/20 text-text-on-brand shadow-none backdrop-blur-none";
+  "border-text-on-brand bg-text-on-brand/20 text-text-on-brand shadow-none backdrop-blur-none";
 
 export const sidebarNavIconWellInactiveClass =
   "border-border/70 bg-bg-card/50 text-text-primary shadow-sm dark:border-text-on-brand/35 dark:bg-text-on-brand/12 group-hover:border-accent-border group-hover:bg-bg-hover group-hover:text-text-primary group-hover:shadow-md dark:group-hover:border-text-on-brand/50 dark:group-hover:bg-text-on-brand/18";

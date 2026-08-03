@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { baseQuery } from "@/lib/frontend/api/base";
 import type { TUserLookupItem } from "@/types/project-invite.types";
-import type { TAdminUserDetail, TAdminUserListItem, TPaginatedList } from "@/types/admin-user.types";
+import type { TAdminUserDetail, TAdminUserListItem, TAdminUserProjectAssignment, TPaginatedList } from "@/types/admin-user.types";
 
 const usersApi = {
   reducerPath: "users-api" as const,
@@ -193,6 +193,70 @@ export function useDeleteUserMutation() {
       void queryClient.removeQueries({ queryKey: usersKeys.detail(userId) });
     },
   });
+}
+
+export type TUpsertUserMembershipPayload = {
+  projectId: string;
+  roleId: string;
+};
+
+async function upsertUserMembership(
+  userId: string,
+  payload: TUpsertUserMembershipPayload,
+): Promise<TAdminUserProjectAssignment[]> {
+  const envelope = await baseQuery.put<{ projects: TAdminUserProjectAssignment[] }>(
+    `users/${userId}/memberships`,
+    payload,
+  );
+  return envelope.data.projects;
+}
+
+export function useUpsertUserMembershipMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      userId,
+      payload,
+    }: {
+      userId: string;
+      payload: TUpsertUserMembershipPayload;
+    }) => {
+      const projects = await upsertUserMembership(userId, payload);
+      return { userId, projects };
+    },
+    onSuccess: (_data, variables) => {
+      void queryClient.invalidateQueries({ queryKey: usersKeys.all });
+      void queryClient.invalidateQueries({ queryKey: usersKeys.detail(variables.userId) });
+    },
+  });
+}
+
+export function useRemoveUserMembershipMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ userId, projectId }: { userId: string; projectId: string }) => {
+      const envelope = await baseQuery.delete<{ projects: TAdminUserProjectAssignment[] }>(
+        `users/${userId}/memberships/${projectId}`,
+      );
+      return { userId, projects: envelope.data.projects };
+    },
+    onSuccess: (_data, variables) => {
+      void queryClient.invalidateQueries({ queryKey: usersKeys.all });
+      void queryClient.invalidateQueries({ queryKey: usersKeys.detail(variables.userId) });
+    },
+  });
+}
+
+/** Apply staged memberships after create (sequential PUT). */
+export async function applyUserMemberships(
+  userId: string,
+  memberships: TUpsertUserMembershipPayload[],
+): Promise<void> {
+  for (const payload of memberships) {
+    await upsertUserMembership(userId, payload);
+  }
 }
 
 async function fetchUserLookup(search: string): Promise<TUserLookupItem[]> {

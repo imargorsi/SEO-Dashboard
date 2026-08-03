@@ -2,7 +2,6 @@ import type { IconType } from "react-icons";
 import {
   IoAnalyticsOutline,
   IoBriefcaseOutline,
-  IoNewspaperOutline,
   IoOptionsOutline,
   IoPeopleOutline,
   IoPersonCircleOutline,
@@ -17,10 +16,10 @@ export type SidebarNavLabelKey =
   | "analytics"
   | "seoActivities"
   | "leads"
-  | "reports"
   | "users"
   | "rolesPermissions"
   | "settings";
+
 
 export type SidebarNavGroupId = "general" | "reporting" | "settings";
 
@@ -106,14 +105,6 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
     labelKey: "seoActivities",
     icon: IoRocketOutline,
     viewPermission: "seo_activities.view",
-    permissionScope: "project",
-    group: "reporting",
-  },
-  {
-    path: "/reports",
-    labelKey: "reports",
-    icon: IoNewspaperOutline,
-    viewPermission: "reports.view",
     permissionScope: "project",
     group: "reporting",
   },

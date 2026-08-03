@@ -26,7 +26,10 @@ export function serializeAdminUserListItem(
   };
 }
 
-export function serializeAdminUserDetail(user: UserDocument): TAdminUserDetail {
+export function serializeAdminUserDetail(
+  user: UserDocument,
+  projects: TAdminUserProjectAssignment[] = [],
+): TAdminUserDetail {
   return {
     id: user._id.toString(),
     name: user.name,
@@ -34,6 +37,7 @@ export function serializeAdminUserDetail(user: UserDocument): TAdminUserDetail {
     profile_image: serializeStoredImageUrl(user.profileImage),
     status: serializeUserStatus(user),
     email_verified_at: user.emailVerifiedAt ? user.emailVerifiedAt.toISOString() : null,
+    projects,
     created_at: user.createdAt.toISOString(),
     updated_at: user.updatedAt.toISOString(),
   };

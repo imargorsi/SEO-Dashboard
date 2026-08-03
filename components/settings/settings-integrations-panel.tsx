@@ -9,7 +9,9 @@ import { AlertDialogCancel } from "@/components/ui/alert-dialog";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
+import { useProjectAccess } from "@/context/project-access-context";
 import { useSelectedProject } from "@/context/selected-project-context";
+import { useAuthUserQuery } from "@/features/auth/auth.api";
 import {
   useAnalyticsOverviewQuery,
   useConnectGoogleIntegrationMutation,
@@ -22,6 +24,7 @@ import { notify } from "@/lib/frontend/feedback/notify";
 import { analyticsHeadingStackClass } from "@/lib/frontend/layout/dashboard-chrome";
 import type { TGoogleIntegrationService } from "@/lib/integrations/constants";
 import { defaultAnalyticsDateRange } from "@/lib/integrations/date.utils";
+import { hasPermission, mergePermissions } from "@/lib/rbac/access";
 import { cn } from "@/lib/utils";
 
 type TPendingAction =
@@ -33,13 +36,25 @@ type TPendingAction =
 export function SettingsIntegrationsPanel() {
   const { t } = useTranslation("translation", { keyPrefix: "settings.integrations" });
   const { selectedProject } = useSelectedProject();
+  const { data: authUser } = useAuthUserQuery();
+  const { projectPermissions } = useProjectAccess();
   const projectId = selectedProject?.id ?? null;
   const dateRange = useMemo(() => defaultAnalyticsDateRange(), []);
+
+  const permissions = useMemo(
+    () => mergePermissions(authUser?.permissions ?? [], projectPermissions),
+    [authUser?.permissions, projectPermissions],
+  );
+  const canUpdate = hasPermission(permissions, "integrations.update");
+  const canDisconnect = hasPermission(permissions, "integrations.disconnect");
+  const canRefresh = hasPermission(permissions, "integrations.refresh");
 
   const overviewQuery = useAnalyticsOverviewQuery(projectId, dateRange, {
     enabled: Boolean(projectId),
   });
-  const propertiesQuery = useGooglePropertiesQuery(projectId, { enabled: Boolean(projectId) });
+  const propertiesQuery = useGooglePropertiesQuery(projectId, {
+    enabled: Boolean(projectId) && canUpdate,
+  });
   const connectMutation = useConnectGoogleIntegrationMutation(projectId);
   const disconnectMutation = useDisconnectGoogleIntegrationMutation(projectId);
   const syncMutation = useSyncGoogleIntegrationsMutation(projectId);
@@ -65,6 +80,7 @@ export function SettingsIntegrationsPanel() {
     nextPropertyId: string,
     mode: "connect" | "update",
   ) {
+    if (!canUpdate) return;
     const trimmed = nextPropertyId.trim();
     if (!trimmed) {
       notify.error(t("propertyRequired"));
@@ -78,12 +94,15 @@ export function SettingsIntegrationsPanel() {
 
     try {
       if (pending.type === "refresh") {
+        if (!canRefresh) return;
         await syncMutation.mutateAsync();
-        notify.success(t("syncSuccess"));
+        notify.success(t("refreshSuccess"));
       } else if (pending.type === "disconnect") {
+        if (!canDisconnect) return;
         await disconnectMutation.mutateAsync(pending.service);
         notify.success(t("disconnectSuccess"));
       } else {
+        if (!canUpdate) return;
         await connectMutation.mutateAsync({
           service: pending.service,
           externalPropertyId: pending.propertyId,
@@ -94,7 +113,7 @@ export function SettingsIntegrationsPanel() {
     } catch (error) {
       const fallback =
         pending.type === "refresh"
-          ? t("syncError")
+          ? t("refreshError")
           : pending.type === "disconnect"
             ? t("disconnectError")
             : pending.type === "update"
@@ -161,17 +180,19 @@ export function SettingsIntegrationsPanel() {
           </p>
           <p className="type-caption text-text-muted">{t("lead")}</p>
         </div>
-        <Button
-          type="button"
-          variant="outlined"
-          size="md"
-          disabled={isBusy}
-          onClick={() => setPending({ type: "refresh" })}
-          className="shrink-0"
-        >
-          <IoRefreshOutline className="size-4" aria-hidden />
-          {t("refresh")}
-        </Button>
+        {canRefresh ? (
+          <Button
+            type="button"
+            variant="outlined"
+            size="md"
+            disabled={isBusy}
+            onClick={() => setPending({ type: "refresh" })}
+            className="shrink-0"
+          >
+            <IoRefreshOutline className="size-4" aria-hidden />
+            {t("refresh")}
+          </Button>
+        ) : null}
       </div>
 
       <div className="grid gap-5 md:grid-cols-2">
@@ -185,6 +206,8 @@ export function SettingsIntegrationsPanel() {
           }
           onRequestDisconnect={() => setPending({ type: "disconnect", service: "gsc" })}
           isBusy={isBusy}
+          canUpdate={canUpdate}
+          canDisconnect={canDisconnect}
         />
         <IntegrationServiceCard
           key={`ga4-${projectId}-${ga4?.externalPropertyId ?? "none"}-${ga4?.status ?? "out"}`}
@@ -196,6 +219,8 @@ export function SettingsIntegrationsPanel() {
           }
           onRequestDisconnect={() => setPending({ type: "disconnect", service: "ga4" })}
           isBusy={isBusy}
+          canUpdate={canUpdate}
+          canDisconnect={canDisconnect}
         />
       </div>
 

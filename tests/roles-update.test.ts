@@ -93,25 +93,29 @@ describe("PATCH /admin/roles/{id} — updateRole", () => {
     await assignProjectMember({ projectId: project._id, userId: teammate._id, roleSlug: PROJECT_USER_ROLE });
 
     const beforeAccess = await getProjectAccessForUser(authContextFor(teammate), project._id.toString());
-    expect(beforeAccess!.permissions).not.toContain(projectPermission("leads", "create"));
+    expect(beforeAccess!.permissions).not.toContain(projectPermission("seo_activities", "create"));
 
     const projectUserRole = await Role.findOne({ slug: PROJECT_USER_ROLE });
     await updateRole(projectUserRole!._id.toString(), {
       name: projectUserRole!.name,
       description: projectUserRole!.description,
-      permissions: [...projectUserRole!.permissions, projectPermission("leads", "create")],
+      permissions: [...projectUserRole!.permissions, projectPermission("seo_activities", "create")],
     });
 
     const afterAccess = await getProjectAccessForUser(authContextFor(teammate), project._id.toString());
-    expect(afterAccess!.permissions).toContain(projectPermission("leads", "create"));
+    expect(afterAccess!.permissions).toContain(projectPermission("seo_activities", "create"));
   });
 
-  it("rejects unknown permissions on update", async () => {
+  it("strips unknown permissions on update after catalog trim", async () => {
     const { role } = await createRole({ name: "Coordinator", description: "", permissions: [] });
 
-    await expect(
-      updateRole(role._id.toString(), { name: "Coordinator", description: "", permissions: ["bogus.permission"] }),
-    ).rejects.toBeInstanceOf(ValidationError);
+    const { role: updated } = await updateRole(role._id.toString(), {
+      name: "Coordinator",
+      description: "",
+      permissions: ["bogus.permission", "dashboard.view"],
+    });
+
+    expect(updated.permissions).toEqual(["dashboard.view"]);
   });
 
   it("does not crash on regex metacharacters when renaming a custom role", async () => {

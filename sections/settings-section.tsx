@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Heading } from "@/components/heading";
@@ -9,15 +10,26 @@ import { SettingsIntegrationsPanel } from "@/components/settings/settings-integr
 import { SettingsThemePanel } from "@/components/settings/settings-theme-panel";
 import { LoadingState } from "@/components/ui/loading-state";
 import { EmptyState } from "@/components/ui/empty-state";
+import { useProjectAccess } from "@/context/project-access-context";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
 import { resolveSettingsCategories } from "@/lib/frontend/settings/categories";
-import { isSuperAdmin } from "@/lib/rbac/access";
+import { hasPermission, isSuperAdmin, mergePermissions } from "@/lib/rbac/access";
 
 export function SettingsSection() {
   const { t } = useTranslation("translation", { keyPrefix: "settings" });
   const { data: authUser, isLoading } = useAuthUserQuery();
+  const { projectPermissions } = useProjectAccess();
   const userIsSuperAdmin = isSuperAdmin(authUser?.roles);
-  const categories = resolveSettingsCategories(userIsSuperAdmin);
+
+  const permissions = useMemo(
+    () => mergePermissions(authUser?.permissions ?? [], projectPermissions),
+    [authUser?.permissions, projectPermissions],
+  );
+
+  const categories = resolveSettingsCategories({
+    isAdmin: userIsSuperAdmin,
+    canViewIntegrations: hasPermission(permissions, "integrations.view"),
+  });
 
   if (isLoading || !authUser) {
     return <LoadingState skeletonVariant="settings" />;

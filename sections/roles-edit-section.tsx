@@ -12,7 +12,9 @@ import { LoadingState } from "@/components/ui/loading-state";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
 import { useRoleQuery } from "@/features/roles/roles.api";
 import { roleCanUpdate } from "@/lib/frontend/roles/acl";
+import { analyticsHeadingStackClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { ROLE_ROUTES } from "@/lib/frontend/roles/role-routes.utils";
+import { cn } from "@/lib/utils";
 
 export function RolesEditSection() {
   const router = useRouter();
@@ -55,8 +57,8 @@ export function RolesEditSection() {
 
   return (
     <div className="w-full min-w-0">
-      <div className="space-y-5 px-4 py-6 sm:px-6">
-        <div className="space-y-1">
+      <div className="flex flex-col gap-6 px-4 py-6 sm:gap-7 sm:px-6 sm:py-7">
+        <div className={cn(analyticsHeadingStackClass, "max-w-2xl")}>
           <Heading id="roles-edit-title" pageTitle>
             {t("createForm.editTitle")}
           </Heading>

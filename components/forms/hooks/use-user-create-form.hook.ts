@@ -6,10 +6,16 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import type { TUserCreateFormValues, TUserFormProps } from "@/components/forms/user-create-form.types";
-import { useCreateUserMutation, useUpdateUserMutation } from "@/features/users/users.api";
+import type { TStagedMembership } from "@/components/users/user-project-memberships-editor";
+import {
+  applyUserMemberships,
+  useCreateUserMutation,
+  useUpdateUserMutation,
+} from "@/features/users/users.api";
 import { ApiError } from "@/lib/frontend/api/errors";
 import { notify } from "@/lib/frontend/feedback/notify";
 import { USER_ROUTES } from "@/lib/frontend/users/user-routes.utils";
+import type { TAdminUserProjectAssignment } from "@/types/admin-user.types";
 
 const DEFAULT_VALUES: TUserCreateFormValues = {
   name: "",
@@ -23,6 +29,7 @@ export function useUserCreateForm({
   userId,
   initialValues,
   initialProfileImageUrl = null,
+  initialProjects = [],
 }: TUserFormProps = {}) {
   const router = useRouter();
   const { t } = useTranslation("translation", { keyPrefix: "modules.users.createForm" });
@@ -30,6 +37,9 @@ export function useUserCreateForm({
   const updateMutation = useUpdateUserMutation();
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [profilePreviewUrl, setProfilePreviewUrl] = useState<string | null>(initialProfileImageUrl);
+  const [assignments, setAssignments] = useState<TAdminUserProjectAssignment[]>(initialProjects);
+  const [stagedMemberships, setStagedMemberships] = useState<TStagedMembership[]>([]);
+  const [isApplyingMemberships, setIsApplyingMemberships] = useState(false);
 
   const {
     register,
@@ -44,12 +54,16 @@ export function useUserCreateForm({
   });
 
   const name = watch("name");
-  const isSubmitting = createMutation.isPending || updateMutation.isPending;
+  const isSubmitting = createMutation.isPending || updateMutation.isPending || isApplyingMemberships;
 
   useEffect(() => {
     if (!initialValues) return;
     reset(initialValues);
   }, [initialValues, reset]);
+
+  useEffect(() => {
+    setAssignments(initialProjects);
+  }, [initialProjects]);
 
   useEffect(() => {
     if (profileImageFile) return;
@@ -138,7 +152,7 @@ export function useUserCreateForm({
         return;
       }
 
-      await createMutation.mutateAsync({
+      const created = await createMutation.mutateAsync({
         payload: {
           name: values.name.trim(),
           email: values.email.trim(),
@@ -147,6 +161,20 @@ export function useUserCreateForm({
         },
         profileImageFile,
       });
+
+      if (stagedMemberships.length > 0) {
+        setIsApplyingMemberships(true);
+        try {
+          await applyUserMemberships(created.id, stagedMemberships);
+        } catch (membershipError) {
+          notify.error(ApiError.messageFrom(membershipError, t("membershipAssignError")));
+          router.push(USER_ROUTES.edit(created.id));
+          return;
+        } finally {
+          setIsApplyingMemberships(false);
+        }
+      }
+
       notify.success(t("successFallback"));
       router.push(USER_ROUTES.list);
     } catch (error) {
@@ -177,12 +205,17 @@ export function useUserCreateForm({
     errors,
     name,
     isEdit,
+    userId,
     isSubmitting,
     profilePreviewUrl,
     onProfileImagePicked,
     onSubmit,
     passwordRules,
     passwordConfirmationRules,
+    assignments,
+    setAssignments,
+    stagedMemberships,
+    setStagedMemberships,
   };
 }
 

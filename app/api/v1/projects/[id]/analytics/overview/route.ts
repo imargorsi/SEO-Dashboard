@@ -5,8 +5,8 @@ import { ApiResponse } from "@/lib/api/response";
 import { runApiGuards } from "@/lib/auth/run-api-guards";
 import { connectDb } from "@/lib/db/mongoose";
 import { getAnalyticsOverview } from "@/lib/integrations/read-analytics";
-import { requireProjectPermission } from "@/lib/projects/get-project-access";
-import { isSuperAdmin } from "@/lib/rbac/access";
+import { getProjectAccessForUser } from "@/lib/projects/get-project-access";
+import { hasPermission } from "@/lib/rbac/access";
 import { parseAnalyticsOverviewQuery } from "@/schemas/analytics";
 
 function zodFieldErrors(error: ZodError): Record<string, string[]> {
@@ -29,8 +29,10 @@ export const GET = withApiHandler(async (request, context) => {
     return ApiResponse.error("Project Not Found.", {}, 404);
   }
 
-  const permissionError = await requireProjectPermission(auth, projectId, "analytics.view");
-  if (permissionError) return permissionError;
+  const access = await getProjectAccessForUser(auth, projectId);
+  if (!access || !hasPermission(access.permissions, "analytics.view")) {
+    return ApiResponse.error("Forbidden.", {}, 403);
+  }
 
   let query;
   try {
@@ -44,8 +46,7 @@ export const GET = withApiHandler(async (request, context) => {
 
   const overview = await getAnalyticsOverview(projectId, query);
 
-  // Property linking is agency-only; clients see metrics without integration details.
-  if (!isSuperAdmin(auth.user.roles)) {
+  if (!hasPermission(access.permissions, "integrations.view")) {
     overview.integrations = { gsc: null, ga4: null };
   }
 

@@ -55,11 +55,11 @@ export function IntegrationPropertySelect({
           "bg-bg-card p-1.5 shadow-(--shadow-elevated)",
         )}
       >
-        <div className="themed-scrollbar flex max-h-45 flex-col gap-0.5 overflow-y-auto">
+        <div className="themed-scrollbar max-h-45 overflow-y-auto">
           <DropdownMenuItem
             onSelect={() => onChange("")}
             className={cn(
-              "h-9 rounded-lg type-body text-text-muted",
+              "text-text-muted",
               !value && "bg-brand/12 text-text-primary",
             )}
           >
@@ -72,10 +72,7 @@ export function IntegrationPropertySelect({
               <DropdownMenuItem
                 key={option.id}
                 onSelect={() => onChange(option.id)}
-                className={cn(
-                  "h-9 rounded-lg type-body",
-                  isSelected && "bg-brand/15 text-text-primary",
-                )}
+                className={cn(isSelected && "bg-brand/15 text-text-primary")}
               >
                 <span className="min-w-0 flex-1 truncate text-start">{option.name}</span>
                 {isSelected ? (

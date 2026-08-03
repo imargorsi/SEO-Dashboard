@@ -16,9 +16,10 @@ import { StatusChip } from "@/components/ui/status-chip";
 import { usePermissionCatalogQuery } from "@/features/permissions/permissions.api";
 import { useRoleQuery } from "@/features/roles/roles.api";
 import { formatShortDate } from "@/lib/frontend/date/format-relative-date.utils";
-import { detailIconWellClass, tableRowIconActionClass } from "@/lib/frontend/layout/dashboard-chrome";
+import { detailIconWellClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { roleActionIcon } from "@/lib/frontend/roles/permission-action-icon.utils";
 import { actionLabelKey, capitalizeAction, modulePermission } from "@/lib/frontend/roles/permission-labels.utils";
+import { permissionModuleIcon } from "@/lib/frontend/roles/permission-module-icon.utils";
 import { adminPermission, type AdminModuleSlug } from "@/lib/rbac/permission-catalog";
 import { isActiveRoleStatus } from "@/lib/roles/constants";
 import { cn } from "@/lib/utils";
@@ -36,7 +37,11 @@ function PermissionActionChip({ action, label }: { action: string; label: string
     <span
       title={label}
       aria-label={label}
-      className={cn(tableRowIconActionClass, "size-7 [&_svg]:size-3.5 [&_svg]:shrink-0")}
+      className={cn(
+        "inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-border/60 bg-bg-card/50 text-text-primary shadow-sm backdrop-blur-md transition-colors",
+        "dark:border-text-on-brand/35 dark:bg-text-on-brand/12",
+        "[&_svg]:size-3.5 [&_svg]:shrink-0",
+      )}
     >
       {Icon ? <Icon aria-hidden /> : <span className="type-caption-xs font-semibold">{label}</span>}
     </span>
@@ -76,20 +81,27 @@ function GrantedPermissionModules({
 
   return (
     <ul className="flex flex-col gap-2.5">
-      {rows.map(({ module, grantedActions }) => (
-        <li key={module.slug} className="flex items-center gap-3">
-          <p className="w-30 shrink-0 truncate type-body-strong text-text-primary sm:w-36">
-            {module.label}
-          </p>
-          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
-            {grantedActions.map((action) => {
-              const labelKey = actionLabelKey(action);
-              const label = labelKey ? tActions(labelKey) : capitalizeAction(action);
-              return <PermissionActionChip key={action} action={action} label={label} />;
-            })}
-          </div>
-        </li>
-      ))}
+      {rows.map(({ module, grantedActions }) => {
+        const ModuleIcon = permissionModuleIcon(module.slug);
+        return (
+          <li
+            key={module.slug}
+            className="flex items-center gap-3 rounded-2xl border border-border/50 bg-bg-card/40 px-3 py-2.5 shadow-sm backdrop-blur-md dark:border-text-on-brand/20 dark:bg-text-on-brand/6"
+          >
+            <span className={cn(detailIconWellClass, "size-8 shrink-0")} aria-hidden>
+              <ModuleIcon className="size-3.5" />
+            </span>
+            <p className="min-w-0 flex-1 truncate type-label text-text-primary">{module.label}</p>
+            <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5">
+              {grantedActions.map((action) => {
+                const labelKey = actionLabelKey(action);
+                const label = labelKey ? tActions(labelKey) : capitalizeAction(action);
+                return <PermissionActionChip key={action} action={action} label={label} />;
+              })}
+            </div>
+          </li>
+        );
+      })}
     </ul>
   );
 }

@@ -9,6 +9,7 @@ import { TableRowIconActions } from "@/components/table/table-row-icon-actions";
 import { ActiveInactiveToggle } from "@/components/ui/active-inactive-toggle";
 import { Badge } from "@/components/ui/badge";
 import { StatusChip } from "@/components/ui/status-chip";
+import { tableGlassChipClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { roleActionIcon } from "@/lib/frontend/roles/permission-action-icon.utils";
 import { getBadgeToneClassName } from "@/lib/frontend/theme/status-colors";
 import { isActiveRoleStatus } from "@/lib/roles/constants";
@@ -64,9 +65,9 @@ export function useRolesTableColumns({
         label: t("colPermissions"),
         headerIcon: LuKeyRound,
         render: (item) => (
-          <Badge variant="outline" className="type-caption-xs tabular-nums">
+          <span className={tableGlassChipClass}>
             {t("permissionsCount", { count: item.permissions_count })}
-          </Badge>
+          </span>
         ),
       },
       {

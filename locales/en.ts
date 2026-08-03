@@ -26,7 +26,6 @@ export interface Translation {
     analytics: string;
     seoActivities: string;
     leads: string;
-    reports: string;
     settings: string;
   };
   breadcrumb: {
@@ -125,6 +124,8 @@ export interface Translation {
       disconnectError: string;
       syncSuccess: string;
       syncError: string;
+      refreshSuccess: string;
+      refreshError: string;
       confirmCancel: string;
       confirmConnectTitle: string;
       confirmConnectBody: string;
@@ -244,6 +245,33 @@ export interface Translation {
         errorFallback: string;
         editSuccessFallback: string;
         editErrorFallback: string;
+        membershipAssignError: string;
+      };
+      memberships: {
+        title: string;
+        lead: string;
+        count: string;
+        empty: string;
+        projectLabel: string;
+        projectPh: string;
+        roleLabel: string;
+        rolePh: string;
+        add: string;
+        removeAria: string;
+        statusInvited: string;
+        assignSuccess: string;
+        assignError: string;
+        updateSuccess: string;
+        updateError: string;
+        removeSuccess: string;
+        removeError: string;
+        confirmUpdateTitle: string;
+        confirmUpdateBody: string;
+        confirmUpdate: string;
+        confirmRemoveTitle: string;
+        confirmRemoveBody: string;
+        confirmRemove: string;
+        confirmCancel: string;
       };
       assignments: {
         noProjects: string;
@@ -977,9 +1005,6 @@ export interface Translation {
     leads: {
       title: string;
     };
-    reports: {
-      title: string;
-    };
     roles: {
       title: string;
       subtitle: string;
@@ -1002,6 +1027,9 @@ export interface Translation {
         descriptionPh: string;
         systemRoleNameLocked: string;
         permsHeading: string;
+        permsLead: string;
+        permsModulesHeading: string;
+        permsModuleLead: string;
         permsSelectAll: string;
         permsClearAll: string;
         permsCount: string;
@@ -1026,6 +1054,8 @@ export interface Translation {
         delete: string;
         invite: string;
         remove: string;
+        disconnect: string;
+        refresh: string;
       };
       detail: {
         title: string;
@@ -1222,7 +1252,6 @@ const translation: Translation = {
     analytics: "Analytics",
     seoActivities: "SEO Activities",
     leads: "Leads",
-    reports: "Reports",
     settings: "Settings",
   },
   breadcrumb: {
@@ -1323,6 +1352,8 @@ const translation: Translation = {
       disconnectError: "Failed To Disconnect Integration.",
       syncSuccess: "Analytics Sync Completed.",
       syncError: "Failed To Sync Analytics.",
+      refreshSuccess: "Analytics Sync Completed.",
+      refreshError: "Failed To Sync Analytics.",
       confirmCancel: "Cancel",
       confirmConnectTitle: "Connect Property?",
       confirmConnectBody: "Link This {{service}} Property To The Selected Project And Start Syncing Cached Analytics.",
@@ -1443,6 +1474,33 @@ const translation: Translation = {
         errorFallback: "Could Not Create User. Try Again.",
         editSuccessFallback: "User Updated Successfully.",
         editErrorFallback: "Could Not Update User. Try Again.",
+        membershipAssignError: "User Created, But Project Assignment Failed. Finish Assignments On The Edit Page.",
+      },
+      memberships: {
+        title: "Project Assignments",
+        lead: "Assign This User To Projects With A Project Role. Changes On Edit Save Immediately.",
+        count: "{{count}} Assigned",
+        empty: "No Projects Assigned Yet.",
+        projectLabel: "Project",
+        projectPh: "Select Project",
+        roleLabel: "Role",
+        rolePh: "Select Role",
+        add: "Add",
+        removeAria: "Remove {{name}}",
+        statusInvited: "Invite Pending",
+        assignSuccess: "Project Assignment Saved.",
+        assignError: "Could Not Save Project Assignment.",
+        updateSuccess: "Project Role Updated.",
+        updateError: "Could Not Update Project Role.",
+        removeSuccess: "Project Assignment Removed.",
+        removeError: "Could Not Remove Project Assignment.",
+        confirmUpdateTitle: "Update Project Role?",
+        confirmUpdateBody: "Change The Role On {{name}} To {{role}}.",
+        confirmUpdate: "Update Role",
+        confirmRemoveTitle: "Remove Project Assignment?",
+        confirmRemoveBody: "Remove This User From {{name}}. They Will Lose Project Access.",
+        confirmRemove: "Remove Assignment",
+        confirmCancel: "Cancel",
       },
       assignments: {
         noProjects: "No Projects Assigned",
@@ -2188,9 +2246,6 @@ const translation: Translation = {
     leads: {
       title: "Leads",
     },
-    reports: {
-      title: "Reports",
-    },
     roles: {
       title: "Roles & Permissions",
       subtitle: "Manage Role Templates And Their Permission Sets.",
@@ -2213,6 +2268,9 @@ const translation: Translation = {
         descriptionPh: "What This Role Is For…",
         systemRoleNameLocked: "System Role Names Can't Be Changed. You Can Still Edit The Description And Permissions.",
         permsHeading: "Select Permissions",
+        permsLead: "Choose Which Modules And Actions This Role Can Access.",
+        permsModulesHeading: "Modules",
+        permsModuleLead: "Toggle The Actions Available For This Module.",
         permsSelectAll: "Select All",
         permsClearAll: "Clear All",
         permsCount: "{{selected}} Of {{total}} Selected",
@@ -2237,6 +2295,8 @@ const translation: Translation = {
         delete: "Delete",
         invite: "Invite",
         remove: "Remove",
+        disconnect: "Disconnect",
+        refresh: "Refresh",
       },
       detail: {
         title: "Role Details",

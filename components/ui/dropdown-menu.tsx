@@ -102,7 +102,9 @@ function DropdownMenuContent({
       role="menu"
       data-slot="dropdown-menu-content"
       className={cn(
-        "absolute top-full z-50 mt-1.5 min-w-[10rem] overflow-hidden rounded-md border border-[var(--border)] bg-[var(--bg-elevated)] p-1 text-[var(--text)] shadow-md",
+        // Gap between items is baked in so hover pills never sit flush (works for nested scroll wrappers too).
+        "absolute top-full z-50 mt-1.5 min-w-[10rem] overflow-hidden rounded-xl border border-border/50 bg-bg-card p-1.5 text-text-primary shadow-(--shadow-elevated)",
+        "[&_[role=menuitem]+[role=menuitem]]:mt-1.5",
         align === "end" ? "end-0" : "start-0",
         className
       )}
@@ -131,9 +133,9 @@ function DropdownMenuItem({
       role="menuitem"
       data-variant={variant}
       className={cn(
-        "relative flex w-full cursor-default items-center gap-1.5 rounded-md px-2 py-1.5 text-start text-xs outline-none select-none",
-        "hover:bg-[var(--accent-bg)] focus:bg-[var(--accent-bg)]",
-        variant === "destructive" && "text-destructive hover:bg-destructive/10",
+        "relative flex min-h-9 w-full cursor-default items-center gap-2 rounded-lg px-2.5 py-2 text-start type-body outline-none select-none",
+        "hover:bg-bg-hover focus:bg-bg-hover",
+        variant === "destructive" && "text-destructive hover:bg-destructive/10 focus:bg-destructive/10",
         className
       )}
       onClick={(e) => {
@@ -147,7 +149,11 @@ function DropdownMenuItem({
 }
 
 const DropdownMenuSeparator = ({ className, ...props }: React.ComponentProps<"div">) => (
-  <div className={cn("-mx-1 my-1 h-px bg-border", className)} {...props} />
+  <div
+    role="separator"
+    className={cn("-mx-0.5 my-1.5 h-px bg-border/60", className)}
+    {...props}
+  />
 );
 
 const DropdownMenuGroup = ({ children }: { children: React.ReactNode }) => <>{children}</>;

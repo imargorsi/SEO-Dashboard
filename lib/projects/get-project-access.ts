@@ -6,6 +6,7 @@ import type { AuthContext } from "@/lib/auth/guards";
 import { hasPermission } from "@/lib/rbac/access";
 import { allProjectCatalogPermissions, projectPermission } from "@/lib/rbac/permission-catalog";
 import { SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
+import { ensureSystemRoles } from "@/lib/rbac/seed-roles";
 import { isActiveRoleStatus } from "@/lib/roles/constants";
 import { Project, ProjectMember, Role } from "@/models";
 
@@ -26,6 +27,8 @@ export type ProjectAccessDto = {
 };
 
 export async function getProjectAccessForUser(auth: AuthContext, projectId: string): Promise<ProjectAccessDto | null> {
+  await ensureSystemRoles();
+
   if (!mongoose.isValidObjectId(projectId)) {
     return null;
   }

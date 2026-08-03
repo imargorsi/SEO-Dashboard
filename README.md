@@ -1,6 +1,6 @@
 # SEO Dashboard
 
-Full-stack **Next.js** application for SEO operations — projects, analytics, activities, leads, and reports.
+Full-stack **Next.js** application for SEO operations — projects, analytics, activities, and leads.
 
 ## Quick start
 

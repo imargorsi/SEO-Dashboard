@@ -12,6 +12,8 @@ export type TSettingsCategory = {
   icon: IconType;
   /** When true, only `super_admin` sees this category. */
   requiresSuperAdmin: boolean;
+  /** When true, needs `integrations.view` on the selected project (`super_admin` always qualifies). */
+  requiresIntegrationsView?: boolean;
 };
 
 export const SETTINGS_CATEGORIES: readonly TSettingsCategory[] = [
@@ -25,10 +27,20 @@ export const SETTINGS_CATEGORIES: readonly TSettingsCategory[] = [
     id: "integrations",
     labelKey: "integrations",
     icon: IoLinkOutline,
-    requiresSuperAdmin: true,
+    requiresSuperAdmin: false,
+    requiresIntegrationsView: true,
   },
 ];
 
-export function resolveSettingsCategories(isAdmin: boolean): TSettingsCategory[] {
-  return SETTINGS_CATEGORIES.filter((category) => !category.requiresSuperAdmin || isAdmin);
+export function resolveSettingsCategories(options: {
+  isAdmin: boolean;
+  canViewIntegrations: boolean;
+}): TSettingsCategory[] {
+  return SETTINGS_CATEGORIES.filter((category) => {
+    if (category.requiresSuperAdmin && !options.isAdmin) return false;
+    if (category.requiresIntegrationsView && !options.isAdmin && !options.canViewIntegrations) {
+      return false;
+    }
+    return true;
+  });
 }

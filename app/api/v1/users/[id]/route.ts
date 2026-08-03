@@ -15,7 +15,7 @@ export const GET = withApiHandler(async (request, context) => {
 
   const { id } = await context!.params;
   const user = await getAdminUserById(id);
-  return buildGetAdminUserResponse(user);
+  return await buildGetAdminUserResponse(user);
 });
 
 export const PATCH = withApiHandler(async (request, context) => {

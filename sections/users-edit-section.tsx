@@ -11,8 +11,10 @@ import { Paragraph } from "@/components/paragraph";
 import { LoadingState } from "@/components/ui/loading-state";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
 import { useUserQuery } from "@/features/users/users.api";
+import { analyticsHeadingStackClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { userCanUpdate } from "@/lib/frontend/users/acl";
 import { USER_ROUTES } from "@/lib/frontend/users/user-routes.utils";
+import { cn } from "@/lib/utils";
 
 export function UsersEditSection() {
   const router = useRouter();
@@ -60,8 +62,8 @@ export function UsersEditSection() {
 
   return (
     <div className="w-full min-w-0">
-      <div className="space-y-5 px-4 py-6 sm:px-6">
-        <div className="space-y-1">
+      <div className="flex flex-col gap-6 px-4 py-6 sm:gap-7 sm:px-6 sm:py-7">
+        <div className={cn(analyticsHeadingStackClass, "max-w-2xl")}>
           <Heading id="users-edit-title" pageTitle>
             {t("editUserTitle")}
           </Heading>
@@ -72,6 +74,7 @@ export function UsersEditSection() {
           userId={user.id}
           initialValues={initialValues}
           initialProfileImageUrl={user.profile_image}
+          initialProjects={user.projects}
         />
       </div>
     </div>

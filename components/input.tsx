@@ -12,7 +12,7 @@ import {
   type KeyboardEvent,
   type Ref,
 } from "react";
-import { IoClose, IoEye, IoEyeOff } from "react-icons/io5";
+import { IoCheckmark, IoClose, IoEye, IoEyeOff } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 import SelectDropdownArrowIcon from "@/components/icons/input-select-dropdown-arrow";
 import {
@@ -62,6 +62,8 @@ export interface ReusableInputProps extends NativeControlProps {
   autoComplete?: string;
   /** Renders `value` as a comma-separated list of removable chips instead of plain text. */
   chips?: boolean;
+  /** Fired when a `type="select"` dropdown opens or closes. */
+  onSelectOpenChange?: (open: boolean) => void;
   onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   onBlur?: (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
 }
@@ -103,6 +105,7 @@ type SelectFieldProps = {
   controlClassName: string;
   onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   onBlur?: (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  onOpenChange?: (open: boolean) => void;
   setControlRef: (node: ControlElement | null) => void;
 };
 
@@ -118,6 +121,7 @@ function SelectField({
   controlClassName,
   onChange,
   onBlur,
+  onOpenChange,
   setControlRef,
 }: SelectFieldProps) {
   const isControlled = value !== undefined;
@@ -154,7 +158,7 @@ function SelectField({
         onBlur={(e) => onBlur?.(e as unknown as FocusEvent<HTMLSelectElement>)}
         ref={setControlRef as Ref<HTMLInputElement>}
       />
-      <DropdownMenu className="w-full">
+      <DropdownMenu className="w-full" onOpenChange={onOpenChange}>
         <DropdownMenuTrigger
           id={`${id}-trigger`}
           disabled={disabled}
@@ -170,7 +174,7 @@ function SelectField({
           <span className="min-w-0 truncate">{displayLabel}</span>
           <SelectDropdownArrowIcon className="shrink-0 text-text-muted" />
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="top-full mt-2 w-full min-w-full rounded-xl border-border bg-bg-input p-1 shadow-(--shadow)">
+        <DropdownMenuContent className="top-full mt-2 w-full min-w-full rounded-xl border border-border/50 bg-bg-card p-1.5 shadow-(--shadow-elevated)">
           {selectableOptions.length === 0 ? (
             <p className="px-2.5 py-3 text-center type-caption text-text-muted">{placeholder}</p>
           ) : (
@@ -183,12 +187,12 @@ function SelectField({
                   <DropdownMenuItem
                     key={optionValue}
                     onSelect={() => emitChange(optionValue)}
-                    className={cn(
-                      "h-9 rounded-lg type-body",
-                      isSelected && "bg-bg-selected text-text-primary",
-                    )}
+                    className={cn(isSelected && "bg-brand/12 text-text-primary")}
                   >
                     <span className="min-w-0 flex-1 truncate text-start">{option.label}</span>
+                    {isSelected ? (
+                      <IoCheckmark className="size-3.5 shrink-0 text-brand" aria-hidden />
+                    ) : null}
                   </DropdownMenuItem>
                 );
               })}
@@ -217,6 +221,7 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
     className = "",
     autoComplete,
     chips = false,
+    onSelectOpenChange,
     onChange,
     onBlur,
     ref: registerRef,
@@ -374,6 +379,7 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
           controlClassName={controlClassName}
           onChange={onChange}
           onBlur={onBlur}
+          onOpenChange={onSelectOpenChange}
           setControlRef={setControlRef}
         />
       ) : (

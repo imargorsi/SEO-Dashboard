@@ -6,7 +6,9 @@ import {
   IoEyeOutline,
   IoPersonAddOutline,
   IoPersonRemoveOutline,
+  IoRefreshOutline,
   IoTrashOutline,
+  IoUnlinkOutline,
 } from "react-icons/io5";
 import { PiPencilThin } from "react-icons/pi";
 
@@ -29,6 +31,10 @@ export function roleActionIcon(action: string): IconType | null {
       return IoPersonAddOutline;
     case "remove":
       return IoPersonRemoveOutline;
+    case "disconnect":
+      return IoUnlinkOutline;
+    case "refresh":
+      return IoRefreshOutline;
     default:
       return null;
   }

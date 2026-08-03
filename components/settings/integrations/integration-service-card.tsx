@@ -60,6 +60,8 @@ type TIntegrationServiceCardProps = {
   onRequestConnectOrUpdate: (propertyId: string, mode: "connect" | "update") => void;
   onRequestDisconnect: () => void;
   isBusy: boolean;
+  canUpdate?: boolean;
+  canDisconnect?: boolean;
 };
 
 export function IntegrationServiceCard({
@@ -69,6 +71,8 @@ export function IntegrationServiceCard({
   onRequestConnectOrUpdate,
   onRequestDisconnect,
   isBusy,
+  canUpdate = true,
+  canDisconnect = true,
 }: TIntegrationServiceCardProps) {
   const { t } = useTranslation("translation", { keyPrefix: "settings.integrations" });
   const [propertyId, setPropertyId] = useState(integration?.externalPropertyId ?? "");
@@ -117,7 +121,7 @@ export function IntegrationServiceCard({
                 value={propertyId}
                 options={propertyOptions}
                 placeholder={t("propertyPlaceholder")}
-                disabled={isBusy}
+                disabled={isBusy || !canUpdate}
                 onChange={setPropertyId}
                 onOpenChange={setSelectOpen}
               />
@@ -126,7 +130,7 @@ export function IntegrationServiceCard({
                 id={`settings-integration-${service}`}
                 value={propertyId}
                 onChange={(event) => setPropertyId(event.target.value)}
-                disabled={isBusy}
+                disabled={isBusy || !canUpdate}
                 placeholder={
                   service === "gsc" ? t("gscPropertyPlaceholder") : t("ga4PropertyPlaceholder")
                 }
@@ -134,19 +138,21 @@ export function IntegrationServiceCard({
             )}
           </div>
           <div className="flex shrink-0 flex-wrap items-center gap-2">
-            <Button
-              type="button"
-              variant="gradient"
-              size="md"
-              disabled={isBusy}
-              onClick={() =>
-                onRequestConnectOrUpdate(propertyId, isLinked ? "update" : "connect")
-              }
-            >
-              <IoLinkOutline className="size-4" aria-hidden />
-              {isLinked ? t("update") : t("connect")}
-            </Button>
-            {isLinked ? (
+            {canUpdate ? (
+              <Button
+                type="button"
+                variant="gradient"
+                size="md"
+                disabled={isBusy}
+                onClick={() =>
+                  onRequestConnectOrUpdate(propertyId, isLinked ? "update" : "connect")
+                }
+              >
+                <IoLinkOutline className="size-4" aria-hidden />
+                {isLinked ? t("update") : t("connect")}
+              </Button>
+            ) : null}
+            {isLinked && canDisconnect ? (
               <Button
                 type="button"
                 variant="outlined"

@@ -15,7 +15,7 @@ import type { TGooglePropertyOption } from "@/types/analytics.types";
 export const GET = withApiHandler(async (request, context) => {
   await connectDb();
 
-  const auth = await runApiGuards(request, { superAdmin: true });
+  const auth = await runApiGuards(request);
   if (auth instanceof Response) return auth;
 
   const { id: projectId } = await context!.params;
@@ -23,7 +23,7 @@ export const GET = withApiHandler(async (request, context) => {
     return ApiResponse.error("Project Not Found.", {}, 404);
   }
 
-  const permissionError = await requireProjectPermission(auth, projectId, "analytics.view");
+  const permissionError = await requireProjectPermission(auth, projectId, "integrations.update");
   if (permissionError) return permissionError;
 
   if (!env.googleConfigured()) {

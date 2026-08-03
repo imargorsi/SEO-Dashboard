@@ -26,6 +26,7 @@ import { useDetailSheetState } from "@/hooks/use-detail-sheet-state.hook";
 import { useQueryParams } from "@/hooks/use-query-params.hook";
 import { ApiError } from "@/lib/frontend/api/errors";
 import { notify } from "@/lib/frontend/feedback/notify";
+import { analyticsHeadingStackClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { parseUsersListQuery } from "@/lib/frontend/users/users-list-query.utils";
 import { userCanCreate, userCanDelete, userCanUpdate, userCanView } from "@/lib/frontend/users/acl";
 import { USER_ROUTES } from "@/lib/frontend/users/user-routes.utils";
@@ -193,9 +194,9 @@ export function UsersListSection() {
 
   return (
     <div className="w-full min-w-0">
-      <div className="space-y-5 px-4 py-6 sm:px-6">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="space-y-1">
+      <div className="flex flex-col gap-6 px-4 py-6 sm:gap-7 sm:px-6 sm:py-7">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+          <div className={cn(analyticsHeadingStackClass, "max-w-2xl")}>
             <Heading id="users-list-title" pageTitle>
               {t("title")}
             </Heading>

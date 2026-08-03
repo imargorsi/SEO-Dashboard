@@ -29,6 +29,7 @@ import { roleActionIcon } from "@/lib/frontend/roles/permission-action-icon.util
 import { ROLE_ROUTES } from "@/lib/frontend/roles/role-routes.utils";
 import { parseRolesListQuery } from "@/lib/frontend/roles/roles-list-query.utils";
 import { notify } from "@/lib/frontend/feedback/notify";
+import { analyticsHeadingStackClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { isActiveRoleStatus, type TRoleStatus } from "@/lib/roles/constants";
 import { EMPTY_ROLE_STATUS_COUNTS } from "@/lib/roles/role-status-filter.utils";
 import type { TAdminRoleListItem } from "@/types/admin-role.types";
@@ -191,9 +192,9 @@ export function RolesListSection() {
 
   return (
     <div className="w-full min-w-0">
-      <div className="space-y-5 px-4 py-6 sm:px-6">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="space-y-1">
+      <div className="flex flex-col gap-6 px-4 py-6 sm:gap-7 sm:px-6 sm:py-7">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+          <div className={cn(analyticsHeadingStackClass, "max-w-2xl")}>
             <Heading id="roles-list-title" pageTitle>
               {t("title")}
             </Heading>

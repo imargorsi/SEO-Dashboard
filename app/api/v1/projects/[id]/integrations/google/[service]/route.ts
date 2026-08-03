@@ -31,7 +31,7 @@ function parseServiceParam(service: string | undefined) {
 export const GET = withApiHandler(async (request, context) => {
   await connectDb();
 
-  const auth = await runApiGuards(request, { superAdmin: true });
+  const auth = await runApiGuards(request);
   if (auth instanceof Response) return auth;
 
   const { id: projectId, service: serviceParam } = await context!.params;
@@ -39,7 +39,7 @@ export const GET = withApiHandler(async (request, context) => {
     return ApiResponse.error("Project Not Found.", {}, 404);
   }
 
-  const permissionError = await requireProjectPermission(auth, projectId, "analytics.view");
+  const permissionError = await requireProjectPermission(auth, projectId, "integrations.view");
   if (permissionError) return permissionError;
 
   let service;
@@ -59,7 +59,7 @@ export const GET = withApiHandler(async (request, context) => {
 export const PUT = withApiHandler(async (request, context) => {
   await connectDb();
 
-  const auth = await runApiGuards(request, { superAdmin: true });
+  const auth = await runApiGuards(request);
   if (auth instanceof Response) return auth;
 
   const { id: projectId, service: serviceParam } = await context!.params;
@@ -67,7 +67,7 @@ export const PUT = withApiHandler(async (request, context) => {
     return ApiResponse.error("Project Not Found.", {}, 404);
   }
 
-  const permissionError = await requireProjectPermission(auth, projectId, "analytics.view");
+  const permissionError = await requireProjectPermission(auth, projectId, "integrations.update");
   if (permissionError) return permissionError;
 
   let service;
@@ -106,7 +106,7 @@ export const PUT = withApiHandler(async (request, context) => {
 export const DELETE = withApiHandler(async (request, context) => {
   await connectDb();
 
-  const auth = await runApiGuards(request, { superAdmin: true });
+  const auth = await runApiGuards(request);
   if (auth instanceof Response) return auth;
 
   const { id: projectId, service: serviceParam } = await context!.params;
@@ -114,7 +114,7 @@ export const DELETE = withApiHandler(async (request, context) => {
     return ApiResponse.error("Project Not Found.", {}, 404);
   }
 
-  const permissionError = await requireProjectPermission(auth, projectId, "analytics.view");
+  const permissionError = await requireProjectPermission(auth, projectId, "integrations.disconnect");
   if (permissionError) return permissionError;
 
   let service;

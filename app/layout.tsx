@@ -7,8 +7,11 @@ import { THEME_PACK_BOOTSTRAP_SCRIPT } from "@/lib/frontend/theme/theme-packs";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Crawllex",
-  description: "Crawllex — SEO Operations Platform",
+  title: {
+    default: "Crawllex - SEO Clarity For Every Client",
+    template: "%s | Crawllex",
+  },
+  description: "Crawllex - SEO Clarity For Every Client",
   metadataBase: new URL("https://crawllex.com"),
   icons: {
     icon: "/favicon.png",

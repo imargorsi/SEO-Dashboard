@@ -11,6 +11,7 @@ import {
 } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 
+import { glassPanelSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { buildSeoActivitySparklinePaths } from "@/lib/frontend/seo-activities/sparkline.utils";
 import type { TSeoActivitySummaryMetric } from "@/lib/frontend/seo-activities/summary.utils";
 import { cn } from "@/lib/utils";
@@ -86,7 +87,7 @@ function MetricSparkline({
     >
       <defs>
         <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" style={{ stopColor: accent, stopOpacity: 0.42 }} />
+          <stop offset="0%" style={{ stopColor: accent, stopOpacity: 0.28 }} />
           <stop offset="100%" style={{ stopColor: accent, stopOpacity: 0 }} />
         </linearGradient>
       </defs>
@@ -114,6 +115,7 @@ function MetricSparkline({
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
+          opacity="0.85"
         >
           {!reduceMotion ? (
             <animate
@@ -143,37 +145,15 @@ export function SeoActivitySummaryCards({ metrics, className }: TSeoActivitySumm
         const theme = METRIC_THEME[metric.id];
         const Icon = theme.icon;
 
-        const cardStyle = {
-          borderColor: `color-mix(in srgb, ${theme.accent} 28%, var(--border))`,
-          boxShadow: `
-            0 0 0 1px color-mix(in srgb, ${theme.accent} 10%, transparent),
-            0 10px 28px color-mix(in srgb, ${theme.accent} 10%, transparent),
-            var(--shadow-elevated)
-          `,
-        } as CSSProperties;
-
         return (
           <div
             key={metric.id}
-            className="relative overflow-hidden rounded-2xl border bg-bg-card-elevated px-4 py-4 sm:px-5"
-            style={cardStyle}
+            className={cn(glassPanelSurfaceClass, "rounded-2xl px-4 py-4 sm:px-5")}
           >
-            <div
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background: `radial-gradient(70% 120% at 100% 0%, color-mix(in srgb, ${theme.accent} 16%, transparent), transparent 55%)`,
-              }}
-              aria-hidden
-            />
-
-            <div className="relative z-10 flex items-center gap-3">
+            <div className="flex items-center gap-3">
               <span
-                className="inline-flex size-11 shrink-0 items-center justify-center rounded-xl"
-                style={{
-                  color: theme.accent,
-                  background: `color-mix(in srgb, ${theme.accent} 16%, transparent)`,
-                  boxShadow: `0 0 18px color-mix(in srgb, ${theme.accent} 35%, transparent)`,
-                }}
+                className="inline-flex size-11 shrink-0 items-center justify-center rounded-xl border border-border/55 dark:border-text-primary/25"
+                style={{ color: theme.accent }}
               >
                 <Icon className="size-5" aria-hidden />
               </span>

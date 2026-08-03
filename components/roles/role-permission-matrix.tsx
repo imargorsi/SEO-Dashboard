@@ -8,6 +8,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import {
   analyticsHeadingStackClass,
   detailIconWellClass,
+  elevatedCardSurfaceClass,
+  tableGlassChipClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
 import { roleActionIcon } from "@/lib/frontend/roles/permission-action-icon.utils";
 import {
@@ -26,7 +28,7 @@ type TRolePermissionMatrixProps = {
   disabled?: boolean;
 };
 
-const panelHeaderClass = "flex h-14 items-center border-b border-border/50 px-4 sm:px-5";
+const panelHeaderClass = "flex h-12 items-center px-1";
 
 export function RolePermissionMatrix({
   modules,
@@ -85,20 +87,14 @@ export function RolePermissionMatrix({
   const ActiveModuleIcon = permissionModuleIcon(activeModule.slug);
 
   return (
-    <div
-      className={cn(
-        "grid min-h-80 gap-0 overflow-hidden rounded-3xl border border-border/40",
-        "bg-bg-card/45 shadow-(--shadow-elevated) backdrop-blur-md",
-        "lg:grid-cols-[240px_1fr]",
-      )}
-    >
-      <aside className="border-b border-border/50 bg-bg-card/25 lg:border-b-0 lg:border-e lg:border-border/40">
+    <div className="grid min-h-80 gap-4 lg:grid-cols-[240px_1fr]">
+      <aside className={cn(elevatedCardSurfaceClass, "flex flex-col rounded-xl p-3 sm:p-3.5")}>
         <div className={panelHeaderClass}>
           <h3 className="type-title text-text-primary">{t("permsModulesHeading")}</h3>
         </div>
 
         <nav
-          className="themed-scrollbar flex gap-1.5 overflow-x-auto p-3 lg:max-h-[min(32rem,70svh)] lg:flex-col lg:overflow-y-auto"
+          className="themed-scrollbar flex gap-2 overflow-x-auto pt-1 lg:max-h-[min(32rem,70svh)] lg:flex-col lg:overflow-y-auto"
           aria-label={t("permsHeading")}
         >
           {modules.map((module) => {
@@ -113,20 +109,19 @@ export function RolePermissionMatrix({
                 onClick={() => setSelectedModuleSlug(module.slug)}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
-                  "flex shrink-0 items-center gap-2.5 rounded-xl border px-3 py-2.5 text-start transition-colors lg:w-full lg:shrink",
+                  "flex shrink-0 items-center gap-2.5 rounded-2xl px-3 py-2.5 text-start transition-colors lg:w-full lg:shrink",
                   isActive
-                    ? "border-border/50 bg-bg-selected text-text-primary shadow-sm"
-                    : "border-transparent text-text-secondary hover:border-border/40 hover:bg-bg-hover/60 hover:text-text-primary",
+                    ? "bg-bg-selected text-text-primary"
+                    : "text-text-secondary hover:bg-bg-hover/60 hover:text-text-primary",
                 )}
               >
-                <ModuleIcon className="size-4 shrink-0" aria-hidden />
+                <ModuleIcon className="size-4 shrink-0 text-text-muted" aria-hidden />
                 <span className="min-w-0 flex-1 truncate type-body-strong">{module.label}</span>
                 <span
                   className={cn(
-                    "shrink-0 rounded-full px-2 py-0.5 type-caption-xs tabular-nums",
-                    count > 0
-                      ? "border border-brand/25 bg-brand/12 text-brand"
-                      : "border border-border/40 text-text-muted",
+                    tableGlassChipClass,
+                    "px-2 py-0.5",
+                    count > 0 ? "border-brand/30 bg-brand/12 text-brand" : "text-text-muted",
                   )}
                 >
                   {count}/{module.actions.length}
@@ -137,8 +132,8 @@ export function RolePermissionMatrix({
         </nav>
       </aside>
 
-      <div className="min-w-0">
-        <div className={cn(panelHeaderClass, "justify-between gap-3")}>
+      <div className={cn(elevatedCardSurfaceClass, "min-w-0 rounded-xl p-3 sm:p-4")}>
+        <div className={cn(panelHeaderClass, "justify-between gap-3 px-1")}>
           <div className="flex min-w-0 items-center gap-2.5">
             <span className={cn(detailIconWellClass, "size-8")} aria-hidden>
               <ActiveModuleIcon className="size-3.5" />
@@ -157,8 +152,8 @@ export function RolePermissionMatrix({
           </Button>
         </div>
 
-        <div className="p-4 sm:p-5">
-          <div className={cn(analyticsHeadingStackClass, "mb-4")}>
+        <div className="pt-3">
+          <div className={cn(analyticsHeadingStackClass, "mb-4 px-1")}>
             <p className="type-caption text-text-muted">{t("permsModuleLead")}</p>
           </div>
 
@@ -174,13 +169,13 @@ export function RolePermissionMatrix({
                 <label
                   key={permission}
                   className={cn(
-                    "flex flex-col gap-3 rounded-2xl border p-3.5 transition-[border-color,background-color,box-shadow] duration-200",
+                    "flex flex-col gap-3 rounded-2xl border bg-transparent p-3.5 transition-[border-color,background-color] duration-200",
                     checked
-                      ? "border-brand/40 bg-brand/10 text-text-primary shadow-sm"
-                      : "border-border/50 bg-bg-card/40 text-text-secondary",
+                      ? "border-brand/45 text-text-primary"
+                      : "border-border/70 text-text-secondary dark:border-text-primary/30",
                     disabled
                       ? "cursor-not-allowed opacity-60"
-                      : "cursor-pointer hover:border-border hover:bg-bg-hover/50 hover:text-text-primary",
+                      : "cursor-pointer hover:border-border hover:text-text-primary dark:hover:border-text-primary/45",
                   )}
                 >
                   <div className="flex items-center justify-between gap-2">
@@ -198,6 +193,7 @@ export function RolePermissionMatrix({
                       checked={checked}
                       disabled={disabled}
                       onChange={(event) => togglePermission(permission, event.target.checked)}
+                      className="dark:border-text-primary/45"
                     />
                   </div>
                   <span className="type-label text-text-primary">{label}</span>

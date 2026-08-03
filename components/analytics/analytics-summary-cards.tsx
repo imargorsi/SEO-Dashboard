@@ -1,6 +1,5 @@
 "use client";
 
-import type { CSSProperties } from "react";
 import { useEffect, useId, useMemo, useState } from "react";
 import type { IconType } from "react-icons";
 import {
@@ -11,6 +10,7 @@ import {
 } from "react-icons/md";
 import { useTranslation } from "react-i18next";
 
+import { elevatedCardSurfaceClass, metricIconWellClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { buildSparklinePathsFromValues } from "@/lib/frontend/analytics/sparkline.utils";
 import { cn } from "@/lib/utils";
 import type { TAnalyticsCardMetricDto, TAnalyticsOverviewDto } from "@/types/analytics.types";
@@ -64,22 +64,6 @@ function usePrefersReducedMotion(): boolean {
   return reduced;
 }
 
-function DotGrid({ accent }: { accent: string }) {
-  return (
-    <div
-      className="pointer-events-none absolute inset-0 opacity-[0.22]"
-      style={{
-        backgroundImage: `radial-gradient(circle, color-mix(in srgb, ${accent} 55%, transparent) 1px, transparent 1.25px)`,
-        backgroundSize: "14px 14px",
-        backgroundPosition: "right top",
-        maskImage: "radial-gradient(90% 70% at 100% 0%, black 20%, transparent 75%)",
-        WebkitMaskImage: "radial-gradient(90% 70% at 100% 0%, black 20%, transparent 75%)",
-      }}
-      aria-hidden
-    />
-  );
-}
-
 function TrendSparkline({
   id,
   accent,
@@ -93,7 +77,6 @@ function TrendSparkline({
 }) {
   const reactId = useId().replace(/:/g, "");
   const gradId = `${id}-${reactId}-fill`;
-  const strokeId = `${id}-${reactId}-stroke`;
   const width = 280;
   const height = 64;
 
@@ -122,21 +105,9 @@ function TrendSparkline({
     >
       <defs>
         <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" style={{ stopColor: accent, stopOpacity: 0.35 }} />
+          <stop offset="0%" style={{ stopColor: accent, stopOpacity: 0.22 }} />
           <stop offset="100%" style={{ stopColor: accent, stopOpacity: 0 }} />
         </linearGradient>
-        <linearGradient id={strokeId} x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" style={{ stopColor: accent, stopOpacity: 0.35 }} />
-          <stop offset="55%" style={{ stopColor: accent, stopOpacity: 0.95 }} />
-          <stop offset="100%" style={{ stopColor: accent, stopOpacity: 1 }} />
-        </linearGradient>
-        <filter id={`${id}-${reactId}-glow`} x="-40%" y="-40%" width="180%" height="180%">
-          <feGaussianBlur stdDeviation="2.2" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
       </defs>
 
       <path
@@ -147,40 +118,28 @@ function TrendSparkline({
       <path
         d={paths.line}
         fill="none"
-        stroke={`url(#${strokeId})`}
-        strokeWidth="2.75"
+        stroke={accent}
+        strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        filter={`url(#${id}-${reactId}-glow)`}
+        opacity="0.9"
       />
-      <circle cx={paths.end.x} cy={paths.end.y} r="5.5" fill={accent} opacity="0.28" />
       <circle
         cx={paths.end.x}
         cy={paths.end.y}
-        r="3.25"
+        r="3"
         fill={accent}
-        stroke="color-mix(in srgb, var(--text-on-brand) 70%, transparent)"
+        stroke="var(--bg-card)"
         strokeWidth="1.25"
       />
     </svg>
   );
 }
 
-function CardSkeleton({ accent }: { accent: string }) {
+function CardSkeleton() {
   return (
-    <div
-      className={cn(
-        "relative isolate min-h-48 overflow-hidden rounded-3xl border border-border/40",
-        "bg-bg-card/30 backdrop-blur-2xl",
-        "px-4 pb-5 pt-4 sm:px-5 sm:pt-5",
-      )}
-      style={
-        {
-          boxShadow: `0 16px 40px color-mix(in srgb, ${accent} 10%, transparent)`,
-        } as CSSProperties
-      }
-    >
-      <div className="relative z-10 flex flex-col gap-3">
+    <div className={cn(elevatedCardSurfaceClass, "min-h-48 rounded-2xl px-4 pb-5 pt-4 sm:px-5 sm:pt-5")}>
+      <div className="flex flex-col gap-3">
         <div className="size-10 animate-pulse rounded-xl bg-bg-hover/70" />
         <div className="h-3 w-24 animate-pulse rounded bg-bg-hover/70" />
         <div className="h-9 w-20 animate-pulse rounded-lg bg-bg-hover/80" />
@@ -237,7 +196,7 @@ export function AnalyticsSummaryCards({
     return (
       <div className={cn("grid gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-4", className)}>
         {cards.map((card) => (
-          <CardSkeleton key={card.id} accent={card.accent} />
+          <CardSkeleton key={card.id} />
         ))}
       </div>
     );
@@ -247,59 +206,17 @@ export function AnalyticsSummaryCards({
     <div className={cn("grid gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-4", className)}>
       {cards.map((card) => {
         const Icon = card.icon;
-        const cardStyle = {
-          boxShadow: `
-            inset 1px 1px 0 color-mix(in srgb, var(--text-on-brand) 16%, transparent),
-            inset -1px -1px 0 color-mix(in srgb, ${card.accent} 8%, transparent),
-            0 0 0 1px color-mix(in srgb, ${card.accent} 14%, transparent),
-            0 18px 42px color-mix(in srgb, ${card.accent} 12%, transparent)
-          `,
-        } as CSSProperties;
 
         return (
           <div
             key={card.id}
             className={cn(
-              "group relative isolate flex min-h-48 flex-col overflow-hidden rounded-3xl",
-              "border border-border/60 dark:border-text-primary/12",
-              "bg-bg-card/28 backdrop-blur-2xl backdrop-saturate-150",
-              "pt-4 sm:pt-5",
-              "transition-[transform,box-shadow] duration-200",
-              !reduceMotion && "hover:-translate-y-0.5",
+              elevatedCardSurfaceClass,
+              "flex min-h-48 flex-col overflow-hidden rounded-2xl pt-4 sm:pt-5",
             )}
-            style={cardStyle}
           >
-            <div
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background: `
-                  linear-gradient(
-                    145deg,
-                    color-mix(in srgb, ${card.accent} 10%, transparent),
-                    transparent 42%
-                  ),
-                  linear-gradient(
-                    180deg,
-                    color-mix(in srgb, var(--bg-card-elevated) 38%, transparent),
-                    color-mix(in srgb, var(--bg-card) 18%, transparent)
-                  )
-                `,
-              }}
-              aria-hidden
-            />
-
-            <DotGrid accent={card.accent} />
-
-            <div className="relative z-10 flex flex-col gap-4 px-4 sm:px-5">
-              <span
-                className="inline-flex size-10 items-center justify-center rounded-xl border backdrop-blur-md"
-                style={{
-                  color: card.accent,
-                  borderColor: `color-mix(in srgb, ${card.accent} 28%, transparent)`,
-                  background: `color-mix(in srgb, ${card.accent} 16%, transparent)`,
-                  boxShadow: `0 0 18px color-mix(in srgb, ${card.accent} 28%, transparent)`,
-                }}
-              >
+            <div className="flex flex-col gap-4 px-4 sm:px-5">
+              <span className={metricIconWellClass} style={{ color: card.accent }}>
                 <Icon className="size-5" aria-hidden />
               </span>
 
@@ -311,7 +228,7 @@ export function AnalyticsSummaryCards({
               </div>
             </div>
 
-            <div className="relative z-0 mt-auto h-12 w-full shrink-0 px-2 pb-1 pt-0">
+            <div className="mt-auto h-12 w-full shrink-0 px-2 pb-1 pt-0">
               <TrendSparkline
                 id={card.id}
                 accent={card.accent}

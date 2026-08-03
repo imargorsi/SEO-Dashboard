@@ -52,7 +52,7 @@ export function ProjectCreateForm({
 
   return (
     <form className="space-y-5" onSubmit={onSubmit} noValidate>
-      <section className={cn(elevatedCardSurfaceClass, "rounded-2xl p-6 shadow-(--shadow) sm:p-8")}>
+      <section className={cn(elevatedCardSurfaceClass, "rounded-2xl p-6 sm:p-8")}>
         <div className="space-y-6">
           <ProjectCreateStepper labels={stepLabels} current={currentStep} />
           <ProjectCreateStepContent hook={hook} />

@@ -14,11 +14,11 @@ export const authFormCardSurfaceClass = cn(
 );
 
 /**
- * Auth field controls — translucent theme surfaces (not opaque `--bg-input` slabs).
- * Matches active pack light/dark tokens over the glass card + video.
+ * Auth field controls — same glass input language as dashboard fields.
+ * Extra blur helps over the video backdrop.
  */
 export const authFieldControlClass =
-  "border-border/55 bg-bg-main/50 shadow-none backdrop-blur-md backdrop-saturate-150 dark:border-text-primary/25 dark:bg-text-primary/[0.07]";
+  "border-border/55 bg-bg-input shadow-none backdrop-blur-md backdrop-saturate-150 dark:border-text-primary/25";
 
 /** Hero copy sits on the video — stay light regardless of page theme. */
 export const authHeroCopyClass = "text-(--auth-hero-fg)";

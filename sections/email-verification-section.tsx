@@ -37,7 +37,7 @@ export function EmailVerificationSection() {
           <Paragraph className="text-text-muted">{t("description")}</Paragraph>
         </div>
 
-        <section className={cn(elevatedCardSurfaceClass, "rounded-2xl p-6 shadow-(--shadow)")}>
+        <section className={cn(elevatedCardSurfaceClass, "rounded-2xl p-6")}>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
               <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-bg-hover">

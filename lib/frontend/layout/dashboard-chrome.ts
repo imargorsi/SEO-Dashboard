@@ -11,6 +11,13 @@ export const dashboardNavIconClass =
 export const toolbarFilterShellClass =
   "inline-flex max-w-full flex-wrap items-center gap-1.5 rounded-full border border-border/60 bg-bg-card/40 p-2 shadow-sm backdrop-blur-md backdrop-saturate-150 dark:border-text-primary/40 dark:bg-text-primary/10";
 
+/**
+ * Frosted panel fill — same glass as filter shells / tables
+ * (visible outline, translucent fill, light shadow — no elevated dark halo).
+ */
+export const glassPanelSurfaceClass =
+  "border border-border/60 bg-bg-card/40 text-text-primary shadow-sm backdrop-blur-md backdrop-saturate-150 dark:border-text-primary/40 dark:bg-text-primary/10";
+
 /** Single glassy control (search, sort trigger) — same surface language as filter chip shells. */
 export const toolbarFilterControlClass =
   "box-border h-11 rounded-full border border-border/60 bg-bg-card/40 shadow-sm backdrop-blur-md backdrop-saturate-150 transition-[border-color,background-color] duration-200 dark:border-text-primary/40 dark:bg-text-primary/10";
@@ -26,6 +33,10 @@ export const detailIconWellClass =
 /** Empty-state icon well — larger glass disc, same surface language as detail wells. */
 export const emptyStateIconWellClass =
   "inline-flex size-14 shrink-0 items-center justify-center rounded-full border border-border/60 bg-bg-card/40 text-brand shadow-sm backdrop-blur-md backdrop-saturate-150 dark:border-text-primary/40 dark:bg-text-primary/14 dark:text-text-primary";
+
+/** Metric / summary card icon well — light nested frost (no opaque card fill). */
+export const metricIconWellClass =
+  "inline-flex size-10 shrink-0 items-center justify-center rounded-xl border border-text-primary/12 bg-text-primary/[0.04] shadow-none backdrop-blur-md backdrop-saturate-150 dark:border-text-primary/18 dark:bg-text-primary/[0.06]";
 
 /** Empty-state content shell — centered stack; glass lives on the icon well only. */
 export const emptyStateShellClass =
@@ -62,9 +73,19 @@ export const tableGlassChipClass =
 export const tablePaginationIconActionClass =
   "size-7 min-w-7 rounded-full border border-border/60 bg-transparent p-0 type-caption text-text-secondary shadow-none transition-[border-color,background-color,color] duration-200 hover:border-accent-border hover:bg-bg-hover/50 hover:text-text-primary disabled:opacity-40 dark:border-text-primary/25 dark:hover:border-text-primary/40 dark:hover:bg-text-primary/10";
 
-/** Elevated card/panel — frosted glass (project cards, analytics, settings panels). */
-export const elevatedCardSurfaceClass =
-  "border border-border/55 bg-bg-card/40 text-text-primary shadow-(--shadow-elevated) backdrop-blur-xl backdrop-saturate-150 transition-[border-color,box-shadow] duration-200 hover:border-accent-border/50 dark:border-text-primary/18 dark:bg-text-primary/[0.06]";
+/**
+ * Dashboard panel / card surface — same transparent chrome as filters + tables
+ * (`glassPanelSurfaceClass`) with a light hover outline. Prefer this for create,
+ * settings, analytics, and project panels so outlines stay visible.
+ */
+export const elevatedCardSurfaceClass = `${glassPanelSurfaceClass} transition-[border-color,box-shadow] duration-200 hover:border-accent-border/50`;
+
+/**
+ * Menus / floating overlays — opaque `--popover` (not translucent `--bg-card`).
+ * Use theme shadow tokens only (no hardcoded rgba in components).
+ */
+export const popoverSurfaceClass =
+  "border border-border bg-popover text-popover-foreground shadow-(--shadow) dark:border-text-primary/40";
 
 /** Analytics module panels — shared radius + breathing room. */
 export const analyticsPanelClass = "rounded-3xl p-5 sm:p-6";

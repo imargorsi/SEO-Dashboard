@@ -17,6 +17,7 @@ import {
   type TDateRange,
   type TDateRangePresetId,
 } from "@/lib/frontend/seo-activities/date-range.utils";
+import { popoverSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
 type TSeoActivityDateRangeFilterProps = {
@@ -199,7 +200,7 @@ export function SeoActivityDateRangeFilter({
             role="dialog"
             aria-label={t("ariaLabel")}
             style={{ top: position.top, left: position.left, width: position.width }}
-            className="fixed z-50 overflow-hidden rounded-2xl border border-border bg-bg-card shadow-lg"
+            className={cn("fixed z-50 overflow-hidden rounded-2xl", popoverSurfaceClass)}
           >
             <div className="grid sm:grid-cols-[9rem_1fr]">
               <aside className="border-b border-border p-2 sm:border-b-0 sm:border-e">

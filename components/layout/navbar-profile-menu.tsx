@@ -12,6 +12,7 @@ import { useAuthUserQuery, useLogoutMutation, useResendEmailVerificationMutation
 import { ApiError } from "@/lib/frontend/api/errors";
 import { notify } from "@/lib/frontend/feedback/notify";
 import { getStatusTextClassName } from "@/lib/frontend/theme/status-colors";
+import { popoverSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
 const menuItemClass =
@@ -143,7 +144,8 @@ export function NavbarProfileMenu({ placement = "topbar", isCollapsed = false }:
       {open ? (
         <div
           className={cn(
-            "absolute z-50 overflow-hidden rounded-xl border border-border bg-bg-card shadow-(--shadow)",
+            "absolute z-50 overflow-hidden rounded-xl",
+            popoverSurfaceClass,
             isSidebarPlacement ? "inset-x-0 bottom-full mb-2 w-full" : "inset-e-0 top-full mt-3 w-60",
             isSidebarCollapsed && "md:inset-x-auto md:inset-s-0 md:w-60"
           )}

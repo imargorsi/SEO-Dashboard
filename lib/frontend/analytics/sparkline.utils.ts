@@ -1,7 +1,7 @@
 export type TSparklinePaths = {
   line: string;
   area: string;
-  /** Last point — for the glowing trend pointer. */
+  /** Last point — end marker on the trend sparkline. */
   end: { x: number; y: number };
 };
 

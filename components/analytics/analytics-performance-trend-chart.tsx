@@ -200,8 +200,7 @@ export function AnalyticsPerformanceTrendChart({
                   y2="0"
                 >
                   <stop offset="0%" stopColor="var(--color-secondary)" />
-                  <stop offset="50%" stopColor="var(--gradient-mid)" />
-                  <stop offset="100%" stopColor="var(--color-brand-primary)" />
+                  <stop offset="100%" stopColor="var(--color-secondary)" />
                 </linearGradient>
                 <linearGradient
                   id={`trend-fill-${gradientId}`}
@@ -212,12 +211,12 @@ export function AnalyticsPerformanceTrendChart({
                 >
                   <stop
                     offset="0%"
-                    stopColor="var(--color-brand-primary)"
-                    stopOpacity={0.28}
+                    stopColor="var(--color-secondary)"
+                    stopOpacity={0.18}
                   />
                   <stop
                     offset="100%"
-                    stopColor="var(--color-brand-primary)"
+                    stopColor="var(--color-secondary)"
                     stopOpacity={0}
                   />
                 </linearGradient>

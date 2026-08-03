@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { popoverSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
 type DropdownMenuContextValue = {
@@ -102,9 +103,10 @@ function DropdownMenuContent({
       role="menu"
       data-slot="dropdown-menu-content"
       className={cn(
-        // Gap between items is baked in so hover pills never sit flush (works for nested scroll wrappers too).
-        "absolute top-full z-50 mt-1.5 min-w-[10rem] overflow-hidden rounded-xl border border-border/50 bg-bg-card p-1.5 text-text-primary shadow-(--shadow-elevated)",
-        "[&_[role=menuitem]+[role=menuitem]]:mt-1.5",
+        // Opaque popover — glass packs keep --bg-card translucent; menus must stay readable.
+        "absolute top-full z-50 mt-1.5 min-w-[10rem] overflow-hidden rounded-xl p-1.5",
+        popoverSurfaceClass,
+        "[&_[role=menuitem]+[role=menuitem]]:mt-1",
         align === "end" ? "end-0" : "start-0",
         className
       )}

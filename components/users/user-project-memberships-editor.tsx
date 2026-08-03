@@ -241,7 +241,7 @@ export function UserProjectMembershipsEditor({
 
       <div
         className={cn(
-          "relative grid gap-3 rounded-3xl border border-border/40 bg-bg-card/35 p-4 shadow-sm backdrop-blur-md sm:grid-cols-[1fr_1fr_auto] sm:items-end",
+          "relative grid gap-3 rounded-3xl border border-border/55 bg-transparent p-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end dark:border-text-primary/25",
           (openSelectKey === "draft-project" || openSelectKey === "draft-role") && "z-30",
         )}
       >

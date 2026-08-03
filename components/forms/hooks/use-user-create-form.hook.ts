@@ -24,12 +24,14 @@ const DEFAULT_VALUES: TUserCreateFormValues = {
   password_confirmation: "",
 };
 
+const EMPTY_PROJECTS: TAdminUserProjectAssignment[] = [];
+
 export function useUserCreateForm({
   isEdit = false,
   userId,
   initialValues,
   initialProfileImageUrl = null,
-  initialProjects = [],
+  initialProjects = EMPTY_PROJECTS,
 }: TUserFormProps = {}) {
   const router = useRouter();
   const { t } = useTranslation("translation", { keyPrefix: "modules.users.createForm" });
@@ -37,7 +39,7 @@ export function useUserCreateForm({
   const updateMutation = useUpdateUserMutation();
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [profilePreviewUrl, setProfilePreviewUrl] = useState<string | null>(initialProfileImageUrl);
-  const [assignments, setAssignments] = useState<TAdminUserProjectAssignment[]>(initialProjects);
+  const [assignments, setAssignments] = useState<TAdminUserProjectAssignment[]>(() => initialProjects);
   const [stagedMemberships, setStagedMemberships] = useState<TStagedMembership[]>([]);
   const [isApplyingMemberships, setIsApplyingMemberships] = useState(false);
 

@@ -28,10 +28,10 @@ type TCreateActionButtonAsButton = TCreateActionButtonBase & {
 export type TCreateActionButtonProps = TCreateActionButtonAsLink | TCreateActionButtonAsButton;
 
 const createActionSurfaceClass = cn(
-  "create-action-btn group relative inline-flex h-10 shrink-0 items-center justify-center gap-2 overflow-hidden",
+  "group relative inline-flex h-10 shrink-0 items-center justify-center gap-2",
   "rounded-full px-4 type-label font-semibold tracking-tight text-text-on-brand",
-  "bg-brand hover:bg-brand/90",
-  "transition-[transform,background-color,box-shadow] duration-200 ease-out",
+  "bg-brand shadow-xs hover:bg-brand/90",
+  "transition-[transform,background-color] duration-200 ease-out",
   "active:scale-[0.985]",
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-border)] focus-visible:ring-offset-2 focus-visible:ring-offset-bg-main",
   "disabled:pointer-events-none disabled:opacity-55",

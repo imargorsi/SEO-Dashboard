@@ -8,6 +8,7 @@ import {
   analyticsHeadingStackClass,
   analyticsPanelClass,
   elevatedCardSurfaceClass,
+  tableGlassChipClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
@@ -67,30 +68,22 @@ export function RoleFormFields({ hook }: TRoleFormFieldsProps) {
             <p className="type-caption text-text-muted">{t("permsLead")}</p>
           </div>
           {!isCatalogLoading && !isCatalogError ? (
-            <span className="inline-flex items-center rounded-full border border-border/50 bg-bg-card/40 px-3 py-1 type-caption tabular-nums text-text-secondary shadow-sm backdrop-blur-md">
+            <span className={cn(tableGlassChipClass, "type-caption text-text-secondary")}>
               {t("permsCount", { selected: permissions.length, total: totalPermissions })}
             </span>
           ) : null}
         </div>
 
         {isCatalogLoading ? (
-          <div
-            className={cn(
-              "grid min-h-80 gap-0 overflow-hidden rounded-3xl border border-border/40",
-              "bg-bg-card/45 shadow-(--shadow-elevated) backdrop-blur-md",
-              "lg:grid-cols-[240px_1fr]",
-            )}
-            role="status"
-            aria-live="polite"
-            aria-busy="true"
-          >
+          <div className="grid min-h-80 gap-4 lg:grid-cols-[240px_1fr]" role="status" aria-live="polite" aria-busy="true">
             <span className="sr-only">{t("permsLoading")}</span>
-            <aside className="space-y-2 border-b border-border/50 p-3 lg:border-b-0 lg:border-e lg:border-border/40">
+            <aside className={cn(elevatedCardSurfaceClass, "flex flex-col gap-2 rounded-xl p-3.5")}>
+              <Skeleton className="mb-1 h-5 w-24 rounded-md" />
               {Array.from({ length: 6 }).map((_, index) => (
-                <Skeleton key={index} className="h-11 w-full rounded-xl" />
+                <Skeleton key={index} className="h-10 w-full rounded-2xl" />
               ))}
             </aside>
-            <div className="space-y-4 p-5">
+            <div className={cn(elevatedCardSurfaceClass, "space-y-4 rounded-xl p-4")}>
               <Skeleton className="h-5 w-40" />
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {Array.from({ length: 4 }).map((_, index) => (
@@ -100,11 +93,11 @@ export function RoleFormFields({ hook }: TRoleFormFieldsProps) {
             </div>
           </div>
         ) : isCatalogError ? (
-          <p className="rounded-3xl border border-destructive/30 bg-destructive/5 px-4 py-5 type-body text-destructive">
+          <p className="rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-5 type-body text-destructive">
             {t("permsLoadErrorBody")}
           </p>
         ) : modules.length === 0 ? (
-          <p className="rounded-3xl border border-border/40 bg-bg-card/45 px-4 py-5 type-body text-text-muted">
+          <p className={cn(elevatedCardSurfaceClass, "rounded-xl px-4 py-5 type-body text-text-muted")}>
             {t("permsEmpty")}
           </p>
         ) : (

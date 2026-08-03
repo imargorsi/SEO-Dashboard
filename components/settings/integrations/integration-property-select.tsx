@@ -49,12 +49,7 @@ export function IntegrationPropertySelect({
         <span className="min-w-0 truncate">{selected?.name ?? placeholder}</span>
         <SelectDropdownArrowIcon className="shrink-0 text-brand" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        className={cn(
-          "top-full mt-2 w-full min-w-full rounded-xl border border-brand/45",
-          "bg-bg-card p-1.5 shadow-(--shadow-elevated)",
-        )}
-      >
+      <DropdownMenuContent className="top-full mt-2 w-full min-w-full border-brand/45">
         <div className="themed-scrollbar max-h-45 overflow-y-auto">
           <DropdownMenuItem
             onSelect={() => onChange("")}

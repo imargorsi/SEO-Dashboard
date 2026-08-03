@@ -86,7 +86,7 @@ export function IntegrationServiceCard({
       className={cn(
         elevatedCardSurfaceClass,
         analyticsPanelClass,
-        "h-full border-border/40 bg-bg-card/40",
+        "h-full",
         selectOpen && "relative z-30",
       )}
     >
@@ -94,7 +94,7 @@ export function IntegrationServiceCard({
         <div className={analyticsHeadingStackClass}>
           <div className="flex flex-wrap items-center gap-2.5">
             <span
-              className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-border/50 bg-bg-card/60 text-text-primary shadow-sm"
+              className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-border/60 bg-transparent text-text-primary dark:border-text-primary/40"
               aria-hidden
             >
               <ServiceIcon className="size-5" />

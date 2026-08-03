@@ -7,6 +7,7 @@ import { ImageUploadAvatar } from "@/components/ui/image-upload-avatar";
 import {
   analyticsPanelClass,
   elevatedCardSurfaceClass,
+  glassPanelSurfaceClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
@@ -101,11 +102,7 @@ export function UserCreateFields({ hook }: UserCreateFieldsProps) {
         </div>
       </section>
 
-      <section
-        className={cn(
-          "rounded-3xl border border-border/40 bg-bg-card/45 p-5 shadow-(--shadow-elevated) backdrop-blur-md sm:p-6",
-        )}
-      >
+      <section className={cn(glassPanelSurfaceClass, "rounded-3xl p-5 sm:p-6")}>
         <UserProjectMembershipsEditor
           userId={isEdit ? userId : undefined}
           assignments={assignments}

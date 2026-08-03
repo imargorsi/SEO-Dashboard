@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { TSettingsCategory, TSettingsCategoryId } from "@/lib/frontend/settings/categories";
+import { elevatedCardSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
 type TSettingsCategoriesLayoutProps = {
@@ -12,8 +13,7 @@ type TSettingsCategoriesLayoutProps = {
   renderPanel: (categoryId: TSettingsCategoryId) => ReactNode;
 };
 
-const panelHeaderClass =
-  "flex h-14 items-center border-b border-border/50 px-4 sm:px-5";
+const panelHeaderClass = "flex h-12 items-center px-1";
 
 export function SettingsCategoriesLayout({
   categories,
@@ -32,20 +32,14 @@ export function SettingsCategoriesLayout({
   if (!activeCategory) return null;
 
   return (
-    <div
-      className={cn(
-        "grid min-h-112 gap-0 overflow-visible rounded-3xl border border-border/40",
-        "bg-bg-card/45 shadow-(--shadow-elevated) backdrop-blur-md",
-        "lg:grid-cols-[240px_1fr]",
-      )}
-    >
-      <aside className="border-b border-border/50 bg-bg-card/25 lg:border-b-0 lg:border-e lg:border-border/40">
+    <div className="grid min-h-112 gap-4 lg:grid-cols-[240px_1fr]">
+      <aside className={cn(elevatedCardSurfaceClass, "flex flex-col overflow-hidden rounded-xl p-3 sm:p-3.5")}>
         <div className={panelHeaderClass}>
           <h2 className="type-title text-text-primary">{t("categoriesHeading")}</h2>
         </div>
 
         <nav
-          className="flex gap-1.5 overflow-x-auto p-3 lg:flex-col lg:overflow-visible"
+          className="flex gap-2 overflow-x-auto pt-1 lg:flex-col lg:overflow-visible"
           aria-label={t("categoriesHeading")}
         >
           {categories.map((category) => {
@@ -59,13 +53,13 @@ export function SettingsCategoriesLayout({
                 onClick={() => setSelectedCategoryId(category.id)}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
-                  "flex shrink-0 items-center gap-2.5 rounded-xl border px-3 py-2.5 text-start type-body-strong transition-colors lg:w-full lg:shrink",
+                  "flex shrink-0 items-center gap-2.5 rounded-2xl px-3 py-2.5 text-start type-body-strong transition-colors lg:w-full lg:shrink",
                   isActive
-                    ? "border-border/50 bg-bg-selected text-text-primary shadow-sm"
-                    : "border-transparent text-text-secondary hover:border-border/40 hover:bg-bg-hover/60 hover:text-text-primary",
+                    ? "bg-bg-selected text-text-primary"
+                    : "text-text-secondary hover:bg-bg-hover/60 hover:text-text-primary",
                 )}
               >
-                <Icon className="size-4 shrink-0" aria-hidden />
+                <Icon className="size-4 shrink-0 text-text-muted" aria-hidden />
                 <span className="truncate">{t(`categories.${category.labelKey}`)}</span>
               </button>
             );
@@ -73,13 +67,13 @@ export function SettingsCategoriesLayout({
         </nav>
       </aside>
 
-      <div className="min-w-0 overflow-visible">
+      <div className={cn(elevatedCardSurfaceClass, "min-w-0 overflow-visible rounded-xl p-3 sm:p-4")}>
         <div className={panelHeaderClass}>
           <h2 className="type-title text-text-primary">
             {t(`categories.${activeCategory.labelKey}`)}
           </h2>
         </div>
-        <div className="overflow-visible p-5 sm:p-6">{renderPanel(activeCategory.id)}</div>
+        <div className="overflow-visible px-1 pt-3 sm:px-2">{renderPanel(activeCategory.id)}</div>
       </div>
     </div>
   );

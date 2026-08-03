@@ -176,7 +176,7 @@ function SelectField({
           <span className="min-w-0 truncate">{displayLabel}</span>
           <SelectDropdownArrowIcon className="shrink-0 text-text-muted" />
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="top-full mt-2 w-full min-w-full rounded-xl border border-border/50 bg-bg-card p-1.5 shadow-(--shadow-elevated)">
+        <DropdownMenuContent className="top-full mt-2 w-full min-w-full">
           {selectableOptions.length === 0 ? (
             <p className="px-2.5 py-3 text-center type-caption text-text-muted">{placeholder}</p>
           ) : (
@@ -240,10 +240,10 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
 
   const showError = Boolean(error);
   const baseClasses =
-    "type-body w-full rounded-xl border bg-bg-input px-3 py-2.5 text-text-primary outline-none transition placeholder:text-text-placeholder focus:border-[var(--accent-border)] focus:ring-2 focus:ring-brand/25 disabled:cursor-not-allowed disabled:opacity-60 disabled:text-text-disabled read-only:cursor-default read-only:opacity-80";
+    "type-body w-full rounded-xl border border-border/60 bg-bg-input px-3 py-2.5 text-text-primary shadow-none outline-none backdrop-blur-md backdrop-saturate-150 transition placeholder:text-text-placeholder focus:border-[var(--accent-border)] focus:ring-2 focus:ring-brand/25 disabled:cursor-not-allowed disabled:opacity-60 disabled:text-text-disabled read-only:cursor-default read-only:opacity-80 dark:border-text-primary/25";
   const borderClass = showError
     ? "border-[color-mix(in_srgb,var(--destructive)_68%,transparent)]"
-    : "border-border";
+    : "";
 
   const handleBlur = (e: FocusEvent<ControlElement>) => {
     onBlur?.(e);
@@ -307,7 +307,7 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
         <div
           onClick={() => chipInputRef.current?.focus()}
           className={cn(
-            "flex w-full flex-wrap items-center gap-1.5 rounded-xl border bg-bg-input px-2 py-1.5 transition focus-within:border-[var(--accent-border)] focus-within:ring-2 focus-within:ring-brand/25",
+            "flex w-full flex-wrap items-center gap-1.5 rounded-xl border border-border/60 bg-bg-input px-2 py-1.5 shadow-none backdrop-blur-md backdrop-saturate-150 transition focus-within:border-[var(--accent-border)] focus-within:ring-2 focus-within:ring-brand/25 dark:border-text-primary/25",
             borderClass,
             controlClassNameProp,
             disabled && "cursor-not-allowed opacity-60",

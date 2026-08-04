@@ -4,8 +4,9 @@ import * as React from "react";
 import { createPortal } from "react-dom";
 
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { dialogSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { overlayStrongClass } from "@/lib/frontend/theme/chrome-tones";
+import { cn } from "@/lib/utils";
 
 type AlertDialogContextValue = {
   open: boolean;
@@ -86,7 +87,8 @@ function AlertDialogContent({
         aria-modal="true"
         data-slot="alert-dialog-content"
         className={cn(
-          "fixed top-1/2 left-1/2 z-50 grid w-[min(100%-1.5rem,26rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl border border-border bg-bg-card p-6 text-text-primary shadow-(--shadow) outline-none",
+          "fixed top-1/2 left-1/2 z-50 grid w-[min(100%-1.5rem,26rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl p-6 outline-none",
+          dialogSurfaceClass,
           className
         )}
       >

@@ -7,6 +7,7 @@ import { IoClose } from "react-icons/io5";
 
 import { AnalyticsGscRankingsTable } from "@/components/analytics/analytics-gsc-rankings-table";
 import { useAnalyticsDimensionsQuery } from "@/features/analytics/analytics.api";
+import { dialogSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { overlayClass } from "@/lib/frontend/theme/chrome-tones";
 import { cn } from "@/lib/utils";
 
@@ -89,7 +90,10 @@ export function AnalyticsGscRankingsModal({
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={descriptionId}
-        className="relative z-10 flex max-h-[min(92vh,44rem)] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-border/60 bg-bg-card shadow-(--shadow)"
+        className={cn(
+          "relative z-10 flex max-h-[min(92vh,44rem)] w-full max-w-4xl flex-col overflow-hidden rounded-2xl",
+          dialogSurfaceClass,
+        )}
       >
         <header className="relative flex shrink-0 flex-col gap-1.5 border-b border-border px-5 pb-4 pt-5 pe-14 sm:px-6">
           <button

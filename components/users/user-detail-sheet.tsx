@@ -33,7 +33,7 @@ export function UserDetailSheet({ user, open, onOpenChange }: UserDetailSheetPro
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="right"
-        className="w-[min(100%,28rem)] border-border/60 bg-bg-card/85 shadow-(--shadow-elevated) backdrop-blur-xl sm:max-w-lg dark:border-text-primary/20 dark:bg-bg-card/90"
+        className="w-[min(100%,28rem)] shadow-(--shadow-elevated) sm:max-w-lg"
       >
         <SheetHeader className="border-border/50 bg-transparent dark:border-text-primary/12">
           <SheetTitle>{t("title")}</SheetTitle>

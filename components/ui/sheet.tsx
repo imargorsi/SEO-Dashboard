@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { IoClose } from "react-icons/io5";
 
 import { cn } from "@/lib/utils";
+import { dialogSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { SHEET_TRANSITION_MS } from "@/lib/frontend/layout/sheet.constants";
 import { overlayClass, surfacePanelHeaderClass } from "@/lib/frontend/theme/chrome-tones";
 
@@ -114,7 +115,8 @@ function SheetContent({
         role="dialog"
         aria-modal="true"
         className={cn(
-          "fixed z-50 flex h-full w-[min(100%,24rem)] flex-col gap-0 border-border bg-bg-card shadow-(--shadow) sm:max-w-md",
+          "fixed z-50 flex h-full w-[min(100%,24rem)] flex-col gap-0 sm:max-w-md",
+          dialogSurfaceClass,
           "transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform",
           sideClass,
           isVisible ? "translate-x-0" : hiddenTransform,

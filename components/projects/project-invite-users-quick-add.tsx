@@ -10,6 +10,7 @@ import { useProjectInviteUsers } from "@/components/forms/hooks/use-project-invi
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { useProjectQuery } from "@/features/projects/projects.api";
+import { dialogSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { overlayClass } from "@/lib/frontend/theme/chrome-tones";
 import { cn } from "@/lib/utils";
 
@@ -52,7 +53,10 @@ function ProjectInviteUsersQuickAddBody({
       aria-modal="true"
       aria-labelledby={titleId}
       aria-describedby={descriptionId}
-      className="relative z-10 flex max-h-[min(92vh,40rem)] w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-border bg-bg-card shadow-(--shadow)"
+      className={cn(
+        "relative z-10 flex max-h-[min(92vh,40rem)] w-full max-w-lg flex-col overflow-hidden rounded-3xl",
+        dialogSurfaceClass,
+      )}
     >
       <header className="relative shrink-0 border-b border-border px-6 pb-5 pt-6">
         <button

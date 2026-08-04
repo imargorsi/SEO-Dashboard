@@ -90,9 +90,13 @@ export const elevatedCardSurfaceClass = `${glassPanelSurfaceClass} transition-[b
 /**
  * Menus / floating overlays — opaque `--popover` (not translucent `--bg-card`).
  * Use theme shadow tokens only (no hardcoded rgba in components).
+ * Glass Aurora dark `--bg-card` includes alpha; popovers/dialogs must stay opaque.
  */
 export const popoverSurfaceClass =
   "border border-border bg-popover text-popover-foreground shadow-(--shadow) dark:border-text-primary/40";
+
+/** Centered modals / alert dialogs — same opaque surface as menus. */
+export const dialogSurfaceClass = popoverSurfaceClass;
 
 /** Analytics module panels — shared radius + breathing room. */
 export const analyticsPanelClass = "rounded-3xl p-5 sm:p-6";

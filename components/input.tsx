@@ -110,6 +110,7 @@ type SelectFieldProps = {
   onBlur?: (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   onOpenChange?: (open: boolean) => void;
   setControlRef: (node: ControlElement | null) => void;
+  "aria-label"?: string;
 };
 
 function SelectField({
@@ -126,6 +127,7 @@ function SelectField({
   onBlur,
   onOpenChange,
   setControlRef,
+  "aria-label": ariaLabel,
 }: SelectFieldProps) {
   const isControlled = value !== undefined;
   const [uncontrolledValue, setUncontrolledValue] = useState("");
@@ -165,6 +167,7 @@ function SelectField({
         <DropdownMenuTrigger
           id={`${id}-trigger`}
           disabled={disabled}
+          aria-label={ariaLabel}
           aria-invalid={showError}
           aria-describedby={showError ? `${id}-error` : undefined}
           className={cn(
@@ -228,6 +231,7 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
     onSelectOpenChange,
     onChange,
     onBlur,
+    "aria-label": ariaLabel,
     ref: registerRef,
     ...rest
   } = props as ReusableInputProps & { ref?: Ref<ControlElement> };
@@ -389,6 +393,7 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
           onBlur={onBlur}
           onOpenChange={onSelectOpenChange}
           setControlRef={setControlRef}
+          aria-label={ariaLabel ?? (label ? undefined : placeholder)}
         />
       ) : (
         <div className={cn(isPassword && "relative")}>

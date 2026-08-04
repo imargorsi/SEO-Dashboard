@@ -16,6 +16,7 @@ import {
   type TSeoActivityQuickAddValues,
 } from "@/lib/frontend/seo-activities/quick-add.utils";
 import { sanitizeHttpUrl } from "@/lib/frontend/seo-activities/sanitize-url.utils";
+import { dialogSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { overlayClass } from "@/lib/frontend/theme/chrome-tones";
 import type {
   TSeoActivityBacklink,
@@ -128,7 +129,11 @@ export function SeoActivityQuickAdd({
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={descriptionId}
-        className="relative z-10 flex max-h-[min(92vh,40rem)] w-full max-w-lg flex-col overflow-hidden rounded-2xl border-2 border-text-muted/45 bg-bg-card shadow-(--shadow)"
+        className={cn(
+          "relative z-10 flex max-h-[min(92vh,40rem)] w-full max-w-lg flex-col overflow-hidden rounded-2xl",
+          dialogSurfaceClass,
+          "border-2 border-text-muted/45",
+        )}
       >
         <header className="relative flex shrink-0 flex-col gap-4 border-b border-border px-5 pb-5 pt-5 sm:px-6">
           <button

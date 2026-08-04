@@ -261,6 +261,10 @@ export interface Translation {
         roleLabel: string;
         rolePh: string;
         add: string;
+        addTitle: string;
+        addLead: string;
+        save: string;
+        saving: string;
         removeAria: string;
         statusInvited: string;
         assignSuccess: string;
@@ -1486,7 +1490,7 @@ const translation: Translation = {
       },
       memberships: {
         title: "Project Assignments",
-        lead: "Assign This User To Projects With A Project Role. Changes On Edit Save Immediately.",
+        lead: "Assign This User To Projects With A Project Role. Role Changes On Edit Save Immediately.",
         count: "{{count}} Assigned",
         empty: "No Projects Assigned Yet.",
         projectLabel: "Project",
@@ -1494,6 +1498,10 @@ const translation: Translation = {
         roleLabel: "Role",
         rolePh: "Select Role",
         add: "Add",
+        addTitle: "Add Project Assignment",
+        addLead: "Choose A Project And Role For This User.",
+        save: "Save",
+        saving: "Saving",
         removeAria: "Remove {{name}}",
         statusInvited: "Invite Pending",
         assignSuccess: "Project Assignment Saved.",

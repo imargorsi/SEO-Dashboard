@@ -6,7 +6,15 @@ import { IoAddOutline, IoPencilOutline, IoTrashOutline } from "react-icons/io5";
 
 import { Input } from "@/components/input";
 import { ProjectIdentity } from "@/components/projects/project-identity";
-import { AlertDialogCancel } from "@/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { Spinner } from "@/components/ui/spinner";
@@ -75,6 +83,7 @@ export function UserProjectMembershipsEditor({
   const upsertMutation = useUpsertUserMembershipMutation();
   const removeMutation = useRemoveUserMembershipMutation();
 
+  const [isAddOpen, setIsAddOpen] = useState(false);
   const [draftProjectId, setDraftProjectId] = useState("");
   const [draftRoleId, setDraftRoleId] = useState("");
   const [pending, setPending] = useState<TPendingAction>(null);
@@ -111,15 +120,30 @@ export function UserProjectMembershipsEditor({
   );
 
   const isBusy = upsertMutation.isPending || removeMutation.isPending;
-  const canAdd = Boolean(draftProjectId && draftRoleId) && !disabled && !isBusy;
+  const canSaveAdd = Boolean(draftProjectId && draftRoleId) && !disabled && !isBusy;
+
+  function resetAddDraft() {
+    setDraftProjectId("");
+    setDraftRoleId("");
+    setOpenSelectKey(null);
+  }
+
+  function openAddModal() {
+    resetAddDraft();
+    setIsAddOpen(true);
+  }
+
+  function closeAddModal() {
+    setIsAddOpen(false);
+    resetAddDraft();
+  }
 
   async function handleAdd() {
-    if (!canAdd) return;
+    if (!canSaveAdd) return;
 
     if (!userId) {
       onStagedChange?.([...staged, { projectId: draftProjectId, roleId: draftRoleId }]);
-      setDraftProjectId("");
-      setDraftRoleId("");
+      closeAddModal();
       return;
     }
 
@@ -129,9 +153,8 @@ export function UserProjectMembershipsEditor({
         payload: { projectId: draftProjectId, roleId: draftRoleId },
       });
       onAssignmentsChange?.(result.projects);
-      setDraftProjectId("");
-      setDraftRoleId("");
       notify.success(t("assignSuccess"));
+      closeAddModal();
     } catch (error) {
       notify.error(ApiError.messageFrom(error, t("assignError")));
     }
@@ -225,59 +248,35 @@ export function UserProjectMembershipsEditor({
         };
       });
 
+  const isAddSelectOpen =
+    openSelectKey === "draft-project" || openSelectKey === "draft-role";
+
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div className={cn(analyticsHeadingStackClass, "max-w-2xl")}>
-          <h2 className="type-title text-text-primary">{t("title")}</h2>
+          <div className="flex flex-wrap items-center gap-2.5">
+            <h2 className="type-title text-text-primary">{t("title")}</h2>
+            {rows.length > 0 ? (
+              <span className="inline-flex items-center rounded-full border border-border/50 bg-bg-card/40 px-3 py-1 type-caption tabular-nums text-text-secondary shadow-sm backdrop-blur-md">
+                {t("count", { count: rows.length })}
+              </span>
+            ) : null}
+          </div>
           <p className="type-caption text-text-muted">{t("lead")}</p>
         </div>
-        {rows.length > 0 ? (
-          <span className="inline-flex items-center rounded-full border border-border/50 bg-bg-card/40 px-3 py-1 type-caption tabular-nums text-text-secondary shadow-sm backdrop-blur-md">
-            {t("count", { count: rows.length })}
-          </span>
+        {!disabled ? (
+          <Button
+            type="button"
+            variant="outlined"
+            size="md"
+            disabled={isBusy}
+            onClick={openAddModal}
+          >
+            <IoAddOutline className="size-4" aria-hidden />
+            {t("add")}
+          </Button>
         ) : null}
-      </div>
-
-      <div
-        className={cn(
-          "relative grid gap-3 rounded-3xl border border-border/55 bg-transparent p-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end dark:border-text-primary/25",
-          (openSelectKey === "draft-project" || openSelectKey === "draft-role") && "z-30",
-        )}
-      >
-        <Input
-          id="membership-draft-project"
-          type="select"
-          label={t("projectLabel")}
-          placeholder={t("projectPh")}
-          options={projectOptions}
-          value={draftProjectId}
-          disabled={disabled || isBusy || isProjectsLoading}
-          onSelectOpenChange={(open) => setOpenSelectKey(open ? "draft-project" : null)}
-          onChange={(event) => setDraftProjectId(event.target.value)}
-        />
-        <Input
-          id="membership-draft-role"
-          type="select"
-          label={t("roleLabel")}
-          placeholder={t("rolePh")}
-          options={roleOptions}
-          value={draftRoleId}
-          disabled={disabled || isBusy || isRolesLoading}
-          onSelectOpenChange={(open) => setOpenSelectKey(open ? "draft-role" : null)}
-          onChange={(event) => setDraftRoleId(event.target.value)}
-        />
-        <Button
-          type="button"
-          variant="outlined"
-          size="md"
-          disabled={!canAdd}
-          onClick={() => void handleAdd()}
-          className="w-full sm:w-auto"
-        >
-          {isBusy ? <Spinner className="size-4" /> : <IoAddOutline className="size-4" aria-hidden />}
-          {t("add")}
-        </Button>
       </div>
 
       {rows.length === 0 ? (
@@ -295,7 +294,7 @@ export function UserProjectMembershipsEditor({
                 key={row.key}
                 className={cn(
                   elevatedCardSurfaceClass,
-                  "relative flex flex-col gap-4 rounded-3xl p-4 sm:p-5",
+                  "relative flex flex-col gap-3 rounded-2xl p-4",
                   isSelectOpen && "z-30",
                 )}
               >
@@ -305,6 +304,7 @@ export function UserProjectMembershipsEditor({
                     websiteUrl={row.websiteUrl}
                     imageUrl={row.imageUrl}
                     meta={row.statusLabel}
+                    size="md"
                     className="min-w-0 flex-1"
                   />
                   <button
@@ -321,7 +321,7 @@ export function UserProjectMembershipsEditor({
                 <Input
                   id={`membership-role-${row.projectId}`}
                   type="select"
-                  label={t("roleLabel")}
+                  aria-label={t("roleLabel")}
                   options={roleOptions}
                   value={row.roleId}
                   disabled={disabled || isBusy || isRolesLoading}
@@ -338,6 +338,73 @@ export function UserProjectMembershipsEditor({
           })}
         </ul>
       )}
+
+      <AlertDialog
+        open={isAddOpen}
+        onOpenChange={(open) => {
+          if (!open) {
+            if (isBusy) return;
+            closeAddModal();
+            return;
+          }
+          setIsAddOpen(true);
+        }}
+      >
+        <AlertDialogContent
+          className={cn(
+            "w-[min(100%-1.5rem,28rem)] gap-5 rounded-lg border-2 border-text-muted/55 sm:p-7",
+            isAddSelectOpen && "z-60",
+          )}
+          onEscapeKeyDown={(event) => {
+            if (isBusy) event.preventDefault();
+          }}
+        >
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("addTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("addLead")}</AlertDialogDescription>
+          </AlertDialogHeader>
+
+          <div className="grid gap-4">
+            <Input
+              id="membership-draft-project"
+              type="select"
+              label={t("projectLabel")}
+              placeholder={t("projectPh")}
+              options={projectOptions}
+              value={draftProjectId}
+              disabled={disabled || isBusy || isProjectsLoading}
+              onSelectOpenChange={(open) => setOpenSelectKey(open ? "draft-project" : null)}
+              onChange={(event) => setDraftProjectId(event.target.value)}
+            />
+            <Input
+              id="membership-draft-role"
+              type="select"
+              label={t("roleLabel")}
+              placeholder={t("rolePh")}
+              options={roleOptions}
+              value={draftRoleId}
+              disabled={disabled || isBusy || isRolesLoading}
+              onSelectOpenChange={(open) => setOpenSelectKey(open ? "draft-role" : null)}
+              onChange={(event) => setDraftRoleId(event.target.value)}
+            />
+          </div>
+
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isBusy}>{t("confirmCancel")}</AlertDialogCancel>
+            <button
+              type="button"
+              className={cn(buttonVariants({ variant: "gradient", size: "md" }))}
+              disabled={!canSaveAdd}
+              onClick={() => void handleAdd()}
+            >
+              <span className="inline-flex items-center justify-center gap-2">
+                {upsertMutation.isPending ? <Spinner className="size-4 shrink-0" /> : null}
+                {upsertMutation.isPending ? t("saving") : t("save")}
+              </span>
+            </button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <ConfirmDialog
         open={Boolean(pending)}

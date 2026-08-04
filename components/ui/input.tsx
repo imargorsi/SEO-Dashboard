@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { formFieldControlClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
@@ -8,7 +9,8 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
       <input
         type={type}
         className={cn(
-          "flex h-10 w-full rounded-xl border border-border/60 bg-bg-input px-3 py-2 text-sm text-text-primary shadow-none backdrop-blur-md backdrop-saturate-150 transition-[color,box-shadow,border-color] outline-none dark:border-text-primary/25",
+          "flex h-10 w-full rounded-xl bg-transparent px-3 py-2 text-sm text-text-primary outline-none transition-[color,box-shadow,border-color]",
+          formFieldControlClass,
           "placeholder:text-text-placeholder",
           "focus-visible:border-[var(--accent-border)] focus-visible:ring-2 focus-visible:ring-brand/25",
           "disabled:cursor-not-allowed disabled:opacity-50 disabled:text-text-disabled",

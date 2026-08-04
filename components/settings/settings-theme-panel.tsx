@@ -4,6 +4,9 @@ import { useTranslation } from "react-i18next";
 
 import { useFontPack } from "@/components/providers/font-pack-provider";
 import { useThemePack } from "@/components/providers/theme-pack-provider";
+import { useUpdateUserPreferencesMutation } from "@/features/preferences/preferences.api";
+import { ApiError } from "@/lib/frontend/api/errors";
+import { notify } from "@/lib/frontend/feedback/notify";
 import { FONT_PACKS, type TFontPackId } from "@/lib/frontend/theme/font-packs";
 import { THEME_PACKS, type TThemePackId } from "@/lib/frontend/theme/theme-packs";
 import { cn } from "@/lib/utils";
@@ -11,8 +14,31 @@ import { cn } from "@/lib/utils";
 export function SettingsThemePanel() {
   const { t: tTheme } = useTranslation("translation", { keyPrefix: "settings.themePacks" });
   const { t: tFont } = useTranslation("translation", { keyPrefix: "settings.fontPacks" });
-  const { themePack, setThemePack } = useThemePack();
-  const { fontPack, setFontPack } = useFontPack();
+  const { themePack } = useThemePack();
+  const { fontPack } = useFontPack();
+  const updatePreferences = useUpdateUserPreferencesMutation();
+
+  function handleThemeSelect(packId: TThemePackId) {
+    updatePreferences.mutate(
+      { theme_pack: packId },
+      {
+        onError: (error) => {
+          notify.error(ApiError.messageFrom(error, tTheme("saveErrorFallback")));
+        },
+      },
+    );
+  }
+
+  function handleFontSelect(packId: TFontPackId) {
+    updatePreferences.mutate(
+      { font_pack: packId },
+      {
+        onError: (error) => {
+          notify.error(ApiError.messageFrom(error, tFont("saveErrorFallback")));
+        },
+      },
+    );
+  }
 
   return (
     <div className="flex flex-col gap-8">
@@ -34,7 +60,7 @@ export function SettingsThemePanel() {
                 swatches={pack.swatches}
                 isSelected={isSelected}
                 selectedLabel={tTheme("selected")}
-                onSelect={() => setThemePack(pack.id)}
+                onSelect={() => handleThemeSelect(pack.id)}
               />
             );
           })}
@@ -60,7 +86,7 @@ export function SettingsThemePanel() {
                 cssVariable={pack.cssVariable}
                 isSelected={isSelected}
                 selectedLabel={tFont("selected")}
-                onSelect={() => setFontPack(pack.id)}
+                onSelect={() => handleFontSelect(pack.id)}
               />
             );
           })}

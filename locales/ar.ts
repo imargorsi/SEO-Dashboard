@@ -78,8 +78,9 @@ const translation: Translation = {
     },
     themePacks: {
       sectionTitle: "سمة الألوان",
-      lead: "اختر سمة الألوان. يتم حفظ اختيارك في هذا المتصفح.",
+      lead: "اختر سمة الألوان. يتم مزامنة اختيارك مع حسابك.",
       selected: "محدد",
+      saveErrorFallback: "تعذر حفظ تفضيل السمة.",
       default: "الافتراضي",
       defaultDescription: "لوحة ألوان البرتقالي والبنفسجي للاستخدام اليومي.",
       "glass-aurora": "زجاج الشفق",
@@ -91,8 +92,9 @@ const translation: Translation = {
     },
     fontPacks: {
       sectionTitle: "الخط",
-      lead: "اختر خط واجهة لوحة التحكم. يتم حفظ اختيارك في هذا المتصفح.",
+      lead: "اختر خط واجهة لوحة التحكم. يتم مزامنة اختيارك مع حسابك.",
       selected: "محدد",
+      saveErrorFallback: "تعذر حفظ تفضيل الخط.",
       jakarta: "Plus Jakarta Sans",
       jakartaDescription: "الخط الافتراضي الحديث — واضح وودود للاستخدام اليومي.",
       ubuntu: "Ubuntu",
@@ -223,6 +225,8 @@ const translation: Translation = {
       createForm: {
         profileImage: "صورة الملف الشخصي",
         profileImageHint: "JPEG أو PNG أو WebP أو GIF. اختياري.",
+        profileImageUploadLabel: "رفع صورة المستخدم",
+        profileImageChangeLabel: "تغيير صورة المستخدم",
         name: "الاسم الكامل",
         namePh: "أدخل الاسم الكامل",
         email: "البريد الإلكتروني",

@@ -5,6 +5,7 @@ import { baseQuery } from "@/lib/frontend/api/base";
 import { ApiError } from "@/lib/frontend/api/errors";
 import { clearAuthSession, getAccessToken, getStoredAuthUser, persistAuthSession, setStoredAuthUser } from "@/lib/frontend/auth/session";
 import { analyticsKeys } from "@/features/analytics/analytics.api";
+import { preferencesKeys } from "@/features/preferences/preferences.api";
 import {
   normalizeAuthUser,
   type AuthMessageResult,
@@ -144,6 +145,7 @@ export function useLogoutMutation() {
       queryClient.removeQueries({ queryKey: authKeys.all });
       // Drop analytics cache so integration metadata cannot leak across users on a shared browser.
       queryClient.removeQueries({ queryKey: analyticsKeys.all });
+      queryClient.removeQueries({ queryKey: preferencesKeys.all });
     },
   });
 }

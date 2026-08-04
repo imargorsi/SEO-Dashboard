@@ -1,5 +1,6 @@
 "use client";
 
+import { formFieldControlClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 import {
   forwardRef,
@@ -239,8 +240,10 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
   const { t } = useTranslation("translation", { keyPrefix: "form" });
 
   const showError = Boolean(error);
-  const baseClasses =
-    "type-body w-full rounded-xl border border-border/60 bg-bg-input px-3 py-2.5 text-text-primary shadow-none outline-none backdrop-blur-md backdrop-saturate-150 transition placeholder:text-text-placeholder focus:border-[var(--accent-border)] focus:ring-2 focus:ring-brand/25 disabled:cursor-not-allowed disabled:opacity-60 disabled:text-text-disabled read-only:cursor-default read-only:opacity-80 dark:border-text-primary/25";
+  const baseClasses = cn(
+    "type-body w-full rounded-xl bg-transparent px-3 py-2.5 text-text-primary outline-none transition placeholder:text-text-placeholder focus:border-[var(--accent-border)] focus:ring-2 focus:ring-brand/25 disabled:cursor-not-allowed disabled:opacity-60 disabled:text-text-disabled read-only:cursor-default read-only:opacity-80",
+    formFieldControlClass,
+  );
   const borderClass = showError
     ? "border-[color-mix(in_srgb,var(--destructive)_68%,transparent)]"
     : "";
@@ -307,7 +310,8 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
         <div
           onClick={() => chipInputRef.current?.focus()}
           className={cn(
-            "flex w-full flex-wrap items-center gap-1.5 rounded-xl border border-border/60 bg-bg-input px-2 py-1.5 shadow-none backdrop-blur-md backdrop-saturate-150 transition focus-within:border-[var(--accent-border)] focus-within:ring-2 focus-within:ring-brand/25 dark:border-text-primary/25",
+            formFieldControlClass,
+            "flex w-full flex-wrap items-center gap-1.5 rounded-xl bg-transparent px-2 py-1.5 transition focus-within:border-[var(--accent-border)] focus-within:ring-2 focus-within:ring-brand/25",
             borderClass,
             controlClassNameProp,
             disabled && "cursor-not-allowed opacity-60",

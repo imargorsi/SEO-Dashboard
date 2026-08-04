@@ -41,8 +41,9 @@ export function UserCreateFields({ hook }: UserCreateFieldsProps) {
             name={name || t("name")}
             imageUrl={profilePreviewUrl}
             onFilePicked={onProfileImagePicked}
-            label={t("profileImage")}
             hint={t("profileImageHint")}
+            pickLabel={t("profileImageUploadLabel")}
+            changeLabel={t("profileImageChangeLabel")}
             variant="photo"
           />
 

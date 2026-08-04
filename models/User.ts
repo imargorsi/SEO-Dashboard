@@ -11,6 +11,18 @@ const userSchema = new Schema(
     emailVerifiedAt: { type: Date, default: null },
     roles: { type: [String], default: [] },
     status: { type: String, enum: USER_ACCOUNT_STATUSES, required: true, default: "active" },
+    /** UI theme pack slug — see `THEME_PACK_IDS`. */
+    themePack: {
+      type: String,
+      enum: ["default", "glass-aurora", "carbon-ice", "lumen-slate"],
+      default: "default",
+    },
+    /** UI font pack slug — see `FONT_PACK_IDS`. */
+    fontPack: {
+      type: String,
+      enum: ["jakarta", "ubuntu", "nunito", "inter"],
+      default: "jakarta",
+    },
   },
   { timestamps: true },
 );
@@ -55,7 +67,7 @@ function attachUserMethods(model: Model<UserDocument>): void {
 function registerUserModel(): Model<UserDocument> {
   const existing = mongoose.models.User as Model<UserDocument> | undefined;
 
-  if (existing?.schema.path("status")) {
+  if (existing?.schema.path("status") && existing?.schema.path("themePack")) {
     attachUserMethods(existing);
     return existing;
   }

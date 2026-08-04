@@ -9,18 +9,18 @@ export const dashboardNavIconClass =
 
 /** Toolbar filters — glass bar with theme tokens (no hardcoded white). */
 export const toolbarFilterShellClass =
-  "inline-flex max-w-full flex-wrap items-center gap-1.5 rounded-full border border-border/60 bg-bg-card/40 p-2 shadow-sm backdrop-blur-md backdrop-saturate-150 dark:border-text-primary/40 dark:bg-text-primary/10";
+  "inline-flex max-w-full flex-wrap items-center gap-1.5 rounded-full border border-border/50 bg-bg-card/20 p-2 shadow-sm backdrop-blur-md backdrop-saturate-125 dark:border-text-primary/30 dark:bg-text-primary/[0.05]";
 
 /**
  * Frosted panel fill — same glass as filter shells / tables
- * (visible outline, translucent fill, light shadow — no elevated dark halo).
+ * (soft outline, light frost so `--bg-main` stays visible — no milky slabs).
  */
 export const glassPanelSurfaceClass =
-  "border border-border/60 bg-bg-card/40 text-text-primary shadow-sm backdrop-blur-md backdrop-saturate-150 dark:border-text-primary/40 dark:bg-text-primary/10";
+  "border border-border/50 bg-bg-card/20 text-text-primary shadow-sm backdrop-blur-md backdrop-saturate-125 dark:border-text-primary/30 dark:bg-text-primary/[0.05]";
 
 /** Single glassy control (search, sort trigger) — same surface language as filter chip shells. */
 export const toolbarFilterControlClass =
-  "box-border h-11 rounded-full border border-border/60 bg-bg-card/40 shadow-sm backdrop-blur-md backdrop-saturate-150 transition-[border-color,background-color] duration-200 dark:border-text-primary/40 dark:bg-text-primary/10";
+  "box-border h-11 rounded-full border border-border/50 bg-bg-card/20 shadow-sm backdrop-blur-md backdrop-saturate-125 transition-[border-color,background-color] duration-200 dark:border-text-primary/30 dark:bg-text-primary/[0.05]";
 
 /** Smaller chips leave a clearer gap inside the outlined shell. */
 export const toolbarFilterChipClass =
@@ -44,7 +44,14 @@ export const emptyStateShellClass =
 
 /** List table — frosted glass over tinted canvas (no solid white fill). */
 export const tableShellClass =
-  "overflow-hidden rounded-xl border border-border/55 bg-bg-card/35 shadow-sm backdrop-blur-xl backdrop-saturate-150 transition-opacity duration-200 dark:border-text-primary/20 dark:bg-text-primary/[0.04]";
+  "overflow-hidden rounded-xl border border-border/50 bg-bg-card/20 shadow-sm backdrop-blur-xl backdrop-saturate-125 transition-opacity duration-200 dark:border-text-primary/18 dark:bg-text-primary/[0.03]";
+
+/**
+ * Form fields — transparent fill (match canvas/panel) + table-shell outline.
+ * Prefer this over milky `--bg-input` slabs inside glass forms.
+ */
+export const formFieldControlClass =
+  "border border-border/50 bg-transparent shadow-none dark:border-text-primary/18";
 
 export const tableHeaderRowClass =
   "border-border/55 bg-transparent hover:bg-transparent dark:border-text-primary/12";
@@ -144,7 +151,7 @@ export const sidebarNavLinkInactiveClass =
 
 /** Project selector — one shell that expands over sidebar content. */
 export const sidebarProjectSelectorShellClass =
-  "flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-bg-card/40 shadow-sm backdrop-blur-md backdrop-saturate-150 transition-[border-color,background-color,box-shadow,max-height] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] dark:border-text-primary/35 dark:bg-text-primary/10";
+  "flex flex-col overflow-hidden rounded-2xl border border-border/50 bg-bg-card/20 shadow-sm backdrop-blur-md backdrop-saturate-125 transition-[border-color,background-color,box-shadow,max-height] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] dark:border-text-primary/30 dark:bg-text-primary/[0.05]";
 
 export const sidebarProjectSelectorShellOpenClass =
   "border-border/80 bg-bg-card-elevated shadow-(--shadow-elevated) dark:border-text-primary/40 dark:bg-bg-card-elevated";

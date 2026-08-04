@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import SelectDropdownArrowIcon from "@/components/icons/input-select-dropdown-arrow";
+import { formFieldControlClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { COUNTRY_DIAL_CODES, DEFAULT_COUNTRY_DIAL_CODE, type TCountryDialCode } from "@/lib/frontend/phone/country-codes";
 import { cn } from "@/lib/utils";
 
@@ -113,11 +114,13 @@ export function PhoneNumberInput({
     if (matched) setCountry(matched);
   }, [value]);
 
-  const controlClasses =
-    "type-body rounded-xl border bg-bg-input px-3 py-2.5 text-text-primary outline-none transition placeholder:text-text-placeholder focus:border-[var(--accent-border)] focus:ring-2 focus:ring-brand/25";
+  const controlClasses = cn(
+    "type-body rounded-xl bg-transparent px-3 py-2.5 text-text-primary outline-none transition placeholder:text-text-placeholder focus:border-[var(--accent-border)] focus:ring-2 focus:ring-brand/25",
+    formFieldControlClass,
+  );
   const borderClass = showError
     ? "border-[color-mix(in_srgb,var(--destructive)_68%,transparent)]"
-    : "border-border";
+    : "";
 
   function emit(nextCountry: TCountryDialCode, nextNumber: string) {
     onChange(nextNumber ? `${nextCountry.dialCode} ${nextNumber}` : "");

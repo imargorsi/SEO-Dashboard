@@ -37,7 +37,7 @@ html[data-theme="PLACEHOLDER"] {
   --bg-card-elevated: #ffffff;
   --border-elevated: color-mix(in srgb, var(--color-brand-primary) 14%, var(--color-primary) 86%);
   --shadow-elevated: 0 1px 2px rgba(26, 22, 40, 0.04), 0 6px 16px color-mix(in srgb, var(--color-brand-primary) 6%, transparent);
-  --bg-input: color-mix(in srgb, var(--color-contrast) 8%, transparent);
+  --bg-input: transparent;
   --bg-hover: var(--color-primary);
   --bg-selected: color-mix(in srgb, var(--color-secondary) 10%, transparent);
   --bg-divider: color-mix(in srgb, var(--color-contrast) 12%, transparent);
@@ -99,7 +99,7 @@ html.dark[data-theme="PLACEHOLDER"] {
     inset 0 1px 0 rgba(255, 255, 255, 0.04),
     0 1px 2px rgba(0, 0, 0, 0.18),
     0 4px 12px rgba(0, 0, 0, 0.12);
-  --bg-input: color-mix(in srgb, var(--text-primary) 7%, transparent);
+  --bg-input: transparent;
   --bg-hover: color-mix(in srgb, var(--color-primary) 72%, white 28%);
   --bg-selected: color-mix(in srgb, var(--color-secondary) 15%, transparent);
   --bg-divider: rgba(255, 255, 255, 0.06);

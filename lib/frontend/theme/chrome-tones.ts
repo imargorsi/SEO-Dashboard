@@ -12,6 +12,6 @@ export const chromeControlToneClass = {
 export const overlayClass = "bg-(--overlay)";
 export const overlayStrongClass = "bg-(--overlay-strong)";
 export const breadcrumbPageClass =
-  "border-border/60 bg-bg-card/40 shadow-sm backdrop-blur-md backdrop-saturate-150 dark:border-text-primary/40 dark:bg-text-primary/10";
+  "border-border/50 bg-bg-card/20 shadow-sm backdrop-blur-md backdrop-saturate-125 dark:border-text-primary/30 dark:bg-text-primary/[0.05]";
 export const breadcrumbChromeMutedClass = "text-(--text-chrome-muted)";
 export const surfacePanelHeaderClass = "bg-(--surface-panel-header)";

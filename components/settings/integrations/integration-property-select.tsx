@@ -9,6 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { formFieldControlClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
 type TIntegrationPropertySelectProps = {
@@ -38,9 +39,8 @@ export function IntegrationPropertySelect({
         id={id}
         disabled={disabled}
         className={cn(
-          "flex h-10 w-full items-center justify-between gap-2 rounded-xl border border-brand/55",
-          "bg-bg-input px-3 type-body text-start text-text-primary shadow-sm",
-          "outline-none transition-[border-color,box-shadow]",
+          "flex h-10 w-full items-center justify-between gap-2 rounded-xl px-3 type-body text-start text-text-primary outline-none transition-[border-color,box-shadow]",
+          formFieldControlClass,
           "hover:border-brand focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand/25",
           !selected && "text-text-placeholder",
           disabled && "cursor-not-allowed opacity-60",

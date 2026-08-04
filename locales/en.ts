@@ -79,6 +79,7 @@ export interface Translation {
       sectionTitle: string;
       lead: string;
       selected: string;
+      saveErrorFallback: string;
       default: string;
       defaultDescription: string;
       "glass-aurora": string;
@@ -92,6 +93,7 @@ export interface Translation {
       sectionTitle: string;
       lead: string;
       selected: string;
+      saveErrorFallback: string;
       jakarta: string;
       jakartaDescription: string;
       ubuntu: string;
@@ -222,6 +224,8 @@ export interface Translation {
       createForm: {
         profileImage: string;
         profileImageHint: string;
+        profileImageUploadLabel: string;
+        profileImageChangeLabel: string;
         name: string;
         namePh: string;
         email: string;
@@ -1302,8 +1306,9 @@ const translation: Translation = {
     },
     themePacks: {
       sectionTitle: "Color Theme",
-      lead: "Choose A Color Theme. Your Selection Is Saved In This Browser.",
+      lead: "Choose A Color Theme. Your Selection Syncs To Your Account.",
       selected: "Selected",
+      saveErrorFallback: "Could Not Save Theme Preference.",
       default: "Default",
       defaultDescription: "Orange And Purple Brand Palette For Everyday Use.",
       "glass-aurora": "Glass Aurora",
@@ -1318,8 +1323,9 @@ const translation: Translation = {
     },
     fontPacks: {
       sectionTitle: "Font",
-      lead: "Choose A Typeface For The Dashboard. Your Selection Is Saved In This Browser.",
+      lead: "Choose A Typeface For The Dashboard. Your Selection Syncs To Your Account.",
       selected: "Selected",
+      saveErrorFallback: "Could Not Save Font Preference.",
       jakarta: "Plus Jakarta Sans",
       jakartaDescription: "Default Modern Sans — Clear And Friendly For Everyday Dashboard Use.",
       ubuntu: "Ubuntu",
@@ -1451,6 +1457,8 @@ const translation: Translation = {
       createForm: {
         profileImage: "Profile Image",
         profileImageHint: "JPEG, PNG, WebP, Or GIF. Optional.",
+        profileImageUploadLabel: "Upload User Image",
+        profileImageChangeLabel: "Change User Image",
         name: "Full Name",
         namePh: "Enter Full Name",
         email: "Email Address",

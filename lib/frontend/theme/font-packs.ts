@@ -1,12 +1,20 @@
 /** Font packs — next/font CSS variables on `<html>`; selection via `data-font` + localStorage. */
 
+export {
+  DEFAULT_FONT_PACK,
+  FONT_PACK_IDS,
+  resolveFontPackId,
+  type TFontPackId,
+} from "@/lib/theme/pack-ids";
+
+import {
+  DEFAULT_FONT_PACK,
+  FONT_PACK_IDS,
+  resolveFontPackId,
+  type TFontPackId,
+} from "@/lib/theme/pack-ids";
+
 export const FONT_PACK_STORAGE_KEY = "dashboard-font-pack";
-
-export const FONT_PACK_IDS = ["jakarta", "ubuntu", "nunito", "inter"] as const;
-
-export type TFontPackId = (typeof FONT_PACK_IDS)[number];
-
-export const DEFAULT_FONT_PACK: TFontPackId = "jakarta";
 
 /** CSS custom property set by next/font `variable` on `<html>`. */
 export type TFontPackMeta = {
@@ -69,12 +77,6 @@ export function subscribeFontPack(listener: () => void): () => void {
       window.removeEventListener("storage", listener);
     }
   };
-}
-
-export function resolveFontPackId(value: unknown): TFontPackId {
-  if (typeof value !== "string") return DEFAULT_FONT_PACK;
-  if (FONT_PACK_IDS.includes(value as TFontPackId)) return value as TFontPackId;
-  return DEFAULT_FONT_PACK;
 }
 
 export function readStoredFontPack(): TFontPackId {

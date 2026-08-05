@@ -12,6 +12,17 @@ npm run dev                  # http://localhost:3000
 npm test
 ```
 
+### Env switch (local machine)
+
+| Command | Env file | Use |
+|---------|----------|-----|
+| `npm run dev` | `.env.local` | Normal local development |
+| `npm run dev:prod` | `.env.production.local` | Local app against production DB |
+| `npm run seed` | `.env.local` | Seed local DB |
+| `npm run seed:prod` | `.env.production.local` | Seed production DB |
+
+Details: `doc/setup.md`. Prefer `npm run dev` day-to-day — `dev:prod` talks to the real production database.
+
 ## Documentation
 
 Internal docs live in **`doc/`** and root **`AGENTS.md`** (local/agent use — gitignored, not shipped in production deploys).

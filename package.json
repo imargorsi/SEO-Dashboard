@@ -4,8 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:prod": "node --env-file=.env.production.local ./node_modules/next/dist/bin/next dev",
     "build": "next build",
     "start": "next start",
+    "start:prod": "node --env-file=.env.production.local ./node_modules/next/dist/bin/next start",
     "lint": "eslint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -16,6 +18,11 @@
     "migrate:user-statuses": "npx tsx --env-file=.env.local scripts/migrate-user-statuses.ts",
     "migrate:seo-activity-types": "npx tsx --env-file=.env.local scripts/migrate-seo-activity-types.ts",
     "migrate:drop-seo-activity-index": "npx tsx --env-file=.env.local scripts/drop-stale-seo-activity-index.ts",
+    "migrate:prod:user-statuses": "npx tsx --env-file=.env.production.local scripts/migrate-user-statuses.ts",
+    "migrate:prod:project-statuses": "npx tsx --env-file=.env.production.local scripts/migrate-project-statuses.ts",
+    "migrate:prod:seo-activity-types": "npx tsx --env-file=.env.production.local scripts/migrate-seo-activity-types.ts",
+    "migrate:prod:drop-seo-activity-index": "npx tsx --env-file=.env.production.local scripts/drop-stale-seo-activity-index.ts",
+    "migrate:prod:unset-business-hours": "npx tsx --env-file=.env.production.local scripts/migrate-unset-business-hours.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },

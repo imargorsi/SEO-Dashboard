@@ -10,6 +10,10 @@ import {
   validateProfileImageFile,
 } from "@/lib/auth/profile-image-storage";
 import { serializeUser } from "@/lib/serializers/user";
+import {
+  DISPLAY_NAME_MAX_LENGTH,
+  DISPLAY_NAME_MAX_MESSAGE,
+} from "@/lib/validation/display-name";
 
 export type UpdateProfileInput = {
   name?: string;
@@ -44,7 +48,16 @@ export async function updateProfile(
   }
 
   if (input.name !== undefined) {
-    user.name = input.name;
+    const trimmedName = input.name.trim();
+    if (!trimmedName) {
+      return ApiResponse.validation("Name Is Required.", { name: ["Name Is Required."] });
+    }
+    if (trimmedName.length > DISPLAY_NAME_MAX_LENGTH) {
+      return ApiResponse.validation(DISPLAY_NAME_MAX_MESSAGE, {
+        name: [DISPLAY_NAME_MAX_MESSAGE],
+      });
+    }
+    user.name = trimmedName;
   }
 
   if (nextProfileImagePath) {

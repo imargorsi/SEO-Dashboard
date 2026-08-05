@@ -3,6 +3,10 @@ import { z } from "zod";
 import { ValidationError } from "@/lib/api/http-errors";
 import { SEO_ACTIVITY_TYPES } from "@/lib/seo-activities/constants";
 import { sanitizeHttpUrl } from "@/lib/seo-activities/sanitize-url";
+import {
+  DISPLAY_NAME_MAX_LENGTH,
+  DISPLAY_NAME_MAX_MESSAGE,
+} from "@/lib/validation/display-name";
 import type { TSeoActivityType } from "@/types/seo-activity.types";
 
 const isoDateSchema = z
@@ -29,7 +33,7 @@ const httpUrlSchema = z
 const contentFields = {
   url: httpUrlSchema,
   occurredOn: isoDateSchema,
-  title: z.string().trim().optional(),
+  title: z.string().trim().max(DISPLAY_NAME_MAX_LENGTH, DISPLAY_NAME_MAX_MESSAGE).optional(),
   anchorText: z.string().trim().optional(),
   details: z.string().trim().optional(),
 };

@@ -9,6 +9,7 @@ import {
   elevatedCardSurfaceClass,
   glassPanelSurfaceClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
+import { DISPLAY_NAME_MAX_LENGTH } from "@/lib/validation/display-name";
 import { cn } from "@/lib/utils";
 
 type UserCreateFieldsProps = {
@@ -53,11 +54,13 @@ export function UserCreateFields({ hook }: UserCreateFieldsProps) {
               label={t("name")}
               placeholder={t("namePh")}
               required
+              maxLength={DISPLAY_NAME_MAX_LENGTH}
               error={errors.name?.message}
               autoComplete="name"
               {...register("name", {
                 required: t("valRequired"),
                 minLength: { value: 1, message: t("valRequired") },
+                maxLength: { value: DISPLAY_NAME_MAX_LENGTH, message: t("valMax") },
               })}
             />
 

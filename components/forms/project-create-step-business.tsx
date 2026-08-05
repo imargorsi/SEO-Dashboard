@@ -7,6 +7,7 @@ import { ImageUploadAvatar } from "@/components/ui/image-upload-avatar";
 import { PhoneNumberInput } from "@/components/ui/phone-number-input";
 import type { TUseProjectCreateFormResult } from "@/components/forms/hooks/use-project-create-form.hook";
 import { WEBSITE_URL_PATTERN } from "@/lib/projects/website-url.utils";
+import { DISPLAY_NAME_MAX_LENGTH } from "@/lib/validation/display-name";
 
 type ProjectCreateStepBusinessProps = {
   hook: TUseProjectCreateFormResult;
@@ -54,10 +55,12 @@ export function ProjectCreateStepBusiness({ hook }: ProjectCreateStepBusinessPro
           required
           disabled={isEdit}
           readOnly={isEdit}
+          maxLength={DISPLAY_NAME_MAX_LENGTH}
           error={errors.businessName?.message}
           {...register("businessName", {
             required: t("valRequired"),
             minLength: { value: 2, message: t("valMin") },
+            maxLength: { value: DISPLAY_NAME_MAX_LENGTH, message: t("valMax") },
           })}
         />
         <Input

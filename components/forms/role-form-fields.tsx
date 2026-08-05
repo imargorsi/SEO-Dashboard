@@ -10,6 +10,7 @@ import {
   elevatedCardSurfaceClass,
   tableGlassChipClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
+import { DISPLAY_NAME_MAX_LENGTH } from "@/lib/validation/display-name";
 import { cn } from "@/lib/utils";
 
 type TRoleFormFieldsProps = {
@@ -41,10 +42,12 @@ export function RoleFormFields({ hook }: TRoleFormFieldsProps) {
               placeholder={t("namePh")}
               required
               readOnly={isSystem}
+              maxLength={DISPLAY_NAME_MAX_LENGTH}
               error={errors.name?.message}
               {...register("name", {
                 required: t("valRequired"),
                 minLength: { value: 2, message: t("valMin") },
+                maxLength: { value: DISPLAY_NAME_MAX_LENGTH, message: t("valMax") },
               })}
             />
             {isSystem ? (

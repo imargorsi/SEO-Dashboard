@@ -10,6 +10,7 @@ import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
 import { Spinner } from "@/components/ui/spinner";
 import type { RegisterValues } from "@/sections/register.types";
+import { DISPLAY_NAME_MAX_LENGTH } from "@/lib/validation/display-name";
 
 type RegisterFormSectionProps = {
   register: UseFormRegister<RegisterValues>;
@@ -40,11 +41,13 @@ export function RegisterFormSection({
           type="text"
           placeholder={t("fullNamePh")}
           required
+          maxLength={DISPLAY_NAME_MAX_LENGTH}
           autoComplete="name"
           error={errors.name?.message ?? ""}
           {...register("name", {
             required: t("fieldRequired"),
             minLength: { value: 2, message: t("fullNameMin") },
+            maxLength: { value: DISPLAY_NAME_MAX_LENGTH, message: t("fullNameMax") },
           })}
         />
 

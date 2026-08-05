@@ -13,6 +13,7 @@ import {
   elevatedCardSurfaceClass,
   elevatedCardTitleClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
+import { DISPLAY_NAME_MAX_LENGTH } from "@/lib/validation/display-name";
 import { cn } from "@/lib/utils";
 import { Heading } from "../heading";
 
@@ -72,10 +73,12 @@ export function ProfileForm({ user }: ProfileFormProps) {
             id="profile-name"
             label={t("nameLabel")}
             placeholder={t("namePh")}
+            maxLength={DISPLAY_NAME_MAX_LENGTH}
             error={errors.name?.message}
             {...register("name", {
               required: t("valRequired"),
               minLength: { value: 2, message: t("valMin") },
+              maxLength: { value: DISPLAY_NAME_MAX_LENGTH, message: t("valMax") },
             })}
           />
           <Input id="profile-email" label={t("emailLabel")} type="email" value={user.email} disabled readOnly />

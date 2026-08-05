@@ -200,6 +200,7 @@ export interface Translation {
       namePh: string;
       valRequired: string;
       valMin: string;
+      valMax: string;
       photoLabel: string;
       photoHint: string;
       photoPick: string;
@@ -251,6 +252,7 @@ export interface Translation {
         valEmail: string;
         valMinPassword: string;
         valPasswordMatch: string;
+        valMax: string;
         successFallback: string;
         errorFallback: string;
         editSuccessFallback: string;
@@ -637,6 +639,7 @@ export interface Translation {
         stepValidationError: string;
         valRequired: string;
         valMin: string;
+        valMax: string;
         valUrl: string;
         valTargetLocations: string;
         valSeoGoals: string;
@@ -996,6 +999,7 @@ export interface Translation {
           url: string;
           date: string;
           minTitle: string;
+          maxTitle: string;
           minAnchor: string;
           minDetails: string;
         };
@@ -1059,6 +1063,7 @@ export interface Translation {
         errorFallback: string;
         valRequired: string;
         valMin: string;
+        valMax: string;
         backToList: string;
       };
       actions: {
@@ -1204,6 +1209,7 @@ export interface Translation {
       fullName: string;
       fullNamePh: string;
       fullNameMin: string;
+      fullNameMax: string;
       email: string;
       password: string;
       confirmPassword: string;
@@ -1443,6 +1449,7 @@ const translation: Translation = {
       namePh: "Your Name",
       valRequired: "This Field Is Required.",
       valMin: "Use At Least 2 Characters.",
+      valMax: "Use At Most 50 Characters.",
       photoLabel: "Profile Photo",
       photoHint: "JPG, PNG, WEBP, Or GIF. Max 5 MB.",
       photoPick: "Upload Photo",
@@ -1495,6 +1502,7 @@ const translation: Translation = {
         valEmail: "Enter A Valid Email Address.",
         valMinPassword: "Use At Least 8 Characters.",
         valPasswordMatch: "Passwords Do Not Match.",
+        valMax: "Use At Most 50 Characters.",
         successFallback: "User Created Successfully.",
         errorFallback: "Could Not Create User. Try Again.",
         editSuccessFallback: "User Updated Successfully.",
@@ -1888,12 +1896,13 @@ const translation: Translation = {
         inviteBatchSuccess: "Invitations Were Sent.",
         inviteBatchPartialError: "{{count}} Invitation(s) Could Not Be Sent.",
         stepValidationError: "Fix Required Fields Before Moving To The Next Step.",
-        valRequired: "This field is required.",
-        valMin: "Use at least 2 characters.",
-        valUrl: "Enter a valid website URL (e.g. example.com).",
-        valTargetLocations: "Add at least one location.",
-        valSeoGoals: "Select at least one SEO objective.",
-        backToList: "Back to projects",
+        valRequired: "This Field Is Required.",
+        valMin: "Use At Least 2 Characters.",
+        valMax: "Use At Most 50 Characters.",
+        valUrl: "Enter A Valid Website URL (E.G. Example.Com).",
+        valTargetLocations: "Add At Least One Location.",
+        valSeoGoals: "Select At Least One SEO Objective.",
+        backToList: "Back To Projects",
         backToProject: "Back To Project",
         editForbiddenTitle: "You Cannot Edit This Project",
         editForbiddenBody: "You Do Not Have Permission To Edit This Project.",
@@ -2252,6 +2261,7 @@ const translation: Translation = {
           url: "Enter A Valid Http Or Https Link.",
           date: "Enter A Valid Date.",
           minTitle: "Use At Least 3 Characters.",
+          maxTitle: "Use At Most 50 Characters.",
           minAnchor: "Use At Least 2 Characters.",
           minDetails: "Use At Least 4 Characters.",
         },
@@ -2315,6 +2325,7 @@ const translation: Translation = {
         errorFallback: "Could Not Create Role. Try Again.",
         valRequired: "This Field Is Required.",
         valMin: "Use At Least 2 Characters.",
+        valMax: "Use At Most 50 Characters.",
         backToList: "Back To Roles",
       },
       actions: {
@@ -2457,9 +2468,10 @@ const translation: Translation = {
     register: {
       title: "Create An Account",
       subtitle: "Create An Account To Get Started With Crawllex",
-      fullName: "Full name",
+      fullName: "Full Name",
       fullNamePh: "Jane Doe",
-      fullNameMin: "Enter at least 2 characters.",
+      fullNameMin: "Enter At Least 2 Characters.",
+      fullNameMax: "Use At Most 50 Characters.",
       email: "Email",
       password: "Password",
       confirmPassword: "Confirm password",

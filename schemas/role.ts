@@ -1,9 +1,11 @@
 import { z } from "zod";
 
+import { displayNameSchema } from "@/lib/validation/display-name";
+
 const permissionsField = z.array(z.string().min(1)).default([]);
 
 export const createRoleSchema = z.object({
-  name: z.string().trim().min(2).max(100),
+  name: displayNameSchema({ min: 2, minMessage: "Use At Least 2 Characters." }),
   description: z.string().trim().max(500).default(""),
   permissions: permissionsField,
 });

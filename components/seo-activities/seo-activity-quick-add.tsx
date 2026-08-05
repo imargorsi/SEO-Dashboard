@@ -18,6 +18,7 @@ import {
 import { sanitizeHttpUrl } from "@/lib/frontend/seo-activities/sanitize-url.utils";
 import { dialogSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { overlayClass } from "@/lib/frontend/theme/chrome-tones";
+import { DISPLAY_NAME_MAX_LENGTH } from "@/lib/validation/display-name";
 import type {
   TSeoActivityBacklink,
   TSeoActivityBlog,
@@ -196,10 +197,12 @@ export function SeoActivityQuickAdd({
                 label={t("fields.title")}
                 placeholder={t("fields.titlePh")}
                 required
+                maxLength={DISPLAY_NAME_MAX_LENGTH}
                 error={errors.title?.message}
                 {...register("title", {
                   required: t("validation.required"),
                   minLength: { value: 3, message: t("validation.minTitle") },
+                  maxLength: { value: DISPLAY_NAME_MAX_LENGTH, message: t("validation.maxTitle") },
                 })}
               />
             ) : null}

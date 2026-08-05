@@ -1,8 +1,10 @@
 import { z } from "zod";
 
+import { displayNameSchema } from "@/lib/validation/display-name";
+
 export const createUserSchema = z
   .object({
-    name: z.string().min(1).max(255),
+    name: displayNameSchema({ min: 1, requiredMessage: "Name Is Required." }),
     email: z.string().email().max(255).transform((v) => v.toLowerCase()),
     password: z.string().min(8),
     password_confirmation: z.string().min(1),
@@ -22,7 +24,7 @@ const optionalPassword = z.preprocess((value) => {
 
 export const updateUserSchema = z
   .object({
-    name: z.string().min(1).max(255),
+    name: displayNameSchema({ min: 1, requiredMessage: "Name Is Required." }),
     email: z.string().email().max(255).transform((v) => v.toLowerCase()),
     password: optionalPassword,
     password_confirmation: z.preprocess((value) => {

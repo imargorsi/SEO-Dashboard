@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { displayNameSchema } from "@/lib/validation/display-name";
+
 const emailSchema = z.string().email().max(255);
 const passwordSchema = z.string().min(8);
 
@@ -10,7 +12,7 @@ export const loginSchema = z.object({
 
 export const registerSchema = z
   .object({
-    name: z.string().min(1).max(255),
+    name: displayNameSchema({ min: 1, requiredMessage: "Name Is Required." }),
     email: emailSchema.transform((v) => v.toLowerCase()),
     password: passwordSchema,
     password_confirmation: z.string().min(1),

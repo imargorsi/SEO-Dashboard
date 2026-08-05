@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import { SEO_GOALS } from "@/lib/projects/constants";
 import { WEBSITE_URL_PATTERN, normalizeWebsiteUrl } from "@/lib/projects/website-url.utils";
+import { displayNameSchema } from "@/lib/validation/display-name";
 
 const optionalText = z.string().trim().max(2000).optional().nullable();
 const optionalShortText = z.string().trim().max(255).optional().nullable();
@@ -21,7 +22,10 @@ const websiteUrlSchema = z
 
 /** POST /api/v1/projects — request body. */
 export const createProjectSchema = z.object({
-  businessName: z.string().trim().min(1, "Business Name Is Required.").max(255),
+  businessName: displayNameSchema({
+    min: 1,
+    requiredMessage: "Business Name Is Required.",
+  }),
   websiteUrl: websiteUrlSchema,
   businessAddress: optionalText,
   pocContactNumber: optionalShortText,

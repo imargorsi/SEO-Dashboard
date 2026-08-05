@@ -5,15 +5,47 @@ export const AUTH_TOKEN_STORAGE_KEY = "auth_access_token";
 export const AUTH_USER_STORAGE_KEY = "auth_user";
 /** Keep in sync with `context/selected-project-context.tsx`. */
 export const SELECTED_PROJECT_STORAGE_KEY = "dashboard-selected-project-id";
-/** Dispatched from `baseQuery` on mid-session 401 so providers can clear RQ cache. */
+/** Mid-session 401 — clear RQ cache + force auth UI to drop the session. */
 export const AUTH_SESSION_EXPIRED_EVENT = "auth:session-expired";
+/** Any same-tab login/logout/clear so hooks subscribed to the token re-render. */
+export const AUTH_SESSION_CHANGED_EVENT = "auth:session-changed";
 
 const TOKEN_KEY = AUTH_TOKEN_STORAGE_KEY;
 const USER_KEY = AUTH_USER_STORAGE_KEY;
 
+function emitAuthSessionChanged(): void {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new Event(AUTH_SESSION_CHANGED_EVENT));
+}
+
 export function notifyAuthSessionExpired(): void {
   if (typeof window === "undefined") return;
   window.dispatchEvent(new Event(AUTH_SESSION_EXPIRED_EVENT));
+  emitAuthSessionChanged();
+}
+
+/** Subscribe to same-tab + cross-tab auth storage changes (for `useSyncExternalStore`). */
+export function subscribeAuthSession(onStoreChange: () => void): () => void {
+  if (typeof window === "undefined") return () => {};
+
+  const onStorage = (event: StorageEvent) => {
+    if (
+      event.key === AUTH_TOKEN_STORAGE_KEY ||
+      event.key === AUTH_USER_STORAGE_KEY ||
+      event.key === null
+    ) {
+      onStoreChange();
+    }
+  };
+
+  window.addEventListener("storage", onStorage);
+  window.addEventListener(AUTH_SESSION_CHANGED_EVENT, onStoreChange);
+  window.addEventListener(AUTH_SESSION_EXPIRED_EVENT, onStoreChange);
+  return () => {
+    window.removeEventListener("storage", onStorage);
+    window.removeEventListener(AUTH_SESSION_CHANGED_EVENT, onStoreChange);
+    window.removeEventListener(AUTH_SESSION_EXPIRED_EVENT, onStoreChange);
+  };
 }
 
 export function getAccessToken(): string | null {
@@ -60,11 +92,13 @@ export function clearAuthSession(): void {
   } catch {
     /* no-op */
   }
+  emitAuthSessionChanged();
 }
 
 export function persistAuthSession(token: string, user: AuthUser): void {
   setAccessToken(token);
   setStoredAuthUser(user);
+  emitAuthSessionChanged();
 }
 
 /** Default post-login route based on platform and project permissions. */

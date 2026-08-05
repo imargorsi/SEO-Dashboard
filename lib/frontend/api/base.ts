@@ -68,10 +68,13 @@ async function request<T>(path: string, init: RequestInit & { skipAuth?: boolean
   const body = await parseBody(response);
 
   if (!response.ok) {
-    // Mid-session revoke/expiry: drop local session so RequireAuth redirects.
+    // Mid-session revoke/expiry: drop local session once (avoid 401 → clear → refetch loops).
     if (response.status === 401 && !skipAuth) {
-      clearAuthSession();
-      notifyAuthSessionExpired();
+      const hadToken = Boolean(getAccessToken());
+      if (hadToken) {
+        clearAuthSession();
+        notifyAuthSessionExpired();
+      }
     }
     if (isApiErrorEnvelope(body)) {
       throw new ApiError(body.message || "Request failed", response.status, normalizeFieldErrors(body.errors), body);

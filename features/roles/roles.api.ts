@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { useAccessToken } from "@/hooks/use-access-token.hook";
 import { baseQuery } from "@/lib/frontend/api/base";
 import type { TRoleStatus } from "@/lib/roles/constants";
 import type { TAdminRoleDetail, TPaginatedRoleList } from "@/types/admin-role.types";
@@ -61,6 +62,7 @@ async function fetchRoles(params: RolesListParams): Promise<TPaginatedRoleList> 
 }
 
 export function useRolesQuery(params: RolesListParams & { enabled?: boolean }) {
+  const token = useAccessToken();
   const page = params.page ?? 1;
   const perPage = params.per_page ?? 15;
   const search = params.search?.trim() || null;
@@ -70,7 +72,7 @@ export function useRolesQuery(params: RolesListParams & { enabled?: boolean }) {
   return useQuery({
     queryKey: rolesKeys.list({ page, per_page: perPage, search, newest, status }),
     queryFn: () => fetchRoles({ page, per_page: perPage, search, newest, status }),
-    enabled: params.enabled ?? true,
+    enabled: (params.enabled ?? true) && Boolean(token),
   });
 }
 
@@ -80,10 +82,11 @@ async function fetchRole(roleId: string): Promise<TAdminRoleDetail> {
 }
 
 export function useRoleQuery(roleId: string | undefined, options?: { enabled?: boolean }) {
+  const token = useAccessToken();
   return useQuery({
     queryKey: rolesKeys.detail(roleId ?? ""),
     queryFn: () => fetchRole(roleId!),
-    enabled: Boolean(roleId) && (options?.enabled ?? true),
+    enabled: Boolean(roleId) && (options?.enabled ?? true) && Boolean(token),
   });
 }
 

@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { baseQuery } from "@/lib/frontend/api/base";
 import { ApiError } from "@/lib/frontend/api/errors";
 import { clearAuthSession, getAccessToken, getStoredAuthUser, persistAuthSession, setStoredAuthUser } from "@/lib/frontend/auth/session";
+import { useAccessToken } from "@/hooks/use-access-token.hook";
 import {
   normalizeAuthUser,
   type AuthMessageResult,
@@ -112,10 +113,13 @@ async function updateProfile(input: UpdateProfileRequest): Promise<UpdateProfile
 }
 
 export function useAuthUserQuery(options?: { enabled?: boolean }) {
+  const token = useAccessToken();
+  const enabled = options?.enabled ?? Boolean(token);
+
   return useQuery({
     queryKey: authKeys.user(),
     queryFn: loadAuthUser,
-    enabled: options?.enabled ?? Boolean(getAccessToken()),
+    enabled,
     placeholderData: () => getStoredAuthUser() ?? undefined,
   });
 }

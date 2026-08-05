@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { useAccessToken } from "@/hooks/use-access-token.hook";
 import { baseQuery } from "@/lib/frontend/api/base";
 import type { TGoogleIntegrationService } from "@/lib/integrations/constants";
 import type {
@@ -123,10 +124,11 @@ export function useAnalyticsOverviewQuery(
   params: TAnalyticsOverviewParams,
   options?: { enabled?: boolean },
 ) {
+  const token = useAccessToken();
   return useQuery({
     queryKey: analyticsKeys.overview(projectId ?? "", params.from, params.to),
     queryFn: () => fetchOverview(projectId!, params),
-    enabled: Boolean(projectId) && (options?.enabled ?? true),
+    enabled: Boolean(projectId) && (options?.enabled ?? true) && Boolean(token),
   });
 }
 
@@ -135,6 +137,7 @@ export function useAnalyticsDimensionsQuery(
   params: TAnalyticsDimensionsParams,
   options?: { enabled?: boolean },
 ) {
+  const token = useAccessToken();
   const limit = params.limit ?? 25;
   const queryParams = {
     from: params.from,
@@ -147,7 +150,7 @@ export function useAnalyticsDimensionsQuery(
   return useQuery({
     queryKey: analyticsKeys.dimensions(projectId ?? "", queryParams),
     queryFn: () => fetchDimensions(projectId!, { ...params, limit }),
-    enabled: Boolean(projectId) && (options?.enabled ?? true),
+    enabled: Boolean(projectId) && (options?.enabled ?? true) && Boolean(token),
   });
 }
 
@@ -155,6 +158,7 @@ export function useGooglePropertiesQuery(
   projectId: string | null | undefined,
   options?: { enabled?: boolean },
 ) {
+  const token = useAccessToken();
   return useQuery({
     queryKey: analyticsKeys.properties(projectId ?? ""),
     queryFn: async () => {
@@ -163,7 +167,7 @@ export function useGooglePropertiesQuery(
       );
       return envelope.data.properties;
     },
-    enabled: Boolean(projectId) && (options?.enabled ?? true),
+    enabled: Boolean(projectId) && (options?.enabled ?? true) && Boolean(token),
   });
 }
 

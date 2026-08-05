@@ -3,7 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { baseQuery } from "@/lib/frontend/api/base";
-import { getAccessToken } from "@/lib/frontend/auth/session";
+import { useAccessToken } from "@/hooks/use-access-token.hook";
 import {
   applyFontPackToDocument,
   readStoredFontPack,
@@ -51,7 +51,8 @@ function readLocalPreferencesSnapshot(): TUserPreferences {
 }
 
 export function useUserPreferencesQuery(options?: { enabled?: boolean }) {
-  const enabled = options?.enabled ?? Boolean(getAccessToken());
+  const token = useAccessToken();
+  const enabled = (options?.enabled ?? true) && Boolean(token);
 
   return useQuery({
     queryKey: preferencesKeys.detail(),

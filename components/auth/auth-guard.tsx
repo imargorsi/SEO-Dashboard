@@ -1,26 +1,19 @@
 "use client";
 
-import { useSyncExternalStore, useEffect, type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { AuthSessionLoading } from "@/components/auth/auth-session-loading";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
-import { getAccessToken, resolvePostLoginPath } from "@/lib/frontend/auth/session";
+import { useAccessToken } from "@/hooks/use-access-token.hook";
+import { resolvePostLoginPath } from "@/lib/frontend/auth/session";
 import { useIsAuthRevealActive, useIsAuthRevealing } from "@/context/auth-reveal-transition";
-
-function useIsClient() {
-  return useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false
-  );
-}
 
 /** Auth screens — redirect to dashboard when already logged in. */
 export function GuestOnly({ children }: { children: ReactNode }) {
   const router = useRouter();
-  const isClient = useIsClient();
+  const token = useAccessToken();
+  const hasToken = Boolean(token);
   const isRevealActive = useIsAuthRevealActive();
-  const hasToken = isClient && Boolean(getAccessToken());
   const { data: user, isPending, isFetching } = useAuthUserQuery({ enabled: hasToken });
 
   useEffect(() => {
@@ -33,7 +26,7 @@ export function GuestOnly({ children }: { children: ReactNode }) {
     return children;
   }
 
-  if (!isClient || (hasToken && (isPending || isFetching)) || user) {
+  if ((hasToken && (isPending || isFetching)) || user) {
     return <AuthSessionLoading />;
   }
 
@@ -43,18 +36,18 @@ export function GuestOnly({ children }: { children: ReactNode }) {
 /** Dashboard — redirect to sign-in when not authenticated. */
 export function RequireAuth({ children }: { children: ReactNode }) {
   const router = useRouter();
-  const isClient = useIsClient();
+  const token = useAccessToken();
+  const hasToken = Boolean(token);
   const isRevealing = useIsAuthRevealing();
-  const hasToken = isClient && Boolean(getAccessToken());
   const { data: user, isPending, isError } = useAuthUserQuery({ enabled: hasToken });
 
   useEffect(() => {
-    if (isClient && (!hasToken || isError)) {
+    if (!hasToken || isError) {
       router.replace("/");
     }
-  }, [hasToken, isClient, isError, router]);
+  }, [hasToken, isError, router]);
 
-  if (!isClient || !hasToken || isError) {
+  if (!hasToken || isError) {
     return <AuthSessionLoading />;
   }
 

@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { useAccessToken } from "@/hooks/use-access-token.hook";
 import { baseQuery } from "@/lib/frontend/api/base";
 import { SEO_ACTIVITY_DEFAULT_PER_PAGE } from "@/lib/seo-activities/constants";
 import type {
@@ -67,6 +68,7 @@ export function useSeoActivitiesQuery(
   params: TSeoActivitiesListParams,
   options?: { enabled?: boolean },
 ) {
+  const token = useAccessToken();
   const page = params.page ?? 1;
   const perPage = params.per_page ?? SEO_ACTIVITY_DEFAULT_PER_PAGE;
   const from = params.from ?? null;
@@ -76,7 +78,7 @@ export function useSeoActivitiesQuery(
   return useQuery({
     queryKey: seoActivitiesKeys.list(projectId ?? "", listParams),
     queryFn: () => fetchSeoActivities(projectId!, listParams),
-    enabled: Boolean(projectId) && (options?.enabled ?? true),
+    enabled: Boolean(projectId) && (options?.enabled ?? true) && Boolean(token),
   });
 }
 

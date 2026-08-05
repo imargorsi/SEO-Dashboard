@@ -7,7 +7,7 @@ import { AuthSessionLoading } from "@/components/auth/auth-session-loading";
 import { useProjectAccess } from "@/context/project-access-context";
 import { useSelectedProject } from "@/context/selected-project-context";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
-import { getAccessToken } from "@/lib/frontend/auth/session";
+import { useAccessToken } from "@/hooks/use-access-token.hook";
 import {
   canAccessRoute,
   isAuthOnlyRoute,
@@ -28,7 +28,8 @@ export function RequireRouteAccess({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const isClient = useIsClient();
-  const hasToken = isClient && Boolean(getAccessToken());
+  const token = useAccessToken();
+  const hasToken = isClient && Boolean(token);
   const { data: user, isPending, isError } = useAuthUserQuery({ enabled: hasToken });
   const { selectedProject } = useSelectedProject();
   const { projectPermissions, isLoading: isProjectAccessLoading } = useProjectAccess();

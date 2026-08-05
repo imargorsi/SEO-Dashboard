@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { useAccessToken } from "@/hooks/use-access-token.hook";
 import { baseQuery } from "@/lib/frontend/api/base";
 import type { TUserLookupItem } from "@/types/project-invite.types";
 import type { TAdminUserDetail, TAdminUserListItem, TAdminUserProjectAssignment, TPaginatedList } from "@/types/admin-user.types";
@@ -72,6 +73,7 @@ async function fetchUsers(params: UsersListParams): Promise<TPaginatedList<TAdmi
 }
 
 export function useUsersQuery(params: UsersListParams & { enabled?: boolean }) {
+  const token = useAccessToken();
   const page = params.page ?? 1;
   const perPage = params.per_page ?? 15;
   const search = params.search?.trim() || null;
@@ -81,7 +83,7 @@ export function useUsersQuery(params: UsersListParams & { enabled?: boolean }) {
   return useQuery({
     queryKey: usersKeys.list({ page, per_page: perPage, search, newest, status }),
     queryFn: () => fetchUsers({ page, per_page: perPage, search, newest, status }),
-    enabled: params.enabled ?? true,
+    enabled: (params.enabled ?? true) && Boolean(token),
   });
 }
 
@@ -91,10 +93,11 @@ async function fetchUser(userId: string): Promise<TAdminUserDetail> {
 }
 
 export function useUserQuery(userId: string | undefined, options?: { enabled?: boolean }) {
+  const token = useAccessToken();
   return useQuery({
     queryKey: usersKeys.detail(userId ?? ""),
     queryFn: () => fetchUser(userId!),
-    enabled: Boolean(userId) && (options?.enabled ?? true),
+    enabled: Boolean(userId) && (options?.enabled ?? true) && Boolean(token),
   });
 }
 
@@ -268,11 +271,12 @@ async function fetchUserLookup(search: string): Promise<TUserLookupItem[]> {
 }
 
 export function useUserLookupQuery(search: string, options?: { enabled?: boolean }) {
+  const token = useAccessToken();
   const trimmed = search.trim();
 
   return useQuery({
     queryKey: usersKeys.lookup(trimmed),
     queryFn: () => fetchUserLookup(trimmed),
-    enabled: (options?.enabled ?? true) && trimmed.length >= 2,
+    enabled: (options?.enabled ?? true) && trimmed.length >= 2 && Boolean(token),
   });
 }

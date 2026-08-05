@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 
+import { useAccessToken } from "@/hooks/use-access-token.hook";
 import { baseQuery } from "@/lib/frontend/api/base";
 import type { TPermissionCatalog } from "@/types/permission-catalog.types";
 
@@ -22,10 +23,11 @@ async function fetchPermissionCatalog(): Promise<TPermissionCatalog> {
 
 /** Fixed v1 permission catalog — safe to cache for the session (`doc/rbac.md`). */
 export function usePermissionCatalogQuery(options?: { enabled?: boolean }) {
+  const token = useAccessToken();
   return useQuery({
     queryKey: permissionsKeys.catalog,
     queryFn: fetchPermissionCatalog,
-    enabled: options?.enabled ?? true,
+    enabled: (options?.enabled ?? true) && Boolean(token),
     staleTime: Infinity,
   });
 }

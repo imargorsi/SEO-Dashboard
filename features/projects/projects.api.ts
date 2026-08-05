@@ -6,6 +6,7 @@ import { baseQuery } from "@/lib/frontend/api/base";
 import type { ProjectStatus, TSeoGoal } from "@/lib/projects/constants";
 import type { TProjectStatusAction } from "@/lib/projects/project-card-actions.utils";
 import type { TProjectDetail, TProjectListItem } from "@/types/project.types";
+import { useAccessToken } from "@/hooks/use-access-token.hook";
 
 export type {
   TProjectDetail,
@@ -94,11 +95,12 @@ type TUseProjectsQueryOptions = {
 
 export function useProjectsQuery(options?: TUseProjectsQueryOptions) {
   const status = options?.status ?? null;
+  const token = useAccessToken();
 
   return useQuery<TProjectListItem[]>({
     queryKey: projectKeys.list(status),
     queryFn: () => fetchProjects(status),
-    enabled: options?.enabled ?? true,
+    enabled: (options?.enabled ?? true) && Boolean(token),
   });
 }
 
@@ -112,10 +114,11 @@ type TUseProjectQueryOptions = {
 };
 
 export function useProjectQuery(projectId: string, options?: TUseProjectQueryOptions) {
+  const token = useAccessToken();
   return useQuery({
     queryKey: projectKeys.detail(projectId),
     queryFn: () => fetchProject(projectId),
-    enabled: (options?.enabled ?? true) && Boolean(projectId),
+    enabled: (options?.enabled ?? true) && Boolean(projectId) && Boolean(token),
   });
 }
 
@@ -132,10 +135,11 @@ type TUseProjectAccessQueryOptions = {
 };
 
 export function useProjectAccessQuery(projectId: string, options?: TUseProjectAccessQueryOptions) {
+  const token = useAccessToken();
   return useQuery({
     queryKey: projectKeys.access(projectId),
     queryFn: () => fetchProjectAccess(projectId),
-    enabled: (options?.enabled ?? true) && Boolean(projectId),
+    enabled: (options?.enabled ?? true) && Boolean(projectId) && Boolean(token),
   });
 }
 

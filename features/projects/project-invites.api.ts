@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { baseQuery } from "@/lib/frontend/api/base";
 import { projectKeys } from "@/features/projects/projects.api";
+import { useAccessToken } from "@/hooks/use-access-token.hook";
 import type {
   TMyProjectInvitation,
   TProjectInviteMember,
@@ -60,10 +61,11 @@ async function fetchMyProjectInvitations(): Promise<TMyProjectInvitation[]> {
 }
 
 export function useMyProjectInvitationsQuery(options?: { enabled?: boolean }) {
+  const token = useAccessToken();
   return useQuery({
     queryKey: inviteKeys.mine(),
     queryFn: fetchMyProjectInvitations,
-    enabled: options?.enabled ?? true,
+    enabled: (options?.enabled ?? true) && Boolean(token),
   });
 }
 

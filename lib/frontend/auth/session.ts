@@ -1,8 +1,20 @@
 import { normalizeAuthUser, type AuthUser } from "@/lib/frontend/auth/types";
 import { resolveDefaultAccessiblePath } from "@/lib/frontend/layout/route-access";
 
-const TOKEN_KEY = "auth_access_token";
-const USER_KEY = "auth_user";
+export const AUTH_TOKEN_STORAGE_KEY = "auth_access_token";
+export const AUTH_USER_STORAGE_KEY = "auth_user";
+/** Keep in sync with `context/selected-project-context.tsx`. */
+export const SELECTED_PROJECT_STORAGE_KEY = "dashboard-selected-project-id";
+/** Dispatched from `baseQuery` on mid-session 401 so providers can clear RQ cache. */
+export const AUTH_SESSION_EXPIRED_EVENT = "auth:session-expired";
+
+const TOKEN_KEY = AUTH_TOKEN_STORAGE_KEY;
+const USER_KEY = AUTH_USER_STORAGE_KEY;
+
+export function notifyAuthSessionExpired(): void {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new Event(AUTH_SESSION_EXPIRED_EVENT));
+}
 
 export function getAccessToken(): string | null {
   if (typeof window === "undefined") return null;
@@ -44,6 +56,7 @@ export function clearAuthSession(): void {
   try {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
+    localStorage.removeItem(SELECTED_PROJECT_STORAGE_KEY);
   } catch {
     /* no-op */
   }

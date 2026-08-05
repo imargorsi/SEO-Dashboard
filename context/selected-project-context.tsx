@@ -4,6 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   useSyncExternalStore,
@@ -11,8 +12,9 @@ import {
 } from "react";
 
 import { useProjectsQuery, type TProjectListItem } from "@/features/projects/projects.api";
+import { SELECTED_PROJECT_STORAGE_KEY } from "@/lib/frontend/auth/session";
 
-const STORAGE_KEY = "dashboard-selected-project-id";
+const STORAGE_KEY = SELECTED_PROJECT_STORAGE_KEY;
 const EMPTY_PROJECTS: TProjectListItem[] = [];
 
 type TSelectedProjectContextValue = {
@@ -68,6 +70,11 @@ export function SelectedProjectProvider({ children }: { children: ReactNode }) {
     getServerStoredProjectId,
   );
   const [preferredId, setPreferredId] = useState<string | null>(null);
+
+  // Logout / session clear removes storage; drop in-memory preference so it cannot stick.
+  useEffect(() => {
+    if (!storedId) setPreferredId(null);
+  }, [storedId]);
 
   const effectivePreferredId = preferredId ?? storedId;
 

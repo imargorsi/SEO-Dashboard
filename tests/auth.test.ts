@@ -71,6 +71,47 @@ describe("Auth API parity", () => {
     expect(await findAccessToken(token)).toBeNull();
   });
 
+  it("access tokens expire after 24 hours", async () => {
+    const { ACCESS_TOKEN_TTL_MS } = await import("@/lib/auth/tokens");
+    const { AccessToken } = await import("@/models");
+
+    const user = await User.create({
+      name: "Expiry User",
+      email: "expiry@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+    });
+
+    const before = Date.now();
+    const token = await createAccessToken(user._id);
+    const [tokenId] = token.split("|", 2);
+    const record = await AccessToken.findById(tokenId);
+    expect(record?.expiresAt).toBeInstanceOf(Date);
+    const expiresAt = record!.expiresAt!.getTime();
+    expect(expiresAt).toBeGreaterThanOrEqual(before + ACCESS_TOKEN_TTL_MS - 5_000);
+    expect(expiresAt).toBeLessThanOrEqual(Date.now() + ACCESS_TOKEN_TTL_MS + 5_000);
+
+    record!.expiresAt = new Date(Date.now() - 1_000);
+    await record!.save();
+    expect(await findAccessToken(token)).toBeNull();
+  });
+
+  it("rejects legacy never-expiring tokens", async () => {
+    const { AccessToken } = await import("@/models");
+
+    const user = await User.create({
+      name: "Legacy Token User",
+      email: "legacy-token@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+    });
+
+    const token = await createAccessToken(user._id);
+    const [tokenId] = token.split("|", 2);
+    await AccessToken.updateOne({ _id: tokenId }, { $set: { expiresAt: null } });
+    expect(await findAccessToken(token)).toBeNull();
+  });
+
   it("registers user with empty roles and sends verification", async () => {
     const { registerUser, buildRegisterResponse } = await import("@/lib/auth/register");
 

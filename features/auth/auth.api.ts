@@ -4,8 +4,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { baseQuery } from "@/lib/frontend/api/base";
 import { ApiError } from "@/lib/frontend/api/errors";
 import { clearAuthSession, getAccessToken, getStoredAuthUser, persistAuthSession, setStoredAuthUser } from "@/lib/frontend/auth/session";
-import { analyticsKeys } from "@/features/analytics/analytics.api";
-import { preferencesKeys } from "@/features/preferences/preferences.api";
 import {
   normalizeAuthUser,
   type AuthMessageResult,
@@ -128,9 +126,12 @@ export function useLoginMutation() {
   return useMutation({
     mutationFn: loginWithCredentials,
     onSuccess: (result) => {
+      // Drop previous user's cache + selected project before storing the new session.
+      clearAuthSession();
+      void queryClient.cancelQueries();
+      queryClient.clear();
       persistAuthSession(result.token, result.user);
       queryClient.setQueryData(authKeys.user(), result.user);
-      queryClient.removeQueries({ queryKey: analyticsKeys.all });
     },
   });
 }
@@ -142,10 +143,9 @@ export function useLogoutMutation() {
     mutationFn: () => baseQuery.post<null>("auth/logout"),
     onSettled: () => {
       clearAuthSession();
-      queryClient.removeQueries({ queryKey: authKeys.all });
-      // Drop analytics cache so integration metadata cannot leak across users on a shared browser.
-      queryClient.removeQueries({ queryKey: analyticsKeys.all });
-      queryClient.removeQueries({ queryKey: preferencesKeys.all });
+      void queryClient.cancelQueries();
+      // Clear all cached queries so the next login cannot see the previous user's data.
+      queryClient.clear();
     },
   });
 }

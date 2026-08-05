@@ -1,6 +1,10 @@
 import { ApiError } from "@/lib/frontend/api/errors";
 import { isApiErrorEnvelope, type ApiErrorEnvelope, type ApiSuccessEnvelope } from "@/lib/frontend/api/types";
-import { getAccessToken } from "@/lib/frontend/auth/session";
+import {
+  clearAuthSession,
+  getAccessToken,
+  notifyAuthSessionExpired,
+} from "@/lib/frontend/auth/session";
 
 const API_PREFIX = "/api/v1";
 
@@ -64,6 +68,11 @@ async function request<T>(path: string, init: RequestInit & { skipAuth?: boolean
   const body = await parseBody(response);
 
   if (!response.ok) {
+    // Mid-session revoke/expiry: drop local session so RequireAuth redirects.
+    if (response.status === 401 && !skipAuth) {
+      clearAuthSession();
+      notifyAuthSessionExpired();
+    }
     if (isApiErrorEnvelope(body)) {
       throw new ApiError(body.message || "Request failed", response.status, normalizeFieldErrors(body.errors), body);
     }

@@ -2,6 +2,9 @@ import crypto from "crypto";
 import { AccessToken } from "@/models";
 import type { Types } from "mongoose";
 
+/** Access tokens expire after 24 hours (server-side). */
+export const ACCESS_TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
+
 function randomToken(length = 40): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   const bytes = crypto.randomBytes(length);
@@ -22,7 +25,7 @@ export async function createAccessToken(userId: Types.ObjectId, name = "api"): P
     userId,
     name,
     tokenHash: hashToken(plainTextToken),
-    expiresAt: null,
+    expiresAt: new Date(Date.now() + ACCESS_TOKEN_TTL_MS),
   });
 
   return `${record._id.toString()}|${plainTextToken}`;
@@ -41,11 +44,15 @@ export async function findAccessToken(plainToken: string | null): Promise<{
   if (!record) return null;
 
   const expected = hashToken(token);
-  if (!crypto.timingSafeEqual(Buffer.from(record.tokenHash), Buffer.from(expected))) {
+  if (
+    record.tokenHash.length !== expected.length ||
+    !crypto.timingSafeEqual(Buffer.from(record.tokenHash), Buffer.from(expected))
+  ) {
     return null;
   }
 
-  if (record.expiresAt && record.expiresAt.getTime() < Date.now()) {
+  if (!record.expiresAt || record.expiresAt.getTime() < Date.now()) {
+    // Legacy never-expiring tokens (expiresAt null) are rejected so the 24h policy applies.
     await AccessToken.deleteOne({ _id: record._id });
     return null;
   }

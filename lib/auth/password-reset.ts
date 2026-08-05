@@ -53,6 +53,7 @@ export async function sendPasswordResetLink(email: string): Promise<NextResponse
       to: email,
       subject: mail.subject,
       text: mail.text,
+      html: mail.html,
     });
   } catch (error) {
     console.error(error);

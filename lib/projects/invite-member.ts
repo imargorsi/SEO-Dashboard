@@ -106,6 +106,7 @@ export async function inviteProjectMember(
       to: invitee.email,
       subject: mail.subject,
       text: mail.text,
+      html: mail.html,
     });
   } catch (error) {
     emailSent = false;

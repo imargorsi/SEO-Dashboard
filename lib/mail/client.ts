@@ -3,6 +3,13 @@ import type SMTPTransport from "nodemailer/lib/smtp-transport";
 import type { Transporter } from "nodemailer";
 import { env } from "@/lib/config/env";
 
+export {
+  emailVerificationMailContent,
+  passwordResetMailContent,
+  projectInviteMailContent,
+} from "@/lib/mail/templates";
+export type { TMailContent } from "@/lib/mail/templates";
+
 let transporter: Transporter | null = null;
 
 function smtpTransportOptions(): SMTPTransport.Options {
@@ -61,58 +68,4 @@ export async function sendMail(payload: MailPayload): Promise<void> {
     console.error("[mail] SMTP send failed:", error);
     throw error;
   }
-}
-
-export function passwordResetMailContent(resetUrl: string, expireMinutes: number) {
-  const app = env.appName();
-  return {
-    subject: `Reset your ${app} password`,
-    text: [
-      "Hello!",
-      "",
-      "You are receiving this email because we received a password reset request for your account.",
-      "",
-      `Reset password: ${resetUrl}`,
-      "",
-      `This link will expire in ${expireMinutes} minutes.`,
-      "",
-      "If you did not request a password reset, no further action is required.",
-    ].join("\n"),
-  };
-}
-
-export function emailVerificationMailContent(verificationUrl: string) {
-  const app = env.appName();
-  return {
-    subject: `Verify your ${app} email address`,
-    text: [
-      "Hello!",
-      "",
-      "Please verify your email address by clicking the link below:",
-      verificationUrl,
-      "",
-      "If you did not create an account, no further action is required.",
-    ].join("\n"),
-  };
-}
-
-export function projectInviteMailContent(input: {
-  projectName: string;
-  inviterName: string;
-  invitationsUrl: string;
-}) {
-  const app = env.appName();
-  return {
-    subject: `You Were Invited To ${input.projectName} On ${app}`,
-    text: [
-      "Hello!",
-      "",
-      `${input.inviterName} invited you to join "${input.projectName}" on ${app}.`,
-      "",
-      "Open your projects page to Accept or Decline the invitation:",
-      input.invitationsUrl,
-      "",
-      "If you were not expecting this invitation, you can safely ignore this email.",
-    ].join("\n"),
-  };
 }

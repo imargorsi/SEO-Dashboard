@@ -71,5 +71,10 @@ export async function sendEmailVerification(user: UserDocument): Promise<void> {
 
   const url = createSignedVerificationUrl(user._id.toString(), user.getEmailForVerification());
   const mail = emailVerificationMailContent(url);
-  await sendMail({ to: user.email, subject: mail.subject, text: mail.text });
+  await sendMail({
+    to: user.email,
+    subject: mail.subject,
+    text: mail.text,
+    html: mail.html,
+  });
 }

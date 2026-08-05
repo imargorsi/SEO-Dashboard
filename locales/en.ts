@@ -41,6 +41,12 @@ export interface Translation {
   };
   ui: {
     close: string;
+    error: {
+      title: string;
+      description: string;
+      tryAgain: string;
+      goHome: string;
+    };
   };
   form: {
     showPassword: string;
@@ -1274,6 +1280,13 @@ const translation: Translation = {
   },
   ui: {
     close: "Close",
+    error: {
+      title: "Something Went Wrong",
+      description:
+        "Our Team Has Been Notified About This Error And We Are Fixing It.",
+      tryAgain: "Try Again",
+      goHome: "Go To Home",
+    },
   },
   form: {
     showPassword: "Show password",

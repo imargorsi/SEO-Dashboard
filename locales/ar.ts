@@ -42,6 +42,12 @@ const translation: Translation = {
   },
   ui: {
     close: "إغلاق",
+    error: {
+      title: "حدث خطأ ما",
+      description: "تم إخطار فريقنا بهذا الخطأ ونحن نعمل على إصلاحه.",
+      tryAgain: "حاول مرة أخرى",
+      goHome: "العودة للرئيسية",
+    },
   },
   form: {
     showPassword: "إظهار كلمة المرور",

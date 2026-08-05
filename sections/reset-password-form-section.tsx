@@ -3,10 +3,10 @@
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
+import { AuthFormHeader } from "@/components/auth/auth-form-header";
 import { AuthInput } from "@/components/auth/auth-input";
 import { AuthSubmitButton } from "@/components/auth/auth-submit-button";
 import { SignInAuthCardShell } from "@/components/sign-in-auth-card-shell";
-import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
 import { Spinner } from "@/components/ui/spinner";
 import type { ResetPasswordValues } from "@/sections/reset-password.types";
@@ -32,27 +32,25 @@ export function ResetPasswordFormSection({
 
   return (
     <SignInAuthCardShell ariaLabelledBy="reset-password-heading">
-      <Heading id="reset-password-heading" pageTitle>
-        {t("title")}
-      </Heading>
+      <AuthFormHeader
+        id="reset-password-heading"
+        title={invalidLink ? t("invalidLinkTitle") : t("title")}
+        subtitle={invalidLink ? t("invalidLinkBody") : t("subtitle")}
+        subtitleClassName={invalidLink ? "text-destructive" : undefined}
+      />
 
       {invalidLink ? (
-        <>
-          <Paragraph className="mt-5 text-sm leading-relaxed text-destructive">
-            {t("invalidLinkBody")}
-          </Paragraph>
-          <Paragraph moreSmaller className="mt-6! text-center">
-            <Link href="/" className="font-semibold text-brand transition-colors hover:brightness-110 hover:underline">
-              {t("backToSignIn")}
-            </Link>
-          </Paragraph>
-        </>
+        <Paragraph moreSmaller className="mt-6! text-center">
+          <Link href="/" className="font-semibold text-brand transition-colors hover:brightness-110 hover:underline">
+            {t("backToSignIn")}
+          </Link>
+        </Paragraph>
       ) : (
         <>
-          <Paragraph className="mt-2 text-sm font-normal leading-relaxed text-text-secondary">{t("subtitle")}</Paragraph>
-
           {resetComplete ? (
-            <Paragraph className="mt-7 text-sm font-normal leading-relaxed text-text-secondary">{t("submitSuccess")}</Paragraph>
+            <Paragraph className="mt-7 text-sm font-normal leading-relaxed text-text-secondary">
+              {t("submitSuccess")}
+            </Paragraph>
           ) : (
             <form className="mt-7 flex flex-col gap-4.5" onSubmit={onValidSubmit} noValidate>
               <AuthInput

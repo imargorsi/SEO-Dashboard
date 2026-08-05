@@ -3,10 +3,10 @@
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
+import { AuthFormHeader } from "@/components/auth/auth-form-header";
 import { AuthInput } from "@/components/auth/auth-input";
 import { AuthSubmitButton } from "@/components/auth/auth-submit-button";
 import { SignInAuthCardShell } from "@/components/sign-in-auth-card-shell";
-import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
 import { Spinner } from "@/components/ui/spinner";
 import type { RegisterValues } from "@/sections/register.types";
@@ -29,10 +29,7 @@ export function RegisterFormSection({
 
   return (
     <SignInAuthCardShell ariaLabelledBy="register-heading">
-      <Heading id="register-heading" pageTitle>
-        {t("title")}
-      </Heading>
-      <Paragraph className="mt-2 text-sm font-normal leading-relaxed text-text-secondary">{t("subtitle")}</Paragraph>
+      <AuthFormHeader id="register-heading" title={t("title")} subtitle={t("subtitle")} />
 
       <form className="mt-7 flex flex-col gap-4.5" onSubmit={onValidSubmit} noValidate>
         <AuthInput

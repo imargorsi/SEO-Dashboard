@@ -32,9 +32,11 @@ export function EmailVerificationSection() {
   return (
     <div className="w-full min-w-0">
       <div className="space-y-5 px-4 py-6 sm:px-6">
-        <div className="space-y-1">
+        <div className="flex flex-col gap-3">
           <Heading pageTitle>{t("title")}</Heading>
-          <Paragraph className="text-text-muted">{t("description")}</Paragraph>
+          <Paragraph className="text-sm font-normal leading-relaxed text-text-muted">
+            {t("description")}
+          </Paragraph>
         </div>
 
         <section className={cn(elevatedCardSurfaceClass, "rounded-2xl p-6")}>

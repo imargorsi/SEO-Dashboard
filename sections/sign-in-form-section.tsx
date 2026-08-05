@@ -1,9 +1,9 @@
 "use client";
 
+import { AuthFormHeader } from "@/components/auth/auth-form-header";
 import { AuthInput } from "@/components/auth/auth-input";
 import { AuthSubmitButton } from "@/components/auth/auth-submit-button";
 import { SignInAuthCardShell } from "@/components/sign-in-auth-card-shell";
-import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -30,10 +30,7 @@ export function SignInFormSection({
 
   return (
     <SignInAuthCardShell ariaLabelledBy="sign-in-heading">
-      <Heading id="sign-in-heading" pageTitle>
-        {t("title")}
-      </Heading>
-      <Paragraph className="mt-2 text-sm font-normal leading-relaxed text-text-secondary">{t("subtitle")}</Paragraph>
+      <AuthFormHeader id="sign-in-heading" title={t("title")} subtitle={t("subtitle")} />
 
       <form className="mt-7 flex flex-col gap-4.5" onSubmit={onValidSubmit} noValidate>
         <AuthInput
@@ -68,7 +65,10 @@ export function SignInFormSection({
         />
 
         <div className="-mt-1 flex justify-end">
-          <Link href="/forgot-password" className="type-caption text-text-secondary transition-colors hover:text-text-primary hover:underline">
+          <Link
+            href="/forgot-password"
+            className="type-caption text-text-secondary transition-colors hover:text-text-primary hover:underline"
+          >
             {t("forgotPassword")}
           </Link>
         </div>

@@ -1,25 +1,40 @@
 ---
-description: Default title case for all user-facing copy and labels
+description: Title case for labels/headings; sentence case for descriptions
 alwaysApply: true
 ---
 
-# Title case (default)
+# User-facing copy case
 
-Unless the user gives different instructions, write **user-facing text in title case**: capitalize the first letter of **each word** in a sentence or phrase.
+## Title case — labels and chrome
 
-Applies to:
+Use **title case** (capitalize the first letter of each word) for short UI chrome:
 
-- i18n strings in `locales/`
-- Button, label, heading, menu, and toast copy
-- Empty states, errors, and success messages shown in the UI
+- Button, label, heading, menu, and tab copy
+- Empty-state **titles**, toast/feedback titles, and short status labels
+- Form field labels
 
 Examples:
 
+- ✅ `Forgot Password`
+- ✅ `Send Reset Link`
 - ✅ `Your Email Is Not Verified`
-- ✅ `Save Password`
-- ❌ `Your email is not verified`
-- ❌ `Save password`
+- ❌ `Forgot password`
+- ❌ `Send reset link`
 
-**Code:** toast/feedback messages go through `notify.*()` in `lib/frontend/feedback/notify.ts`, which applies `capitalizeFeedbackText()` from `lib/frontend/feedback/format.ts`. When adding new i18n keys or static UI strings, author them in title case at the source.
+**Code:** toast/feedback messages go through `notify.*()` in `lib/frontend/feedback/notify.ts`, which applies `capitalizeFeedbackText()` from `lib/frontend/feedback/format.ts`. Author short chrome strings in title case at the source.
 
-Sentence case or lowercase is fine only when the user explicitly asks for it, or when matching an external API message verbatim.
+## Sentence case — descriptions and supporting copy
+
+Use **sentence case** for longer supporting text so it stays readable:
+
+- Page/section **subtitles** and **descriptions**
+- Helper text under headings, hero lead paragraphs, and bullet supporting lines
+- In-form success/body paragraphs (not button labels)
+
+Examples:
+
+- ✅ `Enter your account email and we'll send reset instructions if the address is registered.`
+- ✅ `Log in to your workspace. Your Crawllex dashboard is ready.`
+- ❌ `Enter Your Account Email And We'll Send Reset Instructions…`
+
+Match an external API message verbatim when displaying it as-is.

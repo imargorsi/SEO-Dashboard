@@ -188,7 +188,7 @@ async function syncGscIntegration(
 ): Promise<{ ok: boolean; message: string }> {
   const siteUrl = integration.externalPropertyId?.trim();
   if (!siteUrl) {
-    return { ok: false, message: "GSC Property Id Is Missing." };
+    return { ok: false, message: "GSC property ID is missing." };
   }
 
   const expectedPropertyId = siteUrl;
@@ -199,7 +199,7 @@ async function syncGscIntegration(
     const { startDate, endDate } = resolveSyncWindow(integration);
     if (startDate > endDate) {
       const stillValid = await markIntegrationSynced(integrationId, expectedPropertyId);
-      return stillValid ? { ok: true, message: "Already Up To Date." } : { ok: false, message: abortMessage };
+      return stillValid ? { ok: true, message: "Already up to date." } : { ok: false, message: abortMessage };
     }
 
     const totals = await fetchGscDailyTotals(siteUrl, startDate, endDate);
@@ -275,7 +275,7 @@ async function syncGscIntegration(
       await cleanupAfterStaleSync(integration.projectId, "gsc", integrationId);
       return { ok: false, message: abortMessage };
     }
-    return { ok: true, message: "GSC Sync Completed." };
+    return { ok: true, message: "GSC sync completed." };
   } catch (error) {
     const message = formatGoogleError(error);
     await markIntegrationError(integrationId, expectedPropertyId, message);
@@ -288,7 +288,7 @@ async function syncGa4Integration(
 ): Promise<{ ok: boolean; message: string }> {
   const propertyId = integration.externalPropertyId?.trim();
   if (!propertyId) {
-    return { ok: false, message: "GA4 Property Id Is Missing." };
+    return { ok: false, message: "GA4 property ID is missing." };
   }
 
   const expectedPropertyId = propertyId;
@@ -299,7 +299,7 @@ async function syncGa4Integration(
     const { startDate, endDate } = resolveSyncWindow(integration);
     if (startDate > endDate) {
       const stillValid = await markIntegrationSynced(integrationId, expectedPropertyId);
-      return stillValid ? { ok: true, message: "Already Up To Date." } : { ok: false, message: abortMessage };
+      return stillValid ? { ok: true, message: "Already up to date." } : { ok: false, message: abortMessage };
     }
 
     const normalizedId = normalizeGa4PropertyId(propertyId);
@@ -377,7 +377,7 @@ async function syncGa4Integration(
       await cleanupAfterStaleSync(integration.projectId, "ga4", integrationId);
       return { ok: false, message: abortMessage };
     }
-    return { ok: true, message: "GA4 Sync Completed." };
+    return { ok: true, message: "GA4 sync completed." };
   } catch (error) {
     const message = formatGoogleError(error);
     await markIntegrationError(integrationId, expectedPropertyId, message);
@@ -447,7 +447,7 @@ export function assertManualSyncAllowed(
     const elapsed = now - integration.lastSyncedAt.getTime();
     if (elapsed < ANALYTICS_MANUAL_SYNC_COOLDOWN_MS) {
       const minutesLeft = Math.ceil((ANALYTICS_MANUAL_SYNC_COOLDOWN_MS - elapsed) / 60000);
-      return `Manual Refresh Is Limited To Once Per Hour. Try Again In ${minutesLeft} Minute(s).`;
+      return `Refresh limited. Wait ${minutesLeft}m.`;
     }
   }
   return null;

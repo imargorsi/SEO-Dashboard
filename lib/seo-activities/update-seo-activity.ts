@@ -61,5 +61,5 @@ export async function updateSeoActivity(
 }
 
 export function buildUpdateSeoActivityResponse(activity: SeoActivityDocument): NextResponse {
-  return ApiResponse.success(serializeSeoActivity(activity), "Activity Updated Successfully.");
+  return ApiResponse.success(serializeSeoActivity(activity), "Activity updated.");
 }

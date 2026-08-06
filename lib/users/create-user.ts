@@ -51,7 +51,7 @@ export async function createUser(
 export function buildCreateUserResponse(user: UserDocument): NextResponse {
   return ApiResponse.success(
     serializeAdminUserListItem(user, []),
-    "User Created Successfully.",
+    "User created.",
     201,
   );
 }

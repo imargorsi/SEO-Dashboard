@@ -36,7 +36,7 @@ export const GET = withApiHandler(async (request, context) => {
     query = parseAnalyticsDimensionsQuery(new URL(request.url).searchParams);
   } catch (error) {
     if (error instanceof ZodError) {
-      return ApiResponse.validation("Validation Failed.", zodFieldErrors(error));
+      return ApiResponse.validation("Validation failed.", zodFieldErrors(error));
     }
     throw error;
   }

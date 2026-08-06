@@ -20,5 +20,5 @@ export const POST = withApiHandler(async (request, context) => {
   }
 
   const project = await approveProject(auth, id);
-  return buildProjectStatusResponse(project, "Project Approved Successfully.");
+  return buildProjectStatusResponse(project, "Project approved.");
 });

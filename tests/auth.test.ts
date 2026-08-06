@@ -254,7 +254,7 @@ describe("Auth API parity", () => {
 
     expect(response.status).toBe(200);
     expect(body.success).toBe(true);
-    expect(body.message).toBe("Your password has been changed.");
+    expect(body.message).toBe("Password changed.");
 
     const fresh = await User.findById(user._id);
     expect(await verifyPassword("New-password-1", fresh!.password)).toBe(true);

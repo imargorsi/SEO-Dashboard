@@ -17,5 +17,5 @@ export async function deleteSeoActivity(projectId: string, activityId: string): 
 }
 
 export function buildDeleteSeoActivityResponse(): NextResponse {
-  return ApiResponse.success(null, "Activity Deleted Successfully.");
+  return ApiResponse.success(null, "Activity deleted.");
 }

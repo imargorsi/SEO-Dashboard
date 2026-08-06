@@ -27,8 +27,8 @@ export async function deactivateRole(_auth: AuthContext, roleId: string): Promis
   // deactivating one would strand new project/member creation platform-wide.
   if (role.isSystem) {
     throw new ValidationError(
-      { status: ["System Roles Cannot Be Deactivated."] },
-      "System Roles Cannot Be Deactivated."
+      { status: ["Cannot deactivate system role."] },
+      "Cannot deactivate system role."
     );
   }
 
@@ -41,8 +41,8 @@ export async function deactivateRole(_auth: AuthContext, roleId: string): Promis
 
   if (isAssigned) {
     throw new ValidationError(
-      { status: ["This Role Is Assigned To A User And Cannot Be Deactivated."] },
-      "This Role Is Assigned To A User And Cannot Be Deactivated."
+      { status: ["Cannot deactivate assigned role."] },
+      "Cannot deactivate assigned role."
     );
   }
 

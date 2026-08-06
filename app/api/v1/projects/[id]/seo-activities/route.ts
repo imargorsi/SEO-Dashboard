@@ -44,7 +44,7 @@ export const GET = withApiHandler(async (request, context) => {
     query = parseListSeoActivitiesQuery(new URL(request.url).searchParams);
   } catch (error) {
     if (error instanceof ZodError) {
-      return ApiResponse.validation("Validation Failed.", zodFieldErrors(error));
+      return ApiResponse.validation("Validation failed.", zodFieldErrors(error));
     }
     throw error;
   }
@@ -81,7 +81,7 @@ export const POST = withApiHandler(async (request, context) => {
     input = createSeoActivitySchema.parse(body);
   } catch (error) {
     if (error instanceof ZodError) {
-      return ApiResponse.validation("Validation Failed.", zodFieldErrors(error));
+      return ApiResponse.validation("Validation failed.", zodFieldErrors(error));
     }
     throw error;
   }

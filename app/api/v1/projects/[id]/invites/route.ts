@@ -61,7 +61,7 @@ export const POST = withApiHandler(async (request, context) => {
     input = inviteProjectMemberSchema.parse(body);
   } catch (error) {
     if (error instanceof ZodError) {
-      return ApiResponse.validation("Validation Failed.", {
+      return ApiResponse.validation("Validation failed.", {
         userId: error.issues.map((issue) => issue.message),
       });
     }

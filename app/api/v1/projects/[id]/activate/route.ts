@@ -20,5 +20,5 @@ export const POST = withApiHandler(async (request, context) => {
   }
 
   const project = await activateProject(auth, id);
-  return buildProjectStatusResponse(project, "Project Activated Successfully.");
+  return buildProjectStatusResponse(project, "Project activated.");
 });

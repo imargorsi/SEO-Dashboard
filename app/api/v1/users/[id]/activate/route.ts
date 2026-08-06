@@ -19,5 +19,5 @@ export const POST = withApiHandler(async (request, context) => {
   }
 
   const user = await activateAdminUser(auth, id);
-  return buildUserStatusResponse(user, "User Activated Successfully.");
+  return buildUserStatusResponse(user, "User activated.");
 });

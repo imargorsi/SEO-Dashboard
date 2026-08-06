@@ -20,5 +20,5 @@ export const POST = withApiHandler(async (request, context) => {
   }
 
   const project = await rejectProject(auth, id);
-  return buildProjectStatusResponse(project, "Project Rejected Successfully.");
+  return buildProjectStatusResponse(project, "Project rejected.");
 });

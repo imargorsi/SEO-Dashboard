@@ -20,5 +20,5 @@ export const POST = withApiHandler(async (request, context) => {
   }
 
   const project = await deactivateProject(auth, id);
-  return buildProjectStatusResponse(project, "Project Deactivated Successfully.");
+  return buildProjectStatusResponse(project, "Project deactivated.");
 });

@@ -29,8 +29,8 @@ export async function deleteProject(_auth: AuthContext, projectId: string): Prom
 
   if (project.status !== "inactive" && project.status !== "rejected") {
     throw new ValidationError(
-      { status: ["Only Inactive Or Rejected Projects Can Be Deleted."] },
-      "Project Cannot Be Deleted In Its Current State.",
+      { status: ["Only inactive or rejected projects can be deleted."] },
+      "Project cannot be deleted in its current state.",
     );
   }
 
@@ -44,5 +44,5 @@ export async function deleteProject(_auth: AuthContext, projectId: string): Prom
 }
 
 export function buildDeleteProjectResponse(): NextResponse {
-  return ApiResponse.success(null, "Project Deleted Successfully.");
+  return ApiResponse.success(null, "Project deleted.");
 }

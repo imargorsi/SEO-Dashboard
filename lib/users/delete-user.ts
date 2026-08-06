@@ -25,12 +25,12 @@ export async function deleteAdminUser(auth: AuthContext, userId: string): Promis
   }
 
   if (user.roles.includes(SUPER_ADMIN_ROLE)) {
-    throw new ValidationError({ status: ["This User Cannot Be Deleted."] }, "This User Cannot Be Deleted.");
+    throw new ValidationError({ status: ["Cannot delete user."] }, "Cannot delete user.");
   }
 
   if (isActiveUserStatus(user.status)) {
     throw new ValidationError(
-      { status: ["Only Inactive Users Can Be Deleted."] },
+      { status: ["Only inactive users deletable."] },
       "User Cannot Be Deleted In Its Current State.",
     );
   }
@@ -45,5 +45,5 @@ export async function deleteAdminUser(auth: AuthContext, userId: string): Promis
 }
 
 export function buildDeleteAdminUserResponse(): NextResponse {
-  return ApiResponse.success(null, "User Deleted Successfully.");
+  return ApiResponse.success(null, "User deleted.");
 }

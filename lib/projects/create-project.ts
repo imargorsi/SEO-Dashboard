@@ -95,5 +95,5 @@ export async function createProject(
 }
 
 export function buildCreateProjectResponse(project: ProjectDocument): NextResponse {
-  return ApiResponse.success(serializeProject(project), "Project Created Successfully.", 201);
+  return ApiResponse.success(serializeProject(project), "Project created.", 201);
 }

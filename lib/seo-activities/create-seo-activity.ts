@@ -51,5 +51,5 @@ export async function createSeoActivity(
 }
 
 export function buildCreateSeoActivityResponse(activity: SeoActivityDocument): NextResponse {
-  return ApiResponse.success(serializeSeoActivity(activity), "Activity Created Successfully.", 201);
+  return ApiResponse.success(serializeSeoActivity(activity), "Activity created.", 201);
 }

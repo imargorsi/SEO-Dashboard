@@ -337,7 +337,7 @@ describe("PATCH /projects/{id} — updateProject", () => {
 
     expect(response.status).toBe(200);
     expect(body.success).toBe(true);
-    expect(body.message).toBe("Project Updated Successfully.");
+    expect(body.message).toBe("Project updated.");
     expect(body.data.websiteUrl).toBe("https://response-updated.example.com");
     expect(body.data.businessName).toBe("Response Co");
   });

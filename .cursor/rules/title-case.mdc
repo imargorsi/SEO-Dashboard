@@ -1,5 +1,5 @@
 ---
-description: Title case for labels/headings; sentence case for descriptions
+description: Title case for labels/headings; sentence case for descriptions and toasts
 alwaysApply: true
 ---
 
@@ -10,7 +10,7 @@ alwaysApply: true
 Use **title case** (capitalize the first letter of each word) for short UI chrome:
 
 - Button, label, heading, menu, and tab copy
-- Empty-state **titles**, toast/feedback titles, and short status labels
+- Empty-state **titles** and short status labels
 - Form field labels
 
 Examples:
@@ -21,20 +21,23 @@ Examples:
 - ❌ `Forgot password`
 - ❌ `Send reset link`
 
-**Code:** toast/feedback messages go through `notify.*()` in `lib/frontend/feedback/notify.ts`, which applies `capitalizeFeedbackText()` from `lib/frontend/feedback/format.ts`. Author short chrome strings in title case at the source.
+## Sentence case — descriptions, supporting copy, and toasts
 
-## Sentence case — descriptions and supporting copy
-
-Use **sentence case** for longer supporting text so it stays readable:
+Use **sentence case** for longer supporting text and for **toast / notify feedback**:
 
 - Page/section **subtitles** and **descriptions**
 - Helper text under headings, hero lead paragraphs, and bullet supporting lines
 - In-form success/body paragraphs (not button labels)
+- Toast / `notify.*()` messages (and matching API `message` strings)
 
 Examples:
 
 - ✅ `Enter your account email and we'll send reset instructions if the address is registered.`
-- ✅ `Log in to your workspace. Your Crawllex dashboard is ready.`
+- ✅ `Account created. Check your email.`
+- ✅ `You do not have permission to invite users.`
+- ❌ `Account Created. Check Your Email.`
 - ❌ `Enter Your Account Email And We'll Send Reset Instructions…`
+
+**Code:** toast/feedback messages go through `notify.*()` in `lib/frontend/feedback/notify.ts`, which applies `formatFeedbackText()` from `lib/frontend/feedback/format.ts`. Author toast strings in **sentence case** at the source (frontend locales and backend API messages).
 
 Match an external API message verbatim when displaying it as-is.

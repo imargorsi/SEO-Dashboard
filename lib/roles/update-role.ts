@@ -73,5 +73,5 @@ export async function buildUpdateRoleResponse(role: RoleDocument): Promise<NextR
   const counts = await resolveRoleMemberCounts([role._id]);
   const membersCount = counts.get(role._id.toString()) ?? 0;
 
-  return ApiResponse.success(serializeAdminRoleDetail(role, membersCount), "Role Updated Successfully.");
+  return ApiResponse.success(serializeAdminRoleDetail(role, membersCount), "Role updated.");
 }

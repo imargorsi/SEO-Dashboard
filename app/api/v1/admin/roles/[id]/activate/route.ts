@@ -12,5 +12,5 @@ export const POST = withApiHandler(async (request, context) => {
 
   const { id } = await context!.params;
   const role = await activateRole(auth, id);
-  return buildRoleStatusResponse(role, "Role Activated Successfully.");
+  return buildRoleStatusResponse(role, "Role activated.");
 });

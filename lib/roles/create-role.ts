@@ -54,5 +54,5 @@ export async function createRole(input: CreateRoleInput): Promise<{ role: RoleDo
 }
 
 export function buildCreateRoleResponse(role: RoleDocument): NextResponse {
-  return ApiResponse.success(serializeAdminRoleDetail(role, 0), "Role Created Successfully.", 201);
+  return ApiResponse.success(serializeAdminRoleDetail(role, 0), "Role created.", 201);
 }

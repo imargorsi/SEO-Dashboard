@@ -134,8 +134,8 @@ export function buildInviteProjectMemberResponse(
   return ApiResponse.success(
     invite,
     emailSent
-      ? "Invitation Sent."
-      : "Invitation Created But Email Could Not Be Sent.",
+      ? "Invitation sent."
+      : "Invitation saved. Email failed.",
     201,
   );
 }

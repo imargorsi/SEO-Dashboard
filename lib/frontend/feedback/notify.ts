@@ -1,27 +1,40 @@
-import { toast } from "sonner";
+"use client";
 
-import { capitalizeFeedbackText } from "@/lib/frontend/feedback/format";
+import { toast, type TGlassToastOptions } from "@tarmiz/web-glass-toast";
+
+import { formatFeedbackText } from "@/lib/frontend/feedback/format";
 import type { FeedbackMessage } from "@/lib/frontend/feedback/types";
 
-function showToast({ variant, message }: FeedbackMessage) {
-  const title = capitalizeFeedbackText(message);
+const DEFAULT_OPTIONS: TGlassToastOptions = {
+  position: "top-right",
+  duration: 5000,
+};
+
+function showToast({ variant, message }: FeedbackMessage, options: TGlassToastOptions = {}) {
+  const title = formatFeedbackText(message);
+  const merged: TGlassToastOptions = { ...DEFAULT_OPTIONS, ...options };
 
   switch (variant) {
     case "success":
-      return toast.success(title);
+      return toast.success(title, merged);
     case "error":
-      return toast.error(title);
+      return toast.error(title, merged);
     case "warning":
-      return toast.warning(title);
+      return toast.warning(title, merged);
     case "info":
-      return toast.info(title);
+      return toast.info(title, merged);
   }
 }
 
 export const notify = {
-  success: (message: string) => showToast({ variant: "success", message }),
-  error: (message: string) => showToast({ variant: "error", message }),
-  warning: (message: string) => showToast({ variant: "warning", message }),
-  info: (message: string) => showToast({ variant: "info", message }),
-  show: (message: FeedbackMessage) => showToast(message),
+  success: (message: string, options?: TGlassToastOptions) =>
+    showToast({ variant: "success", message }, options),
+  error: (message: string, options?: TGlassToastOptions) =>
+    showToast({ variant: "error", message }, options),
+  warning: (message: string, options?: TGlassToastOptions) =>
+    showToast({ variant: "warning", message }, options),
+  info: (message: string, options?: TGlassToastOptions) =>
+    showToast({ variant: "info", message }, options),
+  show: (message: FeedbackMessage, options?: TGlassToastOptions) => showToast(message, options),
+  dismiss: (id?: string) => toast.dismiss(id),
 };

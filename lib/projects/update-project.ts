@@ -75,6 +75,6 @@ export async function buildUpdateProjectResponse(project: ProjectDocument): Prom
   ]);
   return ApiResponse.success(
     serializeProject(project, ownerMap.get(project._id.toString()), invitedUsers),
-    "Project Updated Successfully.",
+    "Project updated.",
   );
 }

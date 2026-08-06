@@ -13,7 +13,7 @@ export const POST = withApiHandler(async (request) => {
   const ip = clientIp(request);
   const throttled = ensureRouteNotRateLimited("forgot-password", ip);
   if (throttled !== null) {
-    return ApiResponse.error(`Too many attempts. Please try again in ${throttled} seconds.`, {}, 429);
+    return ApiResponse.error(`Too many attempts. Wait ${throttled}s.`, {}, 429);
   }
   recordRouteAttempt("forgot-password", ip);
 

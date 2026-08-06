@@ -8,7 +8,7 @@ import { UserPreferencesSync } from "@/components/providers/user-preferences-syn
 import { I18nProvider } from "@/components/providers/i18n-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { AuthRevealProvider } from "@/context/auth-reveal-transition";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/toaster";
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
   return (

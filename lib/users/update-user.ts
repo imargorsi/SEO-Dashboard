@@ -61,5 +61,5 @@ export async function updateAdminUser(
 }
 
 export function buildUpdateAdminUserResponse(user: UserDocument): NextResponse {
-  return ApiResponse.success(serializeAdminUserDetail(user), "User Updated Successfully.");
+  return ApiResponse.success(serializeAdminUserDetail(user), "User updated.");
 }

@@ -16,14 +16,14 @@ export async function deleteRole(_auth: AuthContext, roleId: string): Promise<vo
 
   if (role.isSystem) {
     throw new ValidationError(
-      { status: ["System Roles Cannot Be Deleted."] },
-      "System Roles Cannot Be Deleted.",
+      { status: ["Cannot delete system role."] },
+      "Cannot delete system role.",
     );
   }
 
   if (isActiveRoleStatus(role.status)) {
     throw new ValidationError(
-      { status: ["Only Inactive Roles Can Be Deleted."] },
+      { status: ["Only inactive roles deletable."] },
       "Role Cannot Be Deleted In Its Current State.",
     );
   }
@@ -35,8 +35,8 @@ export async function deleteRole(_auth: AuthContext, roleId: string): Promise<vo
 
   if (isAssigned) {
     throw new ValidationError(
-      { status: ["This Role Is Assigned To A User And Cannot Be Deleted."] },
-      "This Role Is Assigned To A User And Cannot Be Deleted.",
+      { status: ["Cannot delete assigned role."] },
+      "Cannot delete assigned role.",
     );
   }
 
@@ -45,5 +45,5 @@ export async function deleteRole(_auth: AuthContext, roleId: string): Promise<vo
 }
 
 export function buildDeleteRoleResponse(): NextResponse {
-  return ApiResponse.success(null, "Role Deleted Successfully.");
+  return ApiResponse.success(null, "Role deleted.");
 }

@@ -2,7 +2,13 @@ import { hasAnyPermission } from "@/lib/rbac/access";
 import { permissionsForScope } from "@/lib/rbac/scope-permissions";
 
 /** Routes any authenticated user may open (outside RBAC). */
-export const AUTH_ONLY_ROUTE_PREFIXES = ["/edit-profile", "/settings", "/projects", "/email-verification"] as const;
+export const AUTH_ONLY_ROUTE_PREFIXES = [
+  "/edit-profile",
+  "/settings",
+  "/projects",
+  "/email-verification",
+  "/debug",
+] as const;
 
 export type RouteAccessRule = {
   pattern: RegExp;

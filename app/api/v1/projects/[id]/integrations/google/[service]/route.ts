@@ -47,7 +47,7 @@ export const GET = withApiHandler(async (request, context) => {
     service = parseServiceParam(serviceParam);
   } catch (error) {
     if (error instanceof ZodError) {
-      return ApiResponse.validation("Validation Failed.", zodFieldErrors(error));
+      return ApiResponse.validation("Validation failed.", zodFieldErrors(error));
     }
     throw error;
   }
@@ -75,7 +75,7 @@ export const PUT = withApiHandler(async (request, context) => {
     service = parseServiceParam(serviceParam);
   } catch (error) {
     if (error instanceof ZodError) {
-      return ApiResponse.validation("Validation Failed.", zodFieldErrors(error));
+      return ApiResponse.validation("Validation failed.", zodFieldErrors(error));
     }
     throw error;
   }
@@ -94,7 +94,7 @@ export const PUT = withApiHandler(async (request, context) => {
     input = connectGoogleIntegrationSchema.parse(body);
   } catch (error) {
     if (error instanceof ZodError) {
-      return ApiResponse.validation("Validation Failed.", zodFieldErrors(error));
+      return ApiResponse.validation("Validation failed.", zodFieldErrors(error));
     }
     throw error;
   }
@@ -122,7 +122,7 @@ export const DELETE = withApiHandler(async (request, context) => {
     service = parseServiceParam(serviceParam);
   } catch (error) {
     if (error instanceof ZodError) {
-      return ApiResponse.validation("Validation Failed.", zodFieldErrors(error));
+      return ApiResponse.validation("Validation failed.", zodFieldErrors(error));
     }
     throw error;
   }

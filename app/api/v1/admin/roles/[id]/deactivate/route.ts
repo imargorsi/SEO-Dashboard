@@ -12,5 +12,5 @@ export const POST = withApiHandler(async (request, context) => {
 
   const { id } = await context!.params;
   const role = await deactivateRole(auth, id);
-  return buildRoleStatusResponse(role, "Role Deactivated Successfully.");
+  return buildRoleStatusResponse(role, "Role deactivated.");
 });

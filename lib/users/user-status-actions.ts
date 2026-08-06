@@ -40,7 +40,7 @@ export async function deactivateAdminUser(auth: AuthContext, userId: string): Pr
   }
 
   if (user.roles.includes(SUPER_ADMIN_ROLE)) {
-    throw new ValidationError({ status: ["This User Cannot Be Deactivated."] }, "This User Cannot Be Deactivated.");
+    throw new ValidationError({ status: ["Cannot deactivate user."] }, "Cannot deactivate user.");
   }
 
   assertUserAccountStatus(user, "active", "Deactivated");

@@ -19,5 +19,5 @@ export const POST = withApiHandler(async (request, context) => {
   }
 
   const user = await deactivateAdminUser(auth, id);
-  return buildUserStatusResponse(user, "User Deactivated Successfully.");
+  return buildUserStatusResponse(user, "User deactivated.");
 });

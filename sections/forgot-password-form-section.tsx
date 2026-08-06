@@ -33,14 +33,10 @@ export function ForgotPasswordFormSection({
       <AuthFormHeader
         id="forgot-password-heading"
         title={t("title")}
-        subtitle={t("subtitle")}
+        subtitle={requestSent ? t("submitSuccess") : t("subtitle")}
       />
 
-      {requestSent ? (
-        <Paragraph className="mt-7 text-sm font-normal leading-relaxed text-text-secondary">
-          {t("submitSuccess")}
-        </Paragraph>
-      ) : (
+      {requestSent ? null : (
         <form className="mt-7 flex flex-col gap-4.5" onSubmit={onValidSubmit} noValidate>
           <AuthInput
             id="forgot-password-email"

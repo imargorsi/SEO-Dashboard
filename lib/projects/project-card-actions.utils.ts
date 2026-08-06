@@ -111,7 +111,7 @@ function buildGeneralActions(
 ): TProjectCardActionConfig[] {
   const actions: TProjectCardActionConfig[] = [];
 
-  if (canInviteMembers) {
+  if (canInviteMembers && status !== "rejected") {
     actions.push({
       id: "inviteUsers",
       group: "general",
@@ -130,6 +130,7 @@ function buildGeneralActions(
     });
   }
 
+  // Rejected projects are read-only on the detail page — no edit CTA.
   if (canEditProject && status !== "rejected") {
     actions.push({
       id: "edit",

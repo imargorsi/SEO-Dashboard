@@ -1,7 +1,13 @@
 "use client";
 
 import { useTranslation } from "react-i18next";
-import { IoCheckmarkCircle } from "react-icons/io5";
+import {
+  IoBriefcaseOutline,
+  IoCheckmarkCircle,
+  IoFlagOutline,
+  IoGridOutline,
+  IoPersonOutline,
+} from "react-icons/io5";
 
 import {
   ProjectDetailField,
@@ -32,7 +38,11 @@ export function ProjectDetailMainContent({ project }: ProjectDetailMainContentPr
 
   return (
     <div className="space-y-4">
-      <ProjectDetailInfoCard title={tDetail("sectionBusinessTitle")} lead={tDetail("sectionBusinessLead")}>
+      <ProjectDetailInfoCard
+        title={tDetail("sectionBusinessTitle")}
+        lead={tDetail("sectionBusinessLead")}
+        icon={<IoBriefcaseOutline className="size-4 shrink-0" aria-hidden />}
+      >
         <div className="grid gap-5 sm:grid-cols-2">
           <ProjectDetailField label={tForm("websiteUrl")} value={displayDetailValue(project.websiteUrl)} />
           <ProjectDetailField label={tForm("businessAddress")} value={displayDetailValue(project.businessAddress)} />
@@ -45,11 +55,19 @@ export function ProjectDetailMainContent({ project }: ProjectDetailMainContentPr
         </div>
       </ProjectDetailInfoCard>
 
-      <ProjectDetailInfoCard title={tDetail("sectionServicesTitle")} lead={tDetail("sectionServicesLead")}>
+      <ProjectDetailInfoCard
+        title={tDetail("sectionServicesTitle")}
+        lead={tDetail("sectionServicesLead")}
+        icon={<IoGridOutline className="size-4 shrink-0" aria-hidden />}
+      >
         <ProjectDetailTagList items={project.servicesOffered} emptyLabel={tDetail("noServices")} />
       </ProjectDetailInfoCard>
 
-      <ProjectDetailInfoCard title={tDetail("sectionSeoGoalsTitle")} lead={tDetail("sectionSeoGoalsLead")}>
+      <ProjectDetailInfoCard
+        title={tDetail("sectionSeoGoalsTitle")}
+        lead={tDetail("sectionSeoGoalsLead")}
+        icon={<IoFlagOutline className="size-4 shrink-0" aria-hidden />}
+      >
         {project.seoGoals.length === 0 ? (
           <p className={cn("type-body", elevatedCardMutedClass)}>{tDetail("noSeoGoals")}</p>
         ) : (
@@ -75,7 +93,11 @@ export function ProjectDetailMainContent({ project }: ProjectDetailMainContentPr
         )}
       </ProjectDetailInfoCard>
 
-      <ProjectDetailInfoCard title={tDetail("sectionIcpTitle")} lead={tDetail("sectionIcpLead")}>
+      <ProjectDetailInfoCard
+        title={tDetail("sectionIcpTitle")}
+        lead={tDetail("sectionIcpLead")}
+        icon={<IoPersonOutline className="size-4 shrink-0" aria-hidden />}
+      >
         <p className={cn("type-body leading-relaxed", elevatedCardBodyClass)}>
           {displayDetailValue(project.idealCustomerProfile, tDetail("noValue"))}
         </p>

@@ -69,8 +69,10 @@ export function ProjectDetailSection() {
       })
     : true;
 
+  // Rejected projects are readable but not editable (API also rejects updates).
   const canEdit = project
-    ? canEditProjectCard({
+    ? project.status !== "rejected" &&
+      canEditProjectCard({
         permissions,
         userId: user?.id,
         ownerId: projectOwnerId,
@@ -134,13 +136,27 @@ export function ProjectDetailSection() {
   }
 
   if (isError) {
-    const isNotFound = error instanceof ApiError && error.status === 404;
+    const status = error instanceof ApiError ? error.status : null;
+    const isNotFound = status === 404;
+    const isForbidden = status === 403;
     return (
       <div className="px-4 py-6 sm:px-6">
         <EmptyState
-          title={isNotFound ? t("notFoundTitle") : t("loadErrorTitle")}
-          description={isNotFound ? t("notFoundBody") : t("loadErrorBody")}
-          icon={isNotFound ? IoFolderOpenOutline : IoWarningOutline}
+          title={
+            isNotFound
+              ? t("notFoundTitle")
+              : isForbidden
+                ? t("forbiddenTitle")
+                : t("loadErrorTitle")
+          }
+          description={
+            isNotFound
+              ? t("notFoundBody")
+              : isForbidden
+                ? t("forbiddenBody")
+                : t("loadErrorBody")
+          }
+          icon={isNotFound || isForbidden ? IoFolderOpenOutline : IoWarningOutline}
         />
       </div>
     );

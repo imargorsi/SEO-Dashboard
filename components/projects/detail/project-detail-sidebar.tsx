@@ -1,6 +1,11 @@
 "use client";
 
 import { useTranslation } from "react-i18next";
+import {
+  IoGitCompareOutline,
+  IoLocationOutline,
+  IoTimeOutline,
+} from "react-icons/io5";
 
 import {
   ProjectDetailInfoCard,
@@ -81,7 +86,10 @@ export function ProjectDetailSidebar({ project }: ProjectDetailSidebarProps) {
     <div className="space-y-4">
       <ProjectDetailMembersCard project={project} />
 
-      <ProjectDetailInfoCard title={t("timelineTitle")}>
+      <ProjectDetailInfoCard
+        title={t("timelineTitle")}
+        icon={<IoTimeOutline className="size-4 shrink-0" aria-hidden />}
+      >
         <ol className="space-y-4">
           {timeline.map((entry) => (
             <li key={entry.id} className="flex gap-3">
@@ -97,11 +105,19 @@ export function ProjectDetailSidebar({ project }: ProjectDetailSidebarProps) {
         </ol>
       </ProjectDetailInfoCard>
 
-      <ProjectDetailInfoCard title={t("sectionLocationsTitle")} lead={t("sectionLocationsLead")}>
+      <ProjectDetailInfoCard
+        title={t("sectionLocationsTitle")}
+        lead={t("sectionLocationsLead")}
+        icon={<IoLocationOutline className="size-4 shrink-0" aria-hidden />}
+      >
         <ProjectDetailTagList items={project.targetLocations} emptyLabel={t("noLocations")} />
       </ProjectDetailInfoCard>
 
-      <ProjectDetailInfoCard title={t("sectionCompetitorsTitle")} lead={t("sectionCompetitorsLead")}>
+      <ProjectDetailInfoCard
+        title={t("sectionCompetitorsTitle")}
+        lead={t("sectionCompetitorsLead")}
+        icon={<IoGitCompareOutline className="size-4 shrink-0" aria-hidden />}
+      >
         {project.competitorUrls.length === 0 ? (
           <p className={cn("type-body", elevatedCardMutedClass)}>{t("noCompetitors")}</p>
         ) : (

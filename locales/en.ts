@@ -449,6 +449,8 @@ export interface Translation {
         loading: string;
         notFoundTitle: string;
         notFoundBody: string;
+        forbiddenTitle: string;
+        forbiddenBody: string;
         loadErrorTitle: string;
         loadErrorBody: string;
         website: string;
@@ -1698,7 +1700,9 @@ const translation: Translation = {
         editProject: "Edit Project",
         loading: "Loading Project…",
         notFoundTitle: "Project Not Found",
-        notFoundBody: "This Project May Have Been Removed Or You Do Not Have Access.",
+        notFoundBody: "This project may have been removed, rejected, or you do not have access.",
+        forbiddenTitle: "Access Denied",
+        forbiddenBody: "You do not have permission to view this project.",
         loadErrorTitle: "Could Not Load Project",
         loadErrorBody: "Could not load data.",
         website: "Website",

@@ -184,8 +184,8 @@ export function ProjectActions({
     projectId,
     isSuperAdmin,
     canViewDetails,
-    canEditProject,
-    canInviteMembers,
+    canEditProject: canEditProject && status !== "rejected",
+    canInviteMembers: canInviteMembers && status !== "rejected",
     canDeleteProject,
   });
 

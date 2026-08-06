@@ -62,7 +62,12 @@ function writeStoredProjectId(id: string | null) {
 
 export function SelectedProjectProvider({ children }: { children: ReactNode }) {
   const { data, isLoading } = useProjectsQuery();
-  const projects: TProjectListItem[] = data ?? EMPTY_PROJECTS;
+  const allProjects: TProjectListItem[] = data ?? EMPTY_PROJECTS;
+  /** Rejected projects stay on the projects list but cannot be selected for module work. */
+  const projects = useMemo(
+    () => allProjects.filter((project) => project.status !== "rejected"),
+    [allProjects],
+  );
 
   const storedId = useSyncExternalStore(
     subscribeStoredProjectId,
@@ -82,6 +87,13 @@ export function SelectedProjectProvider({ children }: { children: ReactNode }) {
     () => projects.find((project) => project.id === effectivePreferredId) ?? null,
     [projects, effectivePreferredId],
   );
+
+  // Drop a stored selection that points at a rejected (or missing) project.
+  useEffect(() => {
+    if (isLoading || !effectivePreferredId || selectedProject) return;
+    writeStoredProjectId(null);
+    setPreferredId(null);
+  }, [effectivePreferredId, isLoading, selectedProject]);
 
   const setSelectedProjectId = useCallback(
     (id: string) => {

@@ -163,7 +163,7 @@ describe("SEO activities CRUD", () => {
     );
 
     expect(forbidden).toBeInstanceOf(Response);
-    expect(forbidden?.status).toBe(403);
+    expect(forbidden?.status).toBe(404);
   });
 
   it("validates type-specific fields on create", async () => {

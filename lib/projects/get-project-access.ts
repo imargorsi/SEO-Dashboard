@@ -20,6 +20,9 @@ const INACTIVE_PROJECT_ACCESS_PERMISSIONS = [
   projectPermission("projects", "update"),
 ] as const;
 
+/** Rejected projects stay readable (detail page) but grant no module / mutate permissions. */
+const REJECTED_PROJECT_ACCESS_PERMISSIONS = [projectPermission("projects", "view")] as const;
+
 export type ProjectAccessDto = {
   projectId: string;
   roles: string[];
@@ -36,8 +39,17 @@ export async function getProjectAccessForUser(auth: AuthContext, projectId: stri
   const isAdmin = auth.user.roles.includes(SUPER_ADMIN_ROLE);
   if (isAdmin) {
     const project = await Project.findById(projectId).select("_id status");
-    if (!project || project.status === "rejected") {
+    if (!project) {
       return null;
+    }
+
+    // Read-only shell — detail yes; analytics / activities / integrations / mutate no.
+    if (project.status === "rejected") {
+      return {
+        projectId,
+        roles: [SUPER_ADMIN_ROLE],
+        permissions: [...REJECTED_PROJECT_ACCESS_PERMISSIONS],
+      };
     }
 
     return {
@@ -58,7 +70,7 @@ export async function getProjectAccessForUser(auth: AuthContext, projectId: stri
   }
 
   const project = await Project.findById(projectId).select("status");
-  if (!project || project.status === "rejected") {
+  if (!project) {
     return null;
   }
 
@@ -67,6 +79,14 @@ export async function getProjectAccessForUser(auth: AuthContext, projectId: stri
   // An inactive role grants no permissions, even if it's still referenced by a membership.
   const rolePermissions = role && isActiveRoleStatus(role.status) ? [...role.permissions] : [];
   const memberManagementPermissions = rolePermissions.filter((permission) => permission.startsWith("members."));
+
+  if (project.status === "rejected") {
+    return {
+      projectId,
+      roles: roleSlug ? [roleSlug] : [],
+      permissions: [...REJECTED_PROJECT_ACCESS_PERMISSIONS],
+    };
+  }
 
   if (project.status === "pending") {
     return {
@@ -101,8 +121,9 @@ export async function requireProjectPermission(
   permission: string
 ): Promise<NextResponse | null> {
   const access = await getProjectAccessForUser(auth, projectId);
+  // No membership / missing project → 404. Rejected projects still grant projects.view only.
   if (!access) {
-    return ApiResponse.error("Forbidden.", {}, 403);
+    return ApiResponse.error("Project Not Found.", {}, 404);
   }
 
   if (!hasPermission(access.permissions, permission)) {

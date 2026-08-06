@@ -132,7 +132,7 @@ export function ProjectCard({
         status={project.status}
         isSuperAdmin={isSuperAdmin}
         canViewDetails={canViewDetails}
-        canEditProject={canEditProject}
+        canEditProject={canEditProject && project.status !== "rejected"}
         canInviteMembers={canInviteMembers}
         canDeleteProject={canDeleteProject}
         onInviteUsers={onInviteUsers}

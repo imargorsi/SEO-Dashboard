@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslation } from "react-i18next";
+import { IoPeopleOutline } from "react-icons/io5";
 
 import { ProjectDetailInfoCard } from "@/components/projects/detail/project-detail-info-card";
 import { UserAvatar } from "@/components/ui/user-avatar";
@@ -68,7 +69,10 @@ export function ProjectDetailMembersCard({ project }: ProjectDetailMembersCardPr
   const ownerName = owner?.name.trim() || t("memberOwnerFallback");
 
   return (
-    <ProjectDetailInfoCard title={t("sidebarMembersTitle")}>
+    <ProjectDetailInfoCard
+      title={t("sidebarMembersTitle")}
+      icon={<IoPeopleOutline className="size-4 shrink-0" aria-hidden />}
+    >
       <div className="space-y-4">
         {owner || members.length > 0 ? (
           <ul className="space-y-4">

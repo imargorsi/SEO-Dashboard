@@ -220,6 +220,48 @@ describe("GET /projects/{id}/access — getProjectAccessForUser", () => {
     if (!(denied instanceof Response)) return;
     expect(denied.status).toBe(403);
   });
+
+  it("allows projects.view on rejected projects but denies other module permissions", async () => {
+    await seedSystemRoles();
+
+    const user = await User.create({
+      name: "Owner",
+      email: "owner-rejected-guard@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+    });
+
+    const { project } = await createProject(
+      authContextFor(user),
+      projectInput({
+        businessName: "Rejected Guard Project",
+        websiteUrl: "https://rejected-guard.example.com",
+      }),
+    );
+
+    await Project.findByIdAndUpdate(project._id, { status: "rejected" });
+
+    const access = await getProjectAccessForUser(authContextFor(user), project._id.toString());
+    expect(access).not.toBeNull();
+    expect(access!.permissions).toEqual(["projects.view"]);
+
+    const allowedView = await requireProjectPermission(
+      authContextFor(user),
+      project._id.toString(),
+      "projects.view",
+    );
+    expect(allowedView).toBeNull();
+
+    const deniedAnalytics = await requireProjectPermission(
+      authContextFor(user),
+      project._id.toString(),
+      "analytics.view",
+    );
+    expect(deniedAnalytics).not.toBeNull();
+    if (!(deniedAnalytics instanceof Response)) return;
+    expect(deniedAnalytics.status).toBe(403);
+  });
 });
 
 describe("GET /auth/user — platform auth only", () => {

@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
 import {
+  detailIconWellClass,
   elevatedCardBodyClass,
   elevatedCardMutedClass,
   elevatedCardSurfaceClass,
@@ -15,6 +16,8 @@ import { cn } from "@/lib/utils";
 type ProjectDetailInfoCardProps = {
   title: string;
   lead?: string;
+  /** Optional icon shown beside the section heading only. */
+  icon?: ReactNode;
   children: ReactNode;
   className?: string;
   action?: ReactNode;
@@ -23,6 +26,7 @@ type ProjectDetailInfoCardProps = {
 export function ProjectDetailInfoCard({
   title,
   lead,
+  icon,
   children,
   className,
   action,
@@ -30,11 +34,20 @@ export function ProjectDetailInfoCard({
   return (
     <section className={cn(elevatedCardSurfaceClass, "rounded-3xl p-5 sm:p-6", className)}>
       <div className="flex items-start justify-between gap-3">
-        <div className="space-y-1">
-          <Heading sectionTitle className={elevatedCardTitleClass}>
-            {title}
-          </Heading>
-          {lead ? <Paragraph className={cn("type-body", elevatedCardMutedClass)}>{lead}</Paragraph> : null}
+        <div className="min-w-0 flex-1 space-y-1">
+          <div className="flex items-center gap-2.5">
+            {icon ? (
+              <span className={cn(detailIconWellClass, "size-8")} aria-hidden>
+                {icon}
+              </span>
+            ) : null}
+            <Heading sectionTitle className={cn("min-w-0", elevatedCardTitleClass)}>
+              {title}
+            </Heading>
+          </div>
+          {lead ? (
+            <Paragraph className={cn("type-body", elevatedCardMutedClass)}>{lead}</Paragraph>
+          ) : null}
         </div>
         {action}
       </div>

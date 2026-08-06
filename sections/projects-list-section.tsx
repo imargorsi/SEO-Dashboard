@@ -41,7 +41,6 @@ import {
   canDeleteProjectCard,
   canEditProjectCard,
   canInviteProjectMembers,
-  canViewProjectCard,
 } from "@/lib/projects/project-card-access.utils";
 import {
   DEFAULT_PROJECT_LIST_VIEW_MODE,
@@ -91,6 +90,7 @@ export function ProjectsListSection() {
         userId: user?.id,
         ownerId,
         isSuperAdmin: userIsSuperAdmin,
+        status: project.status,
       };
 
       /**
@@ -101,7 +101,12 @@ export function ProjectsListSection() {
         selectedProject?.id === project.id ? permissions : (user?.permissions ?? []);
 
       return {
-        canViewDetails: canViewProjectCard(accessInput),
+        /**
+         * List is already membership / super_admin scoped. Any listed row may open detail
+         * (rejected is read-only via access + action builders). Do not require selected-project
+         * `projects.view` — rejected projects cannot be selected.
+         */
+        canViewDetails: true,
         canEditProject: canEditProjectCard(accessInput),
         canInviteMembers: canInviteProjectMembers({
           permissions: invitePermissions,

@@ -6,6 +6,7 @@ type TProjectCardAccessInput = {
   userId?: string | null;
   ownerId?: string | null;
   isSuperAdmin: boolean;
+  status?: ProjectStatus;
 };
 
 export function canViewProjectCard({

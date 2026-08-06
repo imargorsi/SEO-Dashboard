@@ -124,8 +124,8 @@ export function useProjectsTableColumns({
             projectId: item.id,
             isSuperAdmin,
             canViewDetails: access.canViewDetails,
-            canEditProject: access.canEditProject,
-            canInviteMembers: access.canInviteMembers,
+            canEditProject: access.canEditProject && item.status !== "rejected",
+            canInviteMembers: access.canInviteMembers && item.status !== "rejected",
             canDeleteProject: access.canDeleteProject,
           });
           const isStatusPending = statusActionPendingProjectId === item.id;

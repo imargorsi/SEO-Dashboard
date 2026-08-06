@@ -291,4 +291,43 @@ describe("GET /projects — listProjects", () => {
     const activeOnly = await listProjects(authContextFor(user), { status: "active" });
     expect(activeOnly).toHaveLength(0);
   });
+
+  it("includes rejected projects in the default list and when filtered", async () => {
+    await seedSystemRoles();
+
+    const user = await User.create({
+      name: "Reject User",
+      email: "reject-user@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+    });
+
+    const pending = await createProject(
+      authContextFor(user),
+      projectInput({
+        businessName: "Keep Pending",
+        websiteUrl: "https://keep-pending.example.com",
+      }),
+    );
+
+    const rejected = await createProject(
+      authContextFor(user),
+      projectInput({
+        businessName: "Rejected Co",
+        websiteUrl: "https://rejected-list.example.com",
+      }),
+    );
+
+    await Project.findByIdAndUpdate(rejected.project._id, { status: "rejected" });
+
+    const defaultList = await listProjects(authContextFor(user));
+    expect(defaultList.map((project) => project.id).sort()).toEqual(
+      [pending.project._id.toString(), rejected.project._id.toString()].sort(),
+    );
+
+    const rejectedOnly = await listProjects(authContextFor(user), { status: "rejected" });
+    expect(rejectedOnly).toHaveLength(1);
+    expect(rejectedOnly[0]!.id).toBe(rejected.project._id.toString());
+  });
 });

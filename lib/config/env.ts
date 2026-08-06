@@ -51,4 +51,17 @@ export const env = {
       optional("GOOGLE_SERVICE_ACCOUNT_EMAIL") && optional("GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY"),
     );
   },
+  /**
+   * Google OAuth (sign-in / sign-up) — separate from analytics Service Account.
+   * Redirect URI must match the Cloud Console OAuth client exactly.
+   */
+  googleOAuthClientId: () => optional("GOOGLE_OAUTH_CLIENT_ID"),
+  googleOAuthClientSecret: () => optional("GOOGLE_OAUTH_CLIENT_SECRET"),
+  googleOAuthRedirectUri: () =>
+    optional(
+      "GOOGLE_OAUTH_REDIRECT_URI",
+      `${optional("APP_URL", "http://localhost:3000").replace(/\/$/, "")}/api/v1/auth/google/callback`,
+    ),
+  googleOAuthConfigured: () =>
+    Boolean(optional("GOOGLE_OAUTH_CLIENT_ID") && optional("GOOGLE_OAUTH_CLIENT_SECRET")),
 };

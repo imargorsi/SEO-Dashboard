@@ -1178,6 +1178,11 @@ export interface Translation {
       registrationSuccess: string;
       noAccountPrompt: string;
       registerCta: string;
+      googleCallbackTitle: string;
+      googleCallbackSubtitle: string;
+      googleCallbackBody: string;
+      googleExchangeMissing: string;
+      googleExchangeFailed: string;
     };
     forgotPassword: {
       title: string;
@@ -2432,7 +2437,7 @@ const translation: Translation = {
       heroPoint2: "Scheduled checks and history you can trust",
       heroPoint3: "Built for teams who care about accuracy",
       continueWith: "Continue With",
-      continueGoogle: "Google",
+      continueGoogle: "Continue With Google",
       continueSso: "SSO",
       emailInvalid: "Enter A Valid Email Address.",
       passwordMin: "Use At Least 6 Characters.",
@@ -2443,6 +2448,11 @@ const translation: Translation = {
       registrationSuccess: "Account created. Check your email.",
       noAccountPrompt: "New Here?",
       registerCta: "Start Your Journey",
+      googleCallbackTitle: "Signing You In",
+      googleCallbackSubtitle: "Finishing Google sign-in.",
+      googleCallbackBody: "One moment while we connect your account.",
+      googleExchangeMissing: "Google sign-in was incomplete. Try again.",
+      googleExchangeFailed: "Google sign-in failed. Try again.",
     },
     forgotPassword: {
       title: "Forgot Password",

@@ -8,12 +8,15 @@ export async function changePassword(
   user: UserDocument,
   input: { current_password: string; new_password: string }
 ): Promise<NextResponse> {
-  const currentOk = await verifyPassword(input.current_password, user.password);
-  if (!currentOk) {
-    return ApiResponse.validation(
-      authMessages.passwordChangeInvalidCurrentPassword,
-      { current_password: [authMessages.passwordChangeInvalidCurrentPassword] }
-    );
+  // Google-only accounts have no password yet — first set skips current-password check.
+  if (user.hasPassword()) {
+    const currentOk = await verifyPassword(input.current_password, user.password);
+    if (!currentOk) {
+      return ApiResponse.validation(
+        authMessages.passwordChangeInvalidCurrentPassword,
+        { current_password: [authMessages.passwordChangeInvalidCurrentPassword] }
+      );
+    }
   }
 
   user.password = await hashPassword(input.new_password);

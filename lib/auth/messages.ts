@@ -21,4 +21,10 @@ export const authMessages = {
   passwordChangeInvalidCurrentPassword: "Current password incorrect.",
   profileUpdateSuccess: "Profile updated.",
   profileEmptyUpdate: "Nothing to update.",
+  googleOAuthNotConfigured: "Google sign-in is not configured.",
+  googleOAuthFailed: "Google sign-in failed. Try again.",
+  googleOAuthEmailUnverified: "Your Google email must be verified to continue.",
+  googleOAuthStateInvalid: "Google sign-in expired. Try again.",
+  googleOAuthExchangeInvalid: "Google sign-in expired. Try again.",
+  googleOAuthAccountInactive: "Account inactive. Contact an administrator.",
 };

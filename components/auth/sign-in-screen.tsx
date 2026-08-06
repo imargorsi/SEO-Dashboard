@@ -25,6 +25,7 @@ export function SignInScreen() {
   const registered = searchParams.get("registered") === "1";
   const registrationMessage = searchParams.get("message")?.trim() ?? "";
   const emailFromQuery = searchParams.get("email")?.trim() ?? "";
+  const googleError = searchParams.get("google_error")?.trim() ?? "";
 
   const form = useForm<SignInValues>({
     defaultValues: { email: emailFromQuery, password: "" },
@@ -33,6 +34,13 @@ export function SignInScreen() {
 
   useEffect(() => {
     if (queryToastShown.current) return;
+
+    if (googleError) {
+      queryToastShown.current = true;
+      notify.error(googleError);
+      router.replace("/", { scroll: false });
+      return;
+    }
 
     if (verified) {
       queryToastShown.current = true;
@@ -46,7 +54,7 @@ export function SignInScreen() {
       notify.success(registrationMessage || t("registrationSuccess"));
       router.replace(emailFromQuery ? `/?email=${encodeURIComponent(emailFromQuery)}` : "/", { scroll: false });
     }
-  }, [emailFromQuery, registered, registrationMessage, router, t, verified]);
+  }, [emailFromQuery, googleError, registered, registrationMessage, router, t, verified]);
 
   useEffect(() => {
     return () => {

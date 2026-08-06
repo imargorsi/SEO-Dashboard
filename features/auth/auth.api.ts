@@ -112,6 +112,27 @@ async function updateProfile(input: UpdateProfileRequest): Promise<UpdateProfile
   return { user, message: envelope.message };
 }
 
+async function loginWithGoogleExchangeCode(code: string): Promise<LoginResult> {
+  const envelope = await baseQuery.post<LoginResponseData>(
+    "auth/google/exchange",
+    { code },
+    { skipAuth: true },
+  );
+  const user = normalizeAuthUser(envelope.data.user);
+  const token = envelope.data.token;
+
+  if (!user || !token) {
+    throw new ApiError(envelope.message || "Google sign-in failed", 400, {}, envelope);
+  }
+
+  return {
+    token,
+    tokenType: envelope.data.token_type ?? "Bearer",
+    message: envelope.message,
+    user,
+  };
+}
+
 export function useAuthUserQuery(options?: { enabled?: boolean }) {
   const token = useAccessToken();
   const enabled = options?.enabled ?? Boolean(token);
@@ -131,6 +152,21 @@ export function useLoginMutation() {
     mutationFn: loginWithCredentials,
     onSuccess: (result) => {
       // Drop previous user's cache + selected project before storing the new session.
+      clearAuthSession();
+      void queryClient.cancelQueries();
+      queryClient.clear();
+      persistAuthSession(result.token, result.user);
+      queryClient.setQueryData(authKeys.user(), result.user);
+    },
+  });
+}
+
+export function useGoogleExchangeMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: loginWithGoogleExchangeCode,
+    onSuccess: (result) => {
       clearAuthSession();
       void queryClient.cancelQueries();
       queryClient.clear();

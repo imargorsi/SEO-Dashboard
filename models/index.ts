@@ -7,6 +7,12 @@ export {
   AnalyticsDimensionRow,
   type AnalyticsDimensionRowDocument,
 } from "./AnalyticsDimensionRow";
+export {
+  OAuthLoginCode,
+  type OAuthLoginCodeDocument,
+  createOAuthLoginCode,
+  consumeOAuthLoginCode,
+} from "./OAuthLoginCode";
 export { PasswordResetToken } from "./PasswordResetToken";
 export { Project, type ProjectDocument } from "./Project";
 export {

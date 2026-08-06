@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { AuthFormHeader } from "@/components/auth/auth-form-header";
 import { AuthInput } from "@/components/auth/auth-input";
 import { AuthSubmitButton } from "@/components/auth/auth-submit-button";
+import { GoogleAuthButton } from "@/components/auth/google-auth-button";
 import { SignInAuthCardShell } from "@/components/sign-in-auth-card-shell";
 import { Paragraph } from "@/components/paragraph";
 import { Spinner } from "@/components/ui/spinner";
@@ -98,6 +99,8 @@ export function RegisterFormSection({
           {t("submit")}
         </AuthSubmitButton>
       </form>
+
+      <GoogleAuthButton disabled={isSubmitting} />
 
       <Paragraph moreSmaller className="mt-6! text-center">
         <span className="text-text-muted">{t("hasAccount")} </span>

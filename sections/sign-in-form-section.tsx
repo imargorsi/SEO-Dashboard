@@ -3,12 +3,11 @@
 import { AuthFormHeader } from "@/components/auth/auth-form-header";
 import { AuthInput } from "@/components/auth/auth-input";
 import { AuthSubmitButton } from "@/components/auth/auth-submit-button";
+import { GoogleAuthButton } from "@/components/auth/google-auth-button";
 import { SignInAuthCardShell } from "@/components/sign-in-auth-card-shell";
 import { Paragraph } from "@/components/paragraph";
-import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import type { SignInValues } from "@/sections/sign-in.types";
-import { FcGoogle } from "react-icons/fc";
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
@@ -79,20 +78,7 @@ export function SignInFormSection({
         </AuthSubmitButton>
       </form>
 
-      <div className="mt-6">
-        <div className="flex items-center gap-3 type-overline text-text-muted">
-          <span className="h-px flex-1 bg-border" aria-hidden />
-          <span>{t("continueWith")}</span>
-          <span className="h-px flex-1 bg-border" aria-hidden />
-        </div>
-
-        <div className="mt-4">
-          <Button type="button" variant="outlined" size="lg" className="w-full">
-            <FcGoogle className="size-4 shrink-0" aria-hidden />
-            <span>{t("continueGoogle")}</span>
-          </Button>
-        </div>
-      </div>
+      <GoogleAuthButton disabled={isSubmitting} />
 
       <div className="mt-6 pt-2">
         <Paragraph moreSmaller className="text-center leading-relaxed">

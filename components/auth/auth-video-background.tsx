@@ -1,7 +1,6 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
-
+import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion.hook";
 import { cn } from "@/lib/utils";
 
 type AuthVideoBackgroundProps = {
@@ -13,18 +12,6 @@ type AuthVideoBackgroundProps = {
   /** Which viewport edge to anchor when `variant="viewport"`. */
   anchor?: "start" | "end";
 };
-
-function usePrefersReducedMotion() {
-  return useSyncExternalStore(
-    (onStoreChange) => {
-      const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-      media.addEventListener("change", onStoreChange);
-      return () => media.removeEventListener("change", onStoreChange);
-    },
-    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-    () => false,
-  );
-}
 
 export function AuthVideoBackground({ variant = "fill", anchor = "start" }: AuthVideoBackgroundProps) {
   const prefersReducedMotion = usePrefersReducedMotion();

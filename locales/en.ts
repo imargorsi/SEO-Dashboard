@@ -827,6 +827,20 @@ export interface Translation {
           position: string;
         };
       };
+      engagementPreview: {
+        engagementRate: {
+          label: string;
+          hint: string;
+        };
+        avgSessionDuration: {
+          label: string;
+          hint: string;
+        };
+        pageViews: {
+          label: string;
+          hint: string;
+        };
+      };
       trafficSources: {
         title: string;
         totalLabel: string;
@@ -2096,6 +2110,20 @@ const translation: Translation = {
           position: "Position",
         },
       },
+      engagementPreview: {
+        engagementRate: {
+          label: "Engagement Rate",
+          hint: "Share of sessions that qualify as engaged.",
+        },
+        avgSessionDuration: {
+          label: "Avg. Session Duration",
+          hint: "Average time visitors spend per session.",
+        },
+        pageViews: {
+          label: "Page Views",
+          hint: "Total content views in the selected range.",
+        },
+      },
       trafficSources: {
         title: "Traffic Sources",
         totalLabel: "Total",
@@ -2106,14 +2134,14 @@ const translation: Translation = {
       },
       demographics: {
         title: "User Demographics",
-        subtitle: "Where Users Engage By Territory.",
-        metricHint: "Total Users In The Selected Date Range.",
+        subtitle: "Where users engage by territory.",
+        metricHint: "Total users in the selected date range.",
         listAria: "Top Countries By Users",
         mapAria: "World Map Of Users By Country",
         mapUnavailable: "Map Unavailable",
         loading: "Loading…",
         emptyTitle: "No Geographic Data",
-        emptyBody: "Connect Google Analytics And Sync To Populate This Map.",
+        emptyBody: "Connect Google Analytics and sync to populate this map.",
       },
       trendChart: {
         title: "SEO Performance Trend",

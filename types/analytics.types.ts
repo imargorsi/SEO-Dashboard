@@ -55,6 +55,16 @@ export type TAnalyticsOverviewDto = {
     engagedSessions: number;
     organicSessions: number;
   };
+  /**
+   * GA4 engagement KPIs for the selected window (sparklines from daily rows).
+   * `engagementRate` is derived as engagedSessions / sessions.
+   * `avgSessionDuration` is session-weighted average seconds.
+   */
+  engagement: {
+    engagementRate: TAnalyticsCardMetricDto;
+    avgSessionDuration: TAnalyticsCardMetricDto;
+    pageViews: TAnalyticsCardMetricDto;
+  };
   /** Daily series for the performance trend graph. */
   series: Array<{
     date: string;

@@ -4,12 +4,12 @@ import { useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { IoDownloadOutline } from "react-icons/io5";
 
+import { AnalyticsDemographicsEngagementRow } from "@/components/analytics/analytics-demographics-engagement-row";
 import { AnalyticsPerformanceTrendChart } from "@/components/analytics/analytics-performance-trend-chart";
 import { AnalyticsSummaryCards } from "@/components/analytics/analytics-summary-cards";
 import { AnalyticsTopPagesCard } from "@/components/analytics/analytics-top-pages-card";
 import { AnalyticsTopQueriesCard } from "@/components/analytics/analytics-top-queries-card";
 import { AnalyticsTrafficSourcesCard } from "@/components/analytics/analytics-traffic-sources-card";
-import { AnalyticsUserDemographicsCard } from "@/components/analytics/analytics-user-demographics-card";
 import { SeoActivityDateRangeFilter } from "@/components/seo-activities/seo-activity-date-range-filter";
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
@@ -301,7 +301,9 @@ export function AnalyticsSection() {
           />
         </div>
 
-        <AnalyticsUserDemographicsCard
+        <AnalyticsDemographicsEngagementRow
+          overview={overviewQuery.data}
+          overviewLoading={overviewQuery.isLoading}
           rows={geoQuery.data?.rows ?? []}
           isLoading={geoQuery.isLoading}
         />

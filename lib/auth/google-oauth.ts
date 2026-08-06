@@ -196,7 +196,7 @@ export async function handleGoogleOAuthCallback(input: {
       profile = {
         sub: String(data.id ?? ""),
         email: data.email ?? undefined,
-        email_verified: data.verified_email,
+        email_verified: data.verified_email ?? undefined,
         name: data.name ?? undefined,
         picture: data.picture ?? undefined,
       };

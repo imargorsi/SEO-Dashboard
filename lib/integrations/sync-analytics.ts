@@ -320,6 +320,8 @@ async function syncGa4Integration(
             newUsers: row.newUsers,
             engagedSessions: row.engagedSessions,
             organicSessions: row.organicSessions,
+            averageSessionDuration: row.averageSessionDuration,
+            screenPageViews: row.screenPageViews,
           },
         },
         { upsert: true, new: true },

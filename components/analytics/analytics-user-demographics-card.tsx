@@ -87,7 +87,12 @@ export function AnalyticsUserDemographicsCard({
 
   return (
     <section
-      className={cn(elevatedCardSurfaceClass, analyticsPanelClass, className)}
+      className={cn(
+        elevatedCardSurfaceClass,
+        analyticsPanelClass,
+        "flex h-full min-h-0 flex-col",
+        className,
+      )}
       aria-labelledby="analytics-demographics-title"
     >
       {isLoading ? (
@@ -95,8 +100,8 @@ export function AnalyticsUserDemographicsCard({
       ) : countries.length === 0 ? (
         <EmptyState title={t("emptyTitle")} description={t("emptyBody")} />
       ) : (
-        <div className="grid gap-7 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.4fr)] lg:items-stretch lg:gap-8">
-          <div className="flex min-w-0 flex-col gap-6">
+        <div className="flex min-h-0 flex-1 flex-col gap-7 lg:flex-row lg:items-stretch lg:gap-8">
+          <div className="flex w-full shrink-0 flex-col gap-6 lg:w-[min(100%,17.5rem)] lg:max-w-[40%]">
             <div className={analyticsHeadingStackClass}>
               <h2 id="analytics-demographics-title" className="type-title text-text-primary">
                 {t("title")}
@@ -162,15 +167,17 @@ export function AnalyticsUserDemographicsCard({
             </ul>
           </div>
 
-          <div className="relative flex min-h-80 items-stretch overflow-hidden rounded-2xl bg-bg-card/20 p-1 sm:min-h-112 sm:p-2">
-            <WorldChoroplethMap
-              fillsByIsoNumeric={fillsByIsoNumeric}
-              selectedIsoNumeric={selectedCountry?.isoNumeric ?? selectedIso}
-              onSelectIsoNumeric={setSelectedIso}
-              unavailableLabel={t("mapUnavailable")}
-              ariaLabel={t("mapAria")}
-              className="h-full min-h-80 w-full sm:min-h-104"
-            />
+          <div className="relative min-h-80 w-full flex-1 sm:min-h-112 lg:min-h-0">
+            <div className="absolute inset-0 overflow-hidden rounded-2xl bg-bg-card/20 p-1 sm:p-2">
+              <WorldChoroplethMap
+                fillsByIsoNumeric={fillsByIsoNumeric}
+                selectedIsoNumeric={selectedCountry?.isoNumeric ?? selectedIso}
+                onSelectIsoNumeric={setSelectedIso}
+                unavailableLabel={t("mapUnavailable")}
+                ariaLabel={t("mapAria")}
+                className="h-full w-full"
+              />
+            </div>
           </div>
         </div>
       )}

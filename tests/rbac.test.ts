@@ -29,6 +29,10 @@ describe("RBAC permission catalog", () => {
     expect(permissions).toContain("dashboard.view");
     expect(permissions).not.toContain("dashboard.create");
     expect(permissions).toContain("seo_activities.create");
+    expect(permissions).toContain("leads.view");
+    expect(permissions).toContain("leads.export");
+    expect(permissions).not.toContain("leads.create");
+    expect(permissions).not.toContain("leads.import");
     expect(permissions).toContain("integrations.view");
     expect(permissions).toContain("integrations.update");
     expect(permissions).toContain("integrations.disconnect");
@@ -41,6 +45,9 @@ describe("RBAC permission catalog", () => {
     const permissions = defaultProjectUserPermissions();
 
     expect(permissions).toContain("dashboard.view");
+    expect(permissions).toContain("leads.view");
+    expect(permissions).toContain("leads.export");
+    expect(permissions).not.toContain("leads.create");
     expect(permissions).toContain("integrations.view");
     expect(permissions).not.toContain("integrations.update");
     expect(permissions).not.toContain("members.invite");

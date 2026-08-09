@@ -14,6 +14,8 @@ import {
   elevatedCardMutedClass,
   elevatedCardSurfaceClass,
   elevatedCardTitleClass,
+  typeIconTextClass,
+  typeStackMdClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
 import { buildProjectCardActions } from "@/lib/projects/project-card-actions.utils";
 import { cn } from "@/lib/utils";
@@ -87,9 +89,9 @@ export function ProjectCard({
         </div>
       </div>
 
-      <div className="mt-4 space-y-1.5">
+      <div className={cn("mt-4", typeStackMdClass)}>
         <h3 className={cn("type-title", elevatedCardTitleClass)}>{project.businessName}</h3>
-        <p className={cn("flex items-center gap-1.5 type-body", elevatedCardBodyClass)}>
+        <p className={cn(typeIconTextClass, "type-body", elevatedCardBodyClass)}>
           <IoGlobeOutline className="size-3.5 shrink-0" aria-hidden />
           <span className="truncate">{project.websiteUrl}</span>
         </p>
@@ -97,7 +99,7 @@ export function ProjectCard({
 
       <div className="mt-6 flex items-end justify-between gap-3">
         <div className="min-w-0">
-          <p className={cn("type-caption-xs uppercase tracking-[0.08em]", elevatedCardMutedClass)}>
+          <p className={cn("type-caption", elevatedCardMutedClass)}>
             {t("projectOwnerLabel")}
           </p>
           <div className="mt-2.5 flex items-center gap-2">

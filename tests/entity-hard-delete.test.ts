@@ -8,11 +8,11 @@ import { deleteProject } from "@/lib/projects/delete-project";
 import { deleteAdminUser } from "@/lib/users/delete-user";
 import { createRole } from "@/lib/roles/create-role";
 import { deleteRole } from "@/lib/roles/delete-role";
-import { Project, ProjectMember, Role, SeoActivity, User } from "@/models";
+import { Project, ProjectMember, Role, Lead, SeoActivity, User } from "@/models";
 import { authContextFor } from "@/tests/helpers/project-test-utils";
 
 describe("Hard delete — projects, users, roles", () => {
-  it("deletes inactive projects and cascades members + activities", async () => {
+  it("deletes inactive projects and cascades members + activities + leads", async () => {
     await seedSystemRoles();
 
     const admin = await User.create({
@@ -52,11 +52,28 @@ describe("Hard delete — projects, users, roles", () => {
       updatedBy: admin._id,
     });
 
+    await Lead.create({
+      projectId: project._id,
+      firstName: "Cascade",
+      lastName: "Lead",
+      email: "lead-cascade@example.com",
+      phone: "5550001111",
+      servicesInterestedIn: "SEO",
+      message: "Hi",
+      leadDate: "2026-01-01",
+      normalizedEmail: "lead-cascade@example.com",
+      normalizedPhone: "5550001111",
+      origin: "manual",
+      createdBy: admin._id,
+      updatedBy: admin._id,
+    });
+
     await deleteProject(authContextFor(admin), project._id.toString());
 
     expect(await Project.findById(project._id)).toBeNull();
     expect(await ProjectMember.countDocuments({ projectId: project._id })).toBe(0);
     expect(await SeoActivity.countDocuments({ projectId: project._id })).toBe(0);
+    expect(await Lead.countDocuments({ projectId: project._id })).toBe(0);
   });
 
   it("rejects deleting active projects", async () => {

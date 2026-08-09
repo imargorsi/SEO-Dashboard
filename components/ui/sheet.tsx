@@ -6,9 +6,9 @@ import { useTranslation } from "react-i18next";
 import { IoClose } from "react-icons/io5";
 
 import { cn } from "@/lib/utils";
-import { dialogSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
+import { sheetSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { SHEET_TRANSITION_MS } from "@/lib/frontend/layout/sheet.constants";
-import { overlayClass, surfacePanelHeaderClass } from "@/lib/frontend/theme/chrome-tones";
+import { overlayClass } from "@/lib/frontend/theme/chrome-tones";
 
 export { SHEET_TRANSITION_MS };
 
@@ -96,7 +96,9 @@ function SheetContent({
   if (!mounted || !isPresent) return null;
 
   const isLeft = side === "left";
-  const sideClass = isLeft ? "inset-y-0 left-0 border-e" : "inset-y-0 right-0 border-s";
+  const sideClass = isLeft
+    ? "inset-y-0 left-0 border-e border-border/55 dark:border-text-primary/40"
+    : "inset-y-0 right-0 border-s border-border/55 dark:border-text-primary/40";
   const hiddenTransform = isLeft ? "-translate-x-full" : "translate-x-full";
 
   return createPortal(
@@ -104,7 +106,7 @@ function SheetContent({
       {/* Overlay stays interactive until unmount so exit clicks cannot hit the page underneath. */}
       <div
         className={cn(
-          "fixed inset-0 z-50 backdrop-blur-[1px] transition-opacity duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          "fixed inset-0 z-50 backdrop-blur-[2px] transition-opacity duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
           overlayClass,
           isVisible ? "opacity-100" : "opacity-0",
         )}
@@ -116,8 +118,8 @@ function SheetContent({
         aria-modal="true"
         className={cn(
           "fixed z-50 flex h-full w-[min(100%,24rem)] flex-col gap-0 sm:max-w-md",
-          dialogSurfaceClass,
-          "transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform",
+          sheetSurfaceClass,
+          "shadow-(--shadow-elevated) transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform",
           sideClass,
           isVisible ? "translate-x-0" : hiddenTransform,
           !isVisible && "pointer-events-none",
@@ -143,8 +145,7 @@ function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       className={cn(
-        "flex flex-col gap-1 border-b border-border px-5 py-4 pe-12 text-start",
-        surfacePanelHeaderClass,
+        "type-stack-md border-b border-border/50 bg-transparent px-5 py-4 pe-12 text-start dark:border-text-primary/12",
         className,
       )}
       {...props}

@@ -173,7 +173,7 @@ export function ProjectsListSection() {
     <div className="w-full min-w-0">
       <div className="space-y-5 px-4 py-6 sm:px-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="space-y-1">
+          <div className="type-stack-md">
             <Heading id="projects-list-title" pageTitle>
               {t("title")}
             </Heading>

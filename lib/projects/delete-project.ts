@@ -5,7 +5,7 @@ import { NotFoundError, ValidationError } from "@/lib/api/http-errors";
 import { ApiResponse } from "@/lib/api/response";
 import type { AuthContext } from "@/lib/auth/guards";
 import { deleteStoredProjectLogo } from "@/lib/projects/project-logo-storage";
-import { Project, ProjectMember, SeoActivity, type ProjectDocument } from "@/models";
+import { Lead, Project, ProjectMember, SeoActivity, type ProjectDocument } from "@/models";
 
 async function findProjectOrThrow(projectId: string): Promise<ProjectDocument> {
   if (!mongoose.isValidObjectId(projectId)) {
@@ -22,7 +22,7 @@ async function findProjectOrThrow(projectId: string): Promise<ProjectDocument> {
 
 /**
  * Hard-delete a project. Allowed only when status is `inactive` or `rejected`.
- * Cascades members + SEO activities and removes the stored logo.
+ * Cascades members, SEO activities, leads, and removes the stored logo.
  */
 export async function deleteProject(_auth: AuthContext, projectId: string): Promise<void> {
   const project = await findProjectOrThrow(projectId);
@@ -39,6 +39,7 @@ export async function deleteProject(_auth: AuthContext, projectId: string): Prom
 
   await ProjectMember.deleteMany({ projectId: id });
   await SeoActivity.deleteMany({ projectId: id });
+  await Lead.deleteMany({ projectId: id });
   await Project.deleteOne({ _id: id });
   await deleteStoredProjectLogo(logoPath).catch(() => undefined);
 }

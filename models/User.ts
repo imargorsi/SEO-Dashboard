@@ -12,8 +12,8 @@ const userSchema = new Schema(
      * via reset / change-password.
      */
     password: { type: String, default: null },
-    /** Google OIDC `sub` — unique when set; sparse so password-only users stay unique on email. */
-    googleId: { type: String, default: null, unique: true, sparse: true },
+    /** Google OIDC `sub` — unique when set; omit when unset so sparse unique allows many password-only users. */
+    googleId: { type: String, unique: true, sparse: true },
     emailVerifiedAt: { type: Date, default: null },
     roles: { type: [String], default: [] },
     status: { type: String, enum: USER_ACCOUNT_STATUSES, required: true, default: "active" },
@@ -58,7 +58,7 @@ export type UserDocument = InferSchemaType<typeof userSchema> &
     roles: string[];
     status: (typeof USER_ACCOUNT_STATUSES)[number];
     password: string | null;
-    googleId: string | null;
+    googleId?: string | null;
     hasVerifiedEmail(): boolean;
     getEmailForVerification(): string;
     getEmailForPasswordReset(): string;

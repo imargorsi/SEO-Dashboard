@@ -10,6 +10,7 @@ import {
   elevatedCardMutedClass,
   elevatedCardSurfaceClass,
   elevatedCardTitleClass,
+  typeStackMdClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
@@ -34,7 +35,7 @@ export function ProjectDetailInfoCard({
   return (
     <section className={cn(elevatedCardSurfaceClass, "rounded-3xl p-5 sm:p-6", className)}>
       <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0 flex-1 space-y-1">
+        <div className={cn("min-w-0 flex-1", typeStackMdClass)}>
           <div className="flex items-center gap-2.5">
             {icon ? (
               <span className={cn(detailIconWellClass, "size-8")} aria-hidden>
@@ -64,8 +65,8 @@ type ProjectDetailFieldProps = {
 
 export function ProjectDetailField({ label, value, className }: ProjectDetailFieldProps) {
   return (
-    <div className={cn("space-y-1.5", className)}>
-      <p className={cn("type-caption-xs uppercase tracking-[0.08em]", elevatedCardMutedClass)}>{label}</p>
+    <div className={cn(typeStackMdClass, className)}>
+      <p className={cn("type-caption", elevatedCardMutedClass)}>{label}</p>
       <div className={cn("type-body-strong", elevatedCardTitleClass)}>{value}</div>
     </div>
   );

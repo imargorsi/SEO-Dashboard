@@ -6,7 +6,9 @@ type TActionLabelKey =
   | "invite"
   | "remove"
   | "disconnect"
-  | "refresh";
+  | "refresh"
+  | "import"
+  | "export";
 
 /** Maps a catalog action to its locale key under `modules.roles.actions` (undefined for an unrecognized action). */
 const ACTION_LABEL_KEYS: Record<string, TActionLabelKey> = {
@@ -18,6 +20,8 @@ const ACTION_LABEL_KEYS: Record<string, TActionLabelKey> = {
   remove: "remove",
   disconnect: "disconnect",
   refresh: "refresh",
+  import: "import",
+  export: "export",
 };
 
 export function actionLabelKey(action: string): TActionLabelKey | undefined {

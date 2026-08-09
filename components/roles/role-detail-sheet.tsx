@@ -9,14 +9,23 @@ import {
   IoShieldOutline,
 } from "react-icons/io5";
 
-import { DetailFieldRow, DetailSectionHeading } from "@/components/ui/detail-field-row";
+import {
+  DetailFieldRow,
+  DetailSectionHeading,
+  detailSectionClass,
+} from "@/components/ui/detail-field-row";
 import { SheetContentSkeleton } from "@/components/skeletons/dashboard-page-skeleton";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { StatusChip } from "@/components/ui/status-chip";
 import { usePermissionCatalogQuery } from "@/features/permissions/permissions.api";
 import { useRoleQuery } from "@/features/roles/roles.api";
 import { formatShortDate } from "@/lib/frontend/date/format-relative-date.utils";
-import { detailIconWellClass } from "@/lib/frontend/layout/dashboard-chrome";
+import {
+  detailBodyClass,
+  detailHeroRowClass,
+  detailIconWellOutlineClass,
+  typeStackIdentityClass,
+} from "@/lib/frontend/layout/dashboard-chrome";
 import { roleActionIcon } from "@/lib/frontend/roles/permission-action-icon.utils";
 import { actionLabelKey, capitalizeAction, modulePermission } from "@/lib/frontend/roles/permission-labels.utils";
 import { permissionModuleIcon } from "@/lib/frontend/roles/permission-module-icon.utils";
@@ -88,7 +97,7 @@ function GrantedPermissionModules({
             key={module.slug}
             className="flex items-center gap-3 rounded-2xl border border-border/50 bg-bg-card/40 px-3 py-2.5 shadow-sm backdrop-blur-md dark:border-text-primary/20 dark:bg-text-primary/6"
           >
-            <span className={cn(detailIconWellClass, "size-8 shrink-0")} aria-hidden>
+            <span className={cn(detailIconWellOutlineClass, "size-8 shrink-0")} aria-hidden>
               <ModuleIcon className="size-3.5" />
             </span>
             <p className="min-w-0 flex-1 truncate type-label text-text-primary">{module.label}</p>
@@ -120,9 +129,9 @@ export function RoleDetailSheet({ roleId, open, onOpenChange }: TRoleDetailSheet
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="right"
-        className="w-[min(100%,28rem)] shadow-(--shadow-elevated) sm:max-w-lg"
+        className="w-[min(100%,28rem)] sm:max-w-lg"
       >
-        <SheetHeader className="border-border/50 bg-transparent dark:border-text-primary/12">
+        <SheetHeader>
           <SheetTitle>{t("title")}</SheetTitle>
           <SheetDescription>{t("lead")}</SheetDescription>
         </SheetHeader>
@@ -132,14 +141,14 @@ export function RoleDetailSheet({ roleId, open, onOpenChange }: TRoleDetailSheet
             <SheetContentSkeleton />
           </div>
         ) : (
-          <div className="themed-scrollbar flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto px-5 py-5">
+          <div className={detailBodyClass}>
             <section>
-              <div className="flex items-center gap-3.5">
-                <span className={cn(detailIconWellClass, "size-12 shrink-0")} aria-hidden>
+              <div className={detailHeroRowClass}>
+                <span className={cn(detailIconWellOutlineClass, "size-12 shrink-0")} aria-hidden>
                   <IoShieldOutline className="size-5" />
                 </span>
                 <div className="flex min-w-0 flex-1 items-start justify-between gap-3">
-                  <div className="min-w-0 space-y-1">
+                  <div className={cn("min-w-0", typeStackIdentityClass)}>
                     <p className="truncate type-title leading-snug text-text-primary">{role.name}</p>
                     <p className="truncate type-caption leading-snug text-text-muted">{role.slug}</p>
                   </div>
@@ -152,14 +161,14 @@ export function RoleDetailSheet({ roleId, open, onOpenChange }: TRoleDetailSheet
               </div>
             </section>
 
-            <section className="space-y-3">
+            <section className={detailSectionClass}>
               <DetailSectionHeading
                 title={t("description")}
                 description={role.description?.trim() ? role.description : t("noDescription")}
               />
             </section>
 
-            <section className="space-y-3">
+            <section className={detailSectionClass}>
               <DetailSectionHeading title={t("overviewTitle")} description={t("overviewLead")} />
               <div>
                 <DetailFieldRow icon={IoPeopleOutline} label={t("members")}>
@@ -177,7 +186,7 @@ export function RoleDetailSheet({ roleId, open, onOpenChange }: TRoleDetailSheet
               </div>
             </section>
 
-            <section className="space-y-3">
+            <section className={detailSectionClass}>
               <DetailSectionHeading title={t("permissionsTitle")} description={t("permissionsLead")} />
               {role.permissions.length === 0 ? (
                 <p className="type-body text-text-muted">{t("noPermissions")}</p>

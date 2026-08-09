@@ -79,7 +79,7 @@ export function ProjectInvitationsBanner() {
                 size="md"
                 variant="logo"
               />
-              <div className="min-w-0 space-y-1">
+              <div className="type-stack-md min-w-0">
                 <p className={cn("type-body-strong", elevatedCardTitleClass)}>
                   {t("title", { projectName: invitation.projectName })}
                 </p>

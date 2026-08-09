@@ -21,5 +21,6 @@ export {
 } from "./ProjectIntegration";
 export { ProjectMember, type ProjectMemberDocument } from "./ProjectMember";
 export { Role, type RoleDocument } from "./Role";
+export { Lead, type LeadDocument } from "./Lead";
 export { SeoActivity, type SeoActivityDocument } from "./SeoActivity";
 export { User, type UserDocument } from "./User";

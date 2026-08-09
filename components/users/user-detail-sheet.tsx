@@ -8,13 +8,23 @@ import {
   IoRefreshOutline,
 } from "react-icons/io5";
 
-import { DetailFieldRow, DetailSectionHeading } from "@/components/ui/detail-field-row";
+import {
+  DetailFieldRow,
+  DetailSectionHeading,
+  detailSectionClass,
+} from "@/components/ui/detail-field-row";
 import { StatusChip } from "@/components/ui/status-chip";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { UserProjectAssignments } from "@/components/users/user-project-assignments";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { formatShortDate } from "@/lib/frontend/date/format-relative-date.utils";
+import {
+  detailBodyClass,
+  detailHeroRowClass,
+  typeStackIdentityClass,
+} from "@/lib/frontend/layout/dashboard-chrome";
 import { isActiveUserStatus } from "@/lib/users/constants";
+import { cn } from "@/lib/utils";
 import type { TAdminUserListItem } from "@/types/admin-user.types";
 
 type UserDetailSheetProps = {
@@ -33,17 +43,17 @@ export function UserDetailSheet({ user, open, onOpenChange }: UserDetailSheetPro
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="right"
-        className="w-[min(100%,28rem)] shadow-(--shadow-elevated) sm:max-w-lg"
+        className="w-[min(100%,28rem)] sm:max-w-lg"
       >
-        <SheetHeader className="border-border/50 bg-transparent dark:border-text-primary/12">
+        <SheetHeader>
           <SheetTitle>{t("title")}</SheetTitle>
           <SheetDescription>{t("lead")}</SheetDescription>
         </SheetHeader>
 
         {user ? (
-          <div className="themed-scrollbar flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto px-5 py-5">
+          <div className={detailBodyClass}>
             <section>
-              <div className="flex items-center gap-3.5">
+              <div className={detailHeroRowClass}>
                 <UserAvatar
                   name={user.name}
                   imageUrl={user.profile_image}
@@ -52,7 +62,7 @@ export function UserDetailSheet({ user, open, onOpenChange }: UserDetailSheetPro
                   className="shrink-0"
                 />
                 <div className="flex min-w-0 flex-1 items-start justify-between gap-3">
-                  <div className="min-w-0 space-y-1">
+                  <div className={cn("min-w-0", typeStackIdentityClass)}>
                     <p className="truncate type-title leading-snug text-text-primary">{user.name}</p>
                     <p className="truncate type-caption leading-snug text-text-muted">{user.email}</p>
                   </div>
@@ -65,7 +75,7 @@ export function UserDetailSheet({ user, open, onOpenChange }: UserDetailSheetPro
               </div>
             </section>
 
-            <section className="space-y-3">
+            <section className={detailSectionClass}>
               <DetailSectionHeading title={t("accountTitle")} description={t("accountLead")} />
               <div>
                 <DetailFieldRow icon={IoMailOutline} label={t("email")}>
@@ -85,7 +95,7 @@ export function UserDetailSheet({ user, open, onOpenChange }: UserDetailSheetPro
               </div>
             </section>
 
-            <section className="space-y-3">
+            <section className={detailSectionClass}>
               <DetailSectionHeading title={t("projectsTitle")} description={t("projectsLead")} />
               <UserProjectAssignments projects={user.projects} />
             </section>

@@ -1,43 +1,55 @@
 ---
-description: Title case for labels/headings; sentence case for descriptions and toasts
+description: Title case for labels/headings; sentence case for descriptions and toasts — platform-wide, strict
 alwaysApply: true
 ---
 
-# User-facing copy case
+# User-facing copy case (platform-wide, strict)
+
+Crawllex UI copy must be **unified** across every module. Do not invent local casing exceptions.
 
 ## Title case — labels and chrome
 
 Use **title case** (capitalize the first letter of each word) for short UI chrome:
 
 - Button, label, heading, menu, and tab copy
+- Sheet / dialog **titles** and section headings
 - Empty-state **titles** and short status labels
-- Form field labels
+- Form field labels and detail-sheet field labels (`DetailFieldRow`, project detail fields)
 
 Examples:
 
 - ✅ `Forgot Password`
 - ✅ `Send Reset Link`
-- ✅ `Your Email Is Not Verified`
+- ✅ `Lead Details`
+- ✅ `Full Name`
+- ✅ `Services Interested In`
 - ❌ `Forgot password`
 - ❌ `Send reset link`
+- ❌ CSS `uppercase` turning labels into `DATE` / `EMAIL`
 
 ## Sentence case — descriptions, supporting copy, and toasts
 
 Use **sentence case** for longer supporting text and for **toast / notify feedback**:
 
-- Page/section **subtitles** and **descriptions**
+- Page/section **subtitles** and **descriptions** (including `SheetDescription` and `DetailSectionHeading` description)
 - Helper text under headings, hero lead paragraphs, and bullet supporting lines
-- In-form success/body paragraphs (not button labels)
-- Toast / `notify.*()` messages (and matching API `message` strings)
+- Empty-state **bodies** and in-form success/body paragraphs (not button labels)
+- Toast / `notify.*()` messages (and matching backend API `message` strings)
 
 Examples:
 
 - ✅ `Enter your account email and we'll send reset instructions if the address is registered.`
+- ✅ `Contact details, message, and any extra fields from import.`
 - ✅ `Account created. Check your email.`
 - ✅ `You do not have permission to invite users.`
 - ❌ `Account Created. Check Your Email.`
-- ❌ `Enter Your Account Email And We'll Send Reset Instructions…`
+- ❌ `Core Profile Fields For This User.`
+- ❌ `Permission Summary For This Role.`
+
+**Sizing:** field labels use `type-caption`; values use `type-body`. Do not use `type-caption-xs` + `uppercase` for field labels. `type-overline` is for `StatusChip` only.
 
 **Code:** toast/feedback messages go through `notify.*()` in `lib/frontend/feedback/notify.ts`, which applies `formatFeedbackText()` from `lib/frontend/feedback/format.ts`. Author toast strings in **sentence case** at the source (frontend locales and backend API messages).
 
 Match an external API message verbatim when displaying it as-is.
+
+Canonical rule: `AGENTS.md` → **User-Facing Copy Case**.

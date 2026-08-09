@@ -50,6 +50,7 @@ export function ActiveInactiveToggle({
       role="switch"
       aria-checked={checked}
       aria-label={ariaLabel}
+      title={ariaLabel}
       disabled={isDisabled}
       onClick={() => onCheckedChange(!checked)}
       className={cn(

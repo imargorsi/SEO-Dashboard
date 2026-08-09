@@ -90,6 +90,7 @@ export function ProjectInviteUserSelect({
                 onClick={() => onRemove(user.id)}
                 disabled={disabled || isMutating}
                 aria-label={t("inviteRemoveAria", { name: user.name })}
+                title={t("inviteRemoveAria", { name: user.name })}
               >
                 <IoClose className="size-4" aria-hidden />
               </button>
@@ -169,7 +170,7 @@ export function ProjectInviteUserSelect({
                       size="sm"
                       variant="photo"
                     />
-                    <span className="min-w-0 flex-1 space-y-0.5">
+                    <span className="type-stack-md min-w-0 flex-1">
                       <span className="block truncate type-body-strong text-text-primary">{user.name}</span>
                       <span className="block truncate type-caption text-text-muted">{user.email}</span>
                     </span>

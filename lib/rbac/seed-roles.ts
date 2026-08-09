@@ -2,6 +2,8 @@ import {
   INTEGRATION_PERMISSION_ACTIONS,
   integrationPermission,
   isKnownPermission,
+  LEAD_DEFAULT_ROLE_ACTIONS,
+  leadPermission,
 } from "@/lib/rbac/permission-catalog";
 import { PROJECT_OWNER_ROLE, PROJECT_USER_ROLE, SYSTEM_ROLE_SEEDS } from "@/lib/rbac/roles";
 import { purgeHiddenAdminRoles } from "@/lib/rbac/purge-hidden-admin-roles";
@@ -12,7 +14,7 @@ let ensurePromise: Promise<void> | null = null;
 
 /**
  * Runs {@link seedSystemRoles} once per process (retries after failure).
- * Call from project-access paths so Integrations backfill applies before permission checks.
+ * Call from project-access paths so Integrations / Leads backfill applies before permission checks.
  */
 export async function ensureSystemRoles(): Promise<void> {
   if (!ensurePromise) {
@@ -27,8 +29,9 @@ export async function ensureSystemRoles(): Promise<void> {
 /**
  * Ensures system role templates exist.
  * - Insert: full seed including permissions.
- * - Update: identity fields only — do not clobber admin-edited permissions.
- * - System roles: backfill Integrations keys added to the catalog after initial seed.
+ * - Update: identity fields only — do not clobber admin-edited permissions on custom roles.
+ * - System roles: add-only backfill for Integrations + Leads defaults (never $pull mutate keys —
+ *   super_admin may grant leads.create|update|delete|import on owner/user and that must stick).
  * - All roles: strip permission strings removed from the locked catalog (e.g. after a matrix trim).
  */
 export async function seedSystemRoles(): Promise<void> {
@@ -59,17 +62,22 @@ export async function seedSystemRoles(): Promise<void> {
     );
   }
 
-  // Existing DBs used $setOnInsert only — add Integrations without replacing edited arrays.
   const ownerIntegrations = INTEGRATION_PERMISSION_ACTIONS.map((action) =>
     integrationPermission(action),
   );
+  const leadDefaults = LEAD_DEFAULT_ROLE_ACTIONS.map((action) => leadPermission(action));
+
   await Role.updateOne(
     { slug: PROJECT_OWNER_ROLE },
-    { $addToSet: { permissions: { $each: ownerIntegrations } } },
+    { $addToSet: { permissions: { $each: [...ownerIntegrations, ...leadDefaults] } } },
   );
   await Role.updateOne(
     { slug: PROJECT_USER_ROLE },
-    { $addToSet: { permissions: { $each: [integrationPermission("view")] } } },
+    {
+      $addToSet: {
+        permissions: { $each: [integrationPermission("view"), ...leadDefaults] },
+      },
+    },
   );
 
   // Drop catalog-removed keys so role edit saves are not blocked after a matrix trim.

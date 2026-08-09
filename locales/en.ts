@@ -1024,6 +1024,146 @@ export interface Translation {
     };
     leads: {
       title: string;
+      subtitle: string;
+      selectProjectTitle: string;
+      selectProjectBody: string;
+      summary: {
+        total: string;
+        thisMonth: string;
+        lastMonth: string;
+        thisYear: string;
+      };
+      table: {
+        emptyTitle: string;
+        emptyBody: string;
+        summary: string;
+        previousPage: string;
+        nextPage: string;
+        pageNumber: string;
+        colDate: string;
+        colName: string;
+        colFirstName: string;
+        colLastName: string;
+        colEmail: string;
+        colPhone: string;
+        colServices: string;
+        colMessage: string;
+        colActions: string;
+        viewLead: string;
+        editLead: string;
+        deleteLead: string;
+        deleteTitle: string;
+        deleteBody: string;
+        deleteCancel: string;
+        deleteConfirm: string;
+        deleteSuccess: string;
+        deleteErrorFallback: string;
+        loadErrorBody: string;
+      };
+      detail: {
+        title: string;
+        lead: string;
+        unnamed: string;
+        leadTitle: string;
+        leadSectionLead: string;
+        leadDate: string;
+        services: string;
+        message: string;
+        extrasTitle: string;
+        extrasLead: string;
+      };
+      importExport: {
+        trigger: string;
+        import: string;
+        export: string;
+        exportSuccess: string;
+        exportEmpty: string;
+        exportErrorFallback: string;
+      };
+      editor: {
+        trigger: string;
+        createTitle: string;
+        createLead: string;
+        editTitle: string;
+        editLead: string;
+        close: string;
+        cancel: string;
+        submit: string;
+        save: string;
+        createSuccess: string;
+        updateSuccess: string;
+        createErrorFallback: string;
+        updateErrorFallback: string;
+        inactiveProject: string;
+        extrasTitle: string;
+        extrasHint: string;
+        fields: {
+          firstName: string;
+          firstNamePh: string;
+          lastName: string;
+          lastNamePh: string;
+          email: string;
+          emailPh: string;
+          phone: string;
+          phonePh: string;
+          leadDate: string;
+          services: string;
+          servicesPh: string;
+          message: string;
+          messagePh: string;
+        };
+        validation: {
+          required: string;
+          email: string;
+          phone: string;
+          date: string;
+          maxName: string;
+          maxServices: string;
+          maxMessage: string;
+        };
+      };
+      importModal: {
+        titleImport: string;
+        titleMatching: string;
+        close: string;
+        cancel: string;
+        chooseFile: string;
+        chooseFileHint: string;
+        removeFile: string;
+        nextMatching: string;
+        nextImport: string;
+        matchBanner: string;
+        rowCount: string;
+        selectColumn: string;
+        doNotImport: string;
+        useToday: string;
+        parsing: string;
+        parsingHint: string;
+        importing: string;
+        importingHint: string;
+        importSuccess: string;
+        importSuccessWithSkips: string;
+        importNone: string;
+        inactiveProject: string;
+        extrasTitle: string;
+        extrasHint: string;
+        keepAsExtra: string;
+        fields: {
+          firstName: string;
+          lastName: string;
+          email: string;
+          phone: string;
+          message: string;
+          servicesInterestedIn: string;
+          leadDate: string;
+        };
+        errors: {
+          csvOnly: string;
+          tooLarge: string;
+          parseFallback: string;
+          importFallback: string;
+        };
+      };
     };
     roles: {
       title: string;
@@ -1077,6 +1217,8 @@ export interface Translation {
         remove: string;
         disconnect: string;
         refresh: string;
+        import: string;
+        export: string;
       };
       detail: {
         title: string;
@@ -1560,16 +1702,16 @@ const translation: Translation = {
       },
       detail: {
         title: "User Details",
-        lead: "Account Information And Project Memberships From The Current List.",
+        lead: "Account information and project memberships from the current list.",
         accountTitle: "Account Information",
-        accountLead: "Core Profile Fields For This User.",
+        accountLead: "Core profile fields for this user.",
         email: "Email",
         createdAt: "Created",
         updatedAt: "Last Updated",
         emailVerifiedAt: "Email Verified",
         emailNotVerified: "Not Verified",
         projectsTitle: "Assigned Projects",
-        projectsLead: "Projects This User Owns Or Belongs To.",
+        projectsLead: "Projects this user owns or belongs to.",
       },
       statusFilter: {
         ariaLabel: "Filter Users By Status",
@@ -2293,6 +2435,147 @@ const translation: Translation = {
     },
     leads: {
       title: "Leads",
+      subtitle: "Review and manage project leads from imports and manual entry.",
+      selectProjectTitle: "Select A Project",
+      selectProjectBody: "Choose a project from the sidebar to manage its leads.",
+      summary: {
+        total: "Total Leads",
+        thisMonth: "This Month",
+        lastMonth: "Last Month",
+        thisYear: "This Year",
+      },
+      table: {
+        emptyTitle: "No Leads Found",
+        emptyBody: "Import a CSV or add a lead to get started.",
+        summary: "Showing {{shown}} Of {{total}} Leads",
+        previousPage: "Previous Page",
+        nextPage: "Next Page",
+        pageNumber: "Page {{page}}",
+        colDate: "Date",
+        colName: "Name",
+        colFirstName: "First Name",
+        colLastName: "Last Name",
+        colEmail: "Email",
+        colPhone: "Phone Number",
+        colServices: "Services Interested In",
+        colMessage: "Message",
+        colActions: "Actions",
+        viewLead: "View Lead",
+        editLead: "Edit Lead",
+        deleteLead: "Delete Lead",
+        deleteTitle: "Delete Lead?",
+        deleteBody: "This lead will be removed from the selected project.",
+        deleteCancel: "Cancel",
+        deleteConfirm: "Delete",
+        deleteSuccess: "Lead deleted.",
+        deleteErrorFallback: "Could not delete lead.",
+        loadErrorBody: "Could not load leads.",
+      },
+      detail: {
+        title: "Lead Details",
+        lead: "Contact details, message, and any extra fields from import.",
+        unnamed: "Lead",
+        leadTitle: "Lead Details",
+        leadSectionLead: "Date, services, and the original message.",
+        leadDate: "Date",
+        services: "Services Interested In",
+        message: "Message",
+        extrasTitle: "Additional Fields",
+        extrasLead: "Extra columns kept from the source form or CSV.",
+      },
+      importExport: {
+        trigger: "Import / Export",
+        import: "Import",
+        export: "Export",
+        exportSuccess: "Excel report downloaded.",
+        exportEmpty: "No matching leads.",
+        exportErrorFallback: "Could not export leads.",
+      },
+      editor: {
+        trigger: "Add Lead",
+        createTitle: "Add Lead",
+        createLead: "Enter the lead details below.",
+        editTitle: "Edit Lead",
+        editLead: "Update the fields below, then save your changes.",
+        close: "Close",
+        cancel: "Cancel",
+        submit: "Add Lead",
+        save: "Save Changes",
+        createSuccess: "Lead created.",
+        updateSuccess: "Lead updated.",
+        createErrorFallback: "Could not create lead.",
+        updateErrorFallback: "Could not update lead.",
+        inactiveProject: "Leads can only be added when the project is active.",
+        extrasTitle: "Additional Fields",
+        extrasHint: "Imported with this lead. Not editable here.",
+        fields: {
+          firstName: "First Name",
+          firstNamePh: "Jane",
+          lastName: "Last Name",
+          lastNamePh: "Doe",
+          email: "Email",
+          emailPh: "jane@example.com",
+          phone: "Phone Number",
+          phonePh: "+1 555 0100",
+          leadDate: "Date",
+          services: "Services Interested In",
+          servicesPh: "Local SEO, content…",
+          message: "Message",
+          messagePh: "Looking for a quote…",
+        },
+        validation: {
+          required: "This field is required.",
+          email: "Enter a valid email.",
+          phone: "Enter a valid phone number.",
+          date: "Enter a valid date.",
+          maxName: "Use at most 80 characters.",
+          maxServices: "Use at most 500 characters.",
+          maxMessage: "Use at most 5000 characters.",
+        },
+      },
+      importModal: {
+        titleImport: "Import",
+        titleMatching: "Matching",
+        close: "Close",
+        cancel: "Cancel",
+        chooseFile: "Choose CSV File",
+        chooseFileHint: "Upload a .CSV export from Sheets or Excel.",
+        removeFile: "Remove File",
+        nextMatching: "Matching",
+        nextImport: "Import",
+        matchBanner: "Match Lead Fields To Uploaded File",
+        rowCount: "{{count}} Rows Found",
+        selectColumn: "Select Column",
+        doNotImport: "Do Not Import",
+        useToday: "Use Today's Date",
+        parsing: "Parsing CSV…",
+        parsingHint: "Reading headers and preparing field matching.",
+        importing: "Importing Leads…",
+        importingHint: "Saving matched rows to this project.",
+        importSuccess: "Imported {{imported}} leads.",
+        importSuccessWithSkips:
+          "Imported {{imported}} leads. Skipped {{skippedDuplicates}} duplicates and {{skippedInvalid}} invalid rows.",
+        importNone: "No leads imported. Skipped {{skippedDuplicates}} duplicates and {{skippedInvalid}} invalid rows.",
+        inactiveProject: "Leads can only be imported when the project is active.",
+        extrasTitle: "Additional Columns",
+        extrasHint: "Unmapped columns can be kept on the lead or skipped.",
+        keepAsExtra: "Keep As Extra",
+        fields: {
+          firstName: "First Name",
+          lastName: "Last Name",
+          email: "Email",
+          phone: "Phone Number",
+          message: "Message",
+          servicesInterestedIn: "Services Interested In",
+          leadDate: "Date",
+        },
+        errors: {
+          csvOnly: "Only CSV files are supported.",
+          tooLarge: "CSV file is too large.",
+          parseFallback: "Could not parse CSV.",
+          importFallback: "Could not import leads.",
+        },
+      },
     },
     roles: {
       title: "Roles & Permissions",
@@ -2346,22 +2629,24 @@ const translation: Translation = {
         remove: "Remove",
         disconnect: "Disconnect",
         refresh: "Refresh",
+        import: "Import",
+        export: "Export",
       },
       detail: {
         title: "Role Details",
-        lead: "Permission Summary For This Role.",
+        lead: "Permission summary for this role.",
         loading: "Loading Role…",
         overviewTitle: "Role Overview",
-        overviewLead: "Membership And Permission Counts For This Role.",
+        overviewLead: "Membership and permission counts for this role.",
         description: "Description",
-        noDescription: "No Description Provided.",
+        noDescription: "No description provided.",
         members: "Members",
         permissionsCount: "Permissions",
         createdAt: "Created",
         updatedAt: "Last Updated",
         permissionsTitle: "Granted Permissions",
-        permissionsLead: "Modules And Actions This Role Can Perform.",
-        noPermissions: "No Permissions Granted.",
+        permissionsLead: "Modules and actions this role can perform.",
+        noPermissions: "No permissions granted.",
       },
       statusFilter: {
         ariaLabel: "Filter Roles By Status",

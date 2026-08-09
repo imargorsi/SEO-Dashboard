@@ -2,8 +2,10 @@
  * Locked permission catalog — see doc/rbac.md
  *
  * Project role matrix (system + custom templates):
- * - Dashboard / Analytics / Leads: view only (mutate hidden until features exist)
+ * - Dashboard / Analytics: view only (mutate hidden until features exist)
  * - Projects / SEO Activities: view, create, update, delete
+ * - Leads: view, create, update, delete, import, export
+ *   (system defaults: project_owner + project_user → view + export only; super_admin → full)
  * - Integrations (Settings → Google link for selected project): view, disconnect, refresh, update
  * - Members: view, invite, remove
  *
@@ -24,6 +26,19 @@ export type MemberPermissionAction = (typeof MEMBER_PERMISSION_ACTIONS)[number];
 export const INTEGRATION_PERMISSION_ACTIONS = ["view", "disconnect", "refresh", "update"] as const;
 export type IntegrationPermissionAction = (typeof INTEGRATION_PERMISSION_ACTIONS)[number];
 
+export const LEAD_PERMISSION_ACTIONS = [
+  "view",
+  "create",
+  "update",
+  "delete",
+  "import",
+  "export",
+] as const;
+export type LeadPermissionAction = (typeof LEAD_PERMISSION_ACTIONS)[number];
+
+/** Default Leads keys for project_owner / project_user system roles. */
+export const LEAD_DEFAULT_ROLE_ACTIONS = ["view", "export"] as const;
+
 export const VIEW_ONLY_ACTIONS = ["view"] as const;
 
 /** Project-scoped modules in the role matrix. */
@@ -39,7 +54,7 @@ export const PROJECT_MODULE_SLUGS = [
 
 export type ProjectModuleSlug = (typeof PROJECT_MODULE_SLUGS)[number];
 
-export type CrudModuleSlug = Exclude<ProjectModuleSlug, "members" | "integrations">;
+export type CrudModuleSlug = Exclude<ProjectModuleSlug, "members" | "integrations" | "leads">;
 
 export type PermissionModuleDefinition = {
   slug: string;
@@ -52,7 +67,7 @@ export const PROJECT_PERMISSION_MODULES: readonly PermissionModuleDefinition[] =
   { slug: "projects", label: "Projects", actions: PERMISSION_ACTIONS },
   { slug: "analytics", label: "Analytics", actions: VIEW_ONLY_ACTIONS },
   { slug: "seo_activities", label: "SEO Activities", actions: PERMISSION_ACTIONS },
-  { slug: "leads", label: "Leads", actions: VIEW_ONLY_ACTIONS },
+  { slug: "leads", label: "Leads", actions: LEAD_PERMISSION_ACTIONS },
   { slug: "integrations", label: "Integrations", actions: INTEGRATION_PERMISSION_ACTIONS },
   { slug: "members", label: "Members", actions: MEMBER_PERMISSION_ACTIONS },
 ];
@@ -75,6 +90,10 @@ export function memberPermission(action: MemberPermissionAction): string {
 
 export function integrationPermission(action: IntegrationPermissionAction): string {
   return `integrations.${action}`;
+}
+
+export function leadPermission(action: LeadPermissionAction): string {
+  return `leads.${action}`;
 }
 
 export function adminPermission(module: AdminModuleSlug, action: PermissionAction): string {
@@ -110,14 +129,27 @@ export function allProjectCatalogPermissions(): string[] {
   return permissions;
 }
 
-/** Default seeded permissions for `project_owner` — full project matrix. */
-export function defaultProjectOwnerPermissions(): string[] {
-  return allProjectCatalogPermissions();
+function permissionsForModule(
+  mod: PermissionModuleDefinition,
+  mode: "owner" | "user",
+): string[] {
+  if (mod.slug === "leads") {
+    return LEAD_DEFAULT_ROLE_ACTIONS.map((action) => leadPermission(action));
+  }
+  if (mode === "user") {
+    return [`${mod.slug}.view`];
+  }
+  return mod.actions.map((action) => `${mod.slug}.${action}`);
 }
 
-/** Default seeded permissions for `project_user` — view on every project module. */
+/** Default seeded permissions for `project_owner` — full matrix except Leads (view + export). */
+export function defaultProjectOwnerPermissions(): string[] {
+  return PROJECT_PERMISSION_MODULES.flatMap((mod) => permissionsForModule(mod, "owner"));
+}
+
+/** Default seeded permissions for `project_user` — view everywhere; Leads also export. */
 export function defaultProjectUserPermissions(): string[] {
-  return PROJECT_PERMISSION_MODULES.map((mod) => `${mod.slug}.view`);
+  return PROJECT_PERMISSION_MODULES.flatMap((mod) => permissionsForModule(mod, "user"));
 }
 
 export function isKnownPermission(permission: string): boolean {

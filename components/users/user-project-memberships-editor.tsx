@@ -312,6 +312,7 @@ export function UserProjectMembershipsEditor({
                     className={cn(tableRowIconActionClass, "shrink-0")}
                     disabled={disabled || isBusy}
                     aria-label={t("removeAria", { name: row.projectName })}
+                    title={t("removeAria", { name: row.projectName })}
                     onClick={() => requestRemove(row.projectId, row.projectName)}
                   >
                     <IoTrashOutline className="size-4" aria-hidden />

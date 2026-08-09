@@ -8,7 +8,7 @@ import { assignProjectMember } from "@/lib/projects/assign-member";
 import { createProject } from "@/lib/projects/create-project";
 import { getProjectAccessForUser } from "@/lib/projects/get-project-access";
 import { resolveProjectRoleBySlug } from "@/lib/projects/resolve-role";
-import { projectPermission } from "@/lib/rbac/permission-catalog";
+import { leadPermission } from "@/lib/rbac/permission-catalog";
 import { PROJECT_OWNER_ROLE } from "@/lib/rbac/roles";
 import { seedSystemRoles } from "@/lib/rbac/seed-roles";
 import { Project, Role, User } from "@/models";
@@ -38,7 +38,7 @@ describe("Role status (activate / deactivate)", () => {
     const { role } = await createRole({
       name: "Analyst",
       description: "",
-      permissions: [projectPermission("leads", "view")],
+      permissions: [leadPermission("view")],
     });
     const admin = authContextFor(
       await User.create({
@@ -152,7 +152,7 @@ describe("Role status (activate / deactivate)", () => {
     const { role } = await createRole({
       name: "Viewer",
       description: "",
-      permissions: [projectPermission("leads", "view")],
+      permissions: [leadPermission("view")],
     });
     const owner = await User.create({
       name: "Owner",
@@ -177,14 +177,14 @@ describe("Role status (activate / deactivate)", () => {
     await assignProjectMember({ projectId: project._id, userId: member._id, roleSlug: role.slug, status: "active" });
 
     const beforeAccess = await getProjectAccessForUser(authContextFor(member), project._id.toString());
-    expect(beforeAccess!.permissions).toContain(projectPermission("leads", "view"));
+    expect(beforeAccess!.permissions).toContain(leadPermission("view"));
 
     // Simulate a role becoming inactive out-of-band (deactivateRole itself would block this
     // while a membership exists) — access resolution must still treat it as inert.
     await Role.findByIdAndUpdate(role._id, { status: "inactive" });
 
     const afterAccess = await getProjectAccessForUser(authContextFor(member), project._id.toString());
-    expect(afterAccess!.permissions).not.toContain(projectPermission("leads", "view"));
+    expect(afterAccess!.permissions).not.toContain(leadPermission("view"));
     expect(afterAccess!.permissions).toEqual([]);
   });
 });

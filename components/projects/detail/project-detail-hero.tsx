@@ -20,6 +20,9 @@ import {
   elevatedCardBodyClass,
   elevatedCardSurfaceClass,
   elevatedCardTitleClass,
+  typeIconTextClass,
+  typeMetaRowClass,
+  typeStackIdentityClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
@@ -55,7 +58,8 @@ function ContactItem({
         target="_blank"
         rel="noopener noreferrer"
         className={cn(
-          "inline-flex min-w-0 max-w-full items-center gap-1.5 type-caption transition-colors hover:text-text-primary",
+          typeIconTextClass,
+          "type-caption transition-colors hover:text-text-primary",
           elevatedCardBodyClass,
         )}
         aria-label={label}
@@ -66,7 +70,7 @@ function ContactItem({
   }
 
   return (
-    <span className={cn("inline-flex min-w-0 max-w-full items-center gap-1.5 type-caption", elevatedCardBodyClass)}>
+    <span className={cn(typeIconTextClass, "type-caption", elevatedCardBodyClass)}>
       {content}
     </span>
   );
@@ -82,7 +86,7 @@ export function ProjectDetailHero({ project, isSuperAdmin = false }: ProjectDeta
 
   return (
     <section className={cn(elevatedCardSurfaceClass, "rounded-3xl p-3 sm:p-4")}>
-      <div className="flex items-start gap-2.5 sm:gap-3">
+      <div className="flex items-start gap-4">
         <UserAvatar
           name={project.businessName}
           imageUrl={project.logoImage}
@@ -90,7 +94,7 @@ export function ProjectDetailHero({ project, isSuperAdmin = false }: ProjectDeta
           variant="logo"
         />
 
-        <div className="min-w-0 flex-1 space-y-1">
+        <div className={cn("min-w-0 flex-1", typeStackIdentityClass)}>
           <div className="flex items-start justify-between gap-2">
             <Heading sectionTitle className={cn("min-w-0 truncate", elevatedCardTitleClass)}>
               {project.businessName}
@@ -110,7 +114,7 @@ export function ProjectDetailHero({ project, isSuperAdmin = false }: ProjectDeta
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 sm:flex-nowrap sm:gap-x-4">
+          <div className={cn(typeMetaRowClass, "sm:flex-nowrap")}>
             <ContactItem
               icon={<IoGlobeOutline className="size-3.5 shrink-0" />}
               label={t("website")}

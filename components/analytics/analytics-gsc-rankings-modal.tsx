@@ -95,7 +95,7 @@ export function AnalyticsGscRankingsModal({
           dialogSurfaceClass,
         )}
       >
-        <header className="relative flex shrink-0 flex-col gap-1.5 border-b border-border px-5 pb-4 pt-5 pe-14 sm:px-6">
+        <header className="relative type-stack-md shrink-0 border-b border-border px-5 pb-4 pt-5 pe-14 sm:px-6">
           <button
             type="button"
             onClick={() => onOpenChange(false)}

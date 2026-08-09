@@ -18,6 +18,23 @@ export const toolbarFilterShellClass =
 export const glassPanelSurfaceClass =
   "border border-border/50 bg-bg-card/20 text-text-primary shadow-sm backdrop-blur-md backdrop-saturate-125 dark:border-text-primary/30 dark:bg-text-primary/[0.05]";
 
+/**
+ * Modal frost (centered dialogs + side sheets only).
+ * Greyer wash like chips/actions (`text-primary` tint) — not the purple `bg-card` slab —
+ * so modals stay frosted and readable without looking too dark.
+ */
+export const modalFrostFillClass =
+  "bg-bg-card/55 backdrop-blur-xl backdrop-saturate-150 dark:bg-text-primary/10";
+
+export const modalFrostBorderClass =
+  "border border-border/55 dark:border-text-primary/40";
+
+/**
+ * Side detail sheets — modal frost fill; border is applied on one edge only
+ * by the shared `Sheet` (the edge facing page content).
+ */
+export const sheetSurfaceClass = `border-0 ${modalFrostFillClass} text-text-primary shadow-sm`;
+
 /** Single glassy control (search, sort trigger) — same surface language as filter chip shells. */
 export const toolbarFilterControlClass =
   "box-border h-11 rounded-full border border-border/50 bg-bg-card/20 shadow-sm backdrop-blur-md backdrop-saturate-125 transition-[border-color,background-color] duration-200 dark:border-text-primary/30 dark:bg-text-primary/[0.05]";
@@ -26,9 +43,13 @@ export const toolbarFilterControlClass =
 export const toolbarFilterChipClass =
   "inline-flex h-8 items-center gap-2 rounded-full px-3 type-label leading-none transition-colors";
 
-/** Glassy detail / sheet panels — match list chrome without elevated solid fills. */
+/** Glassy detail icon wells — filled frost (page panels, matrices). */
 export const detailIconWellClass =
   "inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-border/60 bg-bg-card/40 text-brand shadow-sm backdrop-blur-md backdrop-saturate-150 dark:border-text-primary/40 dark:bg-text-primary/14 dark:text-text-primary";
+
+/** Modal / sheet icon wells — outline only, no fill (create/edit dialogs + detail sheets). */
+export const detailIconWellOutlineClass =
+  "inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-border/60 bg-transparent text-brand shadow-none dark:border-text-primary/40 dark:bg-transparent dark:text-text-primary";
 
 /** Empty-state icon well — larger glass disc, same surface language as detail wells. */
 export const emptyStateIconWellClass =
@@ -90,19 +111,47 @@ export const elevatedCardSurfaceClass = `${glassPanelSurfaceClass} transition-[b
 /**
  * Menus / floating overlays — opaque `--popover` (not translucent `--bg-card`).
  * Use theme shadow tokens only (no hardcoded rgba in components).
- * Glass Aurora dark `--bg-card` includes alpha; popovers/dialogs must stay opaque.
+ * Glass Aurora dark `--bg-card` includes alpha; popovers must stay opaque.
  */
 export const popoverSurfaceClass =
   "border border-border bg-popover text-popover-foreground shadow-(--shadow) dark:border-text-primary/40";
 
-/** Centered modals / alert dialogs — same opaque surface as menus. */
-export const dialogSurfaceClass = popoverSurfaceClass;
+/**
+ * Centered modals / alert dialogs — denser modal frost (readable text + chrome effect).
+ * Do not use for cards, chips, or list chrome — those stay on light `glassPanelSurfaceClass`.
+ */
+export const dialogSurfaceClass = `${modalFrostBorderClass} ${modalFrostFillClass} text-text-primary shadow-(--shadow-elevated)`;
 
 /** Analytics module panels — shared radius + breathing room. */
 export const analyticsPanelClass = "rounded-3xl p-5 sm:p-6";
 
+/**
+ * Standard content rhythm (md) — heading ↔ description / title ↔ supporting line.
+ * Prefer `type-stack-md` in CSS; this alias is for chrome imports.
+ */
+export const typeStackMdClass = "type-stack-md";
+
+/** Identity hero: name/title then email·phone / slug meta. */
+export const typeStackIdentityClass = "type-stack-identity";
+
+/** Inline icon + text pair (email, phone, links). */
+export const typeIconTextClass = "inline-flex min-w-0 max-w-full items-center gap-2";
+
+/** Horizontal meta row (email | phone). */
+export const typeMetaRowClass = "flex min-w-0 flex-wrap items-center gap-x-4 gap-y-2";
+
+/** Detail sheet section: heading block + fields (Lead Details spacing). */
+export const detailSectionClass = "space-y-3";
+
+/** Detail sheet scroll body. */
+export const detailBodyClass =
+  "themed-scrollbar flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto px-5 py-5";
+
+/** Hero row: avatar/icon well + identity text. */
+export const detailHeroRowClass = "flex items-center gap-4";
+
 /** Page/section title + description — keep hierarchy readable (flex gap, not tight leading collapse). */
-export const analyticsHeadingStackClass = "flex flex-col gap-1.5";
+export const analyticsHeadingStackClass = typeStackMdClass;
 
 export const elevatedCardTitleClass = "text-(--text-on-elevated)";
 

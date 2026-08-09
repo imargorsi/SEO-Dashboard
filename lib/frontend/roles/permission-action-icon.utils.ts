@@ -3,6 +3,8 @@
 import type { IconType } from "react-icons";
 import {
   IoAddOutline,
+  IoCloudDownloadOutline,
+  IoCloudUploadOutline,
   IoEyeOutline,
   IoPersonAddOutline,
   IoPersonRemoveOutline,
@@ -35,6 +37,10 @@ export function roleActionIcon(action: string): IconType | null {
       return IoUnlinkOutline;
     case "refresh":
       return IoRefreshOutline;
+    case "import":
+      return IoCloudUploadOutline;
+    case "export":
+      return IoCloudDownloadOutline;
     default:
       return null;
   }

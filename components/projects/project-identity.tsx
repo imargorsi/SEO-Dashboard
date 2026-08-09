@@ -3,6 +3,10 @@
 import { IoGlobeOutline } from "react-icons/io5";
 
 import { UserAvatar } from "@/components/ui/user-avatar";
+import {
+  typeIconTextClass,
+  typeStackIdentityClass,
+} from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
 type TProjectIdentityProps = {
@@ -26,7 +30,7 @@ export function ProjectIdentity({
   const url = websiteUrl?.trim() || null;
 
   return (
-    <div className={cn("flex min-w-0 items-start gap-3", className)}>
+    <div className={cn("flex min-w-0 items-start gap-4", className)}>
       <UserAvatar
         name={name}
         imageUrl={imageUrl ?? null}
@@ -34,10 +38,10 @@ export function ProjectIdentity({
         variant="logo"
         className="shrink-0"
       />
-      <div className="min-w-0 space-y-1">
+      <div className={cn("min-w-0", typeStackIdentityClass)}>
         <p className="truncate type-title text-text-primary">{name}</p>
         {url ? (
-          <p className="flex min-w-0 items-center gap-1.5 type-caption text-text-muted">
+          <p className={cn(typeIconTextClass, "type-caption text-text-muted")}>
             <IoGlobeOutline className="size-3.5 shrink-0" aria-hidden />
             <span className="truncate">{url}</span>
           </p>

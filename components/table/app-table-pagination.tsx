@@ -47,6 +47,7 @@ export function AppTablePagination({
           size="icon-sm"
           className={tablePaginationIconActionClass}
           aria-label={previousPageLabel}
+          title={previousPageLabel}
           disabled={safePage <= 1}
           onClick={() => onPageChange(safePage - 1)}
         >
@@ -82,6 +83,7 @@ export function AppTablePagination({
           size="icon-sm"
           className={tablePaginationIconActionClass}
           aria-label={nextPageLabel}
+          title={nextPageLabel}
           disabled={safePage >= lastPage}
           onClick={() => onPageChange(safePage + 1)}
         >

@@ -5,7 +5,7 @@ import { NotFoundError, ValidationError } from "@/lib/api/http-errors";
 import { createProject } from "@/lib/projects/create-project";
 import { assignProjectMember } from "@/lib/projects/assign-member";
 import { getProjectAccessForUser } from "@/lib/projects/get-project-access";
-import { projectPermission } from "@/lib/rbac/permission-catalog";
+import { leadPermission, projectPermission } from "@/lib/rbac/permission-catalog";
 import { seedSystemRoles } from "@/lib/rbac/seed-roles";
 import { PROJECT_OWNER_ROLE, PROJECT_USER_ROLE } from "@/lib/rbac/roles";
 import { createRole } from "@/lib/roles/create-role";
@@ -21,12 +21,12 @@ describe("PATCH /admin/roles/{id} — updateRole", () => {
     const { role: updated } = await updateRole(role._id.toString(), {
       name: "Senior Reviewer",
       description: "Reviews everything.",
-      permissions: [projectPermission("leads", "view")],
+      permissions: [leadPermission("view")],
     });
 
     expect(updated.name).toBe("Senior Reviewer");
     expect(updated.description).toBe("Reviews everything.");
-    expect(updated.permissions).toEqual([projectPermission("leads", "view")]);
+    expect(updated.permissions).toEqual([leadPermission("view")]);
   });
 
   it("404s for the reserved super_admin role (never editable)", async () => {

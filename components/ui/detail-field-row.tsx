@@ -3,17 +3,21 @@
 import type { ReactNode } from "react";
 import type { IconType } from "react-icons";
 
-import { detailIconWellClass } from "@/lib/frontend/layout/dashboard-chrome";
+import {
+  detailIconWellOutlineClass,
+  detailSectionClass,
+  typeStackMdClass,
+} from "@/lib/frontend/layout/dashboard-chrome";
 
 type TDetailSectionHeadingProps = {
   title: string;
   description: string;
 };
 
-/** Title + lead for detail sheet / side-panel sections. */
+/** Title + lead for detail sheet / side-panel sections — uses type-stack-md rhythm. */
 export function DetailSectionHeading({ title, description }: TDetailSectionHeadingProps) {
   return (
-    <div className="min-w-0 space-y-0.5">
+    <div className={`min-w-0 ${typeStackMdClass}`}>
       <h3 className="type-label text-text-primary">{title}</h3>
       <p className="type-caption text-text-muted">{description}</p>
     </div>
@@ -26,17 +30,19 @@ type TDetailFieldRowProps = {
   children: ReactNode;
 };
 
-/** Icon + label + value row for detail sheets. */
+/** Icon + label + value row for detail sheets. Labels use Title Case (no CSS uppercase). */
 export function DetailFieldRow({ icon: Icon, label, children }: TDetailFieldRowProps) {
   return (
-    <div className="flex items-start gap-3 py-2.5">
-      <span className={detailIconWellClass} aria-hidden>
+    <div className="flex items-start gap-3.5 py-2.5">
+      <span className={detailIconWellOutlineClass} aria-hidden>
         <Icon className="size-4" />
       </span>
-      <div className="min-w-0 space-y-0.5">
-        <p className="type-caption-xs tracking-[0.08em] uppercase text-text-muted">{label}</p>
+      <div className={`min-w-0 ${typeStackMdClass}`}>
+        <p className="type-caption text-text-muted">{label}</p>
         <div className="type-body text-text-primary wrap-break-word">{children}</div>
       </div>
     </div>
   );
 }
+
+export { detailSectionClass };

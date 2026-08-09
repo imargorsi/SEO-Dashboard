@@ -33,6 +33,7 @@ export function TableRowIconActions({ actions, className }: TTableRowIconActions
           size="icon-sm"
           className={cn(tableRowIconActionClass, action.className)}
           aria-label={action.label}
+          title={action.label}
           disabled={action.disabled}
           onClick={action.onClick}
         >

@@ -47,7 +47,7 @@ export function ProjectDetailHeader({
       </Link>
 
       <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="min-w-0 space-y-1">
+        <div className="type-stack-md min-w-0">
           <Heading id="project-detail-title" pageTitle>
             {businessName}
           </Heading>

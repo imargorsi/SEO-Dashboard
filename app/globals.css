@@ -512,6 +512,19 @@ code {
     text-transform: uppercase;
   }
 
+  /**
+   * Standard content rhythm (md) — heading ↔ supporting copy / title ↔ meta.
+   * Prefer this over ad-hoc space-y-0.5 / space-y-1 so UI never feels cramped.
+   */
+  .type-stack-md {
+    @apply flex flex-col gap-1.5;
+  }
+
+  /** Identity / hero block: title then contact/meta row (matches detail section breathing room). */
+  .type-stack-identity {
+    @apply flex flex-col gap-3;
+  }
+
   .bg-gradient-primary {
     background-color: var(--color-secondary);
     background-image: none;

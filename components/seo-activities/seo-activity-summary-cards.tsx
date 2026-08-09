@@ -1,7 +1,6 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import { useEffect, useState } from "react";
 import type { IconType } from "react-icons";
 import {
   IoCalendarOutline,
@@ -14,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import { glassPanelSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { buildSeoActivitySparklinePaths } from "@/lib/frontend/seo-activities/sparkline.utils";
 import type { TSeoActivitySummaryMetric } from "@/lib/frontend/seo-activities/summary.utils";
+import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion.hook";
 import { cn } from "@/lib/utils";
 
 type TSeoActivitySummaryCardsProps = {
@@ -44,20 +44,6 @@ const METRIC_THEME: Record<TSeoActivitySummaryMetric["id"], TMetricTheme> = {
     accent: "var(--status-active)",
   },
 };
-
-function usePrefersReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(false);
-
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setReduced(media.matches);
-    sync();
-    media.addEventListener("change", sync);
-    return () => media.removeEventListener("change", sync);
-  }, []);
-
-  return reduced;
-}
 
 function MetricSparkline({
   id,

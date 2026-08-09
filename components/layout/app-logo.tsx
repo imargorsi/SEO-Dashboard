@@ -18,9 +18,9 @@ type AppLogoProps = {
   width?: number;
 };
 
-/** Intrinsic canvas: wordmark 1131×193 (~5.86:1), mark 193×193. */
+/** Intrinsic canvas: wordmark 951×186 (~5.11:1), mark 193×193. */
 const FULL_LOGO_WIDTH = 188;
-const FULL_LOGO_HEIGHT = 32;
+const FULL_LOGO_HEIGHT = 37;
 const MARK_SIZE = 32;
 
 export function AppLogo({
@@ -80,7 +80,10 @@ export function AppLogo({
   }
 
   return (
-    <span className={cn("relative inline-flex shrink-0 items-center justify-center", className)}>
+    <span
+      className={cn("relative inline-block shrink-0", className)}
+      style={{ width: fullWidth, height: fullHeight }}
+    >
       {/* Black wordmark — light surfaces */}
       <Image
         src="/crawllex-dark.png"
@@ -88,7 +91,7 @@ export function AppLogo({
         width={fullWidth}
         height={fullHeight}
         priority={priority}
-        className="block h-auto max-h-full w-auto max-w-full dark:hidden"
+        className="absolute inset-0 block h-full w-full object-contain dark:hidden"
         aria-hidden={alt ? undefined : true}
       />
       {/* White wordmark — dark surfaces */}
@@ -98,7 +101,7 @@ export function AppLogo({
         width={fullWidth}
         height={fullHeight}
         priority={priority}
-        className="hidden h-auto max-h-full w-auto max-w-full dark:block"
+        className="absolute inset-0 hidden h-full w-full object-contain dark:block"
         aria-hidden={alt ? undefined : true}
       />
     </span>

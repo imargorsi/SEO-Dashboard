@@ -60,6 +60,93 @@ function buildCardSparklines(
   };
 }
 
+function buildEngagementSparklines(
+  metrics: Array<{
+    date: string;
+    source: string;
+    sessions: number | null;
+    engagedSessions: number | null;
+    averageSessionDuration: number | null;
+    screenPageViews: number | null;
+  }>,
+): {
+  engagementRate: number[];
+  avgSessionDuration: number[];
+  pageViews: number[];
+} {
+  const ga4 = metrics
+    .filter((m) => m.source === "ga4")
+    .slice()
+    .sort((a, b) => a.date.localeCompare(b.date));
+
+  const hasDurationCoverage =
+    ga4.length > 0 && ga4.every((m) => m.averageSessionDuration != null);
+  const hasPageViewCoverage =
+    ga4.length > 0 && ga4.every((m) => m.screenPageViews != null);
+
+  return {
+    engagementRate: ga4.map((m) => {
+      const daySessions = m.sessions ?? 0;
+      if (daySessions <= 0) return 0;
+      return (m.engagedSessions ?? 0) / daySessions;
+    }),
+    // Omit sparklines until every day in-range has the new field (avoids fake zeros).
+    avgSessionDuration: hasDurationCoverage
+      ? ga4.map((m) => m.averageSessionDuration ?? 0)
+      : [],
+    pageViews: hasPageViewCoverage ? ga4.map((m) => m.screenPageViews ?? 0) : [],
+  };
+}
+
+function aggregateGa4Engagement(
+  metrics: Array<{
+    source: string;
+    sessions: number | null;
+    engagedSessions: number | null;
+    averageSessionDuration: number | null;
+    screenPageViews: number | null;
+  }>,
+): {
+  engagementRate: number | null;
+  avgSessionDuration: number | null;
+  pageViews: number | null;
+} {
+  const ga4 = metrics.filter((m) => m.source === "ga4");
+  let sessions = 0;
+  let engagedSessions = 0;
+  let durationWeighted = 0;
+  let durationSessions = 0;
+  let pageViews = 0;
+
+  const hasDurationCoverage =
+    ga4.length > 0 && ga4.every((m) => m.averageSessionDuration != null);
+  const hasPageViewCoverage =
+    ga4.length > 0 && ga4.every((m) => m.screenPageViews != null);
+
+  for (const metric of ga4) {
+    const daySessions = metric.sessions ?? 0;
+    sessions += daySessions;
+    engagedSessions += metric.engagedSessions ?? 0;
+
+    if (hasDurationCoverage && metric.averageSessionDuration != null && daySessions > 0) {
+      durationWeighted += metric.averageSessionDuration * daySessions;
+      durationSessions += daySessions;
+    }
+    if (hasPageViewCoverage) {
+      pageViews += metric.screenPageViews ?? 0;
+    }
+  }
+
+  return {
+    engagementRate: sessions > 0 ? engagedSessions / sessions : null,
+    avgSessionDuration:
+      hasDurationCoverage && durationSessions > 0
+        ? durationWeighted / durationSessions
+        : null,
+    pageViews: hasPageViewCoverage ? pageViews : null,
+  };
+}
+
 function resolveTrend(
   current: number,
   previous: number | undefined,
@@ -180,6 +267,8 @@ export async function getAnalyticsOverview(
   const filteredMetrics = allMetrics;
   const filteredGsc = aggregateGscTotals(filteredMetrics);
   const sparklines = buildCardSparklines(filteredMetrics);
+  const engagementTotals = aggregateGa4Engagement(filteredMetrics);
+  const engagementSparklines = buildEngagementSparklines(filteredMetrics);
 
   let sessions = 0;
   let totalUsers = 0;
@@ -247,6 +336,17 @@ export async function getAnalyticsOverview(
       newUsers,
       engagedSessions,
       organicSessions,
+    },
+    engagement: {
+      engagementRate: cardMetric(
+        engagementTotals.engagementRate,
+        engagementSparklines.engagementRate,
+      ),
+      avgSessionDuration: cardMetric(
+        engagementTotals.avgSessionDuration,
+        engagementSparklines.avgSessionDuration,
+      ),
+      pageViews: cardMetric(engagementTotals.pageViews, engagementSparklines.pageViews),
     },
     series: [...seriesMap.values()].sort((a, b) => a.date.localeCompare(b.date)),
     integrations,

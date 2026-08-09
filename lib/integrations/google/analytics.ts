@@ -13,6 +13,8 @@ export type TGa4DailyTotals = {
   newUsers: number;
   engagedSessions: number;
   organicSessions: number;
+  averageSessionDuration: number;
+  screenPageViews: number;
 };
 
 export type TGa4DimensionRow = {
@@ -86,6 +88,8 @@ export async function fetchGa4DailyTotals(
             { name: "totalUsers" },
             { name: "newUsers" },
             { name: "engagedSessions" },
+            { name: "averageSessionDuration" },
+            { name: "screenPageViews" },
           ],
           limit: "25000",
           returnPropertyQuota: true,
@@ -131,6 +135,8 @@ export async function fetchGa4DailyTotals(
         totalUsers: Number(row.metricValues?.[1]?.value ?? 0),
         newUsers: Number(row.metricValues?.[2]?.value ?? 0),
         engagedSessions: Number(row.metricValues?.[3]?.value ?? 0),
+        averageSessionDuration: Number(row.metricValues?.[4]?.value ?? 0),
+        screenPageViews: Number(row.metricValues?.[5]?.value ?? 0),
         organicSessions: organicByDate.get(date) ?? 0,
       };
     })

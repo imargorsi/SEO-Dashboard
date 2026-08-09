@@ -19,6 +19,10 @@ const analyticsDailyMetricSchema = new Schema(
     newUsers: { type: Number, default: null },
     engagedSessions: { type: Number, default: null },
     organicSessions: { type: Number, default: null },
+    /** GA4 averageSessionDuration — seconds per session for that day. */
+    averageSessionDuration: { type: Number, default: null },
+    /** GA4 screenPageViews — page/screen views for that day. */
+    screenPageViews: { type: Number, default: null },
   },
   { timestamps: true },
 );
@@ -40,6 +44,8 @@ export type AnalyticsDailyMetricDocument = InferSchemaType<typeof analyticsDaily
     newUsers: number | null;
     engagedSessions: number | null;
     organicSessions: number | null;
+    averageSessionDuration: number | null;
+    screenPageViews: number | null;
   };
 
 export const AnalyticsDailyMetric: Model<AnalyticsDailyMetricDocument> =

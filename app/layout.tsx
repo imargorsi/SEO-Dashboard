@@ -15,7 +15,9 @@ export const metadata: Metadata = {
   description: "Crawllex - SEO Clarity For Every Client",
   metadataBase: new URL("https://crawllex.com"),
   icons: {
-    icon: "/favicon.png",
+    icon: [{ url: "/favicon.png", type: "image/png", sizes: "512x512" }],
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
   },
 };
 

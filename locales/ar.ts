@@ -833,6 +833,20 @@ const translation: Translation = {
           position: "الترتيب",
         },
       },
+      engagementPreview: {
+        engagementRate: {
+          label: "معدل التفاعل",
+          hint: "نسبة الجلسات التي تُعد تفاعلية.",
+        },
+        avgSessionDuration: {
+          label: "متوسط مدة الجلسة",
+          hint: "متوسط الوقت الذي يقضيه الزائر في كل جلسة.",
+        },
+        pageViews: {
+          label: "مشاهدات الصفحات",
+          hint: "إجمالي مشاهدات المحتوى في النطاق المحدد.",
+        },
+      },
       trafficSources: {
         title: "مصادر الزيارات",
         totalLabel: "الإجمالي",

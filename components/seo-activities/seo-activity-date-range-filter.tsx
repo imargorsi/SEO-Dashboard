@@ -323,25 +323,23 @@ export function SeoActivityDateRangeFilter({
 
   return (
     <div ref={rootRef} className={cn("relative inline-flex", className)}>
-      <button
+      <Button
         type="button"
+        variant="outline"
+        size="md"
         aria-expanded={open}
         aria-haspopup="dialog"
         aria-label={t("ariaLabel")}
         onClick={() => setOpen((prev) => !prev)}
-        className={cn(
-          "inline-flex h-9 items-center gap-2 rounded-xl border border-border bg-bg-input px-3 type-label text-text-primary transition-colors",
-          "hover:bg-bg-hover",
-          open && "bg-bg-selected",
-        )}
+        className={cn("gap-2", open && "bg-bg-selected")}
       >
         <IoCalendarOutline className="size-4 shrink-0 text-text-muted" aria-hidden />
-        <span className="max-w-48 truncate">{triggerLabel}</span>
+        <span className="max-w-48 truncate font-semibold">{triggerLabel}</span>
         <IoChevronDown
           className={cn("size-3.5 shrink-0 text-text-muted transition-transform", open && "rotate-180")}
           aria-hidden
         />
-      </button>
+      </Button>
       {popup}
     </div>
   );

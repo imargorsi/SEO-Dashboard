@@ -88,4 +88,22 @@ describe("RBAC role seed", () => {
     const slugs = SYSTEM_ROLE_SEEDS.map((role) => role.slug);
     expect(slugs).toEqual([PROJECT_OWNER_ROLE, PROJECT_USER_ROLE]);
   });
+
+  it("preserves admin-granted leads mutate permissions on re-seed", async () => {
+    await seedSystemRoles();
+
+    const owner = await Role.findOne({ slug: PROJECT_OWNER_ROLE });
+    expect(owner).toBeTruthy();
+
+    owner!.permissions = [...new Set([...owner!.permissions, "leads.create", "leads.import"])];
+    await owner!.save();
+
+    await seedSystemRoles();
+
+    const reseeding = await Role.findOne({ slug: PROJECT_OWNER_ROLE });
+    expect(reseeding?.permissions).toContain("leads.view");
+    expect(reseeding?.permissions).toContain("leads.export");
+    expect(reseeding?.permissions).toContain("leads.create");
+    expect(reseeding?.permissions).toContain("leads.import");
+  });
 });

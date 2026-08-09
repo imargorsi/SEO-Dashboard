@@ -131,7 +131,7 @@ export const analyticsPanelClass = "rounded-3xl p-5 sm:p-6";
  */
 export const typeStackMdClass = "type-stack-md";
 
-/** Identity hero: name/title then email·phone / slug meta. */
+/** Identity hero: name/title then email·phone / slug meta (same gap as type-stack-md). */
 export const typeStackIdentityClass = "type-stack-identity";
 
 /** Inline icon + text pair (email, phone, links). */

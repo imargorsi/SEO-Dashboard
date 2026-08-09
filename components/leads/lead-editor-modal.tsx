@@ -230,7 +230,7 @@ export function LeadEditorModal({ open, target, onOpenChange, onSave }: TLeadEdi
             <Input
               id="lead-message"
               type="textarea"
-              rows={4}
+              rows={2}
               label={t("fields.message")}
               placeholder={t("fields.messagePh")}
               required

@@ -520,9 +520,9 @@ code {
     @apply flex flex-col gap-1.5;
   }
 
-  /** Identity / hero block: title then contact/meta row (matches detail section breathing room). */
+  /** Identity / hero: name/title then email · URL · slug (same gap as type-stack-md). */
   .type-stack-identity {
-    @apply flex flex-col gap-3;
+    @apply flex flex-col gap-1.5;
   }
 
   .bg-gradient-primary {

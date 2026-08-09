@@ -2319,7 +2319,7 @@ const translation: Translation = {
     },
     seoActivities: {
       title: "SEO Activities",
-      subtitle: "Track Blogs, Backlinks, And Technical Work For The Selected Project.",
+      subtitle: "Track blogs, backlinks, and technical work for the selected project.",
       typeFilter: {
         ariaLabel: "SEO Activity Type",
         blogs: "Blogs",
@@ -2572,7 +2572,7 @@ const translation: Translation = {
         nextMatching: "Matching",
         nextImport: "Import",
         matchBanner: "Match Lead Fields To Uploaded File",
-        rowCount: "{{count}} Rows Found",
+        rowCount: "{{count}} rows found.",
         selectColumn: "Select Column",
         doNotImport: "Do Not Import",
         useToday: "Use Today's Date",

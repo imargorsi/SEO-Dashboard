@@ -266,7 +266,7 @@ export function SeoActivitiesSection() {
             <Heading id="seo-activities-title" pageTitle>
               {t("title")}
             </Heading>
-            <Paragraph className="text-text-muted">{t("subtitle")}</Paragraph>
+            <Paragraph className="text-text-secondary">{t("subtitle")}</Paragraph>
           </div>
 
           <div className="flex flex-wrap items-center justify-end gap-3">
@@ -284,7 +284,7 @@ export function SeoActivitiesSection() {
           </div>
         </div>
 
-        <SeoActivitySummaryCards metrics={metrics} />
+        <SeoActivitySummaryCards metrics={metrics} isLoading={isLoading && !data} />
 
         <div className="space-y-3">
           <div className="flex flex-wrap items-center justify-end gap-2">

@@ -287,7 +287,7 @@ export function LeadsSection() {
             <Heading id="leads-title" pageTitle>
               {t("title")}
             </Heading>
-            <Paragraph className="text-text-muted">{t("subtitle")}</Paragraph>
+            <Paragraph className="text-text-secondary">{t("subtitle")}</Paragraph>
           </div>
 
           {canCreate ? (

@@ -41,34 +41,33 @@ export function UserProjectAssignments({ projects, className }: UserProjectAssig
             key={`${project.id}-${project.membership_role}-${project.membership_status}`}
             className="rounded-2xl border border-border/50 bg-bg-card/40 p-3.5 shadow-sm backdrop-blur-md dark:border-text-primary/20 dark:bg-text-primary/6"
           >
-            <div className="flex items-start justify-between gap-3">
-              <ProjectIdentity
-                name={project.name}
-                websiteUrl={project.website_url}
-                imageUrl={project.image_url}
-                size="md"
-                className="min-w-0 flex-1"
-                meta={
-                  project.membership_status === "invited" ? t("membershipInvited") : null
-                }
-              />
-              <StatusChip
-                className="shrink-0"
-                colorKey={getProjectStatusColorKey(project.status)}
-                label={projectStatusLabel}
-              />
-            </div>
-            <div className="mt-3">
-              <Badge
-                variant="outline"
-                className={cn(
-                  "type-caption-xs",
-                  getBadgeToneClassName(isOwner ? "warning" : "success"),
-                )}
-              >
-                {project.role_name || membershipLabel}
-              </Badge>
-            </div>
+            <ProjectIdentity
+              name={project.name}
+              websiteUrl={project.website_url}
+              imageUrl={project.image_url}
+              size="md"
+              className="min-w-0"
+              meta={
+                project.membership_status === "invited" ? t("membershipInvited") : null
+              }
+              trailing={
+                <>
+                  <StatusChip
+                    colorKey={getProjectStatusColorKey(project.status)}
+                    label={projectStatusLabel}
+                  />
+                  <Badge
+                    variant="outline"
+                    className={cn(
+                      "type-caption-xs",
+                      getBadgeToneClassName(isOwner ? "warning" : "success"),
+                    )}
+                  >
+                    {project.role_name || membershipLabel}
+                  </Badge>
+                </>
+              }
+            />
           </li>
         );
       })}

@@ -222,6 +222,8 @@ export interface Translation {
     selectProjectTitle: string;
     selectProjectBody: string;
     loadError: string;
+    rangeAllTime: string;
+    workspaceFallback: string;
     pulse: {
       title: string;
       cards: {
@@ -230,6 +232,21 @@ export interface Translation {
         clicks: string;
         blogs: string;
       };
+      descriptions: {
+        leads: string;
+        backlinks: string;
+        clicks: string;
+        blogs: string;
+        unavailable: string;
+      };
+    };
+    trend: {
+      title: string;
+      subtitle: string;
+      gridAria: string;
+      emptyTitle: string;
+      emptyBody: string;
+      noSeries: string;
     };
     assistant: {
       title: string;
@@ -1669,6 +1686,8 @@ const translation: Translation = {
     selectProjectTitle: "Select A Project",
     selectProjectBody: "Choose a project from the sidebar to open its control center.",
     loadError: "Could not load dashboard data. Try again.",
+    rangeAllTime: "All Time",
+    workspaceFallback: "Workspace",
     pulse: {
       title: "SEO Pulse",
       cards: {
@@ -1677,6 +1696,22 @@ const translation: Translation = {
         clicks: "Total Clicks",
         blogs: "Blogs Published",
       },
+      descriptions: {
+        leads: "You got {{count}} leads.",
+        backlinks: "You gained {{count}} backlinks.",
+        clicks: "You earned {{count}} total clicks.",
+        blogs: "You published {{count}} blogs.",
+        unavailable: "Not available for your access on this project.",
+      },
+    },
+    trend: {
+      title: "SEO Performance Trend",
+      subtitle:
+        "Clicks, impressions, CTR, and average position as four mini trends for this project.",
+      gridAria: "Search performance metrics",
+      emptyTitle: "No Trend Data",
+      emptyBody: "Connect Search Console and sync to populate these charts.",
+      noSeries: "No series yet.",
     },
     assistant: {
       title: "Dashboard Assistant",

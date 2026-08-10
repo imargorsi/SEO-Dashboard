@@ -8,6 +8,10 @@ export {
   type AnalyticsDimensionRowDocument,
 } from "./AnalyticsDimensionRow";
 export {
+  AssistantQueryHistory,
+  type AssistantQueryHistoryDocument,
+} from "./AssistantQueryHistory";
+export {
   OAuthLoginCode,
   type OAuthLoginCodeDocument,
   createOAuthLoginCode,

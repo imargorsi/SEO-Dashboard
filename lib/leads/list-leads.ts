@@ -57,14 +57,33 @@ function monthBounds(year: number, monthIndex: number): { from: string; to: stri
   return { from, to };
 }
 
-async function buildSummaryCounts(projectId: string, now = new Date()): Promise<TLeadSummaryCounts> {
+export type TLeadSummaryWindow = "this_month" | "last_month" | "this_year";
+
+/** Calendar window bounds used by lead summary cards and assistant CTAs. */
+export function getLeadSummaryWindowBounds(
+  window: TLeadSummaryWindow,
+  now = new Date(),
+): { from: string; to: string } {
   const year = now.getFullYear();
   const month = now.getMonth();
-  const thisMonth = monthBounds(year, month);
-  const lastMonthDate = new Date(year, month - 1, 1);
-  const lastMonth = monthBounds(lastMonthDate.getFullYear(), lastMonthDate.getMonth());
-  const yearFrom = `${year}-01-01`;
-  const yearTo = todayLeadDate(now);
+
+  if (window === "this_month") {
+    return monthBounds(year, month);
+  }
+  if (window === "last_month") {
+    const lastMonthDate = new Date(year, month - 1, 1);
+    return monthBounds(lastMonthDate.getFullYear(), lastMonthDate.getMonth());
+  }
+  return { from: `${year}-01-01`, to: todayLeadDate(now) };
+}
+
+export async function buildSummaryCounts(
+  projectId: string,
+  now = new Date(),
+): Promise<TLeadSummaryCounts> {
+  const thisMonth = getLeadSummaryWindowBounds("this_month", now);
+  const lastMonth = getLeadSummaryWindowBounds("last_month", now);
+  const thisYear = getLeadSummaryWindowBounds("this_year", now);
 
   const [total, this_month, last_month, this_year] = await Promise.all([
     Lead.countDocuments({ projectId }),
@@ -78,7 +97,7 @@ async function buildSummaryCounts(projectId: string, now = new Date()): Promise<
     }),
     Lead.countDocuments({
       projectId,
-      leadDate: { $gte: yearFrom, $lte: yearTo },
+      leadDate: { $gte: thisYear.from, $lte: thisYear.to },
     }),
   ]);
 

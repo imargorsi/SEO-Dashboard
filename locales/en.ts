@@ -219,6 +219,35 @@ export interface Translation {
   home: {
     title: string;
     subtitle: string;
+    selectProjectTitle: string;
+    selectProjectBody: string;
+    loadError: string;
+    pulse: {
+      title: string;
+      cards: {
+        leads: string;
+        backlinks: string;
+        clicks: string;
+        blogs: string;
+      };
+    };
+    assistant: {
+      title: string;
+      description: string;
+      placeholder: string;
+      submit: string;
+      asking: string;
+      historyLabel: string;
+      queryError: string;
+      suggestions: {
+        leadsThisMonth: string;
+        leadsLastMonth: string;
+        leadsThisYear: string;
+        analyticsOverview: string;
+        topQueries: string;
+        topPages: string;
+      };
+    };
   };
   modules: {
     users: {
@@ -1630,7 +1659,36 @@ const translation: Translation = {
   },
   home: {
     title: "Dashboard",
-    subtitle: "Overview — add widgets and KPIs for your SEO workspace here.",
+    subtitle: "All-time project pulse, search trends, and quick answers for the selected workspace.",
+    selectProjectTitle: "Select A Project",
+    selectProjectBody: "Choose a project from the sidebar to open its control center.",
+    loadError: "Could not load dashboard data. Try again.",
+    pulse: {
+      title: "SEO Pulse",
+      cards: {
+        leads: "Leads",
+        backlinks: "Backlinks Created",
+        clicks: "Total Clicks",
+        blogs: "Blogs Published",
+      },
+    },
+    assistant: {
+      title: "Dashboard Assistant",
+      description: "Ask about leads or analytics for this project. Answers use live cached data only.",
+      placeholder: "Ask about leads or analytics…",
+      submit: "Ask",
+      asking: "Asking…",
+      historyLabel: "Recent Queries",
+      queryError: "Could not run that query. Try again.",
+      suggestions: {
+        leadsThisMonth: "Leads This Month",
+        leadsLastMonth: "Leads Last Month",
+        leadsThisYear: "Leads This Year",
+        analyticsOverview: "Analytics Overview",
+        topQueries: "Top Queries",
+        topPages: "Top Pages",
+      },
+    },
   },
   modules: {
     users: {

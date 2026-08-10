@@ -15,6 +15,7 @@ import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
+import { PageAmbientGlow } from "@/components/ui/page-ambient-glow";
 import { useSelectedProject } from "@/context/selected-project-context";
 import { useProjectAccess } from "@/context/project-access-context";
 import {
@@ -213,27 +214,8 @@ export function AnalyticsSection() {
   }
 
   return (
-    <div className="relative w-full min-w-0">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-128 overflow-hidden"
-      >
-        <div className="absolute -left-20 top-8 size-72 rounded-full bg-brand/12 blur-3xl" />
-        <div
-          className="absolute -right-16 top-24 size-80 rounded-full blur-3xl"
-          style={{
-            background:
-              "color-mix(in srgb, var(--color-secondary) 14%, transparent)",
-          }}
-        />
-        <div
-          className="absolute left-1/3 top-0 h-40 w-2xl -translate-x-1/2 rounded-full blur-3xl"
-          style={{
-            background:
-              "color-mix(in srgb, var(--gradient-mid) 10%, transparent)",
-          }}
-        />
-      </div>
+      <div className="relative w-full min-w-0">
+      <PageAmbientGlow />
 
       <div className="relative flex flex-col gap-6 px-4 py-6 sm:gap-7 sm:px-6 sm:py-7 lg:gap-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-6">

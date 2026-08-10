@@ -1,5 +1,6 @@
 import type { SidebarNavGroup, SidebarNavItem } from "@/lib/frontend/layout/sidebar-nav";
 import {
+  HIDE_LEADS_SIDEBAR_NAV,
   SIDEBAR_NAV_DEFINITIONS,
   SIDEBAR_NAV_GROUP_ORDER,
 } from "@/lib/frontend/layout/sidebar-nav";
@@ -12,6 +13,9 @@ function isNavDefinitionVisible(
   projectPermissions: readonly string[],
   roles: readonly string[],
 ): boolean {
+  // TEMP: Leads hidden from sidebar chrome only.
+  if (HIDE_LEADS_SIDEBAR_NAV && item.path === "/leads") return false;
+
   if (item.viewPermission === null) return true;
 
   const permissions = permissionsForScope(

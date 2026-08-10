@@ -50,6 +50,12 @@ export const SIDEBAR_NAV_GROUP_ORDER: readonly SidebarNavGroupId[] = [
   "settings",
 ] as const;
 
+/**
+ * TEMP: hide Leads from the sidebar. Route remains reachable by URL —
+ * flip to `false` to restore nav.
+ */
+export const HIDE_LEADS_SIDEBAR_NAV = true;
+
 /** Same nav for all roles — visibility is permission-driven. */
 export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
   {

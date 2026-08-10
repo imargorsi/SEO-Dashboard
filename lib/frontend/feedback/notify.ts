@@ -8,6 +8,8 @@ import type { FeedbackMessage } from "@/lib/frontend/feedback/types";
 const DEFAULT_OPTIONS: TGlassToastOptions = {
   position: "top-right",
   duration: 5000,
+  /** Auto-dismiss only — no manual close control. */
+  dismissible: false,
 };
 
 function showToast({ variant, message }: FeedbackMessage, options: TGlassToastOptions = {}) {

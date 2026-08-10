@@ -1,5 +1,5 @@
 export const authMessages = {
-  failed: "These credentials do not match our records.",
+  failed: "Credentials don't match.",
   throttle: (seconds: number) => `Too many attempts. Wait ${seconds}s.`,
   authenticated: "Authenticated.",
   loggedOut: "Logged out.",

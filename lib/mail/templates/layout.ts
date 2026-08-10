@@ -7,12 +7,12 @@ import type { TMailLayoutInput } from "@/lib/mail/templates/types";
  * Email clients do not support CSS variables — keep this palette in sync manually.
  */
 const mailTheme = {
-  bgMain: "#eeeaf4",
+  bgMain: "#f0f2f5",
   bgCard: "#ffffff",
-  textPrimary: "#1a1628",
-  textSecondary: "#5c5670",
-  textMuted: "#8a8499",
-  border: "#e4e0eb",
+  textPrimary: "#14181f",
+  textSecondary: "#4a4e54",
+  textMuted: "#8a8d91",
+  border: "#e1e3e6",
   brand: "#ff7952",
   textOnBrand: "#ffffff",
 } as const;

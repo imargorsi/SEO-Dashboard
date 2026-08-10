@@ -2,3 +2,11 @@ export type { TMailContent, TMailCta, TMailLayoutInput } from "@/lib/mail/templa
 export { passwordResetMailContent } from "@/lib/mail/templates/password-reset";
 export { emailVerificationMailContent } from "@/lib/mail/templates/email-verification";
 export { projectInviteMailContent } from "@/lib/mail/templates/project-invite";
+export { projectCreatedMailContent } from "@/lib/mail/templates/project-created";
+export { projectApprovedMailContent } from "@/lib/mail/templates/project-approved";
+export { projectRejectedMailContent } from "@/lib/mail/templates/project-rejected";
+export { projectActivatedMailContent } from "@/lib/mail/templates/project-activated";
+export { projectDeactivatedMailContent } from "@/lib/mail/templates/project-deactivated";
+export { projectDeletedMailContent } from "@/lib/mail/templates/project-deleted";
+export { userActivatedMailContent } from "@/lib/mail/templates/user-activated";
+export { userDeactivatedMailContent } from "@/lib/mail/templates/user-deactivated";

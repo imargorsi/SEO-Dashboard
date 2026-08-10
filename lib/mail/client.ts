@@ -6,7 +6,15 @@ import { env } from "@/lib/config/env";
 export {
   emailVerificationMailContent,
   passwordResetMailContent,
+  projectActivatedMailContent,
+  projectApprovedMailContent,
+  projectCreatedMailContent,
+  projectDeactivatedMailContent,
+  projectDeletedMailContent,
   projectInviteMailContent,
+  projectRejectedMailContent,
+  userActivatedMailContent,
+  userDeactivatedMailContent,
 } from "@/lib/mail/templates";
 export type { TMailContent } from "@/lib/mail/templates";
 

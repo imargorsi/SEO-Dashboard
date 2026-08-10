@@ -4,7 +4,13 @@ import { NextResponse } from "next/server";
 import { NotFoundError, ValidationError } from "@/lib/api/http-errors";
 import { ApiResponse } from "@/lib/api/response";
 import type { AuthContext } from "@/lib/auth/guards";
+import { projectDeletedMailContent } from "@/lib/mail/client";
 import { deleteStoredProjectLogo } from "@/lib/projects/project-logo-storage";
+import {
+  projectListUrl,
+  resolveProjectOwnerEmail,
+  sendProjectOwnerMail,
+} from "@/lib/projects/send-project-owner-mail";
 import { Lead, Project, ProjectMember, SeoActivity, type ProjectDocument } from "@/models";
 
 async function findProjectOrThrow(projectId: string): Promise<ProjectDocument> {
@@ -23,6 +29,7 @@ async function findProjectOrThrow(projectId: string): Promise<ProjectDocument> {
 /**
  * Hard-delete a project. Allowed only when status is `inactive` or `rejected`.
  * Cascades members, SEO activities, leads, and removes the stored logo.
+ * Emails the owner after a successful delete (soft-fail SMTP).
  */
 export async function deleteProject(_auth: AuthContext, projectId: string): Promise<void> {
   const project = await findProjectOrThrow(projectId);
@@ -34,6 +41,8 @@ export async function deleteProject(_auth: AuthContext, projectId: string): Prom
     );
   }
 
+  const businessName = project.businessName;
+  const ownerEmail = await resolveProjectOwnerEmail(project).catch(() => null);
   const logoPath = project.logoImage;
   const id = project._id;
 
@@ -42,6 +51,19 @@ export async function deleteProject(_auth: AuthContext, projectId: string): Prom
   await Lead.deleteMany({ projectId: id });
   await Project.deleteOne({ _id: id });
   await deleteStoredProjectLogo(logoPath).catch(() => undefined);
+
+  if (ownerEmail) {
+    const mail = projectDeletedMailContent({
+      projectName: businessName,
+      projectsUrl: projectListUrl(),
+    });
+    await sendProjectOwnerMail({
+      project,
+      to: ownerEmail,
+      mail,
+      logLabel: "project-delete",
+    });
+  }
 }
 
 export function buildDeleteProjectResponse(): NextResponse {

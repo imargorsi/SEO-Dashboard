@@ -4,7 +4,9 @@ import mongoose from "mongoose";
 import { ApiResponse } from "@/lib/api/response";
 import { ValidationError } from "@/lib/api/http-errors";
 import type { AuthContext } from "@/lib/auth/guards";
+import { projectCreatedMailContent } from "@/lib/mail/client";
 import { assignProjectMember } from "@/lib/projects/assign-member";
+import { projectListUrl, sendProjectOwnerMail } from "@/lib/projects/send-project-owner-mail";
 import { serializeProject } from "@/lib/serializers/project";
 import { PROJECT_OWNER_ROLE, SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
 import { seedSystemRoles } from "@/lib/rbac/seed-roles";
@@ -89,6 +91,18 @@ export async function createProject(
     projectId: project._id,
     userId: ownerUserId,
     roleSlug: PROJECT_OWNER_ROLE,
+  });
+
+  const mail = projectCreatedMailContent({
+    projectName: project.businessName,
+    status: project.status === "active" ? "active" : "pending",
+    projectsUrl: projectListUrl(),
+  });
+  await sendProjectOwnerMail({
+    project,
+    to: pocEmail,
+    mail,
+    logLabel: "project-create",
   });
 
   return { project };

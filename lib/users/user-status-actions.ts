@@ -4,10 +4,12 @@ import { ApiResponse } from "@/lib/api/response";
 import { ValidationError } from "@/lib/api/http-errors";
 import type { AuthContext } from "@/lib/auth/guards";
 import { revokeAllUserTokens } from "@/lib/auth/tokens";
+import { userActivatedMailContent, userDeactivatedMailContent } from "@/lib/mail/client";
 import { SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
 import { serializeAdminUserDetail } from "@/lib/serializers/admin-user";
 import { getAdminUserById } from "@/lib/users/get-user";
 import { isActiveUserStatus, type TUserAccountStatus } from "@/lib/users/constants";
+import { sendUserAccountMail, signInUrl } from "@/lib/users/send-user-account-mail";
 import { User, type UserDocument } from "@/models";
 
 function assertUserAccountStatus(
@@ -49,6 +51,14 @@ export async function deactivateAdminUser(auth: AuthContext, userId: string): Pr
   await revokeAllUserTokens(user._id);
 
   user.status = "inactive";
+
+  const mail = userDeactivatedMailContent();
+  await sendUserAccountMail({
+    to: user.email,
+    mail,
+    logLabel: "user-deactivate",
+  });
+
   return user;
 }
 
@@ -60,6 +70,14 @@ export async function activateAdminUser(_auth: AuthContext, userId: string): Pro
   await persistUserStatus(user._id, "active");
 
   user.status = "active";
+
+  const mail = userActivatedMailContent({ signInUrl: signInUrl() });
+  await sendUserAccountMail({
+    to: user.email,
+    mail,
+    logLabel: "user-activate",
+  });
+
   return user;
 }
 

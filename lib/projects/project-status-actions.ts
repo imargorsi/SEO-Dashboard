@@ -4,7 +4,14 @@ import { NextResponse } from "next/server";
 import { ApiResponse } from "@/lib/api/response";
 import { NotFoundError, ValidationError } from "@/lib/api/http-errors";
 import type { AuthContext } from "@/lib/auth/guards";
+import {
+  projectActivatedMailContent,
+  projectApprovedMailContent,
+  projectDeactivatedMailContent,
+  projectRejectedMailContent,
+} from "@/lib/mail/client";
 import type { ProjectStatus } from "@/lib/projects/constants";
+import { projectListUrl, sendProjectOwnerMail } from "@/lib/projects/send-project-owner-mail";
 import { serializeProject } from "@/lib/serializers/project";
 import { Project, type ProjectDocument } from "@/models";
 
@@ -50,6 +57,16 @@ export async function approveProject(auth: AuthContext, projectId: string): Prom
   project.rejectedByUserId = null;
   await project.save();
 
+  const mail = projectApprovedMailContent({
+    projectName: project.businessName,
+    projectsUrl: projectListUrl(),
+  });
+  await sendProjectOwnerMail({
+    project,
+    mail,
+    logLabel: "project-approve",
+  });
+
   return project;
 }
 
@@ -62,6 +79,16 @@ export async function rejectProject(auth: AuthContext, projectId: string): Promi
   project.rejectedByUserId = auth.user._id;
   await project.save();
 
+  const mail = projectRejectedMailContent({
+    projectName: project.businessName,
+    projectsUrl: projectListUrl(),
+  });
+  await sendProjectOwnerMail({
+    project,
+    mail,
+    logLabel: "project-reject",
+  });
+
   return project;
 }
 
@@ -72,6 +99,16 @@ export async function deactivateProject(_auth: AuthContext, projectId: string): 
   project.status = "inactive";
   await project.save();
 
+  const mail = projectDeactivatedMailContent({
+    projectName: project.businessName,
+    projectsUrl: projectListUrl(),
+  });
+  await sendProjectOwnerMail({
+    project,
+    mail,
+    logLabel: "project-deactivate",
+  });
+
   return project;
 }
 
@@ -81,6 +118,16 @@ export async function activateProject(_auth: AuthContext, projectId: string): Pr
 
   project.status = "active";
   await project.save();
+
+  const mail = projectActivatedMailContent({
+    projectName: project.businessName,
+    projectsUrl: projectListUrl(),
+  });
+  await sendProjectOwnerMail({
+    project,
+    mail,
+    logLabel: "project-activate",
+  });
 
   return project;
 }

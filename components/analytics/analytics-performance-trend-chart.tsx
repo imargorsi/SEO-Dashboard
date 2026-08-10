@@ -39,6 +39,10 @@ type TAnalyticsPerformanceTrendChartProps = {
   compact?: boolean;
   /** Stretch to parent height (dashboard 50/50 split). */
   fill?: boolean;
+  /** Hide in-card title/subtitle (dashboard renders them outside the chart). */
+  hideTitle?: boolean;
+  /** Overrides default `analytics-trend-title` when the heading lives outside. */
+  labelledBy?: string;
 };
 
 type TChartRow = TAnalyticsTrendPoint;
@@ -110,6 +114,8 @@ export function AnalyticsPerformanceTrendChart({
   className,
   compact = false,
   fill = false,
+  hideTitle = false,
+  labelledBy,
 }: TAnalyticsPerformanceTrendChartProps) {
   const { t } = useTranslation("translation", {
     keyPrefix: "modules.analytics.trendChart",
@@ -127,6 +133,7 @@ export function AnalyticsPerformanceTrendChart({
       ? "h-36 sm:h-40"
       : "h-72";
   const chartHeightPx = fill ? 220 : compact ? 160 : 288;
+  const titleId = labelledBy ?? "analytics-trend-title";
 
   const chartConfig = {
     value: {
@@ -155,22 +162,25 @@ export function AnalyticsPerformanceTrendChart({
         fill && "flex h-full min-h-0 flex-col overflow-hidden",
         className,
       )}
-      aria-labelledby="analytics-trend-title"
+      aria-labelledby={titleId}
     >
       <div
         className={cn(
-          "flex shrink-0 flex-col sm:flex-row sm:items-start sm:justify-between",
+          "flex shrink-0 flex-col sm:flex-row sm:items-start",
+          hideTitle ? "sm:justify-end" : "sm:justify-between",
           compact || fill ? "gap-2 sm:gap-3" : "gap-4 sm:gap-5",
         )}
       >
-        <div className={cn(analyticsHeadingStackClass, "min-w-0")}>
-          <h2 id="analytics-trend-title" className="type-title text-text-primary">
-            {t("title")}
-          </h2>
-          {compact || fill ? null : (
-            <p className="type-caption text-text-muted">{t("subtitle")}</p>
-          )}
-        </div>
+        {hideTitle ? null : (
+          <div className={cn(analyticsHeadingStackClass, "min-w-0")}>
+            <h2 id={titleId} className="type-title text-text-primary">
+              {t("title")}
+            </h2>
+            {compact || fill ? null : (
+              <p className="type-caption text-text-muted">{t("subtitle")}</p>
+            )}
+          </div>
+        )}
 
         <div
           className={cn(toolbarFilterShellClass, "shrink-0")}
@@ -202,7 +212,7 @@ export function AnalyticsPerformanceTrendChart({
 
       <div
         className={cn(
-          fill ? "mt-3 flex min-h-0 flex-1 flex-col" : compact ? "mt-3" : "mt-6",
+          fill ? "mt-2 flex min-h-0 flex-1 flex-col sm:mt-3" : compact ? "mt-3" : "mt-6",
         )}
       >
         {isLoading && !overview ? (

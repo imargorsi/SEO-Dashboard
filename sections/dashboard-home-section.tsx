@@ -93,7 +93,7 @@ export function DashboardHomeSection() {
     <div className="relative flex h-full min-h-0 w-full min-w-0 flex-col overflow-hidden max-xl:h-auto max-xl:overflow-y-auto">
       <PageAmbientGlow />
 
-      <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden px-4 py-3 max-xl:h-auto max-xl:overflow-y-auto sm:px-6 sm:py-4">
+      <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden px-4 py-2.5 max-xl:h-auto max-xl:overflow-y-auto sm:px-6 sm:py-3">
         <div className={cn(typeStackMdClass, "shrink-0")}>
           <Heading id="dashboard-home-title" pageTitle>
             {t("title")}
@@ -101,8 +101,8 @@ export function DashboardHomeSection() {
           <Paragraph className="text-text-secondary">{t("subtitle")}</Paragraph>
         </div>
 
-        <div className="mt-3 flex min-h-0 flex-1 flex-col gap-3 xl:gap-4">
-          <div className="grid min-h-0 flex-1 gap-3 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] xl:items-stretch xl:gap-4">
+        <div className="mt-3 flex min-h-0 flex-1 flex-col gap-5">
+          <div className="grid min-h-0 flex-[0.86] gap-3 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] xl:items-stretch">
             <div className="min-h-0 min-w-0 xl:h-full">
               <DashboardAssistantPanel
                 projectId={projectId}
@@ -131,14 +131,24 @@ export function DashboardHomeSection() {
           </div>
 
           {canViewAnalytics ? (
-            <div className="min-h-0 flex-1">
-              <AnalyticsPerformanceTrendChart
-                compact
-                fill
-                overview={overviewQuery.data}
-                isLoading={overviewQuery.isLoading}
-                className="h-full"
-              />
+            <div className="flex min-h-0 flex-1 flex-col gap-2">
+              <div className={cn(typeStackMdClass, "shrink-0")}>
+                <Heading id="dashboard-trend-title" pageTitle customHeadingTag="h2">
+                  {t("trend.title")}
+                </Heading>
+                <Paragraph className="text-text-secondary">{t("trend.subtitle")}</Paragraph>
+              </div>
+              <div className="min-h-0 flex-1">
+                <AnalyticsPerformanceTrendChart
+                  compact
+                  fill
+                  hideTitle
+                  labelledBy="dashboard-trend-title"
+                  overview={overviewQuery.data}
+                  isLoading={overviewQuery.isLoading}
+                  className="h-full"
+                />
+              </div>
             </div>
           ) : null}
         </div>

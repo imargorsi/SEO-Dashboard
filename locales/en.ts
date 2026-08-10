@@ -230,6 +230,17 @@ export interface Translation {
         clicks: string;
         blogs: string;
       };
+      descriptions: {
+        leads: string;
+        backlinks: string;
+        clicks: string;
+        blogs: string;
+        unavailable: string;
+      };
+    };
+    trend: {
+      title: string;
+      subtitle: string;
     };
     assistant: {
       title: string;
@@ -1677,6 +1688,17 @@ const translation: Translation = {
         clicks: "Total Clicks",
         blogs: "Blogs Published",
       },
+      descriptions: {
+        leads: "You got {{count}} leads.",
+        backlinks: "You gained {{count}} backlinks.",
+        clicks: "You earned {{count}} total clicks.",
+        blogs: "You published {{count}} blogs.",
+        unavailable: "Not available for your access on this project.",
+      },
+    },
+    trend: {
+      title: "SEO Performance Trend",
+      subtitle: "Clicks, impressions, CTR, and average position over time for this project.",
     },
     assistant: {
       title: "Dashboard Assistant",

@@ -172,7 +172,7 @@ export function DashboardAssistantPanel({
         glassPanelSurfaceClass,
         "relative flex h-full min-h-0 flex-col overflow-visible border-0 shadow-none",
         "motion-reduce:border motion-reduce:border-border/50 dark:motion-reduce:border-text-primary/30",
-        compact ? "rounded-2xl p-5 sm:p-6" : "rounded-3xl p-6 sm:p-7",
+        compact ? "rounded-2xl p-3.5 sm:p-4" : "rounded-3xl p-6 sm:p-7",
         className,
       )}
       aria-labelledby="dashboard-assistant-title"
@@ -180,8 +180,11 @@ export function DashboardAssistantPanel({
       <AssistantNeonOutline radius={compact ? 16 : 24} />
 
       <div className="relative z-10 flex min-h-0 flex-1 flex-col overflow-hidden">
-        <div className="flex shrink-0 items-center gap-3">
-          <span className={cn(metricIconWellClass, "size-12")} aria-hidden>
+        <div className={cn("flex shrink-0 items-center", compact ? "gap-2.5" : "gap-3")}>
+          <span
+            className={cn(metricIconWellClass, compact ? "size-10" : "size-12")}
+            aria-hidden
+          >
             <AssistantSparkleIcon />
           </span>
           <div className="flex min-w-0 flex-col gap-0.5">
@@ -196,7 +199,10 @@ export function DashboardAssistantPanel({
 
         {suggestions.length > 0 ? (
           <div
-            className="mt-6 flex shrink-0 flex-wrap justify-end gap-2"
+            className={cn(
+              "flex shrink-0 flex-wrap justify-end gap-2",
+              compact ? "mt-3" : "mt-6",
+            )}
             role="list"
             aria-label={t("suggestionsLabel")}
           >
@@ -221,7 +227,7 @@ export function DashboardAssistantPanel({
           </div>
         ) : null}
 
-        <form onSubmit={handleSubmit} className="mt-4 shrink-0">
+        <form onSubmit={handleSubmit} className={cn("shrink-0", compact ? "mt-3" : "mt-4")}>
           <div
             className={cn(
               formFieldControlClass,
@@ -258,7 +264,7 @@ export function DashboardAssistantPanel({
           </div>
         </form>
 
-        <div className="mt-8 min-h-0 shrink-0" aria-live="polite">
+        <div className={cn("min-h-0 shrink-0", compact ? "mt-4" : "mt-8")} aria-live="polite">
           {answer ? (
             <div className="space-y-2">
               <div className="flex items-center justify-between gap-2">

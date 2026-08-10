@@ -3,23 +3,25 @@
 import { useMemo, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
-import { IoSparklesOutline } from "react-icons/io5";
+import { IoArrowForward, IoSearchOutline, IoTimeOutline } from "react-icons/io5";
 
+import { AssistantNeonOutline } from "@/components/dashboard/assistant-neon-outline";
+import { AssistantSparkleIcon } from "@/components/dashboard/assistant-sparkle-icon";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Heading } from "@/components/heading";
-import { Input } from "@/components/ui/input";
 import { Paragraph } from "@/components/paragraph";
 import {
   useAssistantHistoryQuery,
   useAssistantQueryMutation,
 } from "@/features/assistant/assistant.api";
+import { useTypingPlaceholder } from "@/hooks/use-typing-placeholder.hook";
 import { ApiError } from "@/lib/frontend/api/errors";
 import { notify } from "@/lib/frontend/feedback/notify";
 import {
-  elevatedCardSurfaceClass,
+  formFieldControlClass,
+  glassPanelSurfaceClass,
   metricIconWellClass,
   toolbarFilterChipClass,
-  typeStackMdClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 import type { TAssistantIntent, TAssistantQueryResult } from "@/types/assistant.types";
@@ -28,6 +30,7 @@ type TSuggestion = {
   id: string;
   intent: Exclude<TAssistantIntent, "unknown">;
   label: string;
+  /** English query string — intent detection is English-only in MVP. */
   query: string;
   permission: "leads.view" | "analytics.view";
 };
@@ -41,6 +44,15 @@ type TDashboardAssistantPanelProps = {
   compact?: boolean;
 };
 
+/** English phrases for typewriter — matches chip queries / `detect-intent` (MVP). */
+const TYPING_PHRASES = {
+  leadsThisMonth: "How many leads did I get this month?",
+  leadsLastMonth: "How many leads last month?",
+  clicksOverview: "What were total clicks this month?",
+  topQueries: "What are the top queries?",
+  topPages: "What are the top pages?",
+} as const;
+
 export function DashboardAssistantPanel({
   projectId,
   canViewLeads,
@@ -50,6 +62,7 @@ export function DashboardAssistantPanel({
 }: TDashboardAssistantPanelProps) {
   const { t } = useTranslation("translation", { keyPrefix: "home.assistant" });
   const [draft, setDraft] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
   const [answer, setAnswer] = useState<TAssistantQueryResult | null>(null);
 
   const historyQuery = useAssistantHistoryQuery(projectId);
@@ -109,6 +122,32 @@ export function DashboardAssistantPanel({
     return compact ? filtered.slice(0, 4) : filtered;
   }, [canViewAnalytics, canViewLeads, compact, t]);
 
+  const typingPhrases = useMemo(() => {
+    const phrases: string[] = [];
+    if (canViewLeads) {
+      phrases.push(TYPING_PHRASES.leadsThisMonth, TYPING_PHRASES.leadsLastMonth);
+    }
+    if (canViewAnalytics) {
+      phrases.push(
+        TYPING_PHRASES.clicksOverview,
+        TYPING_PHRASES.topQueries,
+        TYPING_PHRASES.topPages,
+      );
+    }
+    return phrases.length > 0 ? phrases : [t("placeholder")];
+  }, [canViewAnalytics, canViewLeads, t]);
+
+  const typingEnabled = !draft && !isFocused && !queryMutation.isPending;
+  const typingPlaceholder = useTypingPlaceholder({
+    phrases: typingPhrases,
+    enabled: typingEnabled,
+  });
+
+  const historyItems = (historyQuery.data?.items ?? answer?.history ?? []).slice(
+    0,
+    compact ? 3 : 5,
+  );
+
   async function runQuery(query: string) {
     const trimmed = query.trim();
     if (!trimmed || queryMutation.isPending) return;
@@ -127,124 +166,151 @@ export function DashboardAssistantPanel({
     void runQuery(draft);
   }
 
-  const historyItems = (historyQuery.data?.items ?? answer?.history ?? []).slice(
-    0,
-    compact ? 3 : 5,
-  );
-
   return (
     <section
       className={cn(
-        elevatedCardSurfaceClass,
-        "flex h-full min-h-0 flex-col overflow-hidden",
-        compact ? "rounded-2xl p-3 sm:p-4" : "rounded-3xl p-5 sm:p-6",
+        glassPanelSurfaceClass,
+        "relative flex h-full min-h-0 flex-col overflow-visible border-0 shadow-none",
+        "motion-reduce:border motion-reduce:border-border/50 dark:motion-reduce:border-text-primary/30",
+        compact ? "rounded-2xl p-5 sm:p-6" : "rounded-3xl p-6 sm:p-7",
         className,
       )}
       aria-labelledby="dashboard-assistant-title"
     >
-      <div className={cn("flex shrink-0 items-start gap-3", compact ? "mb-3" : "mb-5")}>
-        <span className={metricIconWellClass} aria-hidden>
-          <IoSparklesOutline className="size-5" />
-        </span>
-        <div className={typeStackMdClass}>
-          <Heading id="dashboard-assistant-title" SmallTitle>
-            {t("title")}
-          </Heading>
-          {compact ? null : (
-            <Paragraph className="text-text-secondary">{t("description")}</Paragraph>
-          )}
-        </div>
-      </div>
+      <AssistantNeonOutline radius={compact ? 16 : 24} />
 
-      {suggestions.length > 0 ? (
-        <div className={cn("flex shrink-0 flex-wrap gap-2", compact ? "mb-3" : "mb-4")} role="list">
-          {suggestions.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              role="listitem"
+      <div className="relative z-10 flex min-h-0 flex-1 flex-col overflow-hidden">
+        <div className="flex shrink-0 items-center gap-3">
+          <span className={cn(metricIconWellClass, "size-12")} aria-hidden>
+            <AssistantSparkleIcon />
+          </span>
+          <div className="flex min-w-0 flex-col gap-0.5">
+            <Heading id="dashboard-assistant-title" SmallTitle className="leading-tight">
+              {t("title")}
+            </Heading>
+            <Paragraph className="leading-snug text-text-secondary">
+              {compact ? t("descriptionShort") : t("description")}
+            </Paragraph>
+          </div>
+        </div>
+
+        {suggestions.length > 0 ? (
+          <div
+            className="mt-6 flex shrink-0 flex-wrap justify-end gap-2"
+            role="list"
+            aria-label={t("suggestionsLabel")}
+          >
+            {suggestions.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                role="listitem"
+                disabled={queryMutation.isPending}
+                onClick={() => void runQuery(item.query)}
+                className={cn(
+                  toolbarFilterChipClass,
+                  "border border-border/50 bg-transparent text-text-secondary",
+                  "hover:border-border hover:bg-bg-hover/40 hover:text-text-primary",
+                  "disabled:opacity-50 dark:border-text-primary/20",
+                )}
+              >
+                <IoSearchOutline className="size-3.5 shrink-0 opacity-70" aria-hidden />
+                {item.label}
+              </button>
+            ))}
+          </div>
+        ) : null}
+
+        <form onSubmit={handleSubmit} className="mt-4 shrink-0">
+          <div
+            className={cn(
+              formFieldControlClass,
+              "flex items-center gap-2 rounded-xl bg-transparent p-1.5 ps-3",
+              "focus-within:border-border/50 focus-within:ring-0 dark:focus-within:border-text-primary/18",
+            )}
+          >
+            <input
+              value={draft}
+              onChange={(event) => setDraft(event.target.value)}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              placeholder={
+                typingEnabled ? typingPlaceholder || t("placeholder") : t("placeholder")
+              }
+              aria-label={t("inputLabel")}
               disabled={queryMutation.isPending}
-              onClick={() => void runQuery(item.query)}
               className={cn(
-                toolbarFilterChipClass,
-                "border border-border/50 bg-bg-card/30 text-text-secondary hover:border-accent-border/50 hover:bg-bg-hover/60 hover:text-text-primary disabled:opacity-50 dark:border-text-primary/25",
+                "min-w-0 flex-1 bg-transparent type-body text-text-primary outline-none",
+                "placeholder:text-text-placeholder",
+                "disabled:cursor-not-allowed disabled:opacity-50",
+                compact ? "h-9" : "h-10",
               )}
+            />
+            <Button
+              type="submit"
+              variant="primary"
+              size="sm"
+              disabled={queryMutation.isPending || !draft.trim()}
+              className="shrink-0 rounded-lg px-4"
             >
-              {item.label}
-            </button>
-          ))}
-        </div>
-      ) : null}
+              {queryMutation.isPending ? t("asking") : t("submit")}
+            </Button>
+          </div>
+        </form>
 
-      <form
-        onSubmit={handleSubmit}
-        className="flex shrink-0 flex-col gap-2 sm:flex-row sm:items-center"
-      >
-        <Input
-          value={draft}
-          onChange={(event) => setDraft(event.target.value)}
-          placeholder={t("placeholder")}
-          aria-label={t("placeholder")}
-          disabled={queryMutation.isPending}
-          className={cn("flex-1", compact ? "h-10" : "h-11")}
-        />
-        <Button
-          type="submit"
-          variant="primary"
-          size={compact ? "md" : "lg"}
-          disabled={queryMutation.isPending || !draft.trim()}
-          className="w-full sm:w-auto"
-        >
-          {queryMutation.isPending ? t("asking") : t("submit")}
-        </Button>
-      </form>
-
-      <div className={cn("flex min-h-0 flex-1 flex-col overflow-hidden", compact ? "mt-3" : "mt-4")}>
-        {historyItems.length > 0 ? (
-          <div className="shrink-0">
-            <p className="mb-2 type-caption text-text-muted">{t("historyLabel")}</p>
-            <div className="flex flex-wrap gap-2">
+        <div className="mt-8 min-h-0 shrink-0" aria-live="polite">
+          {answer ? (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between gap-2">
+                <p className="type-caption text-text-muted">{t("answerLabel")}</p>
+                {answer.action ? (
+                  <Link
+                    href={answer.action.route}
+                    className={cn(
+                      buttonVariants({ variant: "ghost", size: "xs" }),
+                      "inline-flex gap-1 text-brand",
+                    )}
+                  >
+                    {answer.action.label}
+                    <IoArrowForward className="size-3.5" aria-hidden />
+                  </Link>
+                ) : null}
+              </div>
+              <p className="max-h-28 overflow-y-auto type-body text-text-primary">
+                {answer.message}
+              </p>
+            </div>
+          ) : historyQuery.isLoading ? (
+            <p className="type-caption text-text-muted">{t("historyLoading")}</p>
+          ) : historyItems.length > 0 ? (
+            <div
+              className="flex flex-wrap gap-1.5"
+              role="list"
+              aria-label={t("historyLabel")}
+            >
               {historyItems.map((item) => (
                 <button
                   key={item.id}
                   type="button"
+                  role="listitem"
                   disabled={queryMutation.isPending}
                   onClick={() => void runQuery(item.query)}
                   className={cn(
-                    toolbarFilterChipClass,
-                    "max-w-full truncate border border-border/40 bg-transparent text-text-muted hover:border-accent-border/40 hover:text-text-secondary disabled:opacity-50 dark:border-text-primary/20",
+                    "inline-flex max-w-full items-center gap-1.5 truncate rounded-lg px-2.5 py-1.5 type-caption",
+                    "text-text-muted transition-colors hover:bg-bg-hover/50 hover:text-text-secondary",
+                    "disabled:opacity-50",
                   )}
                   title={item.query}
                 >
-                  {item.query}
+                  <IoTimeOutline className="size-3.5 shrink-0" aria-hidden />
+                  <span className="truncate">{item.query}</span>
                 </button>
               ))}
             </div>
-          </div>
-        ) : null}
-
-        {answer ? (
-          <div
-            className={cn(
-              "mt-auto overflow-y-auto rounded-2xl border border-border/40 bg-bg-card/15 dark:border-text-primary/20 dark:bg-text-primary/4",
-              compact ? "mt-3 max-h-28 px-3 py-3" : "px-4 py-4",
-            )}
-          >
-            <p className="type-body text-text-primary">{answer.message}</p>
-            {answer.action ? (
-              <div className="mt-2">
-                <Link
-                  href={answer.action.route}
-                  className={cn(buttonVariants({ variant: "outlined", size: "sm" }), "inline-flex")}
-                >
-                  {answer.action.label}
-                </Link>
-              </div>
-            ) : null}
-          </div>
-        ) : (
-          <div className="mt-auto min-h-0 flex-1" aria-hidden />
-        )}
+          ) : (
+            <p className="type-caption text-text-muted">{t("emptyAnswer")}</p>
+          )}
+        </div>
       </div>
     </section>
   );

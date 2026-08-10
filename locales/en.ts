@@ -234,10 +234,16 @@ export interface Translation {
     assistant: {
       title: string;
       description: string;
+      descriptionShort: string;
       placeholder: string;
+      inputLabel: string;
       submit: string;
       asking: string;
+      suggestionsLabel: string;
       historyLabel: string;
+      historyLoading: string;
+      answerLabel: string;
+      emptyAnswer: string;
       queryError: string;
       suggestions: {
         leadsThisMonth: string;
@@ -1674,11 +1680,18 @@ const translation: Translation = {
     },
     assistant: {
       title: "Dashboard Assistant",
-      description: "Ask about leads or analytics for this project. Answers use live cached data only.",
+      description:
+        "Ask about leads or analytics for this project. Answers use cached project data only.",
+      descriptionShort: "Ask about leads or analytics for this project.",
       placeholder: "Ask about leads or analytics…",
+      inputLabel: "Assistant Query",
       submit: "Ask",
       asking: "Asking…",
+      suggestionsLabel: "Try Asking",
       historyLabel: "Recent Queries",
+      historyLoading: "Loading recent queries…",
+      answerLabel: "Answer",
+      emptyAnswer: "Pick a suggestion or type a question to see a quick project summary.",
       queryError: "Could not run that query. Try again.",
       suggestions: {
         leadsThisMonth: "Leads This Month",

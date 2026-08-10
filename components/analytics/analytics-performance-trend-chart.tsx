@@ -35,14 +35,6 @@ type TAnalyticsPerformanceTrendChartProps = {
   overview: TAnalyticsOverviewDto | undefined;
   isLoading?: boolean;
   className?: string;
-  /** Tighter chrome + shorter plot for `/dashboard` no-scroll layout. */
-  compact?: boolean;
-  /** Stretch to parent height (dashboard 50/50 split). */
-  fill?: boolean;
-  /** Hide in-card title/subtitle (dashboard renders them outside the chart). */
-  hideTitle?: boolean;
-  /** Overrides default `analytics-trend-title` when the heading lives outside. */
-  labelledBy?: string;
 };
 
 type TChartRow = TAnalyticsTrendPoint;
@@ -84,10 +76,7 @@ function TrendTooltip({
         {formatTrendTooltipDate(point.date, monthLabels)}
       </p>
       <div className="mt-1.5 flex items-center gap-2">
-        <span
-          className="size-2 shrink-0 rounded-full bg-brand"
-          aria-hidden
-        />
+        <span className="size-2 shrink-0 rounded-full bg-brand" aria-hidden />
         <p className="type-title font-semibold text-text-primary">
           {formatTrendMetricValue(metric, point.value)}
         </p>
@@ -112,10 +101,6 @@ export function AnalyticsPerformanceTrendChart({
   overview,
   isLoading,
   className,
-  compact = false,
-  fill = false,
-  hideTitle = false,
-  labelledBy,
 }: TAnalyticsPerformanceTrendChartProps) {
   const { t } = useTranslation("translation", {
     keyPrefix: "modules.analytics.trendChart",
@@ -127,13 +112,6 @@ export function AnalyticsPerformanceTrendChart({
   const [metric, setMetric] = useState<TAnalyticsTrendMetric>("clicks");
 
   const monthLabels = tMonths("months", { returnObjects: true }) as string[];
-  const chartHeightClass = fill
-    ? "h-full min-h-0"
-    : compact
-      ? "h-36 sm:h-40"
-      : "h-72";
-  const chartHeightPx = fill ? 220 : compact ? 160 : 288;
-  const titleId = labelledBy ?? "analytics-trend-title";
 
   const chartConfig = {
     value: {
@@ -156,31 +134,16 @@ export function AnalyticsPerformanceTrendChart({
 
   return (
     <section
-      className={cn(
-        elevatedCardSurfaceClass,
-        compact || fill ? "rounded-2xl p-3 sm:p-4" : analyticsPanelClass,
-        fill && "flex h-full min-h-0 flex-col overflow-hidden",
-        className,
-      )}
-      aria-labelledby={titleId}
+      className={cn(elevatedCardSurfaceClass, analyticsPanelClass, className)}
+      aria-labelledby="analytics-trend-title"
     >
-      <div
-        className={cn(
-          "flex shrink-0 flex-col sm:flex-row sm:items-start",
-          hideTitle ? "sm:justify-end" : "sm:justify-between",
-          compact || fill ? "gap-2 sm:gap-3" : "gap-4 sm:gap-5",
-        )}
-      >
-        {hideTitle ? null : (
-          <div className={cn(analyticsHeadingStackClass, "min-w-0")}>
-            <h2 id={titleId} className="type-title text-text-primary">
-              {t("title")}
-            </h2>
-            {compact || fill ? null : (
-              <p className="type-caption text-text-muted">{t("subtitle")}</p>
-            )}
-          </div>
-        )}
+      <div className="flex shrink-0 flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-5">
+        <div className={cn(analyticsHeadingStackClass, "min-w-0")}>
+          <h2 id="analytics-trend-title" className="type-title text-text-primary">
+            {t("title")}
+          </h2>
+          <p className="type-caption text-text-muted">{t("subtitle")}</p>
+        </div>
 
         <div
           className={cn(toolbarFilterShellClass, "shrink-0")}
@@ -199,7 +162,7 @@ export function AnalyticsPerformanceTrendChart({
                 className={cn(
                   toolbarFilterChipClass,
                   isActive
-                    ? "bg-brand text-text-on-brand"
+                    ? "bg-brand text-text-on-brand shadow-xs"
                     : "text-text-secondary hover:bg-bg-hover hover:text-text-primary",
                 )}
               >
@@ -210,20 +173,16 @@ export function AnalyticsPerformanceTrendChart({
         </div>
       </div>
 
-      <div
-        className={cn(
-          fill ? "mt-2 flex min-h-0 flex-1 flex-col sm:mt-3" : compact ? "mt-3" : "mt-6",
-        )}
-      >
+      <div className="mt-6">
         {isLoading && !overview ? (
-          <Skeleton className={cn("w-full rounded-2xl", chartHeightClass)} />
+          <Skeleton className="h-72 w-full rounded-2xl" />
         ) : !hasSignal ? (
           <EmptyState title={t("emptyTitle")} description={t("emptyBody")} />
         ) : (
           <ChartContainer
             config={chartConfig}
-            className={cn("aspect-auto w-full", chartHeightClass)}
-            initialDimension={{ width: 640, height: chartHeightPx }}
+            className="aspect-auto h-72 w-full"
+            initialDimension={{ width: 640, height: 288 }}
           >
             <AreaChart
               data={points}
@@ -250,7 +209,12 @@ export function AnalyticsPerformanceTrendChart({
                   <stop
                     offset="0%"
                     stopColor="var(--color-secondary)"
-                    stopOpacity={0.18}
+                    stopOpacity={0.22}
+                  />
+                  <stop
+                    offset="55%"
+                    stopColor="var(--color-secondary)"
+                    stopOpacity={0.08}
                   />
                   <stop
                     offset="100%"
@@ -262,7 +226,7 @@ export function AnalyticsPerformanceTrendChart({
               <CartesianGrid
                 vertical={false}
                 stroke="var(--border)"
-                strokeOpacity={0.45}
+                strokeOpacity={0.35}
               />
               <XAxis
                 dataKey="date"

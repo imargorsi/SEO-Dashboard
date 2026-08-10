@@ -223,6 +223,8 @@ const translation: Translation = {
     selectProjectTitle: "اختر مشروعًا",
     selectProjectBody: "اختر مشروعًا من الشريط الجانبي لفتح مركز التحكم الخاص به.",
     loadError: "تعذّر تحميل بيانات لوحة التحكم. حاول مرة أخرى.",
+    rangeAllTime: "كل الفترات",
+    workspaceFallback: "مساحة العمل",
     pulse: {
       title: "نبض السيو",
       cards: {
@@ -241,7 +243,11 @@ const translation: Translation = {
     },
     trend: {
       title: "اتجاه أداء السيو",
-      subtitle: "النقرات ومرات الظهور ونسبة النقر إلى الظهور ومتوسط الترتيب عبر الزمن لهذا المشروع.",
+      subtitle: "النقرات ومرات الظهور ونسبة النقر إلى الظهور ومتوسط الترتيب كأربعة اتجاهات مصغّرة لهذا المشروع.",
+      gridAria: "مقاييس أداء البحث",
+      emptyTitle: "لا توجد بيانات اتجاه",
+      emptyBody: "اربط Search Console وزامن البيانات لملء هذه الرسوم.",
+      noSeries: "لا توجد سلسلة بعد.",
     },
     assistant: {
       title: "مساعد لوحة التحكم",

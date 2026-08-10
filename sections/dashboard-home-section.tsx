@@ -2,10 +2,11 @@
 
 import { useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { IoBriefcaseOutline, IoTimeOutline } from "react-icons/io5";
 
-import { AnalyticsPerformanceTrendChart } from "@/components/analytics/analytics-performance-trend-chart";
 import { DashboardAssistantPanel } from "@/components/dashboard/dashboard-assistant-panel";
 import { DashboardSeoPulse } from "@/components/dashboard/dashboard-seo-pulse";
+import { DashboardSeoTrendGrid } from "@/components/dashboard/dashboard-seo-trend-grid";
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -20,7 +21,10 @@ import { ANALYTICS_MAX_RANGE_DAYS } from "@/lib/integrations/constants";
 import { addUtcDays, utcYesterdayString } from "@/lib/integrations/date.utils";
 import { ApiError } from "@/lib/frontend/api/errors";
 import { notify } from "@/lib/frontend/feedback/notify";
-import { typeStackMdClass } from "@/lib/frontend/layout/dashboard-chrome";
+import {
+  toolbarFilterShellClass,
+  typeStackMdClass,
+} from "@/lib/frontend/layout/dashboard-chrome";
 import { hasPermission, mergePermissions } from "@/lib/rbac/access";
 import { cn } from "@/lib/utils";
 
@@ -67,6 +71,10 @@ export function DashboardHomeSection() {
   });
 
   useEffect(() => {
+    loadErrorNotified.current = false;
+  }, [projectId]);
+
+  useEffect(() => {
     if (loadErrorNotified.current) return;
     const error = leadsQuery.error ?? seoQuery.error ?? overviewQuery.error;
     if (!error) return;
@@ -88,17 +96,41 @@ export function DashboardHomeSection() {
     (canViewAnalytics && overviewQuery.isLoading);
 
   const typeCounts = seoQuery.data?.filters.type_counts;
+  const projectName = selectedProject?.businessName ?? t("workspaceFallback");
 
   return (
     <div className="relative flex h-full min-h-0 w-full min-w-0 flex-col overflow-hidden max-xl:h-auto max-xl:overflow-y-auto">
       <PageAmbientGlow />
 
       <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden px-4 py-2.5 max-xl:h-auto max-xl:overflow-y-auto sm:px-6 sm:py-3">
-        <div className={cn(typeStackMdClass, "shrink-0")}>
-          <Heading id="dashboard-home-title" pageTitle>
-            {t("title")}
-          </Heading>
-          <Paragraph className="text-text-secondary">{t("subtitle")}</Paragraph>
+        <div className="flex shrink-0 flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div className={cn(typeStackMdClass, "min-w-0")}>
+            <Heading id="dashboard-home-title" pageTitle>
+              {t("title")}
+            </Heading>
+            <Paragraph className="text-text-secondary">{t("subtitle")}</Paragraph>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <span
+              className={cn(
+                toolbarFilterShellClass,
+                "gap-2 rounded-full px-3 py-1.5 type-caption text-text-secondary",
+              )}
+            >
+              <IoBriefcaseOutline className="size-3.5 text-brand" aria-hidden />
+              <span className="max-w-48 truncate font-medium text-text-primary">{projectName}</span>
+            </span>
+            <span
+              className={cn(
+                toolbarFilterShellClass,
+                "gap-2 rounded-full px-3 py-1.5 type-caption text-text-secondary",
+              )}
+            >
+              <IoTimeOutline className="size-3.5 text-text-muted" aria-hidden />
+              {t("rangeAllTime")}
+            </span>
+          </div>
         </div>
 
         <div className="mt-3 flex min-h-0 flex-1 flex-col gap-5">
@@ -131,19 +163,15 @@ export function DashboardHomeSection() {
           </div>
 
           {canViewAnalytics ? (
-            <div className="flex min-h-0 flex-1 flex-col gap-2">
+            <div className="flex min-h-0 flex-1 flex-col gap-2.5">
               <div className={cn(typeStackMdClass, "shrink-0")}>
-                <Heading id="dashboard-trend-title" pageTitle customHeadingTag="h2">
+                <Heading id="dashboard-trend-title" sectionTitle>
                   {t("trend.title")}
                 </Heading>
                 <Paragraph className="text-text-secondary">{t("trend.subtitle")}</Paragraph>
               </div>
               <div className="min-h-0 flex-1">
-                <AnalyticsPerformanceTrendChart
-                  compact
-                  fill
-                  hideTitle
-                  labelledBy="dashboard-trend-title"
+                <DashboardSeoTrendGrid
                   overview={overviewQuery.data}
                   isLoading={overviewQuery.isLoading}
                   className="h-full"

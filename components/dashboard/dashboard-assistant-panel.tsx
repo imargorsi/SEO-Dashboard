@@ -22,6 +22,7 @@ import {
   glassPanelSurfaceClass,
   metricIconWellClass,
   toolbarFilterChipClass,
+  typeStackMdClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 import type { TAssistantIntent, TAssistantQueryResult } from "@/types/assistant.types";
@@ -44,11 +45,11 @@ type TDashboardAssistantPanelProps = {
   compact?: boolean;
 };
 
-/** English phrases for typewriter — matches chip queries / `detect-intent` (MVP). */
+/** English phrases for typewriter — aligned with chip queries / `detect-intent` (MVP). */
 const TYPING_PHRASES = {
-  leadsThisMonth: "How many leads did I get this month?",
+  leadsThisMonth: "How many leads this month?",
   leadsLastMonth: "How many leads last month?",
-  clicksOverview: "What were total clicks this month?",
+  clicksOverview: "Show analytics overview",
   topQueries: "What are the top queries?",
   topPages: "What are the top pages?",
 } as const;
@@ -187,7 +188,7 @@ export function DashboardAssistantPanel({
           >
             <AssistantSparkleIcon />
           </span>
-          <div className="flex min-w-0 flex-col gap-0.5">
+          <div className={cn(typeStackMdClass, "min-w-0")}>
             <Heading id="dashboard-assistant-title" SmallTitle className="leading-tight">
               {t("title")}
             </Heading>
@@ -266,7 +267,12 @@ export function DashboardAssistantPanel({
 
         <div className={cn("min-h-0 shrink-0", compact ? "mt-4" : "mt-8")} aria-live="polite">
           {answer ? (
-            <div className="space-y-2">
+            <div
+              className={cn(
+                "space-y-2 rounded-xl border border-border/40 bg-bg-card/25 p-3",
+                "shadow-sm backdrop-blur-md dark:border-text-primary/20 dark:bg-text-primary/5",
+              )}
+            >
               <div className="flex items-center justify-between gap-2">
                 <p className="type-caption text-text-muted">{t("answerLabel")}</p>
                 {answer.action ? (
@@ -282,7 +288,7 @@ export function DashboardAssistantPanel({
                   </Link>
                 ) : null}
               </div>
-              <p className="max-h-28 overflow-y-auto type-body text-text-primary">
+              <p className="max-h-24 overflow-y-auto type-body text-text-primary">
                 {answer.message}
               </p>
             </div>
@@ -302,8 +308,8 @@ export function DashboardAssistantPanel({
                   disabled={queryMutation.isPending}
                   onClick={() => void runQuery(item.query)}
                   className={cn(
-                    "inline-flex max-w-full items-center gap-1.5 truncate rounded-lg px-2.5 py-1.5 type-caption",
-                    "text-text-muted transition-colors hover:bg-bg-hover/50 hover:text-text-secondary",
+                    "inline-flex max-w-full items-center gap-1.5 truncate rounded-lg border border-transparent px-2.5 py-1.5 type-caption",
+                    "text-text-muted transition-colors hover:border-border/40 hover:bg-bg-hover/50 hover:text-text-secondary",
                     "disabled:opacity-50",
                   )}
                   title={item.query}

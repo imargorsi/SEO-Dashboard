@@ -2,6 +2,7 @@
 
 import type { IconType } from "react-icons";
 import {
+  IoArrowForward,
   IoDocumentTextOutline,
   IoLinkOutline,
   IoPeopleOutline,
@@ -100,7 +101,7 @@ export function DashboardSeoPulse({
       id: "clicks",
       labelKey: "clicks",
       icon: IoStatsChartOutline,
-      accent: "var(--brand)",
+      accent: "var(--color-brand-primary)",
       href: values.clicks == null ? null : "/analytics",
     },
     {
@@ -141,20 +142,30 @@ export function DashboardSeoPulse({
 
         const content = (
           <>
-            <div className="flex items-start justify-between gap-2">
+            <div
+              className="pointer-events-none absolute inset-0 opacity-90"
+              style={{
+                background: `
+                  radial-gradient(120% 80% at 100% 0%, color-mix(in srgb, ${card.accent} 16%, transparent), transparent 55%),
+                  linear-gradient(180deg, color-mix(in srgb, var(--text-primary) 4%, transparent), transparent 42%)
+                `,
+              }}
+              aria-hidden
+            />
+
+            <div className="relative z-10 flex items-start justify-between gap-2">
               <p className="type-caption font-medium text-text-secondary">
                 {t(`cards.${card.labelKey}`)}
               </p>
               <span
                 className={cn(
-                  "inline-flex shrink-0 items-center justify-center rounded-xl border shadow-sm backdrop-blur-md",
+                  "inline-flex shrink-0 items-center justify-center rounded-xl border backdrop-blur-md",
                   compact ? "size-10" : "size-12",
                 )}
                 style={{
                   color: card.accent,
-                  borderColor: `color-mix(in srgb, ${card.accent} 42%, transparent)`,
-                  background: `color-mix(in srgb, ${card.accent} 14%, transparent)`,
-                  boxShadow: `0 0 0 1px color-mix(in srgb, ${card.accent} 10%, transparent), 0 8px 20px -12px color-mix(in srgb, ${card.accent} 55%, transparent)`,
+                  borderColor: `color-mix(in srgb, ${card.accent} 45%, transparent)`,
+                  background: `color-mix(in srgb, ${card.accent} 16%, transparent)`,
                 }}
                 aria-hidden
               >
@@ -162,7 +173,7 @@ export function DashboardSeoPulse({
               </span>
             </div>
 
-            <div className={cn(typeStackMdClass, "mt-auto min-w-0")}>
+            <div className={cn(typeStackMdClass, "relative z-10 mt-auto min-w-0")}>
               <p
                 className={cn(
                   "font-semibold tracking-tight text-text-primary tabular-nums leading-none",
@@ -176,10 +187,19 @@ export function DashboardSeoPulse({
               </p>
             </div>
 
+            {card.href ? (
+              <span
+                className="absolute bottom-2.5 inset-e-2.5 z-10 inline-flex size-6 items-center justify-center rounded-full border border-border/40 bg-bg-card/30 text-text-muted opacity-70 backdrop-blur-sm transition-opacity group-hover:opacity-100 group-hover:text-brand"
+                aria-hidden
+              >
+                <IoArrowForward className="size-3" />
+              </span>
+            ) : null}
+
             <span
-              className="pointer-events-none absolute inset-x-3 bottom-0 h-px opacity-90"
+              className="pointer-events-none absolute inset-x-3 bottom-0 z-10 h-px"
               style={{
-                background: `linear-gradient(90deg, transparent, ${card.accent}, transparent)`,
+                background: `linear-gradient(90deg, transparent, color-mix(in srgb, ${card.accent} 75%, transparent), transparent)`,
               }}
               aria-hidden
             />
@@ -188,11 +208,11 @@ export function DashboardSeoPulse({
 
         const shellClass = cn(
           elevatedCardSurfaceClass,
-          "relative flex h-full min-h-0 flex-col overflow-hidden rounded-2xl",
-          "bg-bg-card/25 dark:bg-text-primary/[0.06]",
+          "group relative flex h-full min-h-0 flex-col overflow-hidden rounded-2xl",
+          "bg-bg-card/20 dark:bg-text-primary/[0.05]",
           compact ? "gap-2 p-3 sm:p-3.5" : "min-h-36 gap-3 p-4 sm:p-5",
           card.href &&
-            "transition-[border-color,background-color,transform] hover:border-accent-border/55 hover:bg-bg-card/35 dark:hover:bg-text-primary/[0.08]",
+            "transition-[border-color,background-color,transform] duration-200 hover:-translate-y-0.5 hover:border-accent-border/55 hover:bg-bg-card/35 dark:hover:bg-text-primary/[0.08]",
         );
 
         if (card.href) {

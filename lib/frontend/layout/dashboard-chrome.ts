@@ -93,9 +93,9 @@ export const tablePaginationBarClass =
 export const tableRowIconActionClass =
   "inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-border/70 bg-bg-card/50 text-text-primary shadow-sm backdrop-blur-md transition-[border-color,background-color,color,box-shadow] duration-200 hover:border-accent-border hover:bg-bg-hover hover:text-text-primary hover:shadow-md dark:border-text-primary/35 dark:bg-text-primary/12 dark:hover:border-text-primary/50 dark:hover:bg-text-primary/18";
 
-/** Inline glass chip for table cell counts / labels — same surface language as row icon actions. */
+/** Inline outlined chip for table cell counts / labels — no fill (readable on glass rows). */
 export const tableGlassChipClass =
-  "inline-flex items-center rounded-full border border-border/70 bg-bg-card/50 px-2.5 py-1 type-caption-xs tabular-nums text-text-primary shadow-sm backdrop-blur-md dark:border-text-primary/35 dark:bg-text-primary/12";
+  "inline-flex items-center rounded-full border border-border bg-transparent px-2.5 py-1 type-caption tabular-nums text-text-primary shadow-none dark:border-text-primary/45";
 
 /** Pagination controls — compact outline chips. */
 export const tablePaginationIconActionClass =

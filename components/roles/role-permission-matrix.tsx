@@ -121,7 +121,7 @@ export function RolePermissionMatrix({
                   className={cn(
                     tableGlassChipClass,
                     "px-2 py-0.5",
-                    count > 0 ? "border-brand/30 bg-brand/12 text-brand" : "text-text-muted",
+                    count > 0 ? "border-brand/45 text-brand" : "text-text-muted",
                   )}
                 >
                   {count}/{module.actions.length}

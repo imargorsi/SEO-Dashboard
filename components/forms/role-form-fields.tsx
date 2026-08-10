@@ -71,7 +71,7 @@ export function RoleFormFields({ hook }: TRoleFormFieldsProps) {
             <p className="type-caption text-text-muted">{t("permsLead")}</p>
           </div>
           {!isCatalogLoading && !isCatalogError ? (
-            <span className={cn(tableGlassChipClass, "type-caption text-text-secondary")}>
+            <span className={cn(tableGlassChipClass, "text-text-secondary")}>
               {t("permsCount", { selected: permissions.length, total: totalPermissions })}
             </span>
           ) : null}

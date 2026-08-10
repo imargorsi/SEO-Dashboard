@@ -32,7 +32,7 @@ export const THEME_PACKS: readonly TThemePackMeta[] = [
     id: "default",
     nameKey: "default",
     descriptionKey: "defaultDescription",
-    swatches: ["#ff7952", "#8204ff", "#2c2745"],
+    swatches: ["#ff7952", "#e85a2a", "#1e222b"],
   },
   {
     id: "glass-aurora",

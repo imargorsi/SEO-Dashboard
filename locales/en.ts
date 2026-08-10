@@ -229,13 +229,13 @@ export interface Translation {
       cards: {
         leads: string;
         backlinks: string;
-        clicks: string;
+        pageViews: string;
         blogs: string;
       };
       descriptions: {
         leads: string;
         backlinks: string;
-        clicks: string;
+        pageViews: string;
         blogs: string;
         unavailable: string;
       };
@@ -1693,13 +1693,13 @@ const translation: Translation = {
       cards: {
         leads: "Leads",
         backlinks: "Backlinks Created",
-        clicks: "Total Clicks",
+        pageViews: "Page Views",
         blogs: "Blogs Published",
       },
       descriptions: {
         leads: "You got {{count}} leads.",
         backlinks: "You gained {{count}} backlinks.",
-        clicks: "You earned {{count}} total clicks.",
+        pageViews: "You recorded {{count}} page views.",
         blogs: "You published {{count}} blogs.",
         unavailable: "Not available for your access on this project.",
       },

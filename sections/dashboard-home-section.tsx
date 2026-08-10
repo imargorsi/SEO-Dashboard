@@ -153,8 +153,8 @@ export function DashboardHomeSection() {
                 values={{
                   leads: canViewLeads ? (leadsQuery.data?.filters.counts.total ?? 0) : null,
                   backlinks: canViewSeo ? (typeCounts?.backlinks ?? 0) : null,
-                  clicks: canViewAnalytics
-                    ? (overviewQuery.data?.cards.clicks.value ?? 0)
+                  pageViews: canViewAnalytics
+                    ? (overviewQuery.data?.engagement.pageViews.value ?? null)
                     : null,
                   blogs: canViewSeo ? (typeCounts?.blogs ?? 0) : null,
                 }}

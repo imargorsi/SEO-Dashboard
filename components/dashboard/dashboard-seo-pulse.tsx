@@ -4,9 +4,9 @@ import type { IconType } from "react-icons";
 import {
   IoArrowForward,
   IoDocumentTextOutline,
+  IoEyeOutline,
   IoLinkOutline,
   IoPeopleOutline,
-  IoStatsChartOutline,
 } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
@@ -21,7 +21,7 @@ import { cn } from "@/lib/utils";
 export type TDashboardSeoPulseValues = {
   leads: number | null;
   backlinks: number | null;
-  clicks: number | null;
+  pageViews: number | null;
   blogs: number | null;
 };
 
@@ -98,11 +98,11 @@ export function DashboardSeoPulse({
       href: values.backlinks == null ? null : "/seo-activities?type=backlinks",
     },
     {
-      id: "clicks",
-      labelKey: "clicks",
-      icon: IoStatsChartOutline,
-      accent: "var(--color-brand-primary)",
-      href: values.clicks == null ? null : "/analytics",
+      id: "pageViews",
+      labelKey: "pageViews",
+      icon: IoEyeOutline,
+      accent: "var(--color-secondary)",
+      href: values.pageViews == null ? null : "/analytics",
     },
     {
       id: "blogs",
@@ -209,10 +209,10 @@ export function DashboardSeoPulse({
         const shellClass = cn(
           elevatedCardSurfaceClass,
           "group relative flex h-full min-h-0 flex-col overflow-hidden rounded-2xl",
-          "bg-bg-card/20 dark:bg-text-primary/[0.05]",
+          "bg-bg-card/20 dark:bg-text-primary/5",
           compact ? "gap-2 p-3 sm:p-3.5" : "min-h-36 gap-3 p-4 sm:p-5",
           card.href &&
-            "transition-[border-color,background-color,transform] duration-200 hover:-translate-y-0.5 hover:border-accent-border/55 hover:bg-bg-card/35 dark:hover:bg-text-primary/[0.08]",
+            "transition-[border-color,background-color,transform] duration-200 hover:-translate-y-0.5 hover:border-accent-border/55 hover:bg-bg-card/35 dark:hover:bg-text-primary/8",
         );
 
         if (card.href) {

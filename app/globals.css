@@ -46,19 +46,19 @@ html[data-font="inter"] {
 
 :root {
   /*
-    Base palette — three surface hex values per mode (+ brand purple for gradients).
+    Base palette — three surface hex values per mode (+ warm brand accent for charts).
     contrast: deepest surface / ink
     primary: elevated surfaces (cards, panels)
-    secondary: accent orange
+    secondary: accent coral (CTAs)
   */
-  --color-contrast: #1a1628;
-  --color-primary: #ebe8f1;
+  --color-contrast: #14181f;
+  --color-primary: #eef0f3;
   --color-secondary: #ff7952;
-  --color-brand-primary: #8204ff;
+  --color-brand-primary: #e85a2a;
   --brand: var(--color-secondary);
 
   /* Brand gradient — reserved for rare brand moments (logo mark, charts). UI CTAs use solid --brand. */
-  --gradient-mid: #c64bff;
+  --gradient-mid: #ff9a62;
   --gradient-primary: linear-gradient(135deg, var(--color-secondary), var(--gradient-mid), var(--color-brand-primary));
   --gradient-button: var(--color-secondary);
   --gradient-button-hover: color-mix(in srgb, var(--color-secondary) 88%, white 12%);
@@ -66,12 +66,12 @@ html[data-font="inter"] {
   --glow-brand: rgba(255, 121, 82, 0.22);
 
   /* Light surfaces — tinted canvas + solid white sections (clear separation) */
-  --bg-main: #eeeaf4;
+  --bg-main: #f0f2f5;
   --bg-sidebar: color-mix(in srgb, var(--bg-main) 55%, var(--color-primary) 45%);
   --bg-card: #ffffff;
   --bg-card-elevated: #ffffff;
-  --border-elevated: color-mix(in srgb, var(--color-brand-primary) 14%, var(--color-primary) 86%);
-  --shadow-elevated: 0 1px 2px rgba(26, 22, 40, 0.04), 0 6px 16px rgba(130, 4, 255, 0.06);
+  --border-elevated: color-mix(in srgb, var(--color-brand-primary) 12%, var(--color-primary) 88%);
+  --shadow-elevated: 0 1px 2px rgba(20, 24, 31, 0.04), 0 6px 16px rgba(232, 90, 42, 0.06);
   --bg-input: transparent;
   --bg-hover: var(--color-primary);
   --bg-selected: color-mix(in srgb, var(--color-secondary) 10%, transparent);
@@ -113,7 +113,7 @@ html[data-font="inter"] {
   --accent-bg: var(--bg-selected);
   --accent-border: color-mix(in srgb, var(--color-secondary) 45%, transparent);
   --social-bg: color-mix(in srgb, var(--bg-sidebar) 70%, transparent);
-  --shadow: rgba(26, 22, 40, 0.08) 0 10px 15px -3px, rgba(26, 22, 40, 0.05) 0 4px 6px -2px;
+  --shadow: rgba(20, 24, 31, 0.08) 0 10px 15px -3px, rgba(20, 24, 31, 0.05) 0 4px 6px -2px;
   --hero-mesh-opacity: 0.35;
   --motion-orbit-color: var(--color-secondary);
   --motion-btn-bg: var(--color-secondary);
@@ -133,7 +133,7 @@ html[data-font="inter"] {
   --status-pending: #f59e0b;
   --status-inactive: #9490a8;
   --status-rejected: #e5484d;
-  /* Cyan — readable on purple/indigo theme surfaces. */
+  /* Cyan — readable on warm/neutral theme surfaces. */
   --status-invited: #22d3ee;
 
   /* Chrome — overlays, inverse controls, breadcrumb pills (theme-aware per mode) */
@@ -215,9 +215,13 @@ html[data-font="inter"] {
 }
 
 .dark {
-  --color-contrast: #1a1628;
-  --color-primary: #2c2745;
+  --color-contrast: #12141a;
+  --color-primary: #1e222b;
   --color-secondary: #ff7952;
+  --color-brand-primary: #ff8a5c;
+  --brand: var(--color-secondary);
+  --gradient-mid: #ff9a62;
+  --gradient-primary: linear-gradient(135deg, var(--color-secondary), var(--gradient-mid), var(--color-brand-primary));
 
   /* Dark surfaces — derived from contrast + primary */
   --bg-main: var(--color-contrast);

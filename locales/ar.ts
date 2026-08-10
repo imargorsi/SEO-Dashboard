@@ -230,13 +230,13 @@ const translation: Translation = {
       cards: {
         leads: "العملاء المحتملون",
         backlinks: "الروابط الخلفية",
-        clicks: "إجمالي النقرات",
+        pageViews: "مشاهدات الصفحة",
         blogs: "المدونات المنشورة",
       },
       descriptions: {
         leads: "حصلت على {{count}} من العملاء المحتملين.",
         backlinks: "اكتسبت {{count}} من الروابط الخلفية.",
-        clicks: "حققت {{count}} من إجمالي النقرات.",
+        pageViews: "سجّلت {{count}} من مشاهدات الصفحة.",
         blogs: "نشرت {{count}} من المدونات.",
         unavailable: "غير متاح حسب صلاحياتك على هذا المشروع.",
       },

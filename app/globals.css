@@ -133,7 +133,8 @@ html[data-font="inter"] {
   --status-pending: #f59e0b;
   --status-inactive: #9490a8;
   --status-rejected: #e5484d;
-  --status-invited: #7c6df0;
+  /* Cyan — readable on purple/indigo theme surfaces. */
+  --status-invited: #22d3ee;
 
   /* Chrome — overlays, inverse controls, breadcrumb pills (theme-aware per mode) */
   --overlay: color-mix(in srgb, var(--color-contrast) 50%, transparent);

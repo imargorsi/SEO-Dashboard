@@ -38,7 +38,7 @@ export const THEME_PACKS: readonly TThemePackMeta[] = [
     id: "glass-aurora",
     nameKey: "glass-aurora",
     descriptionKey: "glass-auroraDescription",
-    swatches: ["#5ea0ff", "#8204ff", "#0a0f1f"],
+    swatches: ["#5ea0ff", "#3b82f6", "#0a0f1f"],
   },
   {
     id: "carbon-ice",

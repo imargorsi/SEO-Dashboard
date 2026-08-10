@@ -38,11 +38,11 @@ const METRIC_THEME: Record<TSeoActivitySummaryMetric["id"], TMetricTheme> = {
   },
   technical_work: {
     icon: IoConstructOutline,
-    accent: "var(--status-invited)",
+    accent: "var(--status-active)",
   },
   total: {
     icon: IoCalendarOutline,
-    accent: "var(--status-active)",
+    accent: "var(--status-invited)",
   },
 };
 

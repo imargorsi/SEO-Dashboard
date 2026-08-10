@@ -1,8 +1,9 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import type { IconType } from "react-icons";
 
-import { elevatedCardSurfaceClass, metricIconWellClass } from "@/lib/frontend/layout/dashboard-chrome";
+import { elevatedCardSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
 export type TSummaryMetricCard = {
@@ -19,17 +20,14 @@ type TSummaryMetricCardsProps = {
   className?: string;
 };
 
-/** Zero-pads small whole counts (`3` → `03`); compact for large totals. */
+/** Formats metric counts for summary cards (Leads + SEO Activities). */
 export function formatSummaryMetricCount(value: number): string {
-  if (!Number.isFinite(value)) return "00";
+  if (!Number.isFinite(value)) return "0";
   if (value >= 10_000) {
     return new Intl.NumberFormat(undefined, {
       notation: "compact",
       maximumFractionDigits: 1,
     }).format(value);
-  }
-  if (Number.isInteger(value) && value >= 0 && value < 100) {
-    return String(value).padStart(2, "0");
   }
   return new Intl.NumberFormat(undefined).format(value);
 }
@@ -44,7 +42,7 @@ function CardSkeleton() {
           <div className="h-3 w-24 animate-pulse rounded bg-bg-hover/70" />
           <div className="h-7 w-12 animate-pulse rounded-lg bg-bg-hover/80" />
         </div>
-        <div className={cn(metricIconWellClass, "size-12 animate-pulse sm:size-14")} />
+        <div className="size-12 animate-pulse rounded-2xl border border-border/50 bg-bg-hover/60 sm:size-14" />
       </div>
     </div>
   );
@@ -67,13 +65,26 @@ export function SummaryMetricCards({ cards, isLoading, className }: TSummaryMetr
     <div className={cn("grid gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-4", className)}>
       {cards.map((card) => {
         const Icon = card.icon;
+        const washStyle = {
+          background: `radial-gradient(120% 100% at 100% 50%, color-mix(in srgb, ${card.accent} 18%, transparent), transparent 60%)`,
+        } satisfies CSSProperties;
+        const iconPlateStyle = {
+          color: card.accent,
+          background: `color-mix(in srgb, ${card.accent} 16%, transparent)`,
+          borderColor: `color-mix(in srgb, ${card.accent} 34%, transparent)`,
+        } satisfies CSSProperties;
 
         return (
           <div
             key={card.id}
-            className={cn(elevatedCardSurfaceClass, "rounded-2xl px-4 py-3.5 sm:px-5")}
+            className={cn(
+              elevatedCardSurfaceClass,
+              "relative overflow-hidden rounded-2xl px-4 py-3.5 sm:px-5",
+            )}
           >
-            <div className="flex items-center justify-between gap-3">
+            <div className="pointer-events-none absolute inset-0" style={washStyle} aria-hidden />
+
+            <div className="relative flex items-center justify-between gap-3">
               <div className="type-stack-md min-w-0">
                 <p className="truncate type-caption text-text-secondary">{card.label}</p>
                 <p className="type-h1 font-semibold tracking-tight text-text-primary tabular-nums leading-none">
@@ -82,8 +93,8 @@ export function SummaryMetricCards({ cards, isLoading, className }: TSummaryMetr
               </div>
 
               <span
-                className={cn(metricIconWellClass, "size-12 sm:size-14")}
-                style={{ color: card.accent }}
+                className="inline-flex size-12 shrink-0 items-center justify-center rounded-2xl border shadow-sm backdrop-blur-md sm:size-14"
+                style={iconPlateStyle}
                 aria-hidden
               >
                 <Icon className="size-6 sm:size-7" />

@@ -259,7 +259,7 @@ export function LeadsImportModal({
           "border-2 border-text-muted/45",
         )}
       >
-        <header className="relative mx-3 mt-3 flex shrink-0 items-center justify-between gap-3 rounded-xl px-4 py-2.5 sm:mx-4">
+        <header className="relative flex shrink-0 items-center justify-between gap-3 px-5 py-4 pe-12 sm:px-6">
           <h2 id={titleId} className="type-title text-text-primary">
             {step === "file" || isParsing ? t("titleImport") : t("titleMatching")}
           </h2>
@@ -267,12 +267,16 @@ export function LeadsImportModal({
             type="button"
             onClick={() => onOpenChange(false)}
             disabled={busy}
-            className="rounded-lg p-1.5 text-text-muted transition-colors hover:bg-bg-hover hover:text-text-primary disabled:opacity-50"
+            className="absolute inset-e-3 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-text-muted transition-colors hover:bg-bg-hover hover:text-text-primary disabled:opacity-50"
           >
             <IoClose className="size-4" aria-hidden />
             <span className="sr-only">{t("close")}</span>
           </button>
         </header>
+        <div
+          aria-hidden
+          className="mx-auto h-px w-[90%] shrink-0 bg-border"
+        />
 
         {busy ? (
           <div className="flex min-h-[18rem] flex-1 flex-col items-center justify-center gap-3 px-6 py-10 text-center">
@@ -386,7 +390,11 @@ export function LeadsImportModal({
               )}
             </div>
 
-            <footer className="mx-3 mb-3 flex shrink-0 items-center justify-between gap-3 rounded-xl px-4 py-2.5 sm:mx-4">
+            <div
+              aria-hidden
+              className="mx-auto h-px w-[90%] shrink-0 bg-border"
+            />
+            <footer className="flex shrink-0 items-center justify-between gap-3 px-5 py-4 sm:px-6">
               <Button
                 type="button"
                 variant="outlined"

@@ -8,14 +8,14 @@ html[data-theme="glass-aurora"] {
   --color-contrast: #f6f8ff;
   --color-primary: #e9edff;
   --color-secondary: #4f8cff;
-  --color-brand-primary: #8204ff;
+  --color-brand-primary: #3b82f6;
   --brand: var(--color-secondary);
 
-  --gradient-mid: #6b5cff;
+  --gradient-mid: #5ea0ff;
   /* CTAs use solid --color-secondary; keep primary gradient for rare brand/chart moments only. */
   --gradient-button: var(--color-secondary);
   --gradient-button-hover: color-mix(in srgb, var(--color-secondary) 88%, white 12%);
-  --gradient-primary: linear-gradient(135deg, #4f8cff, #6b5cff, #8204ff);
+  --gradient-primary: linear-gradient(135deg, #4f8cff, #5ea0ff, #3b82f6);
   --glow-brand: rgba(79, 140, 255, 0.26);
   --motion-btn-bg: var(--color-secondary);
 
@@ -102,13 +102,13 @@ html.dark[data-theme="glass-aurora"] {
   --color-contrast: #0a0f1f;
   --color-primary: #151a2f;
   --color-secondary: #5ea0ff;
-  --color-brand-primary: #8204ff;
+  --color-brand-primary: #3b82f6;
   --brand: var(--color-secondary);
 
-  --gradient-mid: #6b5cff;
+  --gradient-mid: #5ea0ff;
   --gradient-button: var(--color-secondary);
   --gradient-button-hover: color-mix(in srgb, var(--color-secondary) 88%, white 12%);
-  --gradient-primary: linear-gradient(135deg, #5ea0ff, #6b5cff, #8204ff);
+  --gradient-primary: linear-gradient(135deg, #5ea0ff, #4f8cff, #3b82f6);
   --glow-brand: rgba(94, 160, 255, 0.3);
   --motion-btn-bg: var(--color-secondary);
 

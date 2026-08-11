@@ -117,6 +117,9 @@ export function formatGoogleError(error: unknown): string {
   if (error instanceof GoogleNotConfiguredError) return error.message;
   if (error && typeof error === "object" && "message" in error) {
     const message = String((error as { message: unknown }).message);
+    if (message.includes("DECODER routines") || message.includes("ERR_OSSL_UNSUPPORTED")) {
+      return "Google Service Account private key could not be decoded. Check GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY on the host (literal \\n newlines, no wrapping quotes).";
+    }
     return message.slice(0, 500) || "Google Api Request Failed.";
   }
   return "Google Api Request Failed.";

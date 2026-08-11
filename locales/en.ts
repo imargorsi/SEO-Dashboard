@@ -90,8 +90,8 @@ export interface Translation {
       defaultDescription: string;
       "glass-aurora": string;
       "glass-auroraDescription": string;
-      "carbon-ice": string;
-      "carbon-iceDescription": string;
+      "verdant-grove": string;
+      "verdant-groveDescription": string;
       "lumen-slate": string;
       "lumen-slateDescription": string;
     };
@@ -1544,34 +1544,34 @@ const translation: Translation = {
     },
     themePacks: {
       sectionTitle: "Color Theme",
-      lead: "Choose A Color Theme. Your Selection Syncs To Your Account.",
+      lead: "Choose a color theme. Your selection syncs to your account.",
       selected: "Selected",
       saveErrorFallback: "Could not save theme.",
       default: "Default",
-      defaultDescription: "Orange And Purple Brand Palette For Everyday Use.",
+      defaultDescription: "Orange and purple brand palette for everyday use.",
       "glass-aurora": "Glass Aurora",
       "glass-auroraDescription":
-        "Premium Glassmorphism Theme With Soft Aurora Accents For A Futuristic SaaS Experience.",
-      "carbon-ice": "Carbon Ice",
-      "carbon-iceDescription":
-        "Cool Graphite Surfaces With Ice Cyan Accents For A Sharp Modern SaaS Look.",
+        "Premium glassmorphism theme with soft aurora accents for a futuristic SaaS experience.",
+      "verdant-grove": "Verdant Grove",
+      "verdant-groveDescription":
+        "Soft stone surfaces with emerald growth accents for clean premium SEO clarity.",
       "lumen-slate": "Lumen Slate",
       "lumen-slateDescription":
-        "Clean Slate Surfaces With Teal Clarity And Indigo Depth For A Premium Agency Workspace.",
+        "Clean slate surfaces with indigo clarity for a premium agency workspace.",
     },
     fontPacks: {
       sectionTitle: "Font",
-      lead: "Choose A Typeface For The Dashboard. Your Selection Syncs To Your Account.",
+      lead: "Choose a typeface for the dashboard. Your selection syncs to your account.",
       selected: "Selected",
       saveErrorFallback: "Could not save font.",
       jakarta: "Plus Jakarta Sans",
-      jakartaDescription: "Default Modern Sans — Clear And Friendly For Everyday Dashboard Use.",
+      jakartaDescription: "Default modern sans — clear and friendly for everyday dashboard use.",
       ubuntu: "Ubuntu",
-      ubuntuDescription: "Humanist Sans With Warm Character For A Distinctive Product Voice.",
+      ubuntuDescription: "Humanist sans with warm character for a distinctive product voice.",
       nunito: "Nunito",
-      nunitoDescription: "Rounded Soft Sans For A Friendly, Approachable Interface Feel.",
+      nunitoDescription: "Rounded soft sans for a friendly, approachable interface feel.",
       inter: "Inter",
-      interDescription: "Modern UI Sans Optimized For Dense Screens And Long Reading.",
+      interDescription: "Modern UI sans optimized for dense screens and long reading.",
     },
     integrations: {
       lead: "Link Search Console And GA4 Properties For The Selected Project. Only Platform Admins Can Manage These Connections.",

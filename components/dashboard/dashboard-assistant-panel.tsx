@@ -22,7 +22,6 @@ import {
   glassPanelSurfaceClass,
   metricIconWellClass,
   toolbarFilterChipClass,
-  typeStackMdClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 import type { TAssistantIntent, TAssistantQueryResult } from "@/types/assistant.types";
@@ -188,11 +187,11 @@ export function DashboardAssistantPanel({
           >
             <AssistantSparkleIcon />
           </span>
-          <div className={cn(typeStackMdClass, "min-w-0")}>
+          <div className="flex min-w-0 flex-col gap-0.5">
             <Heading id="dashboard-assistant-title" SmallTitle className="leading-tight">
               {t("title")}
             </Heading>
-            <Paragraph className="leading-snug text-text-secondary">
+            <Paragraph moreSmaller className="leading-snug text-text-secondary">
               {compact ? t("descriptionShort") : t("description")}
             </Paragraph>
           </div>

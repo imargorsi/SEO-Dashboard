@@ -41,16 +41,16 @@ export const THEME_PACKS: readonly TThemePackMeta[] = [
     swatches: ["#5ea0ff", "#3b82f6", "#0a0f1f"],
   },
   {
-    id: "carbon-ice",
-    nameKey: "carbon-ice",
-    descriptionKey: "carbon-iceDescription",
-    swatches: ["#22d3ee", "#6366f1", "#0b0d12"],
+    id: "verdant-grove",
+    nameKey: "verdant-grove",
+    descriptionKey: "verdant-groveDescription",
+    swatches: ["#22c55e", "#b45309", "#0c110e"],
   },
   {
     id: "lumen-slate",
     nameKey: "lumen-slate",
     descriptionKey: "lumen-slateDescription",
-    swatches: ["#0d9488", "#818cf8", "#070a10"],
+    swatches: ["#818cf8", "#4338ca", "#070a10"],
   },
 ] as const;
 

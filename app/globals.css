@@ -4,7 +4,7 @@
 @import "flag-icons/css/flag-icons.min.css";
 @import "../styles/themes/default.css";
 @import "../styles/themes/glass-aurora.css";
-@import "../styles/themes/carbon-ice.css";
+@import "../styles/themes/verdant-grove.css";
 @import "../styles/themes/lumen-slate.css";
 
 /* Class-based dark mode for Tailwind `dark:` utilities */
@@ -85,7 +85,7 @@ html[data-font="inter"] {
   --text-disabled: color-mix(in srgb, var(--color-contrast) 20%, transparent);
   /*
     Label color ON brand/gradient fills. May be white OR dark ink when the pack
-    uses bright CTAs (e.g. Carbon Ice). Never use this for frosted glass
+    uses bright CTAs (e.g. Verdant Grove dark). Never use this for frosted glass
     borders/fills — use --text-primary / --border instead.
   */
   --text-on-brand: #ffffff;
@@ -278,7 +278,7 @@ html[data-font="inter"] {
 
   /*
     Frosted chrome / inverse — always from --text-primary (light ink on dark UI).
-    Never from --text-on-brand: packs may set that to dark CTA ink (e.g. Carbon Ice).
+    Never from --text-on-brand: packs may set that to dark CTA ink (e.g. Verdant Grove).
   */
   --text-inverse: var(--text-primary);
   --surface-inverse-hover: color-mix(in srgb, var(--text-primary) 15%, transparent);

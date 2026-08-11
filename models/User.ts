@@ -1,6 +1,10 @@
 import mongoose, { Schema, type InferSchemaType, type Model } from "mongoose";
 
+import { FONT_PACK_IDS, resolveFontPackId, resolveThemePackId, THEME_PACK_IDS } from "@/lib/theme/pack-ids";
 import { isActiveUserStatus, USER_ACCOUNT_STATUSES } from "@/lib/users/constants";
+
+/** Bump when User schema hooks/enums change so HMR recompiles a stale cached model. */
+const USER_MODEL_REVISION = 2;
 
 const userSchema = new Schema(
   {
@@ -20,18 +24,20 @@ const userSchema = new Schema(
     /** UI theme pack slug — see `THEME_PACK_IDS`. */
     themePack: {
       type: String,
-      enum: ["default", "glass-aurora", "carbon-ice", "lumen-slate"],
+      enum: [...THEME_PACK_IDS],
       default: "default",
     },
     /** UI font pack slug — see `FONT_PACK_IDS`. */
     fontPack: {
       type: String,
-      enum: ["jakarta", "ubuntu", "nunito", "inter"],
+      enum: [...FONT_PACK_IDS],
       default: "jakarta",
     },
   },
   { timestamps: true },
 );
+
+(userSchema as Schema & { __crawllexRevision?: number }).__crawllexRevision = USER_MODEL_REVISION;
 
 userSchema.methods.hasVerifiedEmail = function hasVerifiedEmail(this: UserDocument): boolean {
   return this.emailVerifiedAt instanceof Date;
@@ -52,6 +58,13 @@ userSchema.methods.isActive = function isActive(this: UserDocument): boolean {
 userSchema.methods.hasPassword = function hasPassword(this: UserDocument): boolean {
   return typeof this.password === "string" && this.password.length > 0;
 };
+
+/** Migrate retired pack ids before enum validation (e.g. carbon-ice → verdant-grove). */
+userSchema.pre("validate", function migratePackIds(next) {
+  this.themePack = resolveThemePackId(this.themePack);
+  this.fontPack = resolveFontPackId(this.fontPack);
+  next();
+});
 
 export type UserDocument = InferSchemaType<typeof userSchema> &
   mongoose.Document & {
@@ -74,17 +87,41 @@ function attachUserMethods(model: Model<UserDocument>): void {
   model.schema.methods.hasPassword = userSchema.methods.hasPassword;
 }
 
+/** Read enum values from a cached string path (Mongoose keeps these on the live schema). */
+function schemaStringEnumValues(model: Model<UserDocument>, pathName: string): readonly string[] {
+  const path = model.schema.path(pathName) as
+    | { enumValues?: unknown; caster?: { enumValues?: unknown }; options?: { enum?: unknown } }
+    | undefined;
+  if (!path) return [];
+  const raw = path.enumValues ?? path.options?.enum ?? [];
+  return Array.isArray(raw) ? raw.map(String) : [];
+}
+
+function hasCurrentPackEnums(model: Model<UserDocument>): boolean {
+  const themeEnum = schemaStringEnumValues(model, "themePack");
+  const fontEnum = schemaStringEnumValues(model, "fontPack");
+  return (
+    THEME_PACK_IDS.every((id) => themeEnum.includes(id)) &&
+    FONT_PACK_IDS.every((id) => fontEnum.includes(id))
+  );
+}
+
 /**
  * Dev HMR reuses `mongoose.models.User`. If the cached schema is stale
- * (e.g. missing `status` / `googleId`), delete and recompile so path/method changes apply.
+ * (missing paths or outdated theme/font pack enums), delete and recompile.
  */
 function registerUserModel(): Model<UserDocument> {
   const existing = mongoose.models.User as Model<UserDocument> | undefined;
+  const existingRevision = (existing?.schema as Schema & { __crawllexRevision?: number } | undefined)
+    ?.__crawllexRevision;
 
   if (
-    existing?.schema.path("status") &&
-    existing?.schema.path("themePack") &&
-    existing?.schema.path("googleId")
+    existing &&
+    existingRevision === USER_MODEL_REVISION &&
+    existing.schema.path("status") &&
+    existing.schema.path("themePack") &&
+    existing.schema.path("googleId") &&
+    hasCurrentPackEnums(existing)
   ) {
     attachUserMethods(existing);
     return existing;

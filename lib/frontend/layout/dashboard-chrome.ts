@@ -195,7 +195,7 @@ export const sidebarNavIconWellActiveClass =
   "border-text-on-brand bg-text-on-brand/20 text-text-on-brand shadow-none backdrop-blur-none";
 
 export const sidebarNavIconWellInactiveClass =
-  "border-border/70 bg-bg-card/50 text-text-primary shadow-sm dark:border-text-primary/35 dark:bg-text-primary/12 group-hover:border-accent-border group-hover:bg-bg-hover group-hover:text-text-primary group-hover:shadow-md dark:group-hover:border-text-primary/50 dark:group-hover:bg-text-primary/18";
+  "border-border/70 bg-bg-card/50 text-text-primary shadow-sm dark:border-text-primary/45 dark:bg-text-primary/12 group-hover:border-accent-border group-hover:bg-bg-hover group-hover:text-text-primary group-hover:shadow-md dark:group-hover:border-text-primary/60 dark:group-hover:bg-text-primary/18";
 
 /** Nav link: soft pill + circular icon wells. */
 export const sidebarNavLinkClass =
@@ -212,10 +212,10 @@ export const sidebarNavLinkInactiveClass =
 
 /** Project selector — one shell that expands over sidebar content. */
 export const sidebarProjectSelectorShellClass =
-  "flex flex-col overflow-hidden rounded-2xl border border-border/50 bg-bg-card/20 shadow-sm backdrop-blur-md backdrop-saturate-125 transition-[border-color,background-color,box-shadow,max-height] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] dark:border-text-primary/30 dark:bg-text-primary/[0.05]";
+  "flex flex-col overflow-hidden rounded-2xl border border-border/50 bg-bg-card/20 shadow-sm backdrop-blur-md backdrop-saturate-125 transition-[border-color,background-color,box-shadow,max-height] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] dark:border-text-primary/42 dark:bg-text-primary/[0.05]";
 
 export const sidebarProjectSelectorShellOpenClass =
-  "border-border/80 bg-bg-card-elevated shadow-(--shadow-elevated) dark:border-text-primary/40 dark:bg-bg-card-elevated";
+  "border-border/80 bg-bg-card-elevated shadow-(--shadow-elevated) dark:border-text-primary/55 dark:bg-bg-card-elevated";
 
 export const sidebarProjectSelectorTriggerClass =
   "flex w-full shrink-0 items-center gap-3 px-3 py-2.5 type-label text-text-primary transition-colors duration-200 hover:bg-bg-hover/40";
@@ -233,4 +233,4 @@ export const sidebarNavGroupLabelClass =
   "px-2.5 pb-2 type-overline tracking-wide text-text-muted";
 
 export const sidebarNavGroupClass =
-  "flex flex-col gap-1.5 border-t border-border/55 pb-4 pt-7 first:border-t-0 first:pt-0 last:pb-0 dark:border-text-primary/12";
+  "flex flex-col gap-1.5 border-t border-border/55 pb-4 pt-7 first:border-t-0 first:pt-0 last:pb-0 dark:border-text-primary/20";

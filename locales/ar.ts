@@ -91,10 +91,10 @@ const translation: Translation = {
       defaultDescription: "لوحة ألوان البرتقالي والبنفسجي للاستخدام اليومي.",
       "glass-aurora": "زجاج الشفق",
       "glass-auroraDescription": "سمة زجاجية فاخرة بلمسات شفق ناعمة لتجربة SaaS مستقبلية.",
-      "carbon-ice": "جليد الكربون",
-      "carbon-iceDescription": "أسطح جرافيت باردة بلمسات سماوية جليدية لمظهر SaaS حديث وحاد.",
+      "verdant-grove": "بستان الخضرة",
+      "verdant-groveDescription": "أسطح حجرية ناعمة بلمسات زمردية للنمو لمظهر SEO نظيف وفاخر وواضح.",
       "lumen-slate": "سليت لومين",
-      "lumen-slateDescription": "أسطح سليت نظيفة بوضوح تركوازي وعمق نيلي لمساحة عمل وكالة فاخرة.",
+      "lumen-slateDescription": "أسطح سليت نظيفة بوضوح نيلي لمساحة عمل وكالة فاخرة.",
     },
     fontPacks: {
       sectionTitle: "الخط",

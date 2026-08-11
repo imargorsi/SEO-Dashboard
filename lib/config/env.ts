@@ -10,6 +10,22 @@ function optional(name: string, fallback = ""): string {
   return process.env[name] ?? fallback;
 }
 
+/** PEM from `.env` / hPanel: strip wrapping quotes, turn `\n` into real newlines. */
+function normalizePrivateKey(raw: string): string {
+  let value = raw.trim();
+  if (
+    (value.startsWith('"') && value.endsWith('"')) ||
+    (value.startsWith("'") && value.endsWith("'"))
+  ) {
+    value = value.slice(1, -1).trim();
+  }
+  // Hostinger sometimes double-escapes (`\\n`); keep replacing until real newlines.
+  while (value.includes("\\n")) {
+    value = value.replace(/\\n/g, "\n");
+  }
+  return value;
+}
+
 export const env = {
   mongodbUri: () => required("MONGODB_URI"),
   bcryptRounds: () => Number(process.env.BCRYPT_ROUNDS ?? "12"),
@@ -37,14 +53,12 @@ export const env = {
   cronSecret: () => optional("CRON_SECRET"),
   /**
    * Google Service Account — either JSON blob or email + private key.
-   * Private key may use `\n` escaped newlines in env files.
+   * Private key may use `\n` escaped newlines in env files / Hostinger.
    */
   googleServiceAccountJson: () => optional("GOOGLE_SERVICE_ACCOUNT_JSON"),
   googleServiceAccountEmail: () => optional("GOOGLE_SERVICE_ACCOUNT_EMAIL"),
-  googleServiceAccountPrivateKey: () => {
-    const raw = optional("GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY");
-    return raw.replace(/\\n/g, "\n");
-  },
+  googleServiceAccountPrivateKey: () =>
+    normalizePrivateKey(optional("GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY")),
   googleConfigured: () => {
     if (optional("GOOGLE_SERVICE_ACCOUNT_JSON")) return true;
     return Boolean(

@@ -11,9 +11,9 @@ function optional(name: string, fallback = ""): string {
 }
 
 /**
- * PEM from `.env` / Hostinger hPanel.
- * Panels often: wrap quotes, leave literal `\n`, or turn `+` into spaces in the body.
- * Also accepts a base64-encoded full PEM (safest on Hostinger).
+ * Normalize Google SA PEM from env / Hostinger.
+ * Supports: base64 PEM (preferred on Hostinger), quoted values, `\n` escapes,
+ * and PEM body `+` turned into spaces by some hosts.
  */
 export function normalizeGooglePrivateKey(raw: string): string {
   let value = raw.trim();
@@ -35,18 +35,15 @@ export function normalizeGooglePrivateKey(raw: string): string {
     value = value.slice(1, -1).trim();
   }
 
-  // Hostinger sometimes double-escapes (`\\n`); keep replacing until real newlines.
   while (value.includes("\\n")) {
     value = value.replace(/\\n/g, "\n");
   }
 
   // Some hosts URL-decode env values and turn PEM `+` into spaces.
-  value = value
+  return value
     .split("\n")
     .map((line) => (line.startsWith("-----") ? line : line.replace(/ /g, "+")))
     .join("\n");
-
-  return value;
 }
 
 export const env = {
@@ -75,8 +72,9 @@ export const env = {
   /** Protects `/api/v1/cron/*` routes. */
   cronSecret: () => optional("CRON_SECRET"),
   /**
-   * Google Service Account — either JSON blob or email + private key.
-   * Private key may use `\n` escaped newlines in env files / Hostinger.
+   * Google Service Account — JSON blob, or email + private key.
+   * Private key: local `.env` may use `\n`; Hostinger should use base64 PEM
+   * (`normalizeGooglePrivateKey`).
    */
   googleServiceAccountJson: () => optional("GOOGLE_SERVICE_ACCOUNT_JSON"),
   googleServiceAccountEmail: () => optional("GOOGLE_SERVICE_ACCOUNT_EMAIL"),

@@ -394,7 +394,7 @@ export function UserProjectMembershipsEditor({
             <AlertDialogCancel disabled={isBusy}>{t("confirmCancel")}</AlertDialogCancel>
             <button
               type="button"
-              className={cn(buttonVariants({ variant: "gradient", size: "md" }))}
+              className={cn(buttonVariants({ variant: "outlined", size: "md" }))}
               disabled={!canSaveAdd}
               onClick={() => void handleAdd()}
             >
@@ -432,7 +432,7 @@ export function UserProjectMembershipsEditor({
               type="button"
               className={cn(
                 buttonVariants({
-                  variant: pending?.type === "remove" ? "destructive" : "gradient",
+                  variant: pending?.type === "remove" ? "destructive" : "outlined",
                   size: "md",
                 }),
               )}

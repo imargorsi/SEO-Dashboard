@@ -7,6 +7,10 @@
     --color-secondary
     --color-brand-primary
 
+  Auth: `--auth-form-*` inherit from `:root` / `.dark`.
+  If light `--color-contrast` is pale (not dark ink), override `--auth-video-scrim`
+  with a dark mix so white hero copy stays readable on the video.
+
   See doc/theme-packs.md for the full designer sheet and engineer checklist.
 
   Selectors must beat `:root` / `.dark`:

@@ -8,6 +8,7 @@ import { IoClose } from "react-icons/io5";
 import { ProjectInviteUserSelect } from "@/components/forms/project-invite-user-select";
 import { useProjectInviteUsers } from "@/components/forms/hooks/use-project-invite-users.hook";
 import { Button } from "@/components/ui/button";
+import { DialogSectionDivider } from "@/components/ui/dialog-section-divider";
 import { Spinner } from "@/components/ui/spinner";
 import { useProjectQuery } from "@/features/projects/projects.api";
 import { dialogSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
@@ -58,7 +59,7 @@ function ProjectInviteUsersQuickAddBody({
         dialogSurfaceClass,
       )}
     >
-      <header className="relative shrink-0 border-b border-border px-6 pb-5 pt-6">
+      <header className="relative shrink-0 px-6 pb-5 pt-6">
         <button
           type="button"
           onClick={() => onOpenChange(false)}
@@ -77,6 +78,7 @@ function ProjectInviteUsersQuickAddBody({
           </p>
         </div>
       </header>
+      <DialogSectionDivider />
 
       <div className="min-h-0 overflow-y-auto overscroll-contain px-6 py-6">
         {!canInvite ? (
@@ -104,10 +106,11 @@ function ProjectInviteUsersQuickAddBody({
         )}
       </div>
 
-      <footer className="flex shrink-0 flex-col-reverse gap-3 border-t border-border px-6 py-5 sm:flex-row sm:items-center sm:justify-end">
+      <DialogSectionDivider />
+      <footer className="flex shrink-0 flex-col-reverse gap-3 px-6 py-5 sm:flex-row sm:items-center sm:justify-end">
         <Button
           type="button"
-          variant="outline"
+          variant="outlined"
           size="md"
           onClick={() => onOpenChange(false)}
           className="w-full sm:w-auto"
@@ -116,7 +119,7 @@ function ProjectInviteUsersQuickAddBody({
         </Button>
         <Button
           type="button"
-          variant="gradient"
+          variant="outlined"
           size="md"
           disabled={!canInvite || !inviteUsers.hasPending || inviteUsers.isMutating || isPending || isError}
           onClick={() => void onSave()}

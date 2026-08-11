@@ -13,16 +13,25 @@ type AuthVideoBackgroundProps = {
   anchor?: "start" | "end";
 };
 
+/**
+ * Always-dark photography stand-in when video is disabled (reduced motion).
+ * Must stay dark so hero white ink + `AppLogo surface="onDark"` remain readable
+ * even when the page theme is light.
+ */
+function AuthFallbackBackground() {
+  return (
+    <div
+      className="pointer-events-none absolute inset-0 bg-(--auth-fallback-bg)"
+      aria-hidden
+    />
+  );
+}
+
 export function AuthVideoBackground({ variant = "fill", anchor = "start" }: AuthVideoBackgroundProps) {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   if (prefersReducedMotion) {
-    return (
-      <div
-        className="pointer-events-none absolute inset-0 bg-bg-main"
-        aria-hidden
-      />
-    );
+    return <AuthFallbackBackground />;
   }
 
   const video = (

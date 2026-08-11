@@ -153,15 +153,17 @@ html[data-font="inter"] {
   --text-chrome-muted: var(--text-muted);
   --surface-panel-header: color-mix(in srgb, var(--social-bg) 40%, var(--bg-elevated));
 
-  /* Auth — video scrim + hero ink (video is always dark photography) */
+  /* Auth — video is dark photography; hero ink stays white in light and dark.
+     Form card tints with translucent `--bg-main` so backdrop blur keeps chroma visible.
+     `--auth-fallback-bg` is always dark for reduced-motion (no video). */
   --auth-video-scrim: color-mix(in srgb, var(--color-contrast) 30%, transparent);
+  --auth-fallback-bg: #0b1020;
   --auth-hero-fg: #ffffff;
   --auth-hero-muted: color-mix(in srgb, #ffffff 75%, transparent);
-  --auth-form-bg: var(--bg-card);
-  --auth-form-border: var(--border);
-  --auth-form-ring: transparent;
-  --auth-form-shadow: var(--shadow-elevated);
-  --auth-form-highlight: transparent;
+  --auth-form-bg: color-mix(in srgb, var(--bg-main) 58%, transparent);
+  --auth-form-shadow:
+    0 4px 16px color-mix(in srgb, var(--color-contrast) 8%, transparent),
+    0 18px 48px color-mix(in srgb, var(--color-contrast) 14%, transparent);
 
   --sans: var(--font-app-stack);
   --heading: var(--font-app-stack);
@@ -288,13 +290,13 @@ html[data-font="inter"] {
   --surface-panel-header: color-mix(in srgb, var(--text-primary) 4%, var(--bg-elevated));
 
   --auth-video-scrim: color-mix(in srgb, var(--color-contrast) 36%, transparent);
+  --auth-fallback-bg: #0b1020;
   --auth-hero-fg: #ffffff;
   --auth-hero-muted: color-mix(in srgb, #ffffff 75%, transparent);
-  --auth-form-bg: var(--bg-card);
-  --auth-form-border: var(--border);
-  --auth-form-ring: transparent;
-  --auth-form-shadow: var(--shadow-elevated);
-  --auth-form-highlight: transparent;
+  --auth-form-bg: color-mix(in srgb, var(--bg-main) 38%, transparent);
+  --auth-form-shadow:
+    0 4px 18px color-mix(in srgb, black 22%, transparent),
+    0 22px 56px color-mix(in srgb, black 32%, transparent);
 
   color-scheme: dark;
 

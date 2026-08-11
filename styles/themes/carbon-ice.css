@@ -74,12 +74,9 @@ html[data-theme="carbon-ice"] {
   --text-chrome-muted: var(--text-muted);
   --surface-panel-header: color-mix(in srgb, var(--social-bg) 40%, var(--bg-elevated));
 
+  /* Light packs with pale `--color-contrast` need a dark video scrim (hero stays white).
+     `--auth-form-*` inherit from `:root` / `.dark`. */
   --auth-video-scrim: color-mix(in srgb, #0f172a 30%, transparent);
-  --auth-form-bg: var(--bg-card);
-  --auth-form-border: var(--border);
-  --auth-form-ring: transparent;
-  --auth-form-shadow: var(--shadow-elevated);
-  --auth-form-highlight: transparent;
 
   --background: var(--bg-main);
   --foreground: var(--text-primary);
@@ -162,13 +159,6 @@ html.dark[data-theme="carbon-ice"] {
   --shadow-chrome-pill: inset 0 1px 0 color-mix(in srgb, var(--text-primary) 10%, transparent);
   --text-chrome-muted: var(--text-muted);
   --surface-panel-header: color-mix(in srgb, var(--text-primary) 4%, var(--bg-elevated));
-
-  --auth-video-scrim: color-mix(in srgb, var(--color-contrast) 40%, transparent);
-  --auth-form-bg: var(--bg-card);
-  --auth-form-border: var(--border);
-  --auth-form-ring: transparent;
-  --auth-form-shadow: var(--shadow-elevated);
-  --auth-form-highlight: transparent;
 
   color-scheme: dark;
 

@@ -12,6 +12,7 @@ import {
 
 import { Input } from "@/components/input";
 import { Button } from "@/components/ui/button";
+import { DialogSectionDivider } from "@/components/ui/dialog-section-divider";
 import { Spinner } from "@/components/ui/spinner";
 import { commitLeadsImport, previewLeadsImport } from "@/features/leads/leads.api";
 import { ApiError } from "@/lib/frontend/api/errors";
@@ -273,10 +274,7 @@ export function LeadsImportModal({
             <span className="sr-only">{t("close")}</span>
           </button>
         </header>
-        <div
-          aria-hidden
-          className="mx-auto h-px w-[90%] shrink-0 bg-border"
-        />
+        <DialogSectionDivider />
 
         {busy ? (
           <div className="flex min-h-[18rem] flex-1 flex-col items-center justify-center gap-3 px-6 py-10 text-center">
@@ -390,10 +388,7 @@ export function LeadsImportModal({
               )}
             </div>
 
-            <div
-              aria-hidden
-              className="mx-auto h-px w-[90%] shrink-0 bg-border"
-            />
+            <DialogSectionDivider />
             <footer className="flex shrink-0 items-center justify-between gap-3 px-5 py-4 sm:px-6">
               <Button
                 type="button"

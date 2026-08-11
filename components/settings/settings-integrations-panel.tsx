@@ -238,7 +238,7 @@ export function SettingsIntegrationsPanel() {
               type="button"
               className={cn(
                 buttonVariants({
-                  variant: pending?.type === "disconnect" ? "destructive" : "gradient",
+                  variant: pending?.type === "disconnect" ? "destructive" : "outlined",
                   size: "md",
                 }),
               )}

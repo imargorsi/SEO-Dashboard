@@ -4,26 +4,27 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex shrink-0 items-center cursor-pointer justify-center gap-1.5 whitespace-nowrap rounded-xl font-semibold transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:bg-none disabled:bg-[var(--btn-disabled-bg)] disabled:text-[var(--btn-disabled-fg)] disabled:opacity-100 aria-invalid:border-destructive aria-invalid:ring-destructive/30 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
+  "inline-flex shrink-0 items-center cursor-pointer justify-center gap-1.5 whitespace-nowrap rounded-xl font-semibold transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-100 aria-invalid:border-destructive aria-invalid:ring-destructive/30 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
   {
     variants: {
       variant: {
         gradient:
-          "bg-brand text-text-on-brand shadow-xs hover:bg-brand/90",
+          "bg-brand text-text-on-brand shadow-xs hover:bg-brand/90 disabled:bg-[var(--btn-disabled-bg)] disabled:text-[var(--btn-disabled-fg)]",
         default:
-          "bg-brand text-text-on-brand shadow-xs hover:bg-brand/90",
+          "bg-brand text-text-on-brand shadow-xs hover:bg-brand/90 disabled:bg-[var(--btn-disabled-bg)] disabled:text-[var(--btn-disabled-fg)]",
         primary:
-          "bg-brand text-text-on-brand shadow-xs hover:bg-brand/90",
+          "bg-brand text-text-on-brand shadow-xs hover:bg-brand/90 disabled:bg-[var(--btn-disabled-bg)] disabled:text-[var(--btn-disabled-fg)]",
         destructive:
-          "bg-destructive text-text-on-brand hover:bg-destructive/90 focus-visible:ring-destructive/30",
+          "bg-destructive text-text-on-brand hover:bg-destructive/90 focus-visible:ring-destructive/30 disabled:bg-[var(--btn-disabled-bg)] disabled:text-[var(--btn-disabled-fg)]",
         outlined:
-          "border border-border bg-transparent text-text-primary shadow-xs hover:bg-bg-hover dark:border-text-primary/45",
+          "border border-border bg-transparent text-text-primary shadow-none hover:bg-bg-hover dark:border-text-primary/45 disabled:border-border/55 disabled:bg-transparent disabled:text-text-disabled dark:disabled:border-text-primary/30",
+        /** Alias of `outlined` — prefer `outlined` in new code. */
         outline:
-          "border border-border bg-bg-card text-text-primary shadow-xs hover:bg-bg-hover dark:border-text-primary/45",
+          "border border-border bg-transparent text-text-primary shadow-none hover:bg-bg-hover dark:border-text-primary/45 disabled:border-border/55 disabled:bg-transparent disabled:text-text-disabled dark:disabled:border-text-primary/30",
         secondary:
-          "bg-[var(--btn-secondary-bg)] text-[var(--btn-secondary-fg)] hover:bg-[var(--btn-secondary-bg-hover)]",
-        ghost: "text-text-primary hover:bg-bg-hover",
-        link: "rounded-md text-brand underline-offset-4 hover:underline",
+          "bg-[var(--btn-secondary-bg)] text-[var(--btn-secondary-fg)] hover:bg-[var(--btn-secondary-bg-hover)] disabled:bg-[var(--btn-disabled-bg)] disabled:text-[var(--btn-disabled-fg)]",
+        ghost: "text-text-primary hover:bg-bg-hover disabled:bg-transparent disabled:text-text-disabled",
+        link: "rounded-md text-brand underline-offset-4 hover:underline disabled:bg-transparent disabled:text-text-disabled",
       },
       size: {
         small: "h-8 gap-1 rounded-lg px-3 text-xs has-[>svg]:px-2.5",

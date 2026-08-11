@@ -122,6 +122,14 @@ export const popoverSurfaceClass =
  */
 export const dialogSurfaceClass = `${modalFrostBorderClass} ${modalFrostFillClass} text-text-primary shadow-(--shadow-elevated)`;
 
+/**
+ * Standard centered-modal header/footer rule — 90% width, centered (not full-bleed edge borders).
+ * Use via `DialogSectionDivider` after headers and before footers.
+ * Slightly stronger than bare `--border` so the rule stays visible on frosted modal fills.
+ */
+export const dialogSectionDividerClass =
+  "mx-auto h-px w-[90%] shrink-0 bg-border dark:bg-text-primary/22";
+
 /** Analytics module panels — shared radius + breathing room. */
 export const analyticsPanelClass = "rounded-3xl p-5 sm:p-6";
 

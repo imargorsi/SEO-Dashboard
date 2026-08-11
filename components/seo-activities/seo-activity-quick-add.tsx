@@ -8,6 +8,7 @@ import { IoClose } from "react-icons/io5";
 
 import { Input } from "@/components/input";
 import { Button } from "@/components/ui/button";
+import { DialogSectionDivider } from "@/components/ui/dialog-section-divider";
 import { SEO_ACTIVITY_TYPE_OPTIONS } from "@/lib/frontend/seo-activities/constants";
 import { isValidIsoDate } from "@/lib/frontend/seo-activities/date-range.utils";
 import {
@@ -136,7 +137,7 @@ export function SeoActivityQuickAdd({
           "border-2 border-text-muted/45",
         )}
       >
-        <header className="relative flex shrink-0 flex-col gap-4 border-b border-border px-5 pb-5 pt-5 sm:px-6">
+        <header className="relative flex shrink-0 flex-col gap-4 px-5 pb-5 pt-5 sm:px-6">
           <button
             type="button"
             onClick={() => onOpenChange(false)}
@@ -184,6 +185,7 @@ export function SeoActivityQuickAdd({
             })}
           </div>
         </header>
+        <DialogSectionDivider />
 
         <form
           className="flex min-h-0 flex-1 flex-col"
@@ -264,7 +266,8 @@ export function SeoActivityQuickAdd({
             />
           </div>
 
-          <footer className="flex shrink-0 flex-col-reverse gap-2.5 border-t border-border px-5 py-4 sm:flex-row sm:items-center sm:justify-end sm:gap-3 sm:px-6">
+          <DialogSectionDivider />
+          <footer className="flex shrink-0 flex-col-reverse gap-2.5 px-5 py-4 sm:flex-row sm:items-center sm:justify-end sm:gap-3 sm:px-6">
             <Button
               type="button"
               variant="outlined"
@@ -276,7 +279,7 @@ export function SeoActivityQuickAdd({
             </Button>
             <Button
               type="submit"
-              variant="gradient"
+              variant="outlined"
               size="lg"
               disabled={isSubmitting}
               className="w-full sm:min-w-28 sm:w-auto"

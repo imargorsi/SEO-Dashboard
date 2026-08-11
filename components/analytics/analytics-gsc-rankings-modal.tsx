@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next";
 import { IoClose } from "react-icons/io5";
 
 import { AnalyticsGscRankingsTable } from "@/components/analytics/analytics-gsc-rankings-table";
+import { Button } from "@/components/ui/button";
+import { DialogSectionDivider } from "@/components/ui/dialog-section-divider";
 import { useAnalyticsDimensionsQuery } from "@/features/analytics/analytics.api";
 import { dialogSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { overlayClass } from "@/lib/frontend/theme/chrome-tones";
@@ -95,7 +97,7 @@ export function AnalyticsGscRankingsModal({
           dialogSurfaceClass,
         )}
       >
-        <header className="relative type-stack-md shrink-0 border-b border-border px-5 pb-4 pt-5 pe-14 sm:px-6">
+        <header className="relative type-stack-md shrink-0 px-5 pb-4 pt-5 pe-14 sm:px-6">
           <button
             type="button"
             onClick={() => onOpenChange(false)}
@@ -112,6 +114,7 @@ export function AnalyticsGscRankingsModal({
             {t("modalSubtitle")}
           </p>
         </header>
+        <DialogSectionDivider />
 
         <div className="themed-scrollbar min-h-0 flex-1 overflow-y-auto px-5 py-4 sm:px-6">
           <AnalyticsGscRankingsTable
@@ -123,19 +126,16 @@ export function AnalyticsGscRankingsModal({
           />
         </div>
 
-        <footer className="flex shrink-0 items-center justify-between gap-3 border-t border-border px-5 py-3.5 sm:px-6">
+        <DialogSectionDivider />
+        <footer className="flex shrink-0 items-center justify-between gap-3 px-5 py-3.5 sm:px-6">
           <p className="type-caption text-text-muted">
             {query.isLoading || query.isFetching
               ? t("loading")
               : t("modalRowCount", { count: rows.length })}
           </p>
-          <button
-            type="button"
-            onClick={() => onOpenChange(false)}
-            className="rounded-full border border-border/60 bg-bg-card/60 px-4 py-1.5 type-label text-text-secondary transition-colors hover:bg-bg-hover hover:text-text-primary"
-          >
+          <Button type="button" variant="outlined" size="md" onClick={() => onOpenChange(false)}>
             {t("modalClose")}
-          </button>
+          </Button>
         </footer>
       </div>
     </div>,

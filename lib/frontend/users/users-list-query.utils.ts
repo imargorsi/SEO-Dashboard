@@ -1,4 +1,9 @@
 import type { TUserAccountStatus } from "@/lib/users/constants";
+import {
+  isKnownUserAccountSource,
+  type TUserAccountSourceKnown,
+} from "@/lib/users/account-source";
+import { parseUserAccountSourceFilter } from "@/lib/users/account-source-filter.utils";
 import { parseUserStatusFilter } from "@/lib/users/user-status-filter.utils";
 
 type TQueryParamValue = string | string[];
@@ -9,6 +14,7 @@ export type TUsersListQuery = {
   search: string | null;
   newest: boolean;
   status: TUserAccountStatus | null;
+  account_source: TUserAccountSourceKnown | null;
 };
 
 const DEFAULT_PAGE = 1;
@@ -33,6 +39,9 @@ export function parseUsersListQuery(params: Record<string, TQueryParamValue>): T
   const searchRaw = readStringParam(params.search)?.trim();
   const newestRaw = readStringParam(params.newest);
   const status = parseUserStatusFilter(readStringParam(params.status)) ?? null;
+  const parsedSource = parseUserAccountSourceFilter(readStringParam(params.account_source));
+  const account_source =
+    parsedSource && isKnownUserAccountSource(parsedSource) ? parsedSource : null;
 
   return {
     page,
@@ -40,5 +49,6 @@ export function parseUsersListQuery(params: Record<string, TQueryParamValue>): T
     search: searchRaw ? searchRaw : null,
     newest: newestRaw !== "false" && newestRaw !== "0",
     status,
+    account_source,
   };
 }

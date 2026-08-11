@@ -6,7 +6,7 @@ import { buildListProjectsResponse, listProjects } from "@/lib/projects/list-pro
 import { assignProjectMember } from "@/lib/projects/assign-member";
 import { PROJECT_USER_ROLE, SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
 import { seedSystemRoles } from "@/lib/rbac/seed-roles";
-import { Project, User } from "@/models";
+import { Project, ProjectIntegration, User } from "@/models";
 import { authContextFor, projectInput } from "@/tests/helpers/project-test-utils";
 
 describe("GET /projects — listProjects", () => {
@@ -172,6 +172,48 @@ describe("GET /projects — listProjects", () => {
         name: "Lister",
         profileImage: null,
       },
+      integrations: {
+        gsc: "disconnected",
+        ga4: "disconnected",
+      },
+    });
+  });
+
+  it("includes Google integration connection status on list items", async () => {
+    await seedSystemRoles();
+
+    const user = await User.create({
+      name: "Integrations Owner",
+      email: "integrations-owner@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+    });
+
+    const { project } = await createProject(
+      authContextFor(user),
+      projectInput({
+        businessName: "Integrated Co",
+        websiteUrl: "https://integrated.example.com",
+      }),
+    );
+
+    await ProjectIntegration.create({
+      projectId: project._id,
+      provider: "google",
+      service: "gsc",
+      status: "connected",
+      externalPropertyId: "https://integrated.example.com/",
+      connectedAt: new Date(),
+      connectedByUserId: user._id,
+    });
+
+    const projects = await listProjects(authContextFor(user));
+
+    expect(projects).toHaveLength(1);
+    expect(projects[0]!.integrations).toEqual({
+      gsc: "connected",
+      ga4: "disconnected",
     });
   });
 

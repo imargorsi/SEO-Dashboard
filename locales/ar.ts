@@ -361,12 +361,24 @@ const translation: Translation = {
         accountTitle: "معلومات الحساب",
         accountLead: "حقول الملف الأساسية لهذا المستخدم.",
         email: "البريد الإلكتروني",
+        accountSource: "مصدر الحساب",
+        accountSourceUnknown: "غير معروف",
         createdAt: "تاريخ الإنشاء",
         updatedAt: "آخر تحديث",
         emailVerifiedAt: "تم التحقق من البريد",
         emailNotVerified: "غير مُتحقق",
         projectsTitle: "المشاريع المُسنَدة",
         projectsLead: "المشاريع التي يملكها هذا المستخدم أو ينتمي إليها.",
+      },
+      accountSource: {
+        admin: "أنشأه المسؤول",
+        self_register: "تسجيل ذاتي",
+        google: "جوجل",
+      },
+      accountSourceFilter: {
+        ariaLabel: "تصفية المستخدمين حسب مصدر الحساب",
+        label: "المصدر",
+        all: "كل المصادر",
       },
       statusFilter: {
         ariaLabel: "تصفية المستخدمين حسب الحالة",
@@ -494,6 +506,14 @@ const translation: Translation = {
       listCard: {
         projectOwnerLabel: "مالك المشروع",
         projectOwnerFallback: "مالك المشروع",
+      },
+      listIntegrations: {
+        ariaLabel: "تكاملات Google",
+        tooltip: "{{service}}: {{status}}",
+        short: {
+          gsc: "GSC",
+          ga4: "GA4",
+        },
       },
       editProjectTitle: "تعديل المشروع",
       detail: {
@@ -733,6 +753,7 @@ const translation: Translation = {
         colBusinessName: "اسم النشاط",
         colWebsite: "الموقع",
         colStatus: "الحالة",
+        colIntegrations: "التكاملات",
         colBusinessType: "نوع النشاط",
         colActions: "إجراءات",
         createProject: "إنشاء مشروع",

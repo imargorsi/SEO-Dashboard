@@ -3,12 +3,18 @@ import { serializeStoredImageUrl } from "@/lib/serializers/stored-image";
 import type {
   TProjectDetail,
   TProjectInvitee,
+  TProjectListIntegrations,
   TProjectListItem,
   TProjectOwnerSummary,
 } from "@/types/project.types";
 
 export type ProjectListItemDto = TProjectListItem;
 export type ProjectDetailDto = TProjectDetail;
+
+const DEFAULT_LIST_INTEGRATIONS: TProjectListIntegrations = {
+  gsc: "disconnected",
+  ga4: "disconnected",
+};
 
 function serializeTimestamp(value: Date | null | undefined): string | null {
   if (!value) return null;
@@ -19,6 +25,7 @@ function serializeTimestamp(value: Date | null | undefined): string | null {
 export function serializeProjectListItem(
   project: ProjectDocument,
   owner?: TProjectOwnerSummary | null,
+  integrations?: TProjectListIntegrations | null,
 ): TProjectListItem {
   return {
     id: project._id.toString(),
@@ -28,6 +35,7 @@ export function serializeProjectListItem(
     imageUrl: serializeStoredImageUrl(project.logoImage),
     owner: owner ?? null,
     createdByUserId: project.createdByUserId.toString(),
+    integrations: integrations ?? DEFAULT_LIST_INTEGRATIONS,
   };
 }
 

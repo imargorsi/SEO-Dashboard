@@ -147,6 +147,7 @@ export async function resolveUserFromGoogleProfile(
     profileImage: profile.picture ?? null,
     roles: [],
     status: "active",
+    accountSource: "google",
   });
 
   return user;

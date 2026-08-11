@@ -1,3 +1,6 @@
+import type { TUserAccountSource, TUserAccountSourceKnown } from "@/lib/users/account-source";
+import type { TUserAccountSourceCounts } from "@/lib/users/account-source-filter.utils";
+
 export type TAdminUserProjectAssignment = {
   id: string;
   name: string;
@@ -17,6 +20,8 @@ export type TAdminUserListItem = {
   email: string;
   profile_image: string | null;
   status: "active" | "inactive";
+  /** How the account was created — admin Users UI only. */
+  account_source: TUserAccountSource;
   is_super_admin: boolean;
   email_verified_at: string | null;
   projects: TAdminUserProjectAssignment[];
@@ -30,6 +35,7 @@ export type TAdminUserDetail = {
   email: string;
   profile_image: string | null;
   status: "active" | "inactive";
+  account_source: TUserAccountSource;
   email_verified_at: string | null;
   projects: TAdminUserProjectAssignment[];
   created_at: string;
@@ -61,6 +67,8 @@ export type TListFilters = {
     active: number;
     inactive: number;
   };
+  account_source?: TUserAccountSourceKnown | null;
+  account_source_counts?: TUserAccountSourceCounts;
 };
 
 export type TPaginatedList<T> = {

@@ -179,6 +179,39 @@ describe("GET /users — listUsers", () => {
     expect(activeOnly.items[0]!.email).toBe("active-listed@example.com");
   });
 
+  it("filters by account_source", async () => {
+    await User.create({
+      name: "Admin Source",
+      email: "source-admin@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+      status: "active",
+      accountSource: "admin",
+    });
+
+    await User.create({
+      name: "Self Source",
+      email: "source-self@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: null,
+      roles: [],
+      status: "active",
+      accountSource: "self_register",
+    });
+
+    const adminOnly = await listUsers({
+      ...defaultListQuery,
+      search: "source-",
+      account_source: "admin",
+    });
+
+    expect(adminOnly.items).toHaveLength(1);
+    expect(adminOnly.items[0]!.email).toBe("source-admin@example.com");
+    expect(adminOnly.filters.account_source).toBe("admin");
+    expect(adminOnly.filters.account_source_counts?.admin).toBeGreaterThanOrEqual(1);
+  });
+
   it("paginates results", async () => {
     for (let index = 0; index < 3; index += 1) {
       await User.create({

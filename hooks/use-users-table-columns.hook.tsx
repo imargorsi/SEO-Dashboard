@@ -11,6 +11,7 @@ import {
 import { LuCircleDot, LuClock, LuFolder, LuUser } from "react-icons/lu";
 import { PiPencilThin } from "react-icons/pi";
 
+import { AccountSourceBadge } from "@/components/users/account-source-badge";
 import type { TAppTableColumn } from "@/components/table/app-table";
 import { TableRowIconActions } from "@/components/table/table-row-icon-actions";
 import { ActiveInactiveToggle } from "@/components/ui/active-inactive-toggle";
@@ -57,8 +58,11 @@ export function useUsersTableColumns({
           <div className="flex min-w-0 items-center gap-3">
             <UserAvatar name={item.name} imageUrl={item.profile_image} size="md" variant="photo" />
             <div className="min-w-0">
-              <p className="type-body-strong text-text-primary truncate">{item.name}</p>
-              <p className="type-caption text-text-muted truncate">{item.email}</p>
+              <div className="flex min-w-0 items-center gap-2">
+                <p className="truncate type-body-strong text-text-primary">{item.name}</p>
+                <AccountSourceBadge source={item.account_source} />
+              </div>
+              <p className="truncate type-caption text-text-muted">{item.email}</p>
             </div>
           </div>
         ),

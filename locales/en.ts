@@ -359,12 +359,24 @@ export interface Translation {
         accountTitle: string;
         accountLead: string;
         email: string;
+        accountSource: string;
+        accountSourceUnknown: string;
         createdAt: string;
         updatedAt: string;
         emailVerifiedAt: string;
         emailNotVerified: string;
         projectsTitle: string;
         projectsLead: string;
+      };
+      accountSource: {
+        admin: string;
+        self_register: string;
+        google: string;
+      };
+      accountSourceFilter: {
+        ariaLabel: string;
+        label: string;
+        all: string;
       };
       statusFilter: {
         ariaLabel: string;
@@ -492,6 +504,14 @@ export interface Translation {
       listCard: {
         projectOwnerLabel: string;
         projectOwnerFallback: string;
+      };
+      listIntegrations: {
+        ariaLabel: string;
+        tooltip: string;
+        short: {
+          gsc: string;
+          ga4: string;
+        };
       };
       editProjectTitle: string;
       detail: {
@@ -729,6 +749,7 @@ export interface Translation {
         colBusinessName: string;
         colWebsite: string;
         colStatus: string;
+        colIntegrations: string;
         colBusinessType: string;
         colActions: string;
         createProject: string;
@@ -1826,12 +1847,24 @@ const translation: Translation = {
         accountTitle: "Account Information",
         accountLead: "Core profile fields for this user.",
         email: "Email",
+        accountSource: "Account Source",
+        accountSourceUnknown: "Unknown",
         createdAt: "Created",
         updatedAt: "Last Updated",
         emailVerifiedAt: "Email Verified",
         emailNotVerified: "Not Verified",
         projectsTitle: "Assigned Projects",
         projectsLead: "Projects this user owns or belongs to.",
+      },
+      accountSource: {
+        admin: "Admin Created",
+        self_register: "Self Registered",
+        google: "Google",
+      },
+      accountSourceFilter: {
+        ariaLabel: "Filter Users By Account Source",
+        label: "Source",
+        all: "All Sources",
       },
       statusFilter: {
         ariaLabel: "Filter Users By Status",
@@ -1959,6 +1992,14 @@ const translation: Translation = {
       listCard: {
         projectOwnerLabel: "Project Owner",
         projectOwnerFallback: "Project Owner",
+      },
+      listIntegrations: {
+        ariaLabel: "Google Integrations",
+        tooltip: "{{service}}: {{status}}",
+        short: {
+          gsc: "GSC",
+          ga4: "GA4",
+        },
       },
       editProjectTitle: "Edit Project",
       detail: {
@@ -2205,6 +2246,7 @@ const translation: Translation = {
         colBusinessName: "Business Name",
         colWebsite: "Website",
         colStatus: "Status",
+        colIntegrations: "Integrations",
         colBusinessType: "Business type",
         colActions: "Actions",
         createProject: "Create Project",

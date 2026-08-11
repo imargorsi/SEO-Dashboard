@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 
 import type { Option } from "@/components/input";
+import { AccountSourceBadge } from "@/components/users/account-source-badge";
 import { useUsersQuery } from "@/features/users/users.api";
 
 const OWNER_LIST_PAGE_SIZE = 100;
@@ -26,6 +27,7 @@ export function useProjectOwnerOptions(enabled: boolean): TUseProjectOwnerOption
       .map((user) => ({
         label: `${user.name} (${user.email})`,
         value: user.id,
+        badge: <AccountSourceBadge source={user.account_source} />,
       }));
   }, [data?.items]);
 

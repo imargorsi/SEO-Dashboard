@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { USER_ACCOUNT_STATUSES } from "@/lib/users/constants";
+import { USER_ACCOUNT_SOURCE_KNOWN, USER_ACCOUNT_STATUSES } from "@/lib/users/constants";
 
 const emptyToUndefined = (value: unknown) => {
   if (typeof value === "string" && value.trim() === "") {
@@ -22,6 +22,8 @@ export const listUsersQuerySchema = z.object({
   search: z.preprocess(emptyToUndefined, z.string().trim().min(1).optional()),
   newest: z.preprocess(parseNewest, z.boolean().default(true)),
   status: z.enum(USER_ACCOUNT_STATUSES).optional(),
+  /** Known create paths only — `unknown` is storage/soft-resolve residual, not a list filter. */
+  account_source: z.enum(USER_ACCOUNT_SOURCE_KNOWN).optional(),
 });
 
 export type ListUsersQueryInput = z.infer<typeof listUsersQuerySchema>;
@@ -32,6 +34,7 @@ export function parseListUsersQuery(searchParams: URLSearchParams): ListUsersQue
   const search = searchParams.get("search");
   const newest = searchParams.get("newest");
   const status = searchParams.get("status");
+  const accountSource = searchParams.get("account_source");
 
   return listUsersQuerySchema.parse({
     page: page ?? undefined,
@@ -39,5 +42,6 @@ export function parseListUsersQuery(searchParams: URLSearchParams): ListUsersQue
     search: search ?? undefined,
     newest: newest ?? undefined,
     status: status ?? undefined,
+    account_source: accountSource ?? undefined,
   });
 }

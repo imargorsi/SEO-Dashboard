@@ -8,6 +8,7 @@ import { IoTrashOutline } from "react-icons/io5";
 import { TableListSearch } from "@/components/table/table-list-search";
 import { TableListSort } from "@/components/table/table-list-sort";
 import { UserDetailSheet } from "@/components/users/user-detail-sheet";
+import { UserAccountSourceFilter } from "@/components/users/user-account-source-filter";
 import { UserStatusFilter } from "@/components/users/user-status-filter";
 import { UsersTable } from "@/components/users/users-table";
 import { Heading } from "@/components/heading";
@@ -30,6 +31,8 @@ import { analyticsHeadingStackClass } from "@/lib/frontend/layout/dashboard-chro
 import { parseUsersListQuery } from "@/lib/frontend/users/users-list-query.utils";
 import { userCanCreate, userCanDelete, userCanUpdate, userCanView } from "@/lib/frontend/users/acl";
 import { USER_ROUTES } from "@/lib/frontend/users/user-routes.utils";
+import type { TUserAccountSourceKnown } from "@/lib/users/account-source";
+import { EMPTY_USER_ACCOUNT_SOURCE_COUNTS } from "@/lib/users/account-source-filter.utils";
 import { isActiveUserStatus, type TUserAccountStatus } from "@/lib/users/constants";
 import { EMPTY_USER_STATUS_COUNTS } from "@/lib/users/user-status-filter.utils";
 import type { TAdminUserListItem } from "@/types/admin-user.types";
@@ -63,10 +66,12 @@ export function UsersListSection() {
     search: listQuery.search,
     newest: listQuery.newest,
     status: listQuery.status,
+    account_source: listQuery.account_source,
     enabled: canView,
   });
 
   const statusCounts = data?.filters.status_counts ?? EMPTY_USER_STATUS_COUNTS;
+  const accountSourceCounts = data?.filters.account_source_counts ?? EMPTY_USER_ACCOUNT_SOURCE_COUNTS;
 
   const accessDeniedNotified = useRef(false);
   const loadErrorNotified = useRef(false);
@@ -131,6 +136,18 @@ export function UsersListSection() {
       }
 
       updateQueryParams({ status: nextStatus }, ["page"]);
+    },
+    [updateQueryParams],
+  );
+
+  const onAccountSourceFilterChange = useCallback(
+    (nextSource: TUserAccountSourceKnown | null) => {
+      if (!nextSource) {
+        updateQueryParams({}, ["account_source", "page"]);
+        return;
+      }
+
+      updateQueryParams({ account_source: nextSource }, ["page"]);
     },
     [updateQueryParams],
   );
@@ -225,6 +242,11 @@ export function UsersListSection() {
                 onChange={onSearchChange}
                 placeholder={t("table.searchPlaceholder")}
                 isLoading={isFetching}
+              />
+              <UserAccountSourceFilter
+                activeSource={listQuery.account_source}
+                counts={accountSourceCounts}
+                onSourceChange={onAccountSourceFilterChange}
               />
               <TableListSort
                 value={listQuery.newest ? "newest" : "oldest"}

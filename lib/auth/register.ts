@@ -30,6 +30,7 @@ export async function registerUser(input: RegisterUserInput): Promise<{ user: Us
     emailVerifiedAt: null,
     roles: [],
     status: "active",
+    accountSource: "self_register",
   });
 
   try {

@@ -4,6 +4,7 @@ import { ApiResponse } from "@/lib/api/response";
 import type { AuthContext } from "@/lib/auth/guards";
 import { serializeProjectListItem, type ProjectListItemDto } from "@/lib/serializers/project";
 import type { ProjectStatus } from "@/lib/projects/constants";
+import { resolveProjectIntegrationsMap } from "@/lib/projects/resolve-project-integrations.utils";
 import { resolveOwnerMap } from "@/lib/projects/resolve-project-owner.utils";
 import { SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
 import { Project, ProjectMember, type ProjectDocument } from "@/models";
@@ -36,8 +37,15 @@ export async function listProjects(
     projects = await Project.find({ _id: { $in: projectIds }, ...statusFilter }).sort({ createdAt: -1 });
   }
 
-  const ownerMap = await resolveOwnerMap(projects);
-  return projects.map((project) => serializeProjectListItem(project, ownerMap.get(project._id.toString())));
+  const [ownerMap, integrationsMap] = await Promise.all([
+    resolveOwnerMap(projects),
+    resolveProjectIntegrationsMap(projects.map((project) => project._id)),
+  ]);
+
+  return projects.map((project) => {
+    const id = project._id.toString();
+    return serializeProjectListItem(project, ownerMap.get(id), integrationsMap.get(id));
+  });
 }
 
 export function buildListProjectsResponse(projects: ProjectListItemDto[]): NextResponse {

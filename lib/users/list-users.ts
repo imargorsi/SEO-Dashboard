@@ -3,7 +3,12 @@ import { NextResponse } from "next/server";
 import { ApiResponse } from "@/lib/api/response";
 import { SUPER_ADMIN_ROLE } from "@/lib/rbac/roles";
 import { serializeAdminUserListItem } from "@/lib/serializers/admin-user";
-import type { TUserAccountStatus } from "@/lib/users/constants";
+import type { TUserAccountSourceKnown, TUserAccountStatus } from "@/lib/users/constants";
+import {
+  buildAccountSourceMongoFilter,
+  buildUserAccountSourceCounts,
+  EMPTY_USER_ACCOUNT_SOURCE_COUNTS,
+} from "@/lib/users/account-source-filter.utils";
 import { resolveUserProjectAssignments } from "@/lib/users/resolve-user-project-assignments";
 import {
   buildUserStatusCounts,
@@ -67,11 +72,16 @@ function combineFilters(parts: Array<object | null>) {
   return { $and: active };
 }
 
-function buildListUsersFilter(search?: string, status?: TUserAccountStatus) {
+function buildListUsersFilter(
+  search?: string,
+  status?: TUserAccountStatus,
+  accountSource?: TUserAccountSourceKnown,
+) {
   return combineFilters([
     { roles: { $nin: [SUPER_ADMIN_ROLE] } },
     buildSearchFilter(search),
     buildStatusFilter(status),
+    buildAccountSourceMongoFilter(accountSource),
   ]);
 }
 
@@ -84,14 +94,33 @@ async function countUsersByStatus(baseFilter: object) {
   return buildUserStatusCounts(active, inactive);
 }
 
+async function countUsersByAccountSource(baseFilter: object) {
+  // Same soft Mongo filters as list rows — scales via countDocuments (no full scan).
+  const [all, admin, self_register, google] = await Promise.all([
+    User.countDocuments(baseFilter),
+    User.countDocuments(combineFilters([baseFilter, buildAccountSourceMongoFilter("admin")])),
+    User.countDocuments(
+      combineFilters([baseFilter, buildAccountSourceMongoFilter("self_register")]),
+    ),
+    User.countDocuments(combineFilters([baseFilter, buildAccountSourceMongoFilter("google")])),
+  ]);
+
+  return buildUserAccountSourceCounts({
+    admin,
+    self_register,
+    google,
+    unknown: Math.max(0, all - admin - self_register - google),
+  });
+}
+
 export async function listUsers(query: ListUsersQueryInput): Promise<TPaginatedList<TAdminUserListItem>> {
   const baseFilter = buildListUsersFilter(query.search);
-  const filter = buildListUsersFilter(query.search, query.status);
+  const filter = buildListUsersFilter(query.search, query.status, query.account_source);
   const page = query.page;
   const perPage = query.per_page;
   const skip = (page - 1) * perPage;
 
-  const [total, users, statusCounts] = await Promise.all([
+  const [total, users, statusCounts, accountSourceCounts] = await Promise.all([
     User.countDocuments(filter),
     User.find(filter)
       .select("-password")
@@ -99,6 +128,7 @@ export async function listUsers(query: ListUsersQueryInput): Promise<TPaginatedL
       .skip(skip)
       .limit(perPage),
     countUsersByStatus(baseFilter),
+    countUsersByAccountSource(baseFilter),
   ]);
 
   const pagination = buildPagination(total, page, perPage);
@@ -114,6 +144,8 @@ export async function listUsers(query: ListUsersQueryInput): Promise<TPaginatedL
       newest: query.newest,
       status: query.status ?? null,
       status_counts: statusCounts ?? EMPTY_USER_STATUS_COUNTS,
+      account_source: query.account_source ?? null,
+      account_source_counts: accountSourceCounts ?? EMPTY_USER_ACCOUNT_SOURCE_COUNTS,
     },
   };
 }

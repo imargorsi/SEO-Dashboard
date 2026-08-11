@@ -5,6 +5,7 @@ import {
   IoCalendarOutline,
   IoCheckmarkCircleOutline,
   IoMailOutline,
+  IoPersonOutline,
   IoRefreshOutline,
 } from "react-icons/io5";
 
@@ -15,6 +16,7 @@ import {
 } from "@/components/ui/detail-field-row";
 import { StatusChip } from "@/components/ui/status-chip";
 import { UserAvatar } from "@/components/ui/user-avatar";
+import { AccountSourceBadge } from "@/components/users/account-source-badge";
 import { UserProjectAssignments } from "@/components/users/user-project-assignments";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { formatShortDate } from "@/lib/frontend/date/format-relative-date.utils";
@@ -23,7 +25,7 @@ import {
   detailHeroRowClass,
   typeStackIdentityClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
-import { isActiveUserStatus } from "@/lib/users/constants";
+import { isActiveUserStatus, isKnownUserAccountSource } from "@/lib/users/constants";
 import { cn } from "@/lib/utils";
 import type { TAdminUserListItem } from "@/types/admin-user.types";
 
@@ -80,6 +82,13 @@ export function UserDetailSheet({ user, open, onOpenChange }: UserDetailSheetPro
               <div>
                 <DetailFieldRow icon={IoMailOutline} label={t("email")}>
                   {user.email}
+                </DetailFieldRow>
+                <DetailFieldRow icon={IoPersonOutline} label={t("accountSource")}>
+                  {isKnownUserAccountSource(user.account_source) ? (
+                    <AccountSourceBadge source={user.account_source} />
+                  ) : (
+                    t("accountSourceUnknown")
+                  )}
                 </DetailFieldRow>
                 <DetailFieldRow icon={IoCalendarOutline} label={t("createdAt")}>
                   {formatShortDate(user.created_at, i18n.language)}

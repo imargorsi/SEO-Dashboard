@@ -10,11 +10,12 @@ import {
   IoPersonAddOutline,
   IoTrashOutline,
 } from "react-icons/io5";
-import { LuBriefcase, LuCircleDot, LuUser } from "react-icons/lu";
+import { LuBriefcase, LuCircleDot, LuLink, LuUser } from "react-icons/lu";
 import { PiPencilThin } from "react-icons/pi";
 
 import type { TAppTableColumn } from "@/components/table/app-table";
 import { TableRowIconActions } from "@/components/table/table-row-icon-actions";
+import { ProjectIntegrationStatusIcons } from "@/components/projects/project-integration-status-icons";
 import { ProjectStatusChip } from "@/components/projects/project-status-chip";
 import { ActiveInactiveToggle } from "@/components/ui/active-inactive-toggle";
 import { UserAvatar } from "@/components/ui/user-avatar";
@@ -106,6 +107,12 @@ export function useProjectsTableColumns({
             </div>
           );
         },
+      },
+      {
+        key: "integrations",
+        label: t("table.colIntegrations"),
+        headerIcon: LuLink,
+        render: (item) => <ProjectIntegrationStatusIcons integrations={item.integrations} />,
       },
       {
         key: "status",

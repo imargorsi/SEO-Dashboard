@@ -11,6 +11,7 @@ import {
   type ComponentPropsWithoutRef,
   type FocusEvent,
   type KeyboardEvent,
+  type ReactNode,
   type Ref,
 } from "react";
 import { IoCheckmark, IoClose, IoEye, IoEyeOff } from "react-icons/io5";
@@ -37,6 +38,8 @@ export type InputType =
 export interface Option {
   label: string;
   value: string | number;
+  /** Optional chip/badge shown beside the label in the trigger (when selected) and dropdown rows. */
+  badge?: ReactNode;
 }
 
 type NativeControlProps = Omit<
@@ -177,7 +180,10 @@ function SelectField({
             disabled && "cursor-not-allowed",
           )}
         >
-          <span className="min-w-0 truncate">{displayLabel}</span>
+          <span className="flex min-w-0 flex-1 items-center gap-2">
+            <span className="min-w-0 truncate">{displayLabel}</span>
+            {selected?.badge}
+          </span>
           <SelectDropdownArrowIcon className="shrink-0 text-text-muted" />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="top-full mt-2 w-full min-w-full">
@@ -195,7 +201,10 @@ function SelectField({
                     onSelect={() => emitChange(optionValue)}
                     className={cn(isSelected && "bg-brand/12 text-text-primary")}
                   >
-                    <span className="min-w-0 flex-1 truncate text-start">{option.label}</span>
+                    <span className="flex min-w-0 flex-1 items-center gap-2 text-start">
+                      <span className="min-w-0 flex-1 truncate">{option.label}</span>
+                      {option.badge}
+                    </span>
                     {isSelected ? (
                       <IoCheckmark className="size-3.5 shrink-0 text-brand" aria-hidden />
                     ) : null}

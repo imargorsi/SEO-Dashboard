@@ -4,6 +4,7 @@ import { IoGlobeOutline } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 
 import { ProjectActionButton, ProjectActions } from "@/components/projects/project-actions";
+import { ProjectIntegrationStatusIcons } from "@/components/projects/project-integration-status-icons";
 import { ProjectStatusChip } from "@/components/projects/project-status-chip";
 import { ActiveInactiveToggle } from "@/components/ui/active-inactive-toggle";
 import { UserAvatar } from "@/components/ui/user-avatar";
@@ -95,6 +96,7 @@ export function ProjectCard({
           <IoGlobeOutline className="size-3.5 shrink-0" aria-hidden />
           <span className="truncate">{project.websiteUrl}</span>
         </p>
+        <ProjectIntegrationStatusIcons integrations={project.integrations} />
       </div>
 
       <div className="mt-6 flex items-end justify-between gap-3">

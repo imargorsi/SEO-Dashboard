@@ -1,10 +1,14 @@
 import mongoose, { Schema, type InferSchemaType, type Model } from "mongoose";
 
 import { FONT_PACK_IDS, resolveFontPackId, resolveThemePackId, THEME_PACK_IDS } from "@/lib/theme/pack-ids";
-import { isActiveUserStatus, USER_ACCOUNT_STATUSES } from "@/lib/users/constants";
+import {
+  isActiveUserStatus,
+  USER_ACCOUNT_SOURCES,
+  USER_ACCOUNT_STATUSES,
+} from "@/lib/users/constants";
 
 /** Bump when User schema hooks/enums change so HMR recompiles a stale cached model. */
-const USER_MODEL_REVISION = 2;
+const USER_MODEL_REVISION = 4;
 
 const userSchema = new Schema(
   {
@@ -21,6 +25,15 @@ const userSchema = new Schema(
     emailVerifiedAt: { type: Date, default: null },
     roles: { type: [String], default: [] },
     status: { type: String, enum: USER_ACCOUNT_STATUSES, required: true, default: "active" },
+    /**
+     * How the platform account was created — admin Users UI only.
+     * `unknown` = legacy / unclear; soft-inferred at read until backfilled.
+     */
+    accountSource: {
+      type: String,
+      enum: [...USER_ACCOUNT_SOURCES],
+      default: "unknown",
+    },
     /** UI theme pack slug — see `THEME_PACK_IDS`. */
     themePack: {
       type: String,
@@ -60,10 +73,9 @@ userSchema.methods.hasPassword = function hasPassword(this: UserDocument): boole
 };
 
 /** Migrate retired pack ids before enum validation (e.g. carbon-ice → verdant-grove). */
-userSchema.pre("validate", function migratePackIds(next) {
+userSchema.pre("validate", function migratePackIds() {
   this.themePack = resolveThemePackId(this.themePack);
   this.fontPack = resolveFontPackId(this.fontPack);
-  next();
 });
 
 export type UserDocument = InferSchemaType<typeof userSchema> &
@@ -121,6 +133,7 @@ function registerUserModel(): Model<UserDocument> {
     existing.schema.path("status") &&
     existing.schema.path("themePack") &&
     existing.schema.path("googleId") &&
+    existing.schema.path("accountSource") &&
     hasCurrentPackEnums(existing)
   ) {
     attachUserMethods(existing);

@@ -17,6 +17,7 @@ import { hashPassword } from "../lib/auth/password";
 import { revokeAllUserTokens } from "../lib/auth/tokens";
 import { SUPER_ADMIN_ROLE } from "../lib/auth/rbac";
 import { seedSystemRoles } from "../lib/rbac/seed-roles";
+import { backfillUserAccountSources } from "../lib/users/backfill-account-source";
 import { User } from "../models";
 
 async function seed(): Promise<void> {
@@ -31,6 +32,15 @@ async function seed(): Promise<void> {
   );
   if (backfill.modifiedCount > 0) {
     console.log(`Backfilled status=active on ${backfill.modifiedCount} user(s).`);
+  }
+
+  const accountSourceBackfill = await backfillUserAccountSources();
+  if (accountSourceBackfill.modified > 0) {
+    console.log(
+      `Backfilled accountSource on ${accountSourceBackfill.modified}/${accountSourceBackfill.matched} user(s).`,
+    );
+  } else {
+    console.log("Account source backfill: no updates needed.");
   }
 
   const email = env.superAdminEmail().trim().toLowerCase();
@@ -55,12 +65,14 @@ async function seed(): Promise<void> {
       emailVerifiedAt: new Date(),
       roles: [SUPER_ADMIN_ROLE],
       status: "active",
+      accountSource: "admin",
     });
     console.log(`Created super admin: ${email}`);
   } else {
     user.password = await hashPassword(password);
     user.emailVerifiedAt = user.emailVerifiedAt ?? new Date();
     user.status = "active";
+    user.accountSource = "admin";
     if (!user.roles.includes(SUPER_ADMIN_ROLE)) {
       user.roles = [...user.roles, SUPER_ADMIN_ROLE];
     }

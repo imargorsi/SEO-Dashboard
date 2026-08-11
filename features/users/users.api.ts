@@ -19,6 +19,7 @@ const usersKeys = {
     search?: string | null;
     newest?: boolean;
     status?: string | null;
+    account_source?: string | null;
   }) => [...usersKeys.all, "list", params] as const,
   detail: (userId: string) => [...usersKeys.all, "detail", userId] as const,
   lookup: (search: string) => [...usersKeys.all, "lookup", search] as const,
@@ -34,6 +35,7 @@ export type UsersListParams = {
   search?: string | null;
   newest?: boolean;
   status?: "active" | "inactive" | null;
+  account_source?: "admin" | "self_register" | "google" | null;
 };
 
 type TCreateUserPayload = {
@@ -68,6 +70,14 @@ async function fetchUsers(params: UsersListParams): Promise<TPaginatedList<TAdmi
     searchParams.set("status", params.status);
   }
 
+  if (
+    params.account_source === "admin" ||
+    params.account_source === "self_register" ||
+    params.account_source === "google"
+  ) {
+    searchParams.set("account_source", params.account_source);
+  }
+
   const envelope = await baseQuery.get<TPaginatedList<TAdminUserListItem>>(`users?${searchParams.toString()}`);
   return envelope.data;
 }
@@ -79,10 +89,11 @@ export function useUsersQuery(params: UsersListParams & { enabled?: boolean }) {
   const search = params.search?.trim() || null;
   const newest = params.newest !== false;
   const status = params.status ?? null;
+  const account_source = params.account_source ?? null;
 
   return useQuery({
-    queryKey: usersKeys.list({ page, per_page: perPage, search, newest, status }),
-    queryFn: () => fetchUsers({ page, per_page: perPage, search, newest, status }),
+    queryKey: usersKeys.list({ page, per_page: perPage, search, newest, status, account_source }),
+    queryFn: () => fetchUsers({ page, per_page: perPage, search, newest, status, account_source }),
     enabled: (params.enabled ?? true) && Boolean(token),
   });
 }

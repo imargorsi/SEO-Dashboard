@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { useAccessToken } from "@/hooks/use-access-token.hook";
 import { baseQuery } from "@/lib/frontend/api/base";
+import { projectKeys } from "@/features/projects/projects.api";
 import type { TGoogleIntegrationService } from "@/lib/integrations/constants";
 import type {
   TAnalyticsDimensionsDto,
@@ -188,6 +189,7 @@ export function useConnectGoogleIntegrationMutation(projectId: string | null | u
     onSuccess: () => {
       if (!projectId) return;
       void queryClient.invalidateQueries({ queryKey: analyticsKeys.all });
+      void queryClient.invalidateQueries({ queryKey: projectKeys.all });
     },
   });
 }
@@ -205,6 +207,7 @@ export function useDisconnectGoogleIntegrationMutation(projectId: string | null 
     onSuccess: () => {
       if (!projectId) return;
       void queryClient.invalidateQueries({ queryKey: analyticsKeys.all });
+      void queryClient.invalidateQueries({ queryKey: projectKeys.all });
     },
   });
 }
@@ -222,6 +225,7 @@ export function useSyncGoogleIntegrationsMutation(projectId: string | null | und
     onSuccess: () => {
       if (!projectId) return;
       void queryClient.invalidateQueries({ queryKey: analyticsKeys.all });
+      void queryClient.invalidateQueries({ queryKey: projectKeys.all });
     },
   });
 }

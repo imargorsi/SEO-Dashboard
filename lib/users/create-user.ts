@@ -29,6 +29,7 @@ export async function createUser(
     // Platform-only; project roles are assigned via project_members (invite flow).
     roles: [],
     status: "active",
+    accountSource: "admin",
     profileImage: null,
   });
 

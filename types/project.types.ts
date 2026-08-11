@@ -1,9 +1,16 @@
 import type { ProjectStatus, TSeoGoal } from "@/lib/projects/constants";
+import type { TIntegrationStatus } from "@/lib/integrations/constants";
 
 export type TProjectOwnerSummary = {
   id: string;
   name: string;
   profileImage: string | null;
+};
+
+/** Compact Google link state for project list — not the full Settings DTO. */
+export type TProjectListIntegrations = {
+  gsc: TIntegrationStatus;
+  ga4: TIntegrationStatus;
 };
 
 export type TProjectInvitee = {
@@ -24,6 +31,7 @@ export type TProjectListItem = {
   imageUrl: string | null;
   owner: TProjectOwnerSummary | null;
   createdByUserId: string;
+  integrations: TProjectListIntegrations;
 };
 
 export type TProjectDetail = {

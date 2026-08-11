@@ -1,6 +1,6 @@
 import { google } from "googleapis";
 
-import { env } from "@/lib/config/env";
+import { env, normalizeGooglePrivateKey } from "@/lib/config/env";
 
 export class GoogleNotConfiguredError extends Error {
   constructor() {
@@ -25,7 +25,7 @@ function parseServiceAccountCredentials(): {
       }
       return {
         client_email: parsed.client_email,
-        private_key: parsed.private_key.replace(/\\n/g, "\n"),
+        private_key: normalizeGooglePrivateKey(parsed.private_key),
       };
     } catch (error) {
       if (error instanceof GoogleNotConfiguredError) throw error;
@@ -118,7 +118,7 @@ export function formatGoogleError(error: unknown): string {
   if (error && typeof error === "object" && "message" in error) {
     const message = String((error as { message: unknown }).message);
     if (message.includes("DECODER routines") || message.includes("ERR_OSSL_UNSUPPORTED")) {
-      return "Google Service Account private key could not be decoded. Check GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY on the host (literal \\n newlines, no wrapping quotes).";
+      return "Google Service Account private key could not be decoded. On Hostinger, set GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY to a base64-encoded PEM (no quotes).";
     }
     return message.slice(0, 500) || "Google Api Request Failed.";
   }

@@ -10,20 +10,40 @@ function optional(name: string, fallback = ""): string {
   return process.env[name] ?? fallback;
 }
 
-/** PEM from `.env` / hPanel: strip wrapping quotes, turn `\n` into real newlines. */
-function normalizePrivateKey(raw: string): string {
+/**
+ * Normalize Google SA PEM from env / Hostinger.
+ * Supports: base64 PEM (preferred on Hostinger), quoted values, `\n` escapes,
+ * and PEM body `+` turned into spaces by some hosts.
+ */
+export function normalizeGooglePrivateKey(raw: string): string {
   let value = raw.trim();
+  if (!value) return value;
+
+  if (!value.includes("BEGIN") && /^[A-Za-z0-9+/=\s]+$/.test(value) && value.length >= 64) {
+    try {
+      const decoded = Buffer.from(value.replace(/\s+/g, ""), "base64").toString("utf8").trim();
+      if (decoded.includes("BEGIN")) value = decoded;
+    } catch {
+      // keep original
+    }
+  }
+
   if (
     (value.startsWith('"') && value.endsWith('"')) ||
     (value.startsWith("'") && value.endsWith("'"))
   ) {
     value = value.slice(1, -1).trim();
   }
-  // Hostinger sometimes double-escapes (`\\n`); keep replacing until real newlines.
+
   while (value.includes("\\n")) {
     value = value.replace(/\\n/g, "\n");
   }
-  return value;
+
+  // Some hosts URL-decode env values and turn PEM `+` into spaces.
+  return value
+    .split("\n")
+    .map((line) => (line.startsWith("-----") ? line : line.replace(/ /g, "+")))
+    .join("\n");
 }
 
 export const env = {
@@ -52,13 +72,14 @@ export const env = {
   /** Protects `/api/v1/cron/*` routes. */
   cronSecret: () => optional("CRON_SECRET"),
   /**
-   * Google Service Account — either JSON blob or email + private key.
-   * Private key may use `\n` escaped newlines in env files / Hostinger.
+   * Google Service Account — JSON blob, or email + private key.
+   * Private key: local `.env` may use `\n`; Hostinger should use base64 PEM
+   * (`normalizeGooglePrivateKey`).
    */
   googleServiceAccountJson: () => optional("GOOGLE_SERVICE_ACCOUNT_JSON"),
   googleServiceAccountEmail: () => optional("GOOGLE_SERVICE_ACCOUNT_EMAIL"),
   googleServiceAccountPrivateKey: () =>
-    normalizePrivateKey(optional("GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY")),
+    normalizeGooglePrivateKey(optional("GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY")),
   googleConfigured: () => {
     if (optional("GOOGLE_SERVICE_ACCOUNT_JSON")) return true;
     return Boolean(

@@ -1,6 +1,6 @@
 import { google } from "googleapis";
 
-import { env } from "@/lib/config/env";
+import { env, normalizeGooglePrivateKey } from "@/lib/config/env";
 
 export class GoogleNotConfiguredError extends Error {
   constructor() {
@@ -25,7 +25,7 @@ function parseServiceAccountCredentials(): {
       }
       return {
         client_email: parsed.client_email,
-        private_key: parsed.private_key.replace(/\\n/g, "\n"),
+        private_key: normalizeGooglePrivateKey(parsed.private_key),
       };
     } catch (error) {
       if (error instanceof GoogleNotConfiguredError) throw error;

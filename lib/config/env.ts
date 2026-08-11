@@ -10,19 +10,42 @@ function optional(name: string, fallback = ""): string {
   return process.env[name] ?? fallback;
 }
 
-/** PEM from `.env` / hPanel: strip wrapping quotes, turn `\n` into real newlines. */
-function normalizePrivateKey(raw: string): string {
+/**
+ * PEM from `.env` / Hostinger hPanel.
+ * Panels often: wrap quotes, leave literal `\n`, or turn `+` into spaces in the body.
+ * Also accepts a base64-encoded full PEM (safest on Hostinger).
+ */
+export function normalizeGooglePrivateKey(raw: string): string {
   let value = raw.trim();
+  if (!value) return value;
+
+  if (!value.includes("BEGIN") && /^[A-Za-z0-9+/=\s]+$/.test(value) && value.length >= 64) {
+    try {
+      const decoded = Buffer.from(value.replace(/\s+/g, ""), "base64").toString("utf8").trim();
+      if (decoded.includes("BEGIN")) value = decoded;
+    } catch {
+      // keep original
+    }
+  }
+
   if (
     (value.startsWith('"') && value.endsWith('"')) ||
     (value.startsWith("'") && value.endsWith("'"))
   ) {
     value = value.slice(1, -1).trim();
   }
+
   // Hostinger sometimes double-escapes (`\\n`); keep replacing until real newlines.
   while (value.includes("\\n")) {
     value = value.replace(/\\n/g, "\n");
   }
+
+  // Some hosts URL-decode env values and turn PEM `+` into spaces.
+  value = value
+    .split("\n")
+    .map((line) => (line.startsWith("-----") ? line : line.replace(/ /g, "+")))
+    .join("\n");
+
   return value;
 }
 
@@ -58,7 +81,7 @@ export const env = {
   googleServiceAccountJson: () => optional("GOOGLE_SERVICE_ACCOUNT_JSON"),
   googleServiceAccountEmail: () => optional("GOOGLE_SERVICE_ACCOUNT_EMAIL"),
   googleServiceAccountPrivateKey: () =>
-    normalizePrivateKey(optional("GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY")),
+    normalizeGooglePrivateKey(optional("GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY")),
   googleConfigured: () => {
     if (optional("GOOGLE_SERVICE_ACCOUNT_JSON")) return true;
     return Boolean(

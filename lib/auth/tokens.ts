@@ -67,6 +67,7 @@ export async function revokeAccessToken(plainToken: string | null): Promise<bool
   return true;
 }
 
+/** Revoke every session for a user (password reset, deactivate, delete — not ordinary login). */
 export async function revokeAllUserTokens(userId: Types.ObjectId): Promise<void> {
   await AccessToken.deleteMany({ userId });
 }

@@ -58,6 +58,29 @@ describe("Auth API parity", () => {
     expect(body.errors.email).toBeDefined();
   });
 
+  it("login keeps existing tokens so concurrent sessions remain valid", async () => {
+    const { AccessToken } = await import("@/models");
+
+    const user = await User.create({
+      name: "Multi Session",
+      email: "multi-session@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+    });
+
+    const firstToken = await createAccessToken(user._id);
+    expect(await findAccessToken(firstToken)).not.toBeNull();
+
+    const response = await buildLoginResponse(user);
+    const body = await response.json();
+    expect(response.status).toBe(200);
+    expect(body.data.token).toBeTruthy();
+
+    expect(await findAccessToken(firstToken)).not.toBeNull();
+    expect(await findAccessToken(body.data.token as string)).not.toBeNull();
+    expect(await AccessToken.countDocuments({ userId: user._id })).toBe(2);
+  });
+
   it("logout revokes current token", async () => {
     const user = await User.create({
       name: "User",

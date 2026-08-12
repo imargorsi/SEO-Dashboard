@@ -23,7 +23,7 @@ export function AuthSubmitButton({
       disabled={disabled}
       aria-busy={disabled}
       onClick={onClick}
-      variant="gradient"
+      variant="primary"
       size="lg"
       className={cn(
         "w-full",

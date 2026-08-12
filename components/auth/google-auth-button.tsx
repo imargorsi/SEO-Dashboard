@@ -18,14 +18,14 @@ export function GoogleAuthButton({ disabled = false }: GoogleAuthButtonProps) {
   }
 
   return (
-    <div className="mt-6">
-      <div className="flex items-center gap-3 type-overline text-text-muted">
-        <span className="h-px flex-1 bg-border" aria-hidden />
-        <span>{t("continueWith")}</span>
-        <span className="h-px flex-1 bg-border" aria-hidden />
+    <div className="mt-8">
+      <div className="flex items-center gap-3">
+        <span className="h-px flex-1 bg-border/70 dark:bg-text-primary/20" aria-hidden />
+        <span className="type-caption text-text-muted">{t("continueWith")}</span>
+        <span className="h-px flex-1 bg-border/70 dark:bg-text-primary/20" aria-hidden />
       </div>
 
-      <div className="mt-4">
+      <div className="mt-5">
         <Button
           type="button"
           variant="outlined"
@@ -34,7 +34,7 @@ export function GoogleAuthButton({ disabled = false }: GoogleAuthButtonProps) {
           disabled={disabled}
           onClick={startGoogleSignIn}
         >
-          <FcGoogle className="size-4 shrink-0" aria-hidden />
+          <FcGoogle className="size-5 shrink-0" aria-hidden />
           <span>{t("continueGoogle")}</span>
         </Button>
       </div>

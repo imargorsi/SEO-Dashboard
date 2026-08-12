@@ -7,9 +7,7 @@ export default function AuthLayout({
 }>) {
   return (
     <div className="flex min-h-svh flex-col bg-transparent">
-      <div className="flex min-h-0 flex-1 flex-col">
-        <GuestOnly>{children}</GuestOnly>
-      </div>
+      <GuestOnly>{children}</GuestOnly>
     </div>
   );
 }

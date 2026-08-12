@@ -2,6 +2,7 @@
 
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
+import { typeStackMdClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
 type AuthFormHeaderProps = {
@@ -11,17 +12,19 @@ type AuthFormHeaderProps = {
   subtitleClassName?: string;
 };
 
-/** Shared auth card title + description spacing across sign-in, register, and password flows. */
+/**
+ * Auth card title + description — centered under the shared brand mark.
+ */
 export function AuthFormHeader({ id, title, subtitle, subtitleClassName }: AuthFormHeaderProps) {
   return (
-    <header className="flex flex-col gap-3">
+    <header className={cn("flex flex-col items-center text-center", typeStackMdClass)}>
       <Heading id={id} pageTitle>
         {title}
       </Heading>
       {subtitle ? (
         <Paragraph
           className={cn(
-            "text-sm font-normal leading-relaxed text-text-secondary",
+            "max-w-sm type-body leading-relaxed text-text-secondary",
             subtitleClassName,
           )}
         >

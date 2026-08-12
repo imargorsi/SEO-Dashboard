@@ -70,6 +70,8 @@ export interface ReusableInputProps extends NativeControlProps {
   chips?: boolean;
   /** Fired when a `type="select"` dropdown opens or closes. */
   onSelectOpenChange?: (open: boolean) => void;
+  /** Optional leading icon inside the control (email / search, etc.). */
+  startIcon?: ReactNode;
   onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   onBlur?: (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
 }
@@ -237,6 +239,7 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
     controlClassName: controlClassNameProp,
     autoComplete,
     chips = false,
+    startIcon,
     onSelectOpenChange,
     onChange,
     onBlur,
@@ -251,6 +254,7 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
   const chipInputRef = useRef<HTMLInputElement>(null);
   const inputType = isPassword ? (passwordVisible ? "text" : "password") : type;
   const { t } = useTranslation("translation", { keyPrefix: "form" });
+  const hasStartIcon = Boolean(startIcon);
 
   const showError = Boolean(error);
   const baseClasses = cn(
@@ -405,7 +409,15 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
           aria-label={ariaLabel ?? (label ? undefined : placeholder)}
         />
       ) : (
-        <div className={cn(isPassword && "relative")}>
+        <div className={cn((isPassword || hasStartIcon) && "relative")}>
+          {hasStartIcon ? (
+            <span
+              className="pointer-events-none absolute inset-s-0 inset-y-0 z-10 flex items-center justify-center ps-3 text-text-muted"
+              aria-hidden
+            >
+              {startIcon}
+            </span>
+          ) : null}
           <input
             id={id}
             name={name}
@@ -419,7 +431,11 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
             onChange={onChange}
             onBlur={handleBlur}
             ref={setControlRef}
-            className={cn(controlClassName, isPassword && "pe-10")}
+            className={cn(
+              controlClassName,
+              hasStartIcon && "ps-10",
+              isPassword && "pe-10",
+            )}
             autoComplete={autoComplete}
             {...valueProps}
             {...rest}
@@ -431,7 +447,7 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
               disabled={disabled}
               aria-label={passwordVisible ? t("hidePassword") : t("showPassword")}
               aria-pressed={passwordVisible}
-              className="absolute inset-e-0 inset-y-0 flex items-center justify-center px-3 text-text-muted transition-colors hover:text-text-primary focus-visible:text-text-primary focus-visible:outline-none disabled:pointer-events-none disabled:opacity-60"
+              className="absolute inset-e-0 inset-y-0 z-10 flex items-center justify-center px-3 text-text-muted transition-colors hover:text-text-primary focus-visible:text-text-primary focus-visible:outline-none disabled:pointer-events-none disabled:opacity-60"
             >
               {passwordVisible ? (
                 <IoEyeOff className="size-4" aria-hidden />

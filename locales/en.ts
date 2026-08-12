@@ -1392,14 +1392,20 @@ export interface Translation {
       heroTitleStart: string;
       heroTitleAccent: string;
       heroLead: string;
-      heroPoint1: string;
-      heroPoint2: string;
-      heroPoint3: string;
+      heroFeature1Title: string;
+      heroFeature1Body: string;
+      heroFeature2Title: string;
+      heroFeature2Body: string;
+      heroFeature3Title: string;
+      heroFeature3Body: string;
+      trustSecure: string;
+      trustUptime: string;
+      trustMultiClient: string;
+      trustInsights: string;
       continueWith: string;
       continueGoogle: string;
       continueSso: string;
       emailInvalid: string;
-      passwordMin: string;
       fieldRequired: string;
       loginSuccess: string;
       loginErrorUnexpected: string;
@@ -2885,7 +2891,7 @@ const translation: Translation = {
   auth: {
     signIn: {
       title: "Welcome Back",
-      subtitle: "Log in to your workspace. Your Crawllex dashboard is ready.",
+      subtitle: "Sign in to your Crawllex workspace.",
       email: "Email",
       password: "Password",
       submit: "Log In",
@@ -2894,15 +2900,21 @@ const translation: Translation = {
       heroTitleAccent: "Every Client",
       heroLead:
         "Track rankings, spot opportunities, and keep stakeholders aligned from one calm workspace.",
-      heroPoint1: "Multi-client dashboards without the spreadsheet chaos",
-      heroPoint2: "Scheduled checks and history you can trust",
-      heroPoint3: "Built for teams who care about accuracy",
-      continueWith: "Continue With",
+      heroFeature1Title: "Multi-Client Dashboards",
+      heroFeature1Body: "Run every client workspace without spreadsheet chaos.",
+      heroFeature2Title: "Scheduled Checks You Trust",
+      heroFeature2Body: "Reliable history and cadence your team can depend on.",
+      heroFeature3Title: "Insights Built For Accuracy",
+      heroFeature3Body: "Clear performance signals designed for SEO operators.",
+      trustSecure: "Secure Access",
+      trustUptime: "Always On",
+      trustMultiClient: "Multi-Client",
+      trustInsights: "Live Insights",
+      continueWith: "Or Continue With",
       continueGoogle: "Continue With Google",
       continueSso: "SSO",
-      emailInvalid: "Enter A Valid Email Address.",
-      passwordMin: "Use At Least 6 Characters.",
-      fieldRequired: "This Field Is Required.",
+      emailInvalid: "Enter a valid email address.",
+      fieldRequired: "This field is required.",
       loginSuccess: "Signed in.",
       loginErrorUnexpected: "Something went wrong.",
       emailVerifiedSuccess: "Email verified. You can sign in.",
@@ -2922,8 +2934,8 @@ const translation: Translation = {
       email: "Email",
       submit: "Send Reset Link",
       backToSignIn: "Back To Sign In",
-      emailInvalid: "Enter A Valid Email Address.",
-      fieldRequired: "This Field Is Required.",
+      emailInvalid: "Enter a valid email address.",
+      fieldRequired: "This field is required.",
       submitSuccess: "Reset link sent. Check your email.",
       submitErrorFallback: "Could not send reset link.",
     },
@@ -2934,9 +2946,9 @@ const translation: Translation = {
       confirmPassword: "Confirm Password",
       submit: "Reset Password",
       backToSignIn: "Back To Sign In",
-      fieldRequired: "This Field Is Required.",
-      passwordMin: "Use At Least 8 Characters.",
-      passwordMismatch: "Passwords Do Not Match.",
+      fieldRequired: "This field is required.",
+      passwordMin: "Use at least 8 characters.",
+      passwordMismatch: "Passwords do not match.",
       submitSuccess: "Password updated. You can sign in.",
       submitErrorFallback: "Could not reset password.",
       invalidLinkTitle: "Invalid Reset Link",
@@ -2948,18 +2960,18 @@ const translation: Translation = {
       subtitle: "Create an account to get started with Crawllex.",
       fullName: "Full Name",
       fullNamePh: "Jane Doe",
-      fullNameMin: "Enter At Least 2 Characters.",
-      fullNameMax: "Use At Most 50 Characters.",
+      fullNameMin: "Enter at least 2 characters.",
+      fullNameMax: "Use at most 50 characters.",
       email: "Email",
       password: "Password",
       confirmPassword: "Confirm Password",
-      passwordMin: "Use At Least 8 Characters.",
-      passwordMismatch: "Passwords Do Not Match.",
+      passwordMin: "Use at least 8 characters.",
+      passwordMismatch: "Passwords do not match.",
       submit: "Create Account",
       hasAccount: "Already Have An Account?",
       signInLink: "Log In",
-      fieldRequired: "This Field Is Required.",
-      emailInvalid: "Enter A Valid Email Address.",
+      fieldRequired: "This field is required.",
+      emailInvalid: "Enter a valid email address.",
       submitSuccess: "Account created. Check your email.",
       submitErrorFallback: "Could not complete registration.",
     },

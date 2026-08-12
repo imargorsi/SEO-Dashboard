@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { AuthFormBrandMark } from "@/components/auth/auth-form-brand-mark";
 import { AuthFormToolbar } from "@/components/auth/auth-form-toolbar";
 import { authFormCardSurfaceClass } from "@/lib/frontend/layout/auth-chrome";
 import { cn } from "@/lib/utils";
@@ -9,21 +10,28 @@ type SignInAuthCardShellProps = {
   children: ReactNode;
   /** Defaults to theme + language controls. Pass `null` to hide. */
   topToolbar?: ReactNode | null;
+  /** Unified brand mark above the form title. Defaults on. */
+  showBrandMark?: boolean;
 };
 
+/**
+ * Auth form card only — vertical centering lives on the form column in `AuthScreenShell`.
+ */
 export function SignInAuthCardShell({
   ariaLabelledBy,
   children,
   topToolbar = <AuthFormToolbar />,
+  showBrandMark = true,
 }: SignInAuthCardShellProps) {
   return (
-    <section
-      className="relative flex flex-1 flex-col justify-center bg-transparent px-6 py-10 sm:px-10 lg:px-14 lg:py-12"
-      aria-labelledby={ariaLabelledBy}
-    >
-      <div className="mx-auto w-full max-w-120">
-        <div className={cn(authFormCardSurfaceClass, "p-7 sm:p-8")}>
-          {topToolbar ? <div className="-mt-1 mb-5 flex justify-end">{topToolbar}</div> : null}
+    <section className="relative w-full max-w-md" aria-labelledby={ariaLabelledBy}>
+      <div className={cn(authFormCardSurfaceClass, "relative px-7 py-8 sm:px-8 sm:py-10")}>
+        {topToolbar ? (
+          <div className="absolute end-5 top-5 z-10 sm:end-6 sm:top-6">{topToolbar}</div>
+        ) : null}
+
+        <div className={cn("flex flex-col", topToolbar && "pt-3")}>
+          {showBrandMark ? <AuthFormBrandMark className="mb-4" priority /> : null}
           {children}
         </div>
       </div>

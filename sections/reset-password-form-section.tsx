@@ -3,12 +3,15 @@
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
+import { IoLockClosedOutline } from "react-icons/io5";
+
 import { AuthFormHeader } from "@/components/auth/auth-form-header";
 import { AuthInput } from "@/components/auth/auth-input";
 import { AuthSubmitButton } from "@/components/auth/auth-submit-button";
 import { SignInAuthCardShell } from "@/components/sign-in-auth-card-shell";
 import { Paragraph } from "@/components/paragraph";
 import { Spinner } from "@/components/ui/spinner";
+import { authFormFooterClass } from "@/lib/frontend/layout/auth-chrome";
 import type { ResetPasswordValues } from "@/sections/reset-password.types";
 
 type ResetPasswordFormSectionProps = {
@@ -40,19 +43,22 @@ export function ResetPasswordFormSection({
       />
 
       {invalidLink ? (
-        <Paragraph moreSmaller className="mt-6! text-center">
-          <Link href="/" className="font-semibold text-brand transition-colors hover:brightness-110 hover:underline">
+        <Paragraph moreSmaller className={authFormFooterClass}>
+          <Link
+            href="/"
+            className="font-semibold text-brand transition-[color,filter] hover:brightness-110 hover:underline"
+          >
             {t("backToSignIn")}
           </Link>
         </Paragraph>
       ) : (
         <>
           {resetComplete ? (
-            <Paragraph className="mt-7 text-sm font-normal leading-relaxed text-text-secondary">
+            <Paragraph className="mt-8 type-body leading-relaxed text-text-secondary">
               {t("submitSuccess")}
             </Paragraph>
           ) : (
-            <form className="mt-7 flex flex-col gap-4.5" onSubmit={onValidSubmit} noValidate>
+            <form className="mt-8 flex flex-col gap-4" onSubmit={onValidSubmit} noValidate>
               <AuthInput
                 id="reset-password-new"
                 label={t("password")}
@@ -60,6 +66,7 @@ export function ResetPasswordFormSection({
                 placeholder="••••••••"
                 required
                 autoComplete="new-password"
+                startIcon={<IoLockClosedOutline className="size-4" />}
                 error={errors.password?.message ?? ""}
                 {...register("password", {
                   required: t("fieldRequired"),
@@ -74,10 +81,12 @@ export function ResetPasswordFormSection({
                 placeholder="••••••••"
                 required
                 autoComplete="new-password"
+                startIcon={<IoLockClosedOutline className="size-4" />}
                 error={errors.password_confirmation?.message ?? ""}
                 {...register("password_confirmation", {
                   required: t("fieldRequired"),
-                  validate: (value, formValues) => value === formValues.password || t("passwordMismatch"),
+                  validate: (value, formValues) =>
+                    value === formValues.password || t("passwordMismatch"),
                 })}
               />
 
@@ -88,8 +97,11 @@ export function ResetPasswordFormSection({
             </form>
           )}
 
-          <Paragraph moreSmaller className="mt-6! text-center">
-            <Link href="/" className="font-semibold text-brand transition-colors hover:brightness-110 hover:underline">
+          <Paragraph moreSmaller className={authFormFooterClass}>
+            <Link
+              href="/"
+              className="font-semibold text-brand transition-[color,filter] hover:brightness-110 hover:underline"
+            >
               {t("backToSignIn")}
             </Link>
           </Paragraph>

@@ -10,7 +10,6 @@ export const POST = withApiHandler(async (request) => {
 
   if (result instanceof Response) {
     return result;
-    // test deployment
   }
 
   return buildLoginResponse(result.user);

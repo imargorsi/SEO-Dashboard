@@ -6,7 +6,7 @@ import { clearLoginAttempts, clientIp, ensureLoginNotRateLimited, recordLoginFai
 import { createAccessToken } from "@/lib/auth/tokens";
 import { serializeUser } from "@/lib/serializers/user";
 import { isActiveUserStatus } from "@/lib/users/constants";
-import { AccessToken, User, type UserDocument } from "@/models";
+import { User, type UserDocument } from "@/models";
 import { NextResponse } from "next/server";
 
 export async function authenticateLogin(
@@ -40,17 +40,14 @@ export async function authenticateLogin(
   return { user };
 }
 
+/**
+ * Issue a new bearer session without revoking other devices.
+ * Same-browser account bleed is prevented client-side (clear + RQ wipe on login/logout).
+ * All-token revoke remains for password reset, deactivate, and delete.
+ */
 export async function buildLoginResponse(user: UserDocument): Promise<NextResponse> {
   const authData = await loadUserAuthData(user);
-  // Issue the new 24h token first, then drop older sessions (avoids lockout if create fails).
   const token = await createAccessToken(user._id, "api");
-  const [tokenId] = token.split("|", 2);
-  if (tokenId) {
-    await AccessToken.deleteMany({
-      userId: user._id,
-      _id: { $ne: tokenId },
-    });
-  }
 
   return ApiResponse.success(
     {

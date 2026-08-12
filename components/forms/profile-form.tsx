@@ -13,6 +13,7 @@ import {
   elevatedCardSurfaceClass,
   elevatedCardTitleClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
+import { fieldStartIcons } from "@/lib/frontend/forms/input-start-icons";
 import { DISPLAY_NAME_MAX_LENGTH } from "@/lib/validation/display-name";
 import { cn } from "@/lib/utils";
 import { Heading } from "../heading";
@@ -74,6 +75,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
             label={t("nameLabel")}
             placeholder={t("namePh")}
             maxLength={DISPLAY_NAME_MAX_LENGTH}
+            startIcon={fieldStartIcons.person}
             error={errors.name?.message}
             {...register("name", {
               required: t("valRequired"),

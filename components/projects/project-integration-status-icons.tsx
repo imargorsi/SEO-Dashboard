@@ -1,18 +1,12 @@
 "use client";
 
 import { useTranslation } from "react-i18next";
-import type { IconType } from "react-icons";
-import { SiGoogleanalytics, SiGooglesearchconsole } from "react-icons/si";
 
+import { GoogleIntegrationLogo } from "@/components/integrations/google-integration-logo";
 import { getStatusDotClassName } from "@/lib/frontend/theme/status-colors";
 import type { TGoogleIntegrationService, TIntegrationStatus } from "@/lib/integrations/constants";
 import { cn } from "@/lib/utils";
 import type { TProjectListIntegrations } from "@/types/project.types";
-
-const SERVICE_ICONS: Record<TGoogleIntegrationService, IconType> = {
-  gsc: SiGooglesearchconsole,
-  ga4: SiGoogleanalytics,
-};
 
 const SERVICES: TGoogleIntegrationService[] = ["gsc", "ga4"];
 
@@ -34,7 +28,7 @@ type TProjectIntegrationStatusIconsProps = {
 
 /**
  * Compact GSC / GA4 connection indicators for project list.
- * Glass chips + brand icon + status dot (modern SaaS link-state pattern).
+ * Glass chips + official product mark + status dot.
  */
 export function ProjectIntegrationStatusIcons({
   integrations,
@@ -54,7 +48,6 @@ export function ProjectIntegrationStatusIcons({
       {SERVICES.map((service) => {
         const status = resolveListStatus(integrations[service]);
         const isLinked = status === "connected" || status === "error";
-        const Icon = SERVICE_ICONS[service];
         const serviceLabel = t(`services.${service}`);
         const statusLabel = t(`status.${status}`);
         const title = tList("tooltip", { service: serviceLabel, status: statusLabel });
@@ -74,9 +67,10 @@ export function ProjectIntegrationStatusIcons({
             )}
           >
             <span className="relative inline-flex shrink-0">
-              <Icon
-                className={cn("size-3.5", isLinked ? "text-text-primary" : "text-text-muted")}
-                aria-hidden
+              <GoogleIntegrationLogo
+                service={service}
+                size={14}
+                className={cn(!isLinked && "opacity-70")}
               />
               <span
                 className={cn(

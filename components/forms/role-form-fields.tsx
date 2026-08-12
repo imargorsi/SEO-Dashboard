@@ -8,8 +8,10 @@ import {
   analyticsHeadingStackClass,
   analyticsPanelClass,
   elevatedCardSurfaceClass,
+  settingsInsetDividerClass,
   tableGlassChipClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
+import { fieldStartIcons } from "@/lib/frontend/forms/input-start-icons";
 import { DISPLAY_NAME_MAX_LENGTH } from "@/lib/validation/display-name";
 import { cn } from "@/lib/utils";
 
@@ -43,6 +45,7 @@ export function RoleFormFields({ hook }: TRoleFormFieldsProps) {
               required
               readOnly={isSystem}
               maxLength={DISPLAY_NAME_MAX_LENGTH}
+              startIcon={fieldStartIcons.shield}
               error={errors.name?.message}
               {...register("name", {
                 required: t("valRequired"),
@@ -59,6 +62,7 @@ export function RoleFormFields({ hook }: TRoleFormFieldsProps) {
             id="role-form-description"
             label={t("description")}
             placeholder={t("descriptionPh")}
+            startIcon={fieldStartIcons.document}
             {...register("description")}
           />
         </div>
@@ -78,19 +82,32 @@ export function RoleFormFields({ hook }: TRoleFormFieldsProps) {
         </div>
 
         {isCatalogLoading ? (
-          <div className="grid min-h-80 gap-4 lg:grid-cols-[240px_1fr]" role="status" aria-live="polite" aria-busy="true">
+          <div
+            className={cn(
+              elevatedCardSurfaceClass,
+              "flex min-h-80 overflow-hidden rounded-xl",
+            )}
+            role="status"
+            aria-live="polite"
+            aria-busy="true"
+          >
             <span className="sr-only">{t("permsLoading")}</span>
-            <aside className={cn(elevatedCardSurfaceClass, "flex flex-col gap-2 rounded-xl p-3.5")}>
-              <Skeleton className="mb-1 h-5 w-24 rounded-md" />
+            <aside
+              className={cn(
+                "flex w-48 shrink-0 flex-col gap-2 border-e border-border/45 p-3.5",
+                "bg-bg-card/30 dark:border-text-primary/15 dark:bg-text-primary/3 sm:w-52",
+              )}
+            >
               {Array.from({ length: 6 }).map((_, index) => (
-                <Skeleton key={index} className="h-10 w-full rounded-2xl" />
+                <Skeleton key={index} className="h-9 w-full rounded-lg" />
               ))}
             </aside>
-            <div className={cn(elevatedCardSurfaceClass, "space-y-4 rounded-xl p-4")}>
+            <div className="min-w-0 flex-1 space-y-4 px-5 py-4">
               <Skeleton className="h-5 w-40" />
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              <div className={settingsInsetDividerClass} aria-hidden />
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                 {Array.from({ length: 4 }).map((_, index) => (
-                  <Skeleton key={index} className="h-24 rounded-2xl" />
+                  <Skeleton key={index} className="h-20 rounded-xl" />
                 ))}
               </div>
             </div>

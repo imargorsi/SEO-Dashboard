@@ -6,10 +6,10 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  analyticsHeadingStackClass,
-  detailIconWellClass,
   elevatedCardSurfaceClass,
+  settingsInsetDividerClass,
   tableGlassChipClass,
+  typeStackMdClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
 import { roleActionIcon } from "@/lib/frontend/roles/permission-action-icon.utils";
 import {
@@ -28,8 +28,9 @@ type TRolePermissionMatrixProps = {
   disabled?: boolean;
 };
 
-const panelHeaderClass = "flex h-12 items-center px-1";
-
+/**
+ * Single shell — module rail + permission pane side by side (matches Settings categories layout).
+ */
 export function RolePermissionMatrix({
   modules,
   selected,
@@ -87,77 +88,97 @@ export function RolePermissionMatrix({
   const ActiveModuleIcon = permissionModuleIcon(activeModule.slug);
 
   return (
-    <div className="grid min-h-80 gap-4 lg:grid-cols-[240px_1fr]">
-      <aside className={cn(elevatedCardSurfaceClass, "flex flex-col rounded-xl p-3 sm:p-3.5")}>
-        <div className={panelHeaderClass}>
-          <h3 className="type-title text-text-primary">{t("permsModulesHeading")}</h3>
-        </div>
-
+    <div
+      className={cn(
+        elevatedCardSurfaceClass,
+        "flex min-h-80 flex-col overflow-hidden rounded-xl lg:flex-row",
+      )}
+    >
+      <aside
+        className={cn(
+          "flex w-full shrink-0 flex-col border-b border-border/45 p-3",
+          "bg-bg-card/30 sm:p-3.5 lg:w-52 lg:border-b-0 lg:border-e dark:border-text-primary/15 dark:bg-text-primary/3",
+        )}
+      >
         <nav
-          className="themed-scrollbar flex gap-2 overflow-x-auto pt-1 lg:max-h-[min(32rem,70svh)] lg:flex-col lg:overflow-y-auto"
-          aria-label={t("permsHeading")}
+          className="themed-scrollbar flex gap-1 overflow-x-auto lg:max-h-[min(32rem,70svh)] lg:flex-col lg:overflow-y-auto"
+          aria-label={t("permsModulesHeading")}
         >
-          {modules.map((module) => {
+          {modules.map((module, index) => {
             const isActive = module.slug === activeModuleSlug;
             const count = moduleSelectedCount(module);
             const ModuleIcon = permissionModuleIcon(module.slug);
 
             return (
-              <button
-                key={module.slug}
-                type="button"
-                onClick={() => setSelectedModuleSlug(module.slug)}
-                aria-current={isActive ? "page" : undefined}
-                className={cn(
-                  "flex shrink-0 items-center gap-2.5 rounded-2xl px-3 py-2.5 text-start transition-colors lg:w-full lg:shrink",
-                  isActive
-                    ? "bg-bg-selected text-text-primary"
-                    : "text-text-secondary hover:bg-bg-hover/60 hover:text-text-primary",
-                )}
-              >
-                <ModuleIcon className="size-4 shrink-0 text-text-muted" aria-hidden />
-                <span className="min-w-0 flex-1 truncate type-body-strong">{module.label}</span>
-                <span
+              <div key={module.slug} className="flex shrink-0 flex-col lg:w-full lg:shrink">
+                {index > 0 ? (
+                  <div
+                    className={cn(settingsInsetDividerClass, "my-1.5 hidden lg:block")}
+                    aria-hidden
+                  />
+                ) : null}
+                <button
+                  type="button"
+                  onClick={() => setSelectedModuleSlug(module.slug)}
+                  aria-current={isActive ? "page" : undefined}
                   className={cn(
-                    tableGlassChipClass,
-                    "px-2 py-0.5",
-                    count > 0 ? "border-brand/45 text-brand" : "text-text-muted",
+                    "flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-start type-label transition-colors",
+                    isActive
+                      ? "bg-bg-selected text-text-primary shadow-sm"
+                      : "text-text-secondary hover:bg-bg-hover/55 hover:text-text-primary",
                   )}
                 >
-                  {count}/{module.actions.length}
-                </span>
-              </button>
+                  <ModuleIcon
+                    className={cn(
+                      "size-4 shrink-0",
+                      isActive ? "text-brand" : "text-text-muted",
+                    )}
+                    aria-hidden
+                  />
+                  <span className="min-w-0 flex-1 truncate">{module.label}</span>
+                  <span
+                    className={cn(
+                      tableGlassChipClass,
+                      "px-1.5 py-0.5 type-caption-xs",
+                      count > 0 ? "border-brand/45 text-brand" : "text-text-muted",
+                    )}
+                  >
+                    {count}/{module.actions.length}
+                  </span>
+                </button>
+              </div>
             );
           })}
         </nav>
       </aside>
 
-      <div className={cn(elevatedCardSurfaceClass, "min-w-0 rounded-xl p-3 sm:p-4")}>
-        <div className={cn(panelHeaderClass, "justify-between gap-3 px-1")}>
-          <div className="flex min-w-0 items-center gap-2.5">
-            <span className={cn(detailIconWellClass, "size-8")} aria-hidden>
-              <ActiveModuleIcon className="size-3.5" />
-            </span>
-            <h4 className="truncate type-title text-text-primary">{activeModule.label}</h4>
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="flex shrink-0 flex-col gap-3 px-4 pt-3 sm:px-5 sm:pt-3.5">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex min-w-0 items-center gap-2">
+              <ActiveModuleIcon className="size-4 shrink-0 text-brand" aria-hidden />
+              <h3 className="truncate type-title text-text-primary">{activeModule.label}</h3>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="xs"
+              disabled={disabled}
+              onClick={() => toggleSelectAllForModule(activeModule)}
+              className="shrink-0"
+            >
+              {isAllSelected ? t("permsClearAll") : t("permsSelectAll")}
+            </Button>
           </div>
-          <Button
-            type="button"
-            variant="outline"
-            size="xs"
-            disabled={disabled}
-            onClick={() => toggleSelectAllForModule(activeModule)}
-            className="shrink-0"
-          >
-            {isAllSelected ? t("permsClearAll") : t("permsSelectAll")}
-          </Button>
-        </div>
+          <div className={settingsInsetDividerClass} aria-hidden />
+        </header>
 
-        <div className="pt-3">
-          <div className={cn(analyticsHeadingStackClass, "mb-4 px-1")}>
+        <div className="min-w-0 flex-1 px-4 py-4 sm:px-5 sm:py-5">
+          <div className={cn(typeStackMdClass, "mb-4")}>
             <p className="type-caption text-text-muted">{t("permsModuleLead")}</p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
             {activeModule.actions.map((action) => {
               const permission = modulePermission(activeModule.slug, action);
               const checked = selectedSet.has(permission);
@@ -169,10 +190,10 @@ export function RolePermissionMatrix({
                 <label
                   key={permission}
                   className={cn(
-                    "flex flex-col gap-3 rounded-2xl border bg-transparent p-3.5 transition-[border-color,background-color] duration-200",
+                    "flex flex-col gap-2.5 rounded-xl border px-3 py-2.5 transition-[border-color,background-color] duration-200",
                     checked
-                      ? "border-brand/45 text-text-primary"
-                      : "border-border/70 text-text-secondary dark:border-text-primary/30",
+                      ? "border-brand/45 bg-bg-selected/40 text-text-primary"
+                      : "border-border/70 bg-transparent text-text-secondary dark:border-text-primary/30",
                     disabled
                       ? "cursor-not-allowed opacity-60"
                       : "cursor-pointer hover:border-border hover:text-text-primary dark:hover:border-text-primary/45",
@@ -181,9 +202,10 @@ export function RolePermissionMatrix({
                   <div className="flex items-center justify-between gap-2">
                     <span
                       className={cn(
-                        detailIconWellClass,
-                        "size-8",
-                        checked && "border-brand/35 bg-brand/15 text-brand",
+                        "inline-flex size-7 shrink-0 items-center justify-center rounded-lg border text-text-muted",
+                        checked
+                          ? "border-brand/35 bg-brand/15 text-brand"
+                          : "border-border/60 bg-bg-card/40 dark:border-text-primary/40 dark:bg-transparent",
                       )}
                       aria-hidden
                     >

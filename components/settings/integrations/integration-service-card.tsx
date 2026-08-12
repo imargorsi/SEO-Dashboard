@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import type { IconType } from "react-icons";
 import { IoLinkOutline, IoUnlinkOutline } from "react-icons/io5";
-import { SiGoogleanalytics, SiGooglesearchconsole } from "react-icons/si";
 
+import { Input } from "@/components/input";
+import { GoogleIntegrationLogo } from "@/components/integrations/google-integration-logo";
 import { IntegrationPropertySelect } from "@/components/settings/integrations/integration-property-select";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { fieldStartIcons } from "@/lib/frontend/forms/input-start-icons";
 import {
   analyticsHeadingStackClass,
   analyticsPanelClass,
@@ -18,11 +18,6 @@ import { getStatusChipClassName } from "@/lib/frontend/theme/status-colors";
 import type { TGoogleIntegrationService } from "@/lib/integrations/constants";
 import { cn } from "@/lib/utils";
 import type { TProjectIntegrationDto } from "@/types/analytics.types";
-
-const SERVICE_ICONS: Record<TGoogleIntegrationService, IconType> = {
-  gsc: SiGooglesearchconsole,
-  ga4: SiGoogleanalytics,
-};
 
 function resolveStatusKey(
   integration: TProjectIntegrationDto | null | undefined,
@@ -79,7 +74,6 @@ export function IntegrationServiceCard({
   const [selectOpen, setSelectOpen] = useState(false);
   const status = resolveStatusKey(integration);
   const isLinked = status === "connected" || status === "error";
-  const ServiceIcon = SERVICE_ICONS[service];
 
   return (
     <section
@@ -94,10 +88,10 @@ export function IntegrationServiceCard({
         <div className={analyticsHeadingStackClass}>
           <div className="flex flex-wrap items-center gap-2.5">
             <span
-              className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-border/60 bg-transparent text-text-primary dark:border-text-primary/40"
+              className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-border/60 bg-bg-card/40 dark:border-text-primary/40 dark:bg-transparent"
               aria-hidden
             >
-              <ServiceIcon className="size-5" />
+              <GoogleIntegrationLogo service={service} size={20} />
             </span>
             <h3 className="type-title text-text-primary">{t(`services.${service}`)}</h3>
             <StatusPill status={status} label={t(`status.${status}`)} />
@@ -131,6 +125,7 @@ export function IntegrationServiceCard({
                 value={propertyId}
                 onChange={(event) => setPropertyId(event.target.value)}
                 disabled={isBusy || !canUpdate}
+                startIcon={fieldStartIcons.link}
                 placeholder={
                   service === "gsc" ? t("gscPropertyPlaceholder") : t("ga4PropertyPlaceholder")
                 }
@@ -141,7 +136,7 @@ export function IntegrationServiceCard({
             {canUpdate ? (
               <Button
                 type="button"
-                variant="gradient"
+                variant="primary"
                 size="md"
                 disabled={isBusy}
                 onClick={() =>

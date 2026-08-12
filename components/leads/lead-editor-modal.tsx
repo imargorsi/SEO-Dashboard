@@ -9,6 +9,7 @@ import { IoClose } from "react-icons/io5";
 import { Input } from "@/components/input";
 import { Button } from "@/components/ui/button";
 import { DialogSectionDivider } from "@/components/ui/dialog-section-divider";
+import { fieldStartIcons } from "@/lib/frontend/forms/input-start-icons";
 import {
   emptyLeadEditorValues,
   leadToEditorValues,
@@ -159,6 +160,7 @@ export function LeadEditorModal({ open, target, onOpenChange, onSave }: TLeadEdi
                 placeholder={t("fields.firstNamePh")}
                 required
                 maxLength={LEAD_NAME_MAX_LENGTH}
+                startIcon={fieldStartIcons.person}
                 error={errors.firstName?.message}
                 {...register("firstName", {
                   required: t("validation.required"),
@@ -170,6 +172,7 @@ export function LeadEditorModal({ open, target, onOpenChange, onSave }: TLeadEdi
                 label={t("fields.lastName")}
                 placeholder={t("fields.lastNamePh")}
                 maxLength={LEAD_NAME_MAX_LENGTH}
+                startIcon={fieldStartIcons.person}
                 error={errors.lastName?.message}
                 {...register("lastName", {
                   maxLength: { value: LEAD_NAME_MAX_LENGTH, message: t("validation.maxName") },
@@ -197,6 +200,7 @@ export function LeadEditorModal({ open, target, onOpenChange, onSave }: TLeadEdi
                 placeholder={t("fields.phonePh")}
                 required
                 maxLength={LEAD_PHONE_MAX_LENGTH}
+                startIcon={fieldStartIcons.phone}
                 error={errors.phone?.message}
                 {...register("phone", {
                   required: t("validation.required"),
@@ -221,6 +225,7 @@ export function LeadEditorModal({ open, target, onOpenChange, onSave }: TLeadEdi
                   chips
                   label={t("fields.services")}
                   placeholder={t("fields.servicesPh")}
+                  startIcon={fieldStartIcons.tag}
                   value={field.value}
                   onChange={field.onChange}
                   onBlur={field.onBlur}
@@ -259,6 +264,7 @@ export function LeadEditorModal({ open, target, onOpenChange, onSave }: TLeadEdi
                     id={`lead-extra-${key}`}
                     label={key}
                     value={value}
+                    startIcon={fieldStartIcons.text}
                     readOnly
                     disabled
                   />

@@ -6,6 +6,7 @@ import { Input } from "@/components/input";
 import { ImageUploadAvatar } from "@/components/ui/image-upload-avatar";
 import { PhoneNumberInput } from "@/components/ui/phone-number-input";
 import type { TUseProjectCreateFormResult } from "@/components/forms/hooks/use-project-create-form.hook";
+import { fieldStartIcons } from "@/lib/frontend/forms/input-start-icons";
 import { WEBSITE_URL_PATTERN } from "@/lib/projects/website-url.utils";
 import { DISPLAY_NAME_MAX_LENGTH } from "@/lib/validation/display-name";
 
@@ -56,6 +57,7 @@ export function ProjectCreateStepBusiness({ hook }: ProjectCreateStepBusinessPro
           disabled={isEdit}
           readOnly={isEdit}
           maxLength={DISPLAY_NAME_MAX_LENGTH}
+          startIcon={fieldStartIcons.business}
           error={errors.businessName?.message}
           {...register("businessName", {
             required: t("valRequired"),
@@ -65,6 +67,7 @@ export function ProjectCreateStepBusiness({ hook }: ProjectCreateStepBusinessPro
         />
         <Input
           id="websiteUrl"
+          type="url"
           label={t("websiteUrl")}
           placeholder={t("websiteUrlPh")}
           required
@@ -78,6 +81,7 @@ export function ProjectCreateStepBusiness({ hook }: ProjectCreateStepBusinessPro
           id="businessAddress"
           label={t("businessAddress")}
           placeholder={t("businessAddressPh")}
+          startIcon={fieldStartIcons.location}
           className="sm:col-span-2"
           {...register("businessAddress")}
         />

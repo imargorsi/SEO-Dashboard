@@ -305,12 +305,12 @@ export function LeadsSection() {
               value={listQuery.dateRange}
               onChange={onDateRangeChange}
             />
-            {/* <LeadsImportExportMenu
+            <LeadsImportExportMenu
               canImport={canImport}
               canExport={canExport}
               onImport={openImport}
               onExport={() => void onExportExcel()}
-            /> */}
+            />
           </div>
 
           <LeadsTable

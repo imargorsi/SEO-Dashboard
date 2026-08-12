@@ -5,6 +5,7 @@ import { Controller } from "react-hook-form";
 
 import { Input } from "@/components/input";
 import type { TUseProjectCreateFormResult } from "@/components/forms/hooks/use-project-create-form.hook";
+import { fieldStartIcons } from "@/lib/frontend/forms/input-start-icons";
 import { splitCommaSeparated } from "@/lib/frontend/projects/project-form-payload.utils";
 
 type ProjectCreateStepDetailsProps = {
@@ -47,6 +48,7 @@ export function ProjectCreateStepDetails({ hook }: ProjectCreateStepDetailsProps
                   chips
                   label={t("servicesOffered")}
                   placeholder={t("servicesOfferedPh")}
+                  startIcon={fieldStartIcons.tag}
                   value={field.value}
                   onChange={field.onChange}
                   onBlur={field.onBlur}
@@ -76,6 +78,7 @@ export function ProjectCreateStepDetails({ hook }: ProjectCreateStepDetailsProps
             id="idealCustomerProfile"
             label={t("idealCustomerProfile")}
             placeholder={t("idealCustomerProfilePh")}
+            startIcon={fieldStartIcons.person}
             className="sm:col-span-2"
             {...register("idealCustomerProfile")}
           />
@@ -95,6 +98,7 @@ export function ProjectCreateStepDetails({ hook }: ProjectCreateStepDetailsProps
                   chips
                   label={t("targetLocations")}
                   placeholder={t("targetLocationsPh")}
+                  startIcon={fieldStartIcons.location}
                   value={field.value}
                   onChange={field.onChange}
                   onBlur={field.onBlur}

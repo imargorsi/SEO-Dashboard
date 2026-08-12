@@ -9,6 +9,7 @@ import { IoClose } from "react-icons/io5";
 import { Input } from "@/components/input";
 import { Button } from "@/components/ui/button";
 import { DialogSectionDivider } from "@/components/ui/dialog-section-divider";
+import { fieldStartIcons } from "@/lib/frontend/forms/input-start-icons";
 import { SEO_ACTIVITY_TYPE_OPTIONS } from "@/lib/frontend/seo-activities/constants";
 import { isValidIsoDate } from "@/lib/frontend/seo-activities/date-range.utils";
 import {
@@ -200,6 +201,7 @@ export function SeoActivityQuickAdd({
                 placeholder={t("fields.titlePh")}
                 required
                 maxLength={DISPLAY_NAME_MAX_LENGTH}
+                startIcon={fieldStartIcons.document}
                 error={errors.title?.message}
                 {...register("title", {
                   required: t("validation.required"),
@@ -215,6 +217,7 @@ export function SeoActivityQuickAdd({
                 label={t("fields.anchorText")}
                 placeholder={t("fields.anchorTextPh")}
                 required
+                startIcon={fieldStartIcons.text}
                 error={errors.anchorText?.message}
                 {...register("anchorText", {
                   required: t("validation.required"),

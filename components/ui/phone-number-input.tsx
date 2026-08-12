@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { IoSearchOutline } from "react-icons/io5";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -66,14 +68,20 @@ function CountryOptionList({
   return (
     <>
       <div className="p-1 pb-1.5">
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder={t("searchCountry")}
-          autoFocus
-          className="type-caption w-full rounded-lg border border-border bg-bg-input px-2.5 py-1.5 text-text-primary outline-none placeholder:text-text-placeholder focus:border-[var(--accent-border)]"
-        />
+        <div className="relative">
+          <IoSearchOutline
+            className="pointer-events-none absolute inset-s-2.5 top-1/2 size-3.5 -translate-y-1/2 text-text-muted"
+            aria-hidden
+          />
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={t("searchCountry")}
+            autoFocus
+            className="type-caption w-full rounded-lg border border-border bg-bg-input py-1.5 pe-2.5 ps-8 text-text-primary outline-none placeholder:text-text-placeholder focus:border-(--accent-border)"
+          />
+        </div>
       </div>
       <div className="themed-scrollbar max-h-45 overflow-y-auto pe-0.5">
         {filtered.length === 0 ? (

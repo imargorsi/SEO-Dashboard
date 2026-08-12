@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Input } from "@/components/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { TUseProjectCreateFormResult } from "@/components/forms/hooks/use-project-create-form.hook";
+import { fieldStartIcons } from "@/lib/frontend/forms/input-start-icons";
 import { SEO_GOALS } from "@/lib/projects/constants";
 import { SEO_GOAL_ICONS } from "@/lib/frontend/projects/seo-goal-icons";
 import { cn } from "@/lib/utils";
@@ -98,6 +99,7 @@ export function ProjectCreateStepSeo({ hook }: ProjectCreateStepSeoProps) {
                 chips
                 label={t("competitorUrls")}
                 placeholder={t("competitorUrlsPh")}
+                startIcon={fieldStartIcons.link}
                 value={field.value}
                 onChange={field.onChange}
                 onBlur={field.onBlur}

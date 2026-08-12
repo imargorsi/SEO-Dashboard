@@ -17,6 +17,7 @@ import {
 import { IoCheckmark, IoClose, IoEye, IoEyeOff } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 import SelectDropdownArrowIcon from "@/components/icons/input-select-dropdown-arrow";
+import { resolveInputStartIcon } from "@/lib/frontend/forms/input-start-icons";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -254,7 +255,8 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
   const chipInputRef = useRef<HTMLInputElement>(null);
   const inputType = isPassword ? (passwordVisible ? "text" : "password") : type;
   const { t } = useTranslation("translation", { keyPrefix: "form" });
-  const hasStartIcon = Boolean(startIcon);
+  const resolvedStartIcon = startIcon !== undefined ? startIcon : resolveInputStartIcon(type);
+  const hasStartIcon = Boolean(resolvedStartIcon);
 
   const showError = Boolean(error);
   const baseClasses = cn(
@@ -328,12 +330,18 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
           onClick={() => chipInputRef.current?.focus()}
           className={cn(
             formFieldControlClass,
-            "flex w-full flex-wrap items-center gap-1.5 rounded-xl bg-transparent px-2 py-1.5 transition focus-within:border-[var(--accent-border)] focus-within:ring-2 focus-within:ring-brand/25",
+            "flex w-full flex-wrap items-center gap-1.5 rounded-xl bg-transparent px-2 py-1.5 transition focus-within:border-(--accent-border) focus-within:ring-2 focus-within:ring-brand/25",
+            hasStartIcon && "ps-2.5",
             borderClass,
             controlClassNameProp,
             disabled && "cursor-not-allowed opacity-60",
           )}
         >
+          {hasStartIcon ? (
+            <span className="ms-0.5 flex shrink-0 items-center text-text-muted" aria-hidden>
+              {resolvedStartIcon}
+            </span>
+          ) : null}
           {chipValues.map((chip) => (
             <span
               key={chip}
@@ -415,7 +423,7 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
               className="pointer-events-none absolute inset-s-0 inset-y-0 z-10 flex items-center justify-center ps-3 text-text-muted"
               aria-hidden
             >
-              {startIcon}
+              {resolvedStartIcon}
             </span>
           ) : null}
           <input

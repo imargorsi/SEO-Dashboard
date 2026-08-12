@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" fill="none" role="img" aria-hidden="true">
+  <!-- Official Google Analytics product mark (chart bars + leading node). -->
+  <rect x="24" y="104" width="36" height="64" rx="18" fill="#F9AB00"/>
+  <rect x="78" y="56" width="36" height="112" rx="18" fill="#E37400"/>
+  <rect x="132" y="24" width="36" height="144" rx="18" fill="#E37400"/>
+  <circle cx="150" cy="30" r="22" fill="#E37400"/>
+</svg>

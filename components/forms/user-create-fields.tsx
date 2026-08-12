@@ -9,6 +9,7 @@ import {
   elevatedCardSurfaceClass,
   glassPanelSurfaceClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
+import { fieldStartIcons } from "@/lib/frontend/forms/input-start-icons";
 import { DISPLAY_NAME_MAX_LENGTH } from "@/lib/validation/display-name";
 import { cn } from "@/lib/utils";
 
@@ -55,6 +56,7 @@ export function UserCreateFields({ hook }: UserCreateFieldsProps) {
               placeholder={t("namePh")}
               required
               maxLength={DISPLAY_NAME_MAX_LENGTH}
+              startIcon={fieldStartIcons.person}
               error={errors.name?.message}
               autoComplete="name"
               {...register("name", {

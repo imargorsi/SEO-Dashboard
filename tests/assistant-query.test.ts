@@ -35,8 +35,10 @@ describe("Dashboard assistant query", () => {
 
     await createLead(auth, projectId, {
       firstName: "Ada",
+      lastName: "",
       email: "ada@example.com",
       phone: "+1 (555) 010-3000",
+      servicesInterestedIn: null,
       message: "Hello",
       leadDate: todayLeadDate(),
     });

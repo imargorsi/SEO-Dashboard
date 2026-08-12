@@ -130,6 +130,13 @@ export const dialogSurfaceClass = `${modalFrostBorderClass} ${modalFrostFillClas
 export const dialogSectionDividerClass =
   "mx-auto h-px w-[90%] shrink-0 bg-border dark:bg-text-primary/22";
 
+/**
+ * Settings inset rules — 99% width, centered (category rail + theme section splits).
+ * Softer than modal dividers so they sit cleanly on glass panels.
+ */
+export const settingsInsetDividerClass =
+  "mx-auto h-px w-[99%] shrink-0 bg-border/55 dark:bg-text-primary/18";
+
 /** Analytics module panels — shared radius + breathing room. */
 export const analyticsPanelClass = "rounded-3xl p-5 sm:p-6";
 

@@ -7,7 +7,6 @@ type TRootErrorProps = {
   reset: () => void;
 };
 
-//
 export default function RootError({ error, reset }: TRootErrorProps) {
   return <AppErrorBoundary error={error} reset={reset} scope="root-error" />;
 }

@@ -222,8 +222,21 @@ export interface Translation {
     selectProjectTitle: string;
     selectProjectBody: string;
     loadError: string;
-    rangeAllTime: string;
-    workspaceFallback: string;
+    dateFilterAriaLabel: string;
+    export: {
+      excel: string;
+      success: string;
+      empty: string;
+      errorFallback: string;
+      metric: string;
+      value: string;
+      date: string;
+      sessions: string;
+      sheets: {
+        summary: string;
+        dailyTrend: string;
+      };
+    };
     pulse: {
       title: string;
       cards: {
@@ -247,9 +260,33 @@ export interface Translation {
       emptyTitle: string;
       emptyBody: string;
       noSeries: string;
+      descriptions: {
+        clicks: string;
+        impressions: string;
+        ctr: string;
+        position: string;
+        engagementRate: string;
+        avgSessionDuration: string;
+        unavailable: string;
+      };
+      cards: {
+        clicks: string;
+        impressions: string;
+        ctr: string;
+        position: string;
+        engagementRate: string;
+        avgSessionDuration: string;
+      };
+      direction: {
+        up: string;
+        down: string;
+        flat: string;
+      };
     };
     assistant: {
       title: string;
+      greeting: string;
+      greetingFallback: string;
       description: string;
       descriptionShort: string;
       placeholder: string;
@@ -257,11 +294,14 @@ export interface Translation {
       submit: string;
       asking: string;
       suggestionsLabel: string;
+      popularTitle: string;
       historyLabel: string;
       historyLoading: string;
       answerLabel: string;
       emptyAnswer: string;
       queryError: string;
+      tipTitle: string;
+      tipBody: string;
       suggestions: {
         leadsThisMonth: string;
         leadsLastMonth: string;
@@ -1712,12 +1752,25 @@ const translation: Translation = {
   },
   home: {
     title: "Dashboard",
-    subtitle: "All-time project pulse, search trends, and quick answers for the selected workspace.",
+    subtitle: "Project pulse, search trends, and quick answers for the selected date range.",
     selectProjectTitle: "Select A Project",
     selectProjectBody: "Choose a project from the sidebar to open its control center.",
     loadError: "Could not load dashboard data. Try again.",
-    rangeAllTime: "All Time",
-    workspaceFallback: "Workspace",
+    dateFilterAriaLabel: "Dashboard Date Range",
+    export: {
+      excel: "Export Excel",
+      success: "Excel report downloaded.",
+      empty: "No dashboard data for this range.",
+      errorFallback: "Could not export dashboard data.",
+      metric: "Metric",
+      value: "Value",
+      date: "Date",
+      sessions: "Sessions",
+      sheets: {
+        summary: "Summary",
+        dailyTrend: "Daily Trend",
+      },
+    },
     pulse: {
       title: "SEO Pulse",
       cards: {
@@ -1737,27 +1790,55 @@ const translation: Translation = {
     trend: {
       title: "SEO Performance Trend",
       subtitle:
-        "Clicks, impressions, CTR, and average position as four mini trends for this project.",
+        "Clicks, impressions, CTR, position, engagement rate, and session time for the selected range.",
       gridAria: "Search performance metrics",
       emptyTitle: "No Trend Data",
-      emptyBody: "Connect Search Console and sync to populate these charts.",
+      emptyBody: "Connect Search Console and Analytics, then sync to populate these metrics.",
       noSeries: "No series yet.",
+      cards: {
+        clicks: "Clicks",
+        impressions: "Impressions",
+        ctr: "CTR",
+        position: "Position",
+        engagementRate: "Engagement Rate",
+        avgSessionDuration: "Session Time",
+      },
+      descriptions: {
+        clicks: "You got {{count}} clicks from search.",
+        impressions: "You got {{count}} impressions in search results.",
+        ctr: "Your click-through rate is {{count}}.",
+        position: "Your average position is {{count}}.",
+        engagementRate: "Your engagement rate is {{count}}.",
+        avgSessionDuration: "Visitors spend {{count}} per session on average.",
+        unavailable: "Not available for this project yet.",
+      },
+      direction: {
+        up: "Trending up over this range.",
+        down: "Trending down over this range.",
+        flat: "Holding steady over this range.",
+      },
     },
     assistant: {
       title: "Dashboard Assistant",
+      greeting: "Hi {{name}}",
+      greetingFallback: "Hi There",
       description:
-        "Ask about leads, analytics, or SEO activities for this project. Answers use cached project data only.",
-      descriptionShort: "Ask about leads, analytics, or SEO activities for this project.",
+        "I'm your Dashboard Assistant. Ask about leads, analytics, or SEO activities for this project. Answers use cached project data only.",
+      descriptionShort:
+        "I'm your Dashboard Assistant. Ask about leads, analytics, or SEO activities for this project.",
       placeholder: "Ask about leads, analytics, or SEO activities…",
       inputLabel: "Assistant Query",
       submit: "Ask",
       asking: "Asking…",
       suggestionsLabel: "Try Asking",
+      popularTitle: "Popular Questions",
       historyLabel: "Recent Queries",
       historyLoading: "Loading recent queries…",
       answerLabel: "Answer",
       emptyAnswer: "Pick a suggestion or type a question to see a quick project summary.",
       queryError: "Could not run that query. Try again.",
+      tipTitle: "Pro Tip",
+      tipBody: "Ask about leads, analytics, pages, queries, or SEO activities for this project.",
       suggestions: {
         leadsThisMonth: "Leads This Month",
         leadsLastMonth: "Leads Last Month",

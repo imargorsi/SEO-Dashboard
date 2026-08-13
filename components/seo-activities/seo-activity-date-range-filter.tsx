@@ -33,6 +33,8 @@ type TSeoActivityDateRangeFilterProps = {
   resolvePreset?: (preset: TDateRangePresetId, now?: Date) => TDateRange;
   /** Custom preset matcher (default: `matchDateRangePreset`). */
   matchPreset?: (range: TDateRange, now?: Date) => TDateRangePresetId | null;
+  /** Override trigger/popup aria-label (default: `t("ariaLabel")`). */
+  ariaLabel?: string;
 };
 
 type TPopupPosition = {
@@ -53,6 +55,7 @@ export function SeoActivityDateRangeFilter({
   i18nKeyPrefix = "modules.seoActivities.dateFilter",
   resolvePreset = resolveDateRangePreset,
   matchPreset = matchDateRangePreset,
+  ariaLabel,
 }: TSeoActivityDateRangeFilterProps) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { t } = useTranslation("translation", { keyPrefix: i18nKeyPrefix as any }) as { t: (...args: any[]) => string };
@@ -199,7 +202,7 @@ export function SeoActivityDateRangeFilter({
           <div
             ref={popupRef}
             role="dialog"
-            aria-label={t("ariaLabel")}
+            aria-label={ariaLabel ?? t("ariaLabel")}
             style={{ top: position.top, left: position.left, width: position.width }}
             className={cn("fixed z-50 overflow-hidden rounded-2xl", popoverSurfaceClass)}
           >
@@ -330,7 +333,7 @@ export function SeoActivityDateRangeFilter({
         size="md"
         aria-expanded={open}
         aria-haspopup="dialog"
-        aria-label={t("ariaLabel")}
+        aria-label={ariaLabel ?? t("ariaLabel")}
         onClick={() => setOpen((prev) => !prev)}
         className={cn("gap-2", open && "bg-bg-selected")}
       >

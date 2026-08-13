@@ -25,16 +25,14 @@ import {
   useAnalyticsOverviewQuery,
 } from "@/features/analytics/analytics.api";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
-import { useQueryParams } from "@/hooks/use-query-params.hook";
+import { useSyncedAnalyticsDateRange } from "@/hooks/use-synced-analytics-date-range.hook";
 import { ApiError } from "@/lib/frontend/api/errors";
 import {
   downloadAnalyticsExcel,
   hasAnalyticsExportSignal,
 } from "@/lib/frontend/analytics/export.utils";
-import { parseAnalyticsPageQuery } from "@/lib/frontend/analytics/list-query.utils";
 import { notify } from "@/lib/frontend/feedback/notify";
 import { analyticsHeadingStackClass } from "@/lib/frontend/layout/dashboard-chrome";
-import type { TDateRange } from "@/lib/frontend/seo-activities/date-range.utils";
 import { cn } from "@/lib/utils";
 import {
   ANALYTICS_DATE_PRESET_IDS,
@@ -45,18 +43,13 @@ import { hasPermission, mergePermissions } from "@/lib/rbac/access";
 
 export function AnalyticsSection() {
   const { t } = useTranslation("translation", { keyPrefix: "modules.analytics" });
-  const { queryParams, updateQueryParams } = useQueryParams();
-  const pageQuery = parseAnalyticsPageQuery(queryParams);
-  const dateRange = pageQuery.dateRange;
-  const from = dateRange.from ?? "";
-  const to = dateRange.to ?? "";
+  const { dateRange, from, to, onDateRangeChange } = useSyncedAnalyticsDateRange();
 
   const { selectedProject } = useSelectedProject();
   const projectId = selectedProject?.id ?? null;
   const { data: authUser } = useAuthUserQuery();
   const { projectPermissions } = useProjectAccess();
   const loadErrorNotified = useRef(false);
-  const didSyncDefaultRange = useRef(false);
 
   const permissions = useMemo(
     () => mergePermissions(authUser?.permissions ?? [], projectPermissions),
@@ -64,19 +57,6 @@ export function AnalyticsSection() {
   );
   const canView = hasPermission(permissions, "analytics.view");
   const rangeEnabled = Boolean(projectId) && canView && Boolean(from && to);
-
-  useEffect(() => {
-    if (didSyncDefaultRange.current) return;
-    const hasFrom = typeof queryParams.from === "string" && queryParams.from.length > 0;
-    const hasTo = typeof queryParams.to === "string" && queryParams.to.length > 0;
-    if (hasFrom || hasTo) {
-      didSyncDefaultRange.current = true;
-      return;
-    }
-    if (!dateRange.from || !dateRange.to) return;
-    didSyncDefaultRange.current = true;
-    updateQueryParams({ from: dateRange.from, to: dateRange.to });
-  }, [dateRange.from, dateRange.to, queryParams.from, queryParams.to, updateQueryParams]);
 
   const overviewQuery = useAnalyticsOverviewQuery(
     projectId,
@@ -124,22 +104,6 @@ export function AnalyticsSection() {
     queriesQuery.error,
     t,
   ]);
-
-  function onDateRangeChange(range: TDateRange) {
-    if (!range.from && !range.to) {
-      const fallback = resolveAnalyticsDatePreset("last_30_days");
-      updateQueryParams({
-        from: fallback.from ?? "",
-        to: fallback.to ?? "",
-      });
-      return;
-    }
-
-    const next: Record<string, string> = {};
-    if (range.from) next.from = range.from;
-    if (range.to) next.to = range.to;
-    updateQueryParams(next);
-  }
 
   async function onExportExcel() {
     if (!projectId || !from || !to || exportMutation.isPending) return;

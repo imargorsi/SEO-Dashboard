@@ -3,38 +3,37 @@
 import { Icons } from "@/lib/frontend/icons/app-icons";
 
 import { useMemo, useState, type FormEvent } from "react";
-import Link from "next/link";
 import { useTranslation } from "react-i18next";
 
 import { AssistantNeonOutline } from "@/components/dashboard/assistant-neon-outline";
-import { AssistantSparkleIcon } from "@/components/dashboard/assistant-sparkle-icon";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Heading } from "@/components/heading";
-import { Paragraph } from "@/components/paragraph";
+import { DashboardAssistantAnswer } from "@/components/dashboard/dashboard-assistant-answer";
+import { DashboardAssistantGreeting } from "@/components/dashboard/dashboard-assistant-greeting";
+import {
+  DashboardAssistantQuestionList,
+  type TAssistantQuestionRow,
+} from "@/components/dashboard/dashboard-assistant-question-list";
+import { Button } from "@/components/ui/button";
 import {
   useAssistantHistoryQuery,
   useAssistantQueryMutation,
 } from "@/features/assistant/assistant.api";
+import { useAuthUserQuery } from "@/features/auth/auth.api";
 import { useTypingPlaceholder } from "@/hooks/use-typing-placeholder.hook";
 import { ApiError } from "@/lib/frontend/api/errors";
+import {
+  assistantTypingPhrases,
+  buildAssistantSuggestions,
+  filterAssistantSuggestions,
+} from "@/lib/frontend/assistant/suggestions";
 import { notify } from "@/lib/frontend/feedback/notify";
 import {
   formFieldControlClass,
   glassPanelSurfaceClass,
-  metricIconWellClass,
   toolbarFilterChipClass,
+  typeStackMdClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
-import type { TAssistantIntent, TAssistantQueryResult } from "@/types/assistant.types";
-
-type TSuggestion = {
-  id: string;
-  intent: Exclude<TAssistantIntent, "unknown">;
-  label: string;
-  /** English query string — intent detection is English-only. */
-  query: string;
-  permission: "leads.view" | "analytics.view" | "seo_activities.view";
-};
+import type { TAssistantQueryResult } from "@/types/assistant.types";
 
 type TDashboardAssistantPanelProps = {
   projectId: string;
@@ -42,21 +41,14 @@ type TDashboardAssistantPanelProps = {
   canViewAnalytics: boolean;
   canViewSeo: boolean;
   className?: string;
-  /** Tighter chrome for no-scroll `/dashboard` layout. */
   compact?: boolean;
 };
 
-/** English phrases for typewriter — aligned with chip queries / `parseAssistantQuery`. */
-const TYPING_PHRASES = {
-  leadsThisMonth: "How many leads this month?",
-  leadsLastMonth: "How many leads last month?",
-  clicksOverview: "Show analytics overview",
-  topQueries: "What are the top queries?",
-  topPages: "What are the top pages?",
-  blogs: "How many blogs?",
-  backlinks: "How many backlinks?",
-  technicalWork: "How much technical work?",
-} as const;
+function firstNameFromDisplayName(name: string | undefined): string {
+  const trimmed = name?.trim() ?? "";
+  if (!trimmed) return "";
+  return trimmed.split(/\s+/)[0] ?? "";
+}
 
 export function DashboardAssistantPanel({
   projectId,
@@ -67,121 +59,72 @@ export function DashboardAssistantPanel({
   compact = false,
 }: TDashboardAssistantPanelProps) {
   const { t } = useTranslation("translation", { keyPrefix: "home.assistant" });
+  const { data: authUser } = useAuthUserQuery();
   const [draft, setDraft] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [answer, setAnswer] = useState<TAssistantQueryResult | null>(null);
 
   const historyQuery = useAssistantHistoryQuery(projectId);
   const queryMutation = useAssistantQueryMutation(projectId);
+  const isBusy = queryMutation.isPending;
 
-  const suggestions = useMemo<TSuggestion[]>(() => {
-    const all: TSuggestion[] = [
-      {
-        id: "leadsThisMonth",
-        intent: "leads_count",
-        label: t("suggestions.leadsThisMonth"),
-        query: "How many leads this month?",
-        permission: "leads.view",
-      },
-      {
-        id: "analyticsOverview",
-        intent: "analytics_overview",
-        label: t("suggestions.analyticsOverview"),
-        query: "Show analytics overview",
-        permission: "analytics.view",
-      },
-      {
-        id: "blogs",
-        intent: "seo_count",
-        label: t("suggestions.blogs"),
-        query: "How many blogs?",
-        permission: "seo_activities.view",
-      },
-      {
-        id: "topQueries",
-        intent: "analytics_top",
-        label: t("suggestions.topQueries"),
-        query: "What are the top queries?",
-        permission: "analytics.view",
-      },
-      {
-        id: "leadsLastMonth",
-        intent: "leads_count",
-        label: t("suggestions.leadsLastMonth"),
-        query: "How many leads last month?",
-        permission: "leads.view",
-      },
-      {
-        id: "topPages",
-        intent: "analytics_top",
-        label: t("suggestions.topPages"),
-        query: "What are the top pages?",
-        permission: "analytics.view",
-      },
-      {
-        id: "backlinks",
-        intent: "seo_count",
-        label: t("suggestions.backlinks"),
-        query: "How many backlinks?",
-        permission: "seo_activities.view",
-      },
-      {
-        id: "technicalWork",
-        intent: "seo_count",
-        label: t("suggestions.technicalWork"),
-        query: "How much technical work?",
-        permission: "seo_activities.view",
-      },
-      {
-        id: "leadsThisYear",
-        intent: "leads_count",
-        label: t("suggestions.leadsThisYear"),
-        query: "How many leads this year?",
-        permission: "leads.view",
-      },
-    ];
+  const firstName = firstNameFromDisplayName(authUser?.name);
+  const greeting = firstName ? t("greeting", { name: firstName }) : t("greetingFallback");
 
-    const filtered = all.filter((item) => {
-      if (item.permission === "leads.view") return canViewLeads;
-      if (item.permission === "analytics.view") return canViewAnalytics;
-      return canViewSeo;
-    });
+  const suggestions = useMemo(
+    () =>
+      filterAssistantSuggestions(
+        buildAssistantSuggestions({
+          leadsThisMonth: t("suggestions.leadsThisMonth"),
+          leadsLastMonth: t("suggestions.leadsLastMonth"),
+          analyticsOverview: t("suggestions.analyticsOverview"),
+          topPages: t("suggestions.topPages"),
+          topQueries: t("suggestions.topQueries"),
+          blogs: t("suggestions.blogs"),
+          backlinks: t("suggestions.backlinks"),
+          technicalWork: t("suggestions.technicalWork"),
+        }),
+        canViewLeads,
+        canViewAnalytics,
+        canViewSeo,
+      ),
+    [canViewAnalytics, canViewLeads, canViewSeo, t],
+  );
 
-    return compact ? filtered.slice(0, 4) : filtered;
-  }, [canViewAnalytics, canViewLeads, canViewSeo, compact, t]);
-
-  const typingPhrases = useMemo(() => {
-    const phrases: string[] = [];
-    if (canViewLeads) {
-      phrases.push(TYPING_PHRASES.leadsThisMonth, TYPING_PHRASES.leadsLastMonth);
-    }
-    if (canViewAnalytics) {
-      phrases.push(
-        TYPING_PHRASES.clicksOverview,
-        TYPING_PHRASES.topQueries,
-        TYPING_PHRASES.topPages,
-      );
-    }
-    if (canViewSeo) {
-      phrases.push(TYPING_PHRASES.blogs, TYPING_PHRASES.backlinks, TYPING_PHRASES.technicalWork);
-    }
-    return phrases.length > 0 ? phrases : [t("placeholder")];
-  }, [canViewAnalytics, canViewLeads, canViewSeo, t]);
-
-  const typingEnabled = !draft && !isFocused && !queryMutation.isPending;
-  const typingPlaceholder = useTypingPlaceholder({
-    phrases: typingPhrases,
-    enabled: typingEnabled,
-  });
+  const visibleCount = compact ? 4 : 5;
+  const chips = suggestions.slice(0, visibleCount);
+  const popularRows: TAssistantQuestionRow[] = chips.map((item) => ({
+    id: item.id,
+    label: item.query,
+    query: item.query,
+    icon: item.icon,
+  }));
 
   const historyItems = (historyQuery.data?.items ?? answer?.history ?? []).slice(
     0,
     compact ? 3 : 5,
   );
+  const recentRows: TAssistantQuestionRow[] = historyItems.map((item) => ({
+    id: item.id,
+    label: item.query,
+    query: item.query,
+    icon: Icons.clock,
+  }));
+
+  const typingPhrases = useMemo(
+    () => assistantTypingPhrases(canViewLeads, canViewAnalytics, canViewSeo, t("placeholder")),
+    [canViewAnalytics, canViewLeads, canViewSeo, t],
+  );
+
+  const typingEnabled = !draft && !isFocused && !isBusy;
+  const typingPlaceholder = useTypingPlaceholder({
+    phrases: typingPhrases,
+    enabled: typingEnabled,
+  });
 
   async function runQuery(query: string) {
     const trimmed = query.trim();
-    if (!trimmed || queryMutation.isPending) return;
+    if (!trimmed || isBusy) return;
 
     setDraft(trimmed);
     try {
@@ -201,68 +144,53 @@ export function DashboardAssistantPanel({
     <section
       className={cn(
         glassPanelSurfaceClass,
-        "relative flex h-full min-h-0 flex-col overflow-visible border-0 shadow-none",
+        "relative flex h-full w-full flex-col overflow-visible border-0 shadow-none",
         "motion-reduce:border motion-reduce:border-border/50 dark:motion-reduce:border-text-primary/30",
-        compact ? "rounded-2xl p-3.5 sm:p-4" : "rounded-3xl p-6 sm:p-7",
+        compact ? "rounded-2xl p-4 sm:p-5" : "rounded-3xl p-6 sm:p-7",
         className,
       )}
       aria-labelledby="dashboard-assistant-title"
     >
       <AssistantNeonOutline radius={compact ? 16 : 24} />
 
-      <div className="relative z-10 flex min-h-0 flex-1 flex-col overflow-hidden">
-        <div className={cn("flex shrink-0 items-center", compact ? "gap-2.5" : "gap-3")}>
-          <span
-            className={cn(metricIconWellClass, compact ? "size-10" : "size-12")}
-            aria-hidden
-          >
-            <AssistantSparkleIcon />
-          </span>
-          <div className="flex min-w-0 flex-col gap-0.5">
-            <Heading id="dashboard-assistant-title" SmallTitle className="leading-tight">
-              {t("title")}
-            </Heading>
-            <Paragraph moreSmaller className="leading-snug text-text-secondary">
-              {compact ? t("descriptionShort") : t("description")}
-            </Paragraph>
-          </div>
-        </div>
+      <div className="relative z-10 flex min-h-0 flex-1 flex-col gap-5">
+        <DashboardAssistantGreeting greeting={greeting} compact={compact} />
 
-        {suggestions.length > 0 ? (
+        {!answer && chips.length > 0 ? (
           <div
-            className={cn(
-              "flex shrink-0 flex-wrap justify-end gap-2",
-              compact ? "mt-3" : "mt-6",
-            )}
+            className="flex shrink-0 flex-wrap gap-2"
             role="list"
             aria-label={t("suggestionsLabel")}
           >
-            {suggestions.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                role="listitem"
-                disabled={queryMutation.isPending}
-                onClick={() => void runQuery(item.query)}
-                className={cn(
-                  toolbarFilterChipClass,
-                  "border border-border/50 bg-transparent text-text-secondary",
-                  "hover:border-border hover:bg-bg-hover/40 hover:text-text-primary",
-                  "disabled:opacity-50 dark:border-text-primary/20",
-                )}
-              >
-                <Icons.search className="size-3.5 shrink-0 opacity-70" aria-hidden />
-                {item.label}
-              </button>
-            ))}
+            {chips.map((item) => {
+              const Icon = item.icon;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  role="listitem"
+                  disabled={isBusy}
+                  onClick={() => void runQuery(item.query)}
+                  className={cn(
+                    toolbarFilterChipClass,
+                    "border border-border/50 bg-transparent text-text-secondary",
+                    "hover:border-border hover:bg-bg-hover/40 hover:text-text-primary",
+                    "disabled:opacity-50 dark:border-text-primary/20",
+                  )}
+                >
+                  <Icon className="size-3.5 shrink-0 opacity-70" aria-hidden />
+                  {item.label}
+                </button>
+              );
+            })}
           </div>
         ) : null}
 
-        <form onSubmit={handleSubmit} className={cn("shrink-0", compact ? "mt-3" : "mt-4")}>
+        <form onSubmit={handleSubmit} className="shrink-0">
           <div
             className={cn(
               formFieldControlClass,
-              "flex items-center gap-2 rounded-xl bg-transparent p-1.5 ps-3",
+              "flex items-center gap-1.5 rounded-xl bg-transparent p-1.5 ps-3",
               "focus-within:border-border/50 focus-within:ring-0 dark:focus-within:border-text-primary/18",
             )}
           >
@@ -275,84 +203,70 @@ export function DashboardAssistantPanel({
                 typingEnabled ? typingPlaceholder || t("placeholder") : t("placeholder")
               }
               aria-label={t("inputLabel")}
-              disabled={queryMutation.isPending}
+              disabled={isBusy}
               className={cn(
                 "min-w-0 flex-1 bg-transparent type-body text-text-primary outline-none",
-                "placeholder:text-text-placeholder",
-                "disabled:cursor-not-allowed disabled:opacity-50",
+                "placeholder:text-text-placeholder disabled:cursor-not-allowed disabled:opacity-50",
                 compact ? "h-9" : "h-10",
               )}
             />
             <Button
               type="submit"
               variant="primary"
-              size="sm"
-              disabled={queryMutation.isPending || !draft.trim()}
-              className="shrink-0 rounded-lg px-4"
+              size="icon-sm"
+              disabled={isBusy || !draft.trim()}
+              aria-label={isBusy ? t("asking") : t("submit")}
+              className="rounded-lg"
             >
-              {queryMutation.isPending ? t("asking") : t("submit")}
+              {isBusy ? (
+                <Icons.loading className="size-4 animate-spin" aria-hidden />
+              ) : (
+                <Icons.arrowRight className="size-4 rtl:rotate-180" aria-hidden />
+              )}
             </Button>
           </div>
         </form>
 
-        <div className={cn("min-h-0 shrink-0", compact ? "mt-4" : "mt-8")} aria-live="polite">
+        <div className="flex min-h-0 flex-1 flex-col" aria-live="polite">
           {answer ? (
-            <div
-              className={cn(
-                "space-y-2 rounded-xl border border-border/40 bg-bg-card/25 p-3",
-                "shadow-sm backdrop-blur-md dark:border-text-primary/20 dark:bg-text-primary/5",
-              )}
-            >
-              <div className="flex items-center justify-between gap-2">
-                <p className="type-caption text-text-muted">{t("answerLabel")}</p>
-                {answer.action ? (
-                  <Link
-                    href={answer.action.route}
-                    className={cn(
-                      buttonVariants({ variant: "ghost", size: "xs" }),
-                      "inline-flex gap-1 text-brand",
-                    )}
-                  >
-                    {answer.action.label}
-                    <Icons.arrowRight className="size-3.5" aria-hidden />
-                  </Link>
-                ) : null}
-              </div>
-              <p className="max-h-24 overflow-y-auto type-body text-text-primary">
-                {answer.message}
-              </p>
-            </div>
+            <DashboardAssistantAnswer answer={answer} />
           ) : historyQuery.isLoading ? (
             <p className="type-caption text-text-muted">{t("historyLoading")}</p>
-          ) : historyItems.length > 0 ? (
-            <div
-              className="flex flex-wrap gap-1.5"
-              role="list"
-              aria-label={t("historyLabel")}
-            >
-              {historyItems.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  role="listitem"
-                  disabled={queryMutation.isPending}
-                  onClick={() => void runQuery(item.query)}
-                  className={cn(
-                    "inline-flex max-w-full items-center gap-1.5 truncate rounded-lg border border-transparent px-2.5 py-1.5 type-caption",
-                    "text-text-muted transition-colors hover:border-border/40 hover:bg-bg-hover/50 hover:text-text-secondary",
-                    "disabled:opacity-50",
-                  )}
-                  title={item.query}
-                >
-                  <Icons.clock className="size-3.5 shrink-0" aria-hidden />
-                  <span className="truncate">{item.query}</span>
-                </button>
-              ))}
-            </div>
           ) : (
-            <p className="type-caption text-text-muted">{t("emptyAnswer")}</p>
+            <DashboardAssistantQuestionList
+              title={recentRows.length > 0 ? t("historyLabel") : t("popularTitle")}
+              items={recentRows.length > 0 ? recentRows : popularRows}
+              disabled={isBusy}
+              onSelect={(query) => void runQuery(query)}
+            />
           )}
         </div>
+
+        {!answer ? (
+          <div
+            className={cn(
+              "relative mt-auto flex shrink-0 items-center gap-3 overflow-hidden rounded-xl px-3.5 py-3.5",
+              "bg-status-pending/10 dark:bg-status-pending/15",
+            )}
+          >
+            <span
+              className="inline-flex size-11 shrink-0 items-center justify-center rounded-full"
+              style={{
+                color: "var(--status-pending)",
+                background: "color-mix(in srgb, var(--status-pending) 22%, transparent)",
+                boxShadow:
+                  "0 0 18px color-mix(in srgb, var(--status-pending) 42%, transparent)",
+              }}
+              aria-hidden
+            >
+              <Icons.bulb className="size-5" />
+            </span>
+            <div className={cn(typeStackMdClass, "min-w-0")}>
+              <p className="type-body-strong text-text-primary">{t("tipTitle")}</p>
+              <p className="type-body leading-snug text-text-secondary">{t("tipBody")}</p>
+            </div>
+          </div>
+        ) : null}
       </div>
     </section>
   );

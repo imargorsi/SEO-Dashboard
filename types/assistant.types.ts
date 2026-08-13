@@ -54,6 +54,11 @@ export type TAssistantAction = {
   route: string;
 };
 
+export type TAssistantListItem = {
+  label: string;
+  detail: string;
+};
+
 export type TAssistantHistoryItem = {
   id: string;
   query: string;
@@ -65,6 +70,7 @@ export type TAssistantQueryResult = {
   message: string;
   intent: TAssistantIntent;
   action?: TAssistantAction;
+  items?: TAssistantListItem[];
   history: TAssistantHistoryItem[];
 };
 

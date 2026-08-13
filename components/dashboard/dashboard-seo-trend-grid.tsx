@@ -3,24 +3,28 @@
 import type { TAppIconComponent } from "@/components/ui/app-icon";
 import { Icons } from "@/lib/frontend/icons/app-icons";
 
+import Link from "next/link";
 import { useTranslation } from "react-i18next";
 
-import { AnalyticsTrendSparkline } from "@/components/analytics/analytics-trend-sparkline";
 import { EmptyState } from "@/components/ui/empty-state";
-import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion.hook";
-import {
-  elevatedCardSurfaceClass,
-  typeStackMdClass,
-} from "@/lib/frontend/layout/dashboard-chrome";
+import { elevatedCardSurfaceClass, typeStackMdClass } from "@/lib/frontend/layout/dashboard-chrome";
+import { withDateRangeQuery } from "@/lib/frontend/routing/with-date-range-query.utils";
 import { cn } from "@/lib/utils";
 import type { TAnalyticsCardMetricDto, TAnalyticsOverviewDto } from "@/types/analytics.types";
 
-type TTrendCardId = "clicks" | "impressions" | "ctr" | "position";
+type TTrendCardId =
+  | "clicks"
+  | "impressions"
+  | "ctr"
+  | "position"
+  | "engagementRate"
+  | "avgSessionDuration";
 
-type TTrendCardDef = {
+type TTrendRowDef = {
   id: TTrendCardId;
   icon: TAppIconComponent;
   accent: string;
+  invertTrend: boolean;
   format: (value: number | null | undefined) => string;
   metric: TAnalyticsCardMetricDto | undefined;
 };
@@ -29,6 +33,8 @@ type TDashboardSeoTrendGridProps = {
   overview: TAnalyticsOverviewDto | undefined;
   isLoading?: boolean;
   className?: string;
+  from?: string;
+  to?: string;
 };
 
 function formatCompactNumber(value: number | null | undefined): string {
@@ -49,22 +55,36 @@ function formatPosition(value: number | null | undefined): string {
   return value.toFixed(1);
 }
 
-function CardSkeleton() {
+function formatSessionDuration(totalSeconds: number | null | undefined): string {
+  if (totalSeconds == null || Number.isNaN(totalSeconds)) return "—";
+  const rounded = Math.round(totalSeconds);
+  const minutes = Math.floor(rounded / 60);
+  const seconds = rounded % 60;
+  return `${minutes}m ${String(seconds).padStart(2, "0")}s`;
+}
+
+function seriesDirection(values: number[], invert: boolean): "up" | "down" | "flat" {
+  if (values.length < 2) return "flat";
+  const first = values[0]!;
+  const last = values[values.length - 1]!;
+  if (last === first) return "flat";
+  const rising = last > first;
+  if (invert) return rising ? "down" : "up";
+  return rising ? "up" : "down";
+}
+
+function RowSkeleton() {
   return (
-    <div
-      className={cn(
-        elevatedCardSurfaceClass,
-        "flex h-full min-h-0 flex-col justify-between rounded-2xl p-3 sm:p-3.5",
-      )}
-    >
-      <div className="flex items-start justify-between gap-2">
-        <div className="space-y-2">
-          <div className="h-3 w-16 animate-pulse rounded bg-bg-hover/70" />
-          <div className="h-7 w-14 animate-pulse rounded-lg bg-bg-hover/80" />
-        </div>
-        <div className="size-9 animate-pulse rounded-xl bg-bg-hover/70" />
+    <div className="flex min-h-0 flex-1 items-center gap-4 py-4">
+      <div className="size-12 shrink-0 animate-pulse rounded-2xl bg-bg-hover/70" />
+      <div className="min-w-0 flex-1 space-y-2">
+        <div className="h-3 w-16 animate-pulse rounded bg-bg-hover/70" />
+        <div className="h-6 w-14 animate-pulse rounded-lg bg-bg-hover/80" />
       </div>
-      <div className="mt-3 h-14 w-full animate-pulse rounded-xl bg-bg-hover/50" />
+      <div className="w-40 shrink-0 space-y-2">
+        <div className="ms-auto h-3 w-36 animate-pulse rounded bg-bg-hover/60" />
+        <div className="ms-auto h-3 w-28 animate-pulse rounded bg-bg-hover/50" />
+      </div>
     </div>
   );
 }
@@ -73,19 +93,19 @@ export function DashboardSeoTrendGrid({
   overview,
   isLoading,
   className,
+  from,
+  to,
 }: TDashboardSeoTrendGridProps) {
   const { t } = useTranslation("translation", { keyPrefix: "home.trend" });
-  const { t: tTabs } = useTranslation("translation", {
-    keyPrefix: "modules.analytics.trendChart.tabs",
-  });
-  const reduceMotion = usePrefersReducedMotion();
   const cardsData = overview?.cards;
+  const engagement = overview?.engagement;
 
-  const cards: TTrendCardDef[] = [
+  const rows: TTrendRowDef[] = [
     {
       id: "clicks",
       icon: Icons.chartBar,
       accent: "var(--color-brand-primary)",
+      invertTrend: false,
       format: formatCompactNumber,
       metric: cardsData?.clicks,
     },
@@ -93,6 +113,7 @@ export function DashboardSeoTrendGrid({
       id: "impressions",
       icon: Icons.view,
       accent: "var(--status-pending)",
+      invertTrend: false,
       format: formatCompactNumber,
       metric: cardsData?.impressions,
     },
@@ -100,113 +121,135 @@ export function DashboardSeoTrendGrid({
       id: "ctr",
       icon: Icons.chartLine,
       accent: "var(--status-active)",
+      invertTrend: false,
       format: formatPercentRatio,
       metric: cardsData?.ctr,
     },
     {
       id: "position",
       icon: Icons.analytics,
-      accent: "var(--color-brand-primary)",
+      accent: "var(--color-secondary)",
+      invertTrend: true,
       format: formatPosition,
       metric: cardsData?.position,
     },
+    {
+      id: "engagementRate",
+      icon: Icons.sparkles,
+      accent: "var(--status-invited)",
+      invertTrend: false,
+      format: formatPercentRatio,
+      metric: engagement?.engagementRate,
+    },
+    {
+      id: "avgSessionDuration",
+      icon: Icons.clock,
+      accent: "var(--color-brand-primary)",
+      invertTrend: false,
+      format: formatSessionDuration,
+      metric: engagement?.avgSessionDuration,
+    },
   ];
 
-  const gridClass = cn(
-    "grid h-full min-h-0 grid-cols-2 gap-2.5 sm:gap-3",
+  const panelClass = cn(
+    elevatedCardSurfaceClass,
+    "flex h-full w-full flex-col rounded-2xl bg-bg-card/20 p-4 sm:p-5 dark:bg-text-primary/5",
     className,
   );
 
   if (isLoading && !overview) {
     return (
-      <div className={gridClass}>
-        {cards.map((card) => (
-          <CardSkeleton key={card.id} />
-        ))}
+      <div className={panelClass}>
+        <div className="h-5 w-44 shrink-0 animate-pulse rounded bg-bg-hover/70" />
+        <div className="mt-2 h-3 w-64 shrink-0 animate-pulse rounded bg-bg-hover/50" />
+        <div className="mt-3 flex min-h-0 flex-1 flex-col divide-y divide-border/40 dark:divide-text-primary/12">
+          {rows.map((row) => (
+            <RowSkeleton key={row.id} />
+          ))}
+        </div>
       </div>
     );
   }
 
-  const hasAnySignal = cards.some((card) => (card.metric?.sparkline?.length ?? 0) > 0);
+  const hasAnySignal = rows.some(
+    (row) => row.metric?.value != null || (row.metric?.sparkline?.length ?? 0) > 0,
+  );
 
   if (!hasAnySignal) {
     return (
-      <div
-        className={cn(
-          elevatedCardSurfaceClass,
-          "flex h-full min-h-0 items-center justify-center rounded-2xl p-4",
-          className,
-        )}
-      >
+      <div className={cn(panelClass, "items-center justify-center p-4")}>
         <EmptyState title={t("emptyTitle")} description={t("emptyBody")} />
       </div>
     );
   }
 
   return (
-    <div className={gridClass} role="list" aria-label={t("gridAria")}>
-      {cards.map((card) => {
-        const Icon = card.icon;
-        const sparkline = card.metric?.sparkline ?? [];
+    <section className={panelClass} aria-label={t("gridAria")}>
+      <div className={cn(typeStackMdClass, "shrink-0")}>
+        <p className="type-title text-text-primary">{t("title")}</p>
+        <p className="type-caption leading-snug text-text-secondary">{t("subtitle")}</p>
+      </div>
+      <div
+        className="mt-4 flex min-h-0 flex-1 flex-col divide-y divide-border/40 dark:divide-text-primary/12"
+        role="list"
+      >
+        {rows.map((row) => {
+          const Icon = row.icon;
+          const sparkline = row.metric?.sparkline ?? [];
+          const direction = seriesDirection(sparkline, row.invertTrend);
+          const display = row.format(row.metric?.value);
+          const hasValue = row.metric?.value != null;
+          const description = hasValue
+            ? t(`descriptions.${row.id}`, { count: display })
+            : t("descriptions.unavailable");
 
-        return (
-          <article
-            key={card.id}
-            role="listitem"
-            className={cn(
-              elevatedCardSurfaceClass,
-              "relative flex h-full min-h-0 flex-col overflow-hidden rounded-2xl",
-              "bg-bg-card/20 p-3 dark:bg-text-primary/5 sm:p-3.5",
-            )}
-          >
-            <div
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background: `radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, ${card.accent} 14%, transparent), transparent 58%)`,
-              }}
-              aria-hidden
-            />
-
-            <div className="relative z-10 flex items-start justify-between gap-2">
-              <div className={cn(typeStackMdClass, "min-w-0")}>
-                <p className="type-caption font-medium text-text-secondary">
-                  {tTabs(card.id)}
-                </p>
-                <p className="type-h2 font-semibold tracking-tight text-text-primary tabular-nums leading-none">
-                  {card.format(card.metric?.value)}
-                </p>
-              </div>
+          return (
+            <Link
+              key={row.id}
+              href={withDateRangeQuery("/analytics", from, to)}
+              role="listitem"
+              className={cn(
+                "group flex min-h-0 flex-1 items-center gap-4 py-4",
+                "transition-colors",
+              )}
+            >
               <span
-                className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border backdrop-blur-md"
+                className="inline-flex size-12 shrink-0 items-center justify-center rounded-2xl border backdrop-blur-md"
                 style={{
-                  color: card.accent,
-                  borderColor: `color-mix(in srgb, ${card.accent} 42%, transparent)`,
-                  background: `color-mix(in srgb, ${card.accent} 14%, transparent)`,
+                  color: row.accent,
+                  borderColor: `color-mix(in srgb, ${row.accent} 42%, transparent)`,
+                  background: `color-mix(in srgb, ${row.accent} 14%, transparent)`,
                 }}
                 aria-hidden
               >
-                <Icon className="size-5" />
+                <Icon className="size-6" />
               </span>
-            </div>
 
-            <div className="relative z-10 mt-auto h-16 w-full min-h-0 pt-2 sm:h-18">
-              {sparkline.length > 0 ? (
-                <AnalyticsTrendSparkline
-                  id={`dashboard-trend-${card.id}`}
-                  accent={card.accent}
-                  values={sparkline}
-                  reduceMotion={reduceMotion}
-                  height={56}
-                />
-              ) : (
-                <div className="flex h-full items-end">
-                  <p className="type-caption text-text-muted">{t("noSeries")}</p>
-                </div>
-              )}
-            </div>
-          </article>
-        );
-      })}
-    </div>
+              <div className={cn(typeStackMdClass, "min-w-0 flex-1")}>
+                <p className="type-caption font-medium text-text-secondary">
+                  {t(`cards.${row.id}`)}
+                </p>
+                <p className="flex items-center gap-1 type-title font-semibold tracking-tight text-text-primary tabular-nums leading-none">
+                  {display}
+                  {direction === "up" ? (
+                    <Icons.arrowUp className="size-4 text-status-active" aria-hidden />
+                  ) : null}
+                  {direction === "down" ? (
+                    <Icons.arrowDown className="size-4 text-status-rejected" aria-hidden />
+                  ) : null}
+                </p>
+              </div>
+
+              <div className={cn(typeStackMdClass, "max-w-56 shrink-0 text-end sm:max-w-64")}>
+                <p className="type-caption leading-snug text-text-secondary">{description}</p>
+                <p className="type-caption leading-snug text-text-muted">
+                  {t(`direction.${direction}`)}
+                </p>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+    </section>
   );
 }

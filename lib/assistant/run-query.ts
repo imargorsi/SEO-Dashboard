@@ -31,11 +31,13 @@ export async function runAssistantQuery(
 
   let message: string;
   let action: TAssistantQueryResult["action"];
+  let items: TAssistantQueryResult["items"];
 
   if (parsed.kind === "unknown") {
     const answer = unknownAssistantAnswer();
     message = answer.message;
     action = answer.action;
+    items = answer.items;
   } else {
     const requiredPermission = permissionForAssistantParse(parsed);
     const access = await getProjectAccessForUser(auth, projectId);
@@ -48,10 +50,12 @@ export async function runAssistantQuery(
       const answer = deniedAssistantAnswer(denyModule(requiredPermission));
       message = answer.message;
       action = answer.action;
+      items = answer.items;
     } else {
       const answer = await handleAssistantIntent(projectId, parsed);
       message = answer.message;
       action = answer.action;
+      items = answer.items;
     }
   }
 
@@ -66,6 +70,7 @@ export async function runAssistantQuery(
     message,
     intent,
     action,
+    items,
     history,
   };
 }

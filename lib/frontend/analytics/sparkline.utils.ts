@@ -5,6 +5,27 @@ export type TSparklinePaths = {
   end: { x: number; y: number };
 };
 
+export type TSparklineBar = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
+export function downsampleSeries(values: readonly number[], maxPoints: number): number[] {
+  if (values.length === 0 || maxPoints < 1) return [];
+  if (values.length <= maxPoints) return [...values];
+
+  const bucketSize = values.length / maxPoints;
+  return Array.from({ length: maxPoints }, (_, index) => {
+    const start = Math.floor(index * bucketSize);
+    const end = Math.max(start + 1, Math.floor((index + 1) * bucketSize));
+    const slice = values.slice(start, end);
+    const total = slice.reduce((sum, value) => sum + value, 0);
+    return total / slice.length;
+  });
+}
+
 function buildPoints(
   series: readonly number[],
   width: number,
@@ -98,4 +119,30 @@ export function buildSparklinePathsFromValues(
     area: pointsToAreaPath(line, points, height),
     end: points[points.length - 1]!,
   };
+}
+
+/** Compact volume bars for dashboard trend tiles. */
+export function buildSparklineBarsFromValues(
+  values: readonly number[],
+  width = 280,
+  height = 40,
+  maxBars = 24,
+): TSparklineBar[] {
+  const series = downsampleSeries(values, maxBars);
+  if (series.length === 0) return [];
+
+  const peak = Math.max(...series, 0.0001);
+  const gap = 1.25;
+  const slot = width / series.length;
+  const barWidth = Math.max(1.25, slot - gap);
+
+  return series.map((value, index) => {
+    const barHeight = Math.max(1.5, (value / peak) * (height - 2));
+    return {
+      x: index * slot + (slot - barWidth) / 2,
+      y: height - barHeight,
+      width: barWidth,
+      height: barHeight,
+    };
+  });
 }

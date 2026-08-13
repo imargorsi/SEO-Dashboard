@@ -10,6 +10,8 @@ import { DashboardSeoPulse } from "@/components/dashboard/dashboard-seo-pulse";
 import { DashboardSeoTrendGrid } from "@/components/dashboard/dashboard-seo-trend-grid";
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
+import { SeoActivityDateRangeFilter } from "@/components/seo-activities/seo-activity-date-range-filter";
+import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageAmbientGlow } from "@/components/ui/page-ambient-glow";
 import { useProjectAccess } from "@/context/project-access-context";
@@ -18,25 +20,26 @@ import { useAnalyticsOverviewQuery } from "@/features/analytics/analytics.api";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
 import { useLeadsQuery } from "@/features/leads/leads.api";
 import { useSeoActivitiesQuery } from "@/features/seo-activities/seo-activities.api";
-import { ANALYTICS_MAX_RANGE_DAYS } from "@/lib/integrations/constants";
-import { addUtcDays, utcYesterdayString } from "@/lib/integrations/date.utils";
+import { useSyncedAnalyticsDateRange } from "@/hooks/use-synced-analytics-date-range.hook";
 import { ApiError } from "@/lib/frontend/api/errors";
-import { notify } from "@/lib/frontend/feedback/notify";
 import {
-  toolbarFilterShellClass,
-  typeStackMdClass,
-} from "@/lib/frontend/layout/dashboard-chrome";
+  downloadDashboardExcel,
+  hasDashboardExportSignal,
+} from "@/lib/frontend/dashboard/export.utils";
+import { notify } from "@/lib/frontend/feedback/notify";
+import { typeStackMdClass } from "@/lib/frontend/layout/dashboard-chrome";
+import {
+  ANALYTICS_DATE_PRESET_IDS,
+  matchAnalyticsDatePreset,
+  resolveAnalyticsDatePreset,
+} from "@/lib/integrations/date.utils";
 import { hasPermission, mergePermissions } from "@/lib/rbac/access";
 import { cn } from "@/lib/utils";
 
-/** Widest overview window Analytics API allows (cache is typically ≤90d backfill). */
-function allTimeAnalyticsRange(now = new Date()): { from: string; to: string } {
-  const to = utcYesterdayString(now);
-  return { from: addUtcDays(to, -(ANALYTICS_MAX_RANGE_DAYS - 1)), to };
-}
-
 export function DashboardHomeSection() {
   const { t } = useTranslation("translation", { keyPrefix: "home" });
+  const { dateRange, from, to, hasRange, onDateRangeChange } = useSyncedAnalyticsDateRange();
+
   const { selectedProject } = useSelectedProject();
   const projectId = selectedProject?.id ?? null;
   const { data: authUser } = useAuthUserQuery();
@@ -51,29 +54,27 @@ export function DashboardHomeSection() {
   const canViewLeads = hasPermission(permissions, "leads.view");
   const canViewAnalytics = hasPermission(permissions, "analytics.view");
   const canViewSeo = hasPermission(permissions, "seo_activities.view");
-
-  const analyticsRange = useMemo(() => allTimeAnalyticsRange(), []);
-  const analyticsEnabled = Boolean(projectId) && canViewAnalytics;
+  const analyticsEnabled = Boolean(projectId) && canViewAnalytics && hasRange;
 
   const leadsQuery = useLeadsQuery(
     projectId,
-    { page: 1, per_page: 1 },
-    { enabled: Boolean(projectId) && canViewLeads },
+    { page: 1, per_page: 1, from, to },
+    { enabled: Boolean(projectId) && canViewLeads && hasRange },
   );
 
   const seoQuery = useSeoActivitiesQuery(
     projectId,
-    { type: "blogs", page: 1, per_page: 1 },
-    { enabled: Boolean(projectId) && canViewSeo },
+    { type: "blogs", page: 1, per_page: 1, from, to },
+    { enabled: Boolean(projectId) && canViewSeo && hasRange },
   );
 
-  const overviewQuery = useAnalyticsOverviewQuery(projectId, analyticsRange, {
+  const overviewQuery = useAnalyticsOverviewQuery(projectId, { from, to }, {
     enabled: analyticsEnabled,
   });
 
   useEffect(() => {
     loadErrorNotified.current = false;
-  }, [projectId]);
+  }, [projectId, from, to]);
 
   useEffect(() => {
     if (loadErrorNotified.current) return;
@@ -82,6 +83,60 @@ export function DashboardHomeSection() {
     loadErrorNotified.current = true;
     notify.error(ApiError.messageFrom(error, t("loadError")));
   }, [leadsQuery.error, overviewQuery.error, seoQuery.error, t]);
+
+  const typeCounts = seoQuery.data?.filters.type_counts;
+  const pulseValues = {
+    leads: canViewLeads ? (leadsQuery.data?.pagination.total ?? 0) : null,
+    backlinks: canViewSeo ? (typeCounts?.backlinks ?? 0) : null,
+    pageViews: canViewAnalytics
+      ? (overviewQuery.data?.engagement.pageViews.value ?? null)
+      : null,
+    blogs: canViewSeo ? (typeCounts?.blogs ?? 0) : null,
+  };
+
+  function onExportExcel() {
+    if (!hasRange) return;
+
+    const payload = {
+      pulse: pulseValues,
+      overview: canViewAnalytics ? overviewQuery.data : undefined,
+    };
+
+    if (!hasDashboardExportSignal(payload)) {
+      notify.info(t("export.empty"));
+      return;
+    }
+
+    try {
+      downloadDashboardExcel({
+        payload,
+        range: dateRange,
+        labels: {
+          sheets: {
+            summary: t("export.sheets.summary"),
+            dailyTrend: t("export.sheets.dailyTrend"),
+          },
+          metric: t("export.metric"),
+          value: t("export.value"),
+          date: t("export.date"),
+          leads: t("pulse.cards.leads"),
+          backlinks: t("pulse.cards.backlinks"),
+          pageViews: t("pulse.cards.pageViews"),
+          blogs: t("pulse.cards.blogs"),
+          clicks: t("trend.cards.clicks"),
+          impressions: t("trend.cards.impressions"),
+          ctr: t("trend.cards.ctr"),
+          position: t("trend.cards.position"),
+          engagementRate: t("trend.cards.engagementRate"),
+          avgSessionDuration: t("trend.cards.avgSessionDuration"),
+          sessions: t("export.sessions"),
+        },
+      });
+      notify.success(t("export.success"));
+    } catch (error) {
+      notify.error(ApiError.messageFrom(error, t("export.errorFallback")));
+    }
+  }
 
   if (!projectId) {
     return (
@@ -96,14 +151,11 @@ export function DashboardHomeSection() {
     (canViewSeo && seoQuery.isLoading) ||
     (canViewAnalytics && overviewQuery.isLoading);
 
-  const typeCounts = seoQuery.data?.filters.type_counts;
-  const projectName = selectedProject?.businessName ?? t("workspaceFallback");
-
   return (
-    <div className="relative flex h-full min-h-0 w-full min-w-0 flex-col overflow-hidden max-xl:h-auto max-xl:overflow-y-auto">
+    <div className="relative flex h-full min-h-0 w-full min-w-0 flex-col overflow-y-auto">
       <PageAmbientGlow />
 
-      <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden px-4 py-2.5 max-xl:h-auto max-xl:overflow-y-auto sm:px-6 sm:py-3">
+      <div className="relative flex min-h-0 w-full min-w-0 flex-1 flex-col px-4 py-2.5 sm:px-6 sm:py-3">
         <div className="flex shrink-0 flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div className={cn(typeStackMdClass, "min-w-0")}>
             <Heading id="dashboard-home-title" pageTitle>
@@ -112,75 +164,71 @@ export function DashboardHomeSection() {
             <Paragraph className="text-text-secondary">{t("subtitle")}</Paragraph>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <span
-              className={cn(
-                toolbarFilterShellClass,
-                "gap-2 rounded-full px-3 py-1.5 type-caption text-text-secondary",
-              )}
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <SeoActivityDateRangeFilter
+              value={dateRange}
+              onChange={onDateRangeChange}
+              presets={ANALYTICS_DATE_PRESET_IDS}
+              i18nKeyPrefix="modules.analytics.dateFilter"
+              resolvePreset={resolveAnalyticsDatePreset}
+              matchPreset={matchAnalyticsDatePreset}
+              ariaLabel={t("dateFilterAriaLabel")}
+            />
+            <Button
+              type="button"
+              variant="outlined"
+              size="md"
+              onClick={onExportExcel}
+              disabled={pulseLoading || !hasRange}
+              className="shrink-0"
             >
-              <Icons.briefcase className="size-3.5 text-brand" aria-hidden />
-              <span className="max-w-48 truncate font-medium text-text-primary">{projectName}</span>
-            </span>
-            <span
-              className={cn(
-                toolbarFilterShellClass,
-                "gap-2 rounded-full px-3 py-1.5 type-caption text-text-secondary",
-              )}
-            >
-              <Icons.clock className="size-3.5 text-text-muted" aria-hidden />
-              {t("rangeAllTime")}
-            </span>
+              <Icons.cloudDownload className="size-4" aria-hidden />
+              {t("export.excel")}
+            </Button>
           </div>
         </div>
 
-        <div className="mt-3 flex min-h-0 flex-1 flex-col gap-5">
-          <div className="grid min-h-0 flex-[0.86] gap-3 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] xl:items-stretch">
-            <div className="min-h-0 min-w-0 xl:h-full">
+        <div className="mt-3 flex min-h-0 w-full flex-1 flex-col gap-8 pb-4">
+          <section aria-label={t("pulse.title")} className="shrink-0">
+            <DashboardSeoPulse
+              variant="row"
+              isLoading={pulseLoading}
+              from={from}
+              to={to}
+              values={pulseValues}
+            />
+          </section>
+
+          <div
+            className={cn(
+              "grid min-h-0 w-full flex-1 gap-3",
+              canViewAnalytics &&
+                "lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] lg:items-stretch",
+            )}
+          >
+            <div className="flex min-h-0 min-w-0 w-full">
               <DashboardAssistantPanel
                 projectId={projectId}
                 canViewLeads={canViewLeads}
                 canViewAnalytics={canViewAnalytics}
                 canViewSeo={canViewSeo}
                 compact
-                className="h-full min-h-0"
+                className="h-full w-full"
               />
             </div>
 
-            <section aria-label={t("pulse.title")} className="min-h-0 min-w-0 xl:h-full">
-              <DashboardSeoPulse
-                compact
-                className="h-full min-h-0"
-                isLoading={pulseLoading}
-                values={{
-                  leads: canViewLeads ? (leadsQuery.data?.filters.counts.total ?? 0) : null,
-                  backlinks: canViewSeo ? (typeCounts?.backlinks ?? 0) : null,
-                  pageViews: canViewAnalytics
-                    ? (overviewQuery.data?.engagement.pageViews.value ?? null)
-                    : null,
-                  blogs: canViewSeo ? (typeCounts?.blogs ?? 0) : null,
-                }}
-              />
-            </section>
-          </div>
-
-          {canViewAnalytics ? (
-            <div className="flex min-h-0 flex-1 flex-col gap-2.5">
-              <div className={cn(typeStackMdClass, "shrink-0")}>
-                <Heading id="dashboard-trend-title" sectionTitle>
-                  {t("trend.title")}
-                </Heading>
-                <Paragraph className="text-text-secondary">{t("trend.subtitle")}</Paragraph>
-              </div>
-              <div className="min-h-0 flex-1">
+            {canViewAnalytics ? (
+              <section aria-label={t("trend.title")} className="flex min-h-0 min-w-0 w-full">
                 <DashboardSeoTrendGrid
                   overview={overviewQuery.data}
                   isLoading={overviewQuery.isLoading}
-                  className="h-full"
+                  from={from}
+                  to={to}
+                  className="h-full w-full"
                 />
-              </div>
-            </div>
-          ) : null}
+              </section>
+            ) : null}
+          </div>
         </div>
       </div>
     </div>

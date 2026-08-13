@@ -11,6 +11,7 @@ import { seedSystemRoles } from "@/lib/rbac/seed-roles";
 import { createSeoActivity } from "@/lib/seo-activities/create-seo-activity";
 import {
   AnalyticsDailyMetric,
+  AnalyticsDimensionRow,
   AssistantQueryHistory,
   Project,
   ProjectMember,
@@ -341,5 +342,67 @@ describe("Dashboard assistant query", () => {
     expect(result.message).toContain("42");
     expect(result.action?.label).toBe("View Analytics");
     expect(result.action?.route).toMatch(/^\/analytics\?from=/);
+  });
+
+  it("returns ranked top pages as list items with decoded labels", async () => {
+    await seedSystemRoles();
+
+    const owner = await User.create({
+      name: "Top Pages Owner",
+      email: "dash-top-pages@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+    });
+
+    const { project } = await createProject(
+      authContextFor(owner),
+      projectInput({
+        businessName: "Top Pages Project",
+        websiteUrl: "https://logicalcreations.net",
+      }),
+    );
+    await Project.findByIdAndUpdate(project._id, { status: "active" });
+    const projectId = project._id.toString();
+    const date = utcYesterdayString();
+
+    await AnalyticsDimensionRow.create([
+      {
+        projectId,
+        date,
+        source: "gsc",
+        dimensionType: "page",
+        dimensionValue: "https://logicalcreations.net/",
+        clicks: 40,
+        impressions: 200,
+      },
+      {
+        projectId,
+        date,
+        source: "gsc",
+        dimensionType: "page",
+        dimensionValue:
+          "https://logicalcreations.net/%D9%85%D8%B9%D8%B1%D8%B6-%D8%A7%D9%84%D8%B5%D9%88%D8%B1/",
+        clicks: 4,
+        impressions: 20,
+      },
+    ]);
+
+    const result = await runAssistantQuery(authContextFor(owner), projectId, {
+      query: "top pages",
+    });
+
+    expect(result.intent).toBe("analytics_top");
+    expect(result.message).toMatch(/^Top pages for /);
+    expect(result.items).toHaveLength(2);
+    expect(result.items?.[0]).toEqual({
+      label: "https://logicalcreations.net/",
+      detail: "40 clicks",
+    });
+    expect(result.items?.[1]?.label).toBe(
+      "https://logicalcreations.net/معرض-الصور/",
+    );
+    expect(result.items?.[1]?.detail).toBe("4 clicks");
+    expect(result.action?.label).toBe("View Analytics");
   });
 });

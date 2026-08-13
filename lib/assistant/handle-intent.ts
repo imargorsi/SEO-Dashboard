@@ -1,6 +1,7 @@
 import { defaultAnalyticsDateRange } from "@/lib/integrations/date.utils";
 import { getAnalyticsDimensions, getAnalyticsOverview } from "@/lib/integrations/read-analytics";
 import { countLeadsInRange } from "@/lib/leads/list-leads";
+import { formatAssistantListLabel } from "@/lib/assistant/format-list-label";
 import {
   rangeQuery,
   resolveAnalyticsWindow,
@@ -11,6 +12,7 @@ import type { TSeoActivityType } from "@/types/seo-activity.types";
 import type {
   TAssistantAction,
   TAssistantAnalyticsMetric,
+  TAssistantListItem,
   TAssistantParse,
 } from "@/types/assistant.types";
 
@@ -150,6 +152,7 @@ function activityLabel(type: TSeoActivityType, count: number): string {
 export type TAssistantIntentAnswer = {
   message: string;
   action?: TAssistantAction;
+  items?: TAssistantListItem[];
 };
 
 export async function handleAssistantIntent(
@@ -228,17 +231,18 @@ export async function handleAssistantIntent(
     };
   }
   const useClicks = parsed.source === "gsc";
-  const summary = dimensions.rows
-    .slice(0, 5)
-    .map((row) => {
-      const primary = useClicks ? (row.clicks ?? 0) : (row.sessions ?? 0);
-      const unit = useClicks ? "clicks" : "sessions";
-      return `${row.dimensionValue} (${formatCount(primary)} ${unit})`;
-    })
-    .join(", ");
+  const items: TAssistantListItem[] = dimensions.rows.slice(0, 5).map((row) => {
+    const primary = useClicks ? (row.clicks ?? 0) : (row.sessions ?? 0);
+    const unit = useClicks ? "clicks" : "sessions";
+    return {
+      label: formatAssistantListLabel(row.dimensionValue),
+      detail: `${formatCount(primary)} ${unit}`,
+    };
+  });
   return {
-    message: `Top ${dimLabel} for ${range.label}: ${summary}.`,
+    message: `Top ${dimLabel} for ${range.label}:`,
     action,
+    items,
   };
 }
 

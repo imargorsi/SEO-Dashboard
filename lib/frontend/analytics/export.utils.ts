@@ -1,5 +1,14 @@
 import { downloadBrowserFile } from "@/lib/frontend/seo-activities/export.utils";
 import type { TDateRange } from "@/lib/frontend/seo-activities/date-range.utils";
+import {
+  buildDatedExportFilename,
+  buildSpreadsheetXml,
+  formatSpreadsheetPercentRatio,
+  formatSpreadsheetPosition,
+  numberOrEmpty,
+  stringCell,
+  type TSpreadsheetSheet,
+} from "@/lib/frontend/export/spreadsheet-xml.utils";
 import type {
   TAnalyticsDimensionRowDto,
   TAnalyticsOverviewDto,
@@ -43,86 +52,22 @@ export type TAnalyticsExportPayload = {
   countries: TAnalyticsDimensionRowDto[];
 };
 
-type TCell =
-  | { type: "String"; value: string }
-  | { type: "Number"; value: number };
-
-type TSheet = {
-  name: string;
-  headers: string[];
-  rows: TCell[][];
-};
-
-function escapeXml(value: string): string {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
-
-function sanitizeSheetName(name: string): string {
-  const cleaned = name.replace(/[\\/?*[\]:]/g, " ").trim() || "Sheet";
-  return cleaned.slice(0, 31);
-}
-
-function formatPercentRatio(value: number | null | undefined): string {
-  if (value == null || Number.isNaN(value)) return "";
-  return `${(value * 100).toFixed(2)}%`;
-}
-
-function formatPosition(value: number | null | undefined): string {
-  if (value == null || Number.isNaN(value)) return "";
-  return value.toFixed(2);
-}
-
-function numberOrEmpty(value: number | null | undefined): TCell {
-  if (value == null || Number.isNaN(value)) return { type: "String", value: "" };
-  return { type: "Number", value };
-}
-
-function stringCell(value: string): TCell {
-  return { type: "String", value };
-}
-
-function renderCell(cell: TCell): string {
-  return `<Cell><Data ss:Type="${cell.type}">${escapeXml(
-    cell.type === "Number" ? String(cell.value) : cell.value,
-  )}</Data></Cell>`;
-}
-
-function renderSheet(sheet: TSheet): string {
-  const headerCells = sheet.headers
-    .map((header) => renderCell(stringCell(header)))
-    .join("");
-  const bodyRows = sheet.rows
-    .map((row) => `<Row>${row.map(renderCell).join("")}</Row>`)
-    .join("");
-
-  return `<Worksheet ss:Name="${escapeXml(sanitizeSheetName(sheet.name))}">
-  <Table>
-   <Row>${headerCells}</Row>
-   ${bodyRows}
-  </Table>
- </Worksheet>`;
-}
-
 function buildGscDimensionRows(
   rows: readonly TAnalyticsDimensionRowDto[],
-): TSheet["rows"] {
+): TSpreadsheetSheet["rows"] {
   return rows.map((row) => [
     stringCell(row.dimensionValue),
     numberOrEmpty(row.clicks),
     numberOrEmpty(row.impressions),
-    stringCell(formatPercentRatio(row.ctr)),
-    stringCell(formatPosition(row.position)),
+    stringCell(formatSpreadsheetPercentRatio(row.ctr)),
+    stringCell(formatSpreadsheetPosition(row.position)),
   ]);
 }
 
 function buildSheets(
   payload: TAnalyticsExportPayload,
   labels: TAnalyticsExportLabels,
-): TSheet[] {
+): TSpreadsheetSheet[] {
   const { overview } = payload;
 
   return [
@@ -135,10 +80,13 @@ function buildSheets(
           stringCell(labels.totalImpressions),
           numberOrEmpty(overview.cards.impressions.value),
         ],
-        [stringCell(labels.avgCtr), stringCell(formatPercentRatio(overview.cards.ctr.value))],
+        [
+          stringCell(labels.avgCtr),
+          stringCell(formatSpreadsheetPercentRatio(overview.cards.ctr.value)),
+        ],
         [
           stringCell(labels.avgPosition),
-          stringCell(formatPosition(overview.cards.position.value)),
+          stringCell(formatSpreadsheetPosition(overview.cards.position.value)),
         ],
         [stringCell(labels.totalSessions), numberOrEmpty(overview.ga4.sessions)],
         [stringCell(labels.totalUsers), numberOrEmpty(overview.ga4.totalUsers)],
@@ -158,8 +106,8 @@ function buildSheets(
         stringCell(point.date),
         numberOrEmpty(point.clicks),
         numberOrEmpty(point.impressions),
-        stringCell(formatPercentRatio(point.ctr)),
-        stringCell(formatPosition(point.position)),
+        stringCell(formatSpreadsheetPercentRatio(point.ctr)),
+        stringCell(formatSpreadsheetPosition(point.position)),
         numberOrEmpty(point.sessions),
       ]),
     },
@@ -210,29 +158,11 @@ export function buildAnalyticsExcelXml(
   payload: TAnalyticsExportPayload,
   labels: TAnalyticsExportLabels,
 ): string {
-  const sheets = buildSheets(payload, labels)
-    .map(renderSheet)
-    .join("\n ");
-
-  return `<?xml version="1.0"?>
-<?mso-application progid="Excel.Sheet"?>
-<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
- xmlns:o="urn:schemas-microsoft-com:office:office"
- xmlns:x="urn:schemas-microsoft-com:office:excel"
- xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
- ${sheets}
-</Workbook>`;
+  return buildSpreadsheetXml(buildSheets(payload, labels));
 }
 
 export function buildAnalyticsExportFilename(range: TDateRange, now = new Date()): string {
-  const stamp = [
-    now.getFullYear(),
-    String(now.getMonth() + 1).padStart(2, "0"),
-    String(now.getDate()).padStart(2, "0"),
-  ].join("");
-  const from = range.from ?? "all";
-  const to = range.to ?? "all";
-  return `analytics-report_${from}_${to}_${stamp}.xls`;
+  return buildDatedExportFilename("analytics-report", range, now);
 }
 
 export function hasAnalyticsExportSignal(payload: TAnalyticsExportPayload): boolean {

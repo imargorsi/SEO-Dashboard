@@ -16,7 +16,7 @@ function firstValue(value: TQueryValue): string | undefined {
   return value;
 }
 
-/** Read analytics date window from URL (`from` / `to`). Defaults to last 30 days. */
+/** Read Analytics / Dashboard date window from URL (`from` / `to`). Defaults to last 30 days. */
 export function parseAnalyticsPageQuery(
   params: Record<string, TQueryValue>,
 ): TAnalyticsPageQuery {

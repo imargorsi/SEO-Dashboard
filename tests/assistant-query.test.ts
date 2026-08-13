@@ -3,11 +3,20 @@ import { describe, expect, it } from "vitest";
 import { runAssistantQuery } from "@/lib/assistant/run-query";
 import { listAssistantHistory } from "@/lib/assistant/history";
 import { hashPassword } from "@/lib/auth/password";
+import { utcYesterdayString } from "@/lib/integrations/date.utils";
 import { createLead } from "@/lib/leads/create-lead";
 import { todayLeadDate } from "@/lib/leads/normalize";
 import { createProject } from "@/lib/projects/create-project";
 import { seedSystemRoles } from "@/lib/rbac/seed-roles";
-import { AssistantQueryHistory, Project, ProjectMember, Role, User } from "@/models";
+import { createSeoActivity } from "@/lib/seo-activities/create-seo-activity";
+import {
+  AnalyticsDailyMetric,
+  AssistantQueryHistory,
+  Project,
+  ProjectMember,
+  Role,
+  User,
+} from "@/models";
 import { authContextFor, projectInput } from "@/tests/helpers/project-test-utils";
 
 describe("Dashboard assistant query", () => {
@@ -47,7 +56,7 @@ describe("Dashboard assistant query", () => {
       query: "How many leads this month?",
     });
 
-    expect(result.intent).toBe("leads_this_month");
+    expect(result.intent).toBe("leads_count");
     expect(result.message.toLowerCase()).toContain("lead");
     expect(result.action?.label).toBe("View Leads");
     expect(result.action?.route).toMatch(/^\/leads\?from=/);
@@ -104,7 +113,7 @@ describe("Dashboard assistant query", () => {
       query: "leads this month",
     });
 
-    expect(result.intent).toBe("leads_this_month");
+    expect(result.intent).toBe("leads_count");
     expect(result.message.toLowerCase()).toContain("permission");
     expect(result.action).toBeUndefined();
     expect(result.history).toHaveLength(1);
@@ -198,5 +207,139 @@ describe("Dashboard assistant query", () => {
     expect(result.intent).toBe("unknown");
     expect(result.action).toBeUndefined();
     expect(result.message.toLowerCase()).toContain("understand");
+  });
+
+  it("answers SEO activity counts for members with seo_activities.view", async () => {
+    await seedSystemRoles();
+
+    const owner = await User.create({
+      name: "Seo Owner",
+      email: "dash-seo@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+    });
+
+    const { project } = await createProject(
+      authContextFor(owner),
+      projectInput({
+        businessName: "Seo Assist Project",
+        websiteUrl: "https://dash-seo.example.com",
+      }),
+    );
+    await Project.findByIdAndUpdate(project._id, { status: "active" });
+    const projectId = project._id.toString();
+    const auth = authContextFor(owner);
+
+    await createSeoActivity(auth, projectId, {
+      type: "blogs",
+      title: "Local Guide",
+      url: "https://dash-seo.example.com/blog/local",
+      occurredOn: todayLeadDate(),
+    });
+
+    const result = await runAssistantQuery(auth, projectId, {
+      query: "How many blogs?",
+    });
+
+    expect(result.intent).toBe("seo_count");
+    expect(result.message.toLowerCase()).toContain("blog");
+    expect(result.action?.label).toBe("View SEO Activities");
+    expect(result.action?.route).toMatch(/^\/seo-activities/);
+  });
+
+  it("denies SEO intents without seo_activities.view and still records history", async () => {
+    await seedSystemRoles();
+
+    const owner = await User.create({
+      name: "Owner",
+      email: "dash-seo-owner@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+    });
+
+    const viewer = await User.create({
+      name: "Viewer",
+      email: "dash-seo-viewer@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+    });
+
+    const { project } = await createProject(
+      authContextFor(owner),
+      projectInput({
+        businessName: "Seo Deny Project",
+        websiteUrl: "https://dash-seo-deny.example.com",
+      }),
+    );
+    await Project.findByIdAndUpdate(project._id, { status: "active" });
+
+    const dashOnlyRole = await Role.create({
+      name: "Dashboard Only Seo",
+      slug: "dashboard_only_seo_test",
+      scope: "project",
+      status: "active",
+      permissions: ["dashboard.view"],
+      isSystem: false,
+    });
+
+    await ProjectMember.create({
+      projectId: project._id,
+      userId: viewer._id,
+      roleId: dashOnlyRole._id,
+      status: "active",
+    });
+
+    const result = await runAssistantQuery(authContextFor(viewer), project._id.toString(), {
+      query: "How many blogs?",
+    });
+
+    expect(result.intent).toBe("seo_count");
+    expect(result.message.toLowerCase()).toContain("permission");
+    expect(result.action).toBeUndefined();
+    expect(result.history).toHaveLength(1);
+  });
+
+  it("answers analytics metric intents from cached overview data", async () => {
+    await seedSystemRoles();
+
+    const owner = await User.create({
+      name: "Analytics Owner",
+      email: "dash-analytics@example.com",
+      password: await hashPassword("password"),
+      emailVerifiedAt: new Date(),
+      roles: [],
+    });
+
+    const { project } = await createProject(
+      authContextFor(owner),
+      projectInput({
+        businessName: "Analytics Assist Project",
+        websiteUrl: "https://dash-analytics.example.com",
+      }),
+    );
+    await Project.findByIdAndUpdate(project._id, { status: "active" });
+    const projectId = project._id.toString();
+
+    await AnalyticsDailyMetric.create({
+      projectId,
+      date: utcYesterdayString(),
+      source: "gsc",
+      clicks: 42,
+      impressions: 400,
+      ctr: 0.105,
+      position: 8.2,
+    });
+
+    const result = await runAssistantQuery(authContextFor(owner), projectId, {
+      query: "how many clicks last 30 days",
+    });
+
+    expect(result.intent).toBe("analytics_metric");
+    expect(result.message).toContain("42");
+    expect(result.action?.label).toBe("View Analytics");
+    expect(result.action?.route).toMatch(/^\/analytics\?from=/);
   });
 });

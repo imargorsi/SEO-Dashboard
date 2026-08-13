@@ -104,6 +104,15 @@ export async function buildSummaryCounts(
   return { total, this_month, last_month, this_year };
 }
 
+export async function countLeadsInRange(
+  projectId: string,
+  from?: string | null,
+  to?: string | null,
+): Promise<number> {
+  const dateFilter = buildLeadDateFilter(from ?? undefined, to ?? undefined);
+  return Lead.countDocuments({ projectId, ...dateFilter });
+}
+
 export async function listLeads(
   projectId: string,
   query: ListLeadsQueryInput,

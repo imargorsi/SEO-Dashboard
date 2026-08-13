@@ -57,6 +57,14 @@ async function countByType(
   return { blogs, backlinks, technical_work };
 }
 
+export async function getSeoActivityCounts(
+  projectId: string,
+  from?: string | null,
+  to?: string | null,
+): Promise<TSeoActivityTypeCounts> {
+  return countByType(projectId, buildDateFilter(from ?? undefined, to ?? undefined));
+}
+
 export async function listSeoActivities(
   projectId: string,
   query: ListSeoActivitiesQueryInput,

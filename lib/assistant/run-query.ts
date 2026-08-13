@@ -1,36 +1,43 @@
 import type { AuthContext } from "@/lib/auth/guards";
-import {
-  detectAssistantIntent,
-  permissionForAssistantIntent,
-} from "@/lib/assistant/detect-intent";
+import { permissionForAssistantParse } from "@/lib/assistant/detect-intent";
 import {
   deniedAssistantAnswer,
   handleAssistantIntent,
   unknownAssistantAnswer,
 } from "@/lib/assistant/handle-intent";
 import { appendAssistantHistory } from "@/lib/assistant/history";
+import { parseAssistantQuery } from "@/lib/assistant/nlp/parse-query";
 import { getProjectAccessForUser } from "@/lib/projects/get-project-access";
 import { hasPermission } from "@/lib/rbac/access";
 import type { AssistantQueryInput } from "@/schemas/assistant";
 import type { TAssistantQueryResult } from "@/types/assistant.types";
+
+function denyModule(
+  permission: "leads.view" | "analytics.view" | "seo_activities.view" | null,
+): "leads" | "analytics" | "seo_activities" {
+  if (permission?.startsWith("leads.")) return "leads";
+  if (permission?.startsWith("seo_activities.")) return "seo_activities";
+  return "analytics";
+}
 
 export async function runAssistantQuery(
   auth: AuthContext,
   projectId: string,
   input: AssistantQueryInput,
 ): Promise<TAssistantQueryResult> {
-  const intent = detectAssistantIntent(input.query);
+  const parsed = parseAssistantQuery(input.query);
+  const intent = parsed.kind;
   const userId = auth.user._id.toString();
 
   let message: string;
   let action: TAssistantQueryResult["action"];
 
-  if (intent === "unknown") {
+  if (parsed.kind === "unknown") {
     const answer = unknownAssistantAnswer();
     message = answer.message;
     action = answer.action;
   } else {
-    const requiredPermission = permissionForAssistantIntent(intent);
+    const requiredPermission = permissionForAssistantParse(parsed);
     const access = await getProjectAccessForUser(auth, projectId);
     const allowed =
       requiredPermission != null &&
@@ -38,13 +45,11 @@ export async function runAssistantQuery(
       hasPermission(access.permissions, requiredPermission);
 
     if (!allowed) {
-      const answer = deniedAssistantAnswer(
-        requiredPermission?.startsWith("leads.") ? "leads" : "analytics",
-      );
+      const answer = deniedAssistantAnswer(denyModule(requiredPermission));
       message = answer.message;
       action = answer.action;
     } else {
-      const answer = await handleAssistantIntent(projectId, intent);
+      const answer = await handleAssistantIntent(projectId, parsed);
       message = answer.message;
       action = answer.action;
     }

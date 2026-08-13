@@ -31,33 +31,38 @@ type TSuggestion = {
   id: string;
   intent: Exclude<TAssistantIntent, "unknown">;
   label: string;
-  /** English query string — intent detection is English-only in MVP. */
+  /** English query string — intent detection is English-only. */
   query: string;
-  permission: "leads.view" | "analytics.view";
+  permission: "leads.view" | "analytics.view" | "seo_activities.view";
 };
 
 type TDashboardAssistantPanelProps = {
   projectId: string;
   canViewLeads: boolean;
   canViewAnalytics: boolean;
+  canViewSeo: boolean;
   className?: string;
   /** Tighter chrome for no-scroll `/dashboard` layout. */
   compact?: boolean;
 };
 
-/** English phrases for typewriter — aligned with chip queries / `detect-intent` (MVP). */
+/** English phrases for typewriter — aligned with chip queries / `parseAssistantQuery`. */
 const TYPING_PHRASES = {
   leadsThisMonth: "How many leads this month?",
   leadsLastMonth: "How many leads last month?",
   clicksOverview: "Show analytics overview",
   topQueries: "What are the top queries?",
   topPages: "What are the top pages?",
+  blogs: "How many blogs?",
+  backlinks: "How many backlinks?",
+  technicalWork: "How much technical work?",
 } as const;
 
 export function DashboardAssistantPanel({
   projectId,
   canViewLeads,
   canViewAnalytics,
+  canViewSeo,
   className,
   compact = false,
 }: TDashboardAssistantPanelProps) {
@@ -73,16 +78,9 @@ export function DashboardAssistantPanel({
     const all: TSuggestion[] = [
       {
         id: "leadsThisMonth",
-        intent: "leads_this_month",
+        intent: "leads_count",
         label: t("suggestions.leadsThisMonth"),
         query: "How many leads this month?",
-        permission: "leads.view",
-      },
-      {
-        id: "leadsLastMonth",
-        intent: "leads_last_month",
-        label: t("suggestions.leadsLastMonth"),
-        query: "How many leads last month?",
         permission: "leads.view",
       },
       {
@@ -93,22 +91,50 @@ export function DashboardAssistantPanel({
         permission: "analytics.view",
       },
       {
+        id: "blogs",
+        intent: "seo_count",
+        label: t("suggestions.blogs"),
+        query: "How many blogs?",
+        permission: "seo_activities.view",
+      },
+      {
         id: "topQueries",
-        intent: "analytics_top_queries",
+        intent: "analytics_top",
         label: t("suggestions.topQueries"),
         query: "What are the top queries?",
         permission: "analytics.view",
       },
       {
+        id: "leadsLastMonth",
+        intent: "leads_count",
+        label: t("suggestions.leadsLastMonth"),
+        query: "How many leads last month?",
+        permission: "leads.view",
+      },
+      {
         id: "topPages",
-        intent: "analytics_top_pages",
+        intent: "analytics_top",
         label: t("suggestions.topPages"),
         query: "What are the top pages?",
         permission: "analytics.view",
       },
       {
+        id: "backlinks",
+        intent: "seo_count",
+        label: t("suggestions.backlinks"),
+        query: "How many backlinks?",
+        permission: "seo_activities.view",
+      },
+      {
+        id: "technicalWork",
+        intent: "seo_count",
+        label: t("suggestions.technicalWork"),
+        query: "How much technical work?",
+        permission: "seo_activities.view",
+      },
+      {
         id: "leadsThisYear",
-        intent: "leads_this_year",
+        intent: "leads_count",
         label: t("suggestions.leadsThisYear"),
         query: "How many leads this year?",
         permission: "leads.view",
@@ -117,11 +143,12 @@ export function DashboardAssistantPanel({
 
     const filtered = all.filter((item) => {
       if (item.permission === "leads.view") return canViewLeads;
-      return canViewAnalytics;
+      if (item.permission === "analytics.view") return canViewAnalytics;
+      return canViewSeo;
     });
 
     return compact ? filtered.slice(0, 4) : filtered;
-  }, [canViewAnalytics, canViewLeads, compact, t]);
+  }, [canViewAnalytics, canViewLeads, canViewSeo, compact, t]);
 
   const typingPhrases = useMemo(() => {
     const phrases: string[] = [];
@@ -135,8 +162,11 @@ export function DashboardAssistantPanel({
         TYPING_PHRASES.topPages,
       );
     }
+    if (canViewSeo) {
+      phrases.push(TYPING_PHRASES.blogs, TYPING_PHRASES.backlinks, TYPING_PHRASES.technicalWork);
+    }
     return phrases.length > 0 ? phrases : [t("placeholder")];
-  }, [canViewAnalytics, canViewLeads, t]);
+  }, [canViewAnalytics, canViewLeads, canViewSeo, t]);
 
   const typingEnabled = !draft && !isFocused && !queryMutation.isPending;
   const typingPlaceholder = useTypingPlaceholder({

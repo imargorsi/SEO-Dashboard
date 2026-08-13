@@ -141,6 +141,7 @@ export function DashboardHomeSection() {
                 projectId={projectId}
                 canViewLeads={canViewLeads}
                 canViewAnalytics={canViewAnalytics}
+                canViewSeo={canViewSeo}
                 compact
                 className="h-full min-h-0"
               />

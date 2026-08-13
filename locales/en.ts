@@ -269,6 +269,9 @@ export interface Translation {
         analyticsOverview: string;
         topQueries: string;
         topPages: string;
+        blogs: string;
+        backlinks: string;
+        technicalWork: string;
       };
     };
   };
@@ -1743,9 +1746,9 @@ const translation: Translation = {
     assistant: {
       title: "Dashboard Assistant",
       description:
-        "Ask about leads or analytics for this project. Answers use cached project data only.",
-      descriptionShort: "Ask about leads or analytics for this project.",
-      placeholder: "Ask about leads or analytics…",
+        "Ask about leads, analytics, or SEO activities for this project. Answers use cached project data only.",
+      descriptionShort: "Ask about leads, analytics, or SEO activities for this project.",
+      placeholder: "Ask about leads, analytics, or SEO activities…",
       inputLabel: "Assistant Query",
       submit: "Ask",
       asking: "Asking…",
@@ -1762,6 +1765,9 @@ const translation: Translation = {
         analyticsOverview: "Analytics Overview",
         topQueries: "Top Queries",
         topPages: "Top Pages",
+        blogs: "Blogs Published",
+        backlinks: "Backlinks Created",
+        technicalWork: "Technical Work",
       },
     },
   },

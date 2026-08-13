@@ -9,10 +9,19 @@ const require = createRequire(import.meta.url);
 let nlp: WinkMethods | null = null;
 let initFailed = false;
 
+function isWinkModel(value: unknown): value is Model {
+  return typeof value === "object" && value != null && "core" in value;
+}
+
 function loadWinkModel(): Model {
-  const loaded = require("wink-eng-lite-web-model") as Model & { default?: Model };
-  if (loaded && typeof loaded === "object" && "core" in loaded) return loaded;
-  if (loaded?.default && typeof loaded.default === "object" && "core" in loaded.default) {
+  const loaded: unknown = require("wink-eng-lite-web-model");
+  if (isWinkModel(loaded)) return loaded;
+  if (
+    typeof loaded === "object" &&
+    loaded != null &&
+    "default" in loaded &&
+    isWinkModel(loaded.default)
+  ) {
     return loaded.default;
   }
   throw new Error("Assistant NLP model failed to load.");

@@ -1,11 +1,8 @@
 "use client";
 
-import type { IconType } from "react-icons";
-import {
-  MdOutlineVisibility,
-  MdOutlineSchedule,
-  MdOutlineTrendingUp,
-} from "react-icons/md";
+import type { TAppIconComponent } from "@/components/ui/app-icon";
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useTranslation } from "react-i18next";
 
 import { AnalyticsTrendSparkline } from "@/components/analytics/analytics-trend-sparkline";
@@ -21,7 +18,7 @@ type TMetricCardId = "engagementRate" | "avgSessionDuration" | "pageViews";
 
 type TMetricCardDef = {
   id: TMetricCardId;
-  icon: IconType;
+  icon: TAppIconComponent;
   accent: string;
   valueLabel: string;
   sparkline: number[];
@@ -88,21 +85,21 @@ export function AnalyticsEngagementPreviewCards({
   const metricCards: TMetricCardDef[] = [
     {
       id: "engagementRate",
-      icon: MdOutlineTrendingUp,
+      icon: Icons.chartLine,
       accent: "var(--status-active)",
       valueLabel: formatRatioPercent(engagementRate.value),
       sparkline: engagementRate.sparkline,
     },
     {
       id: "avgSessionDuration",
-      icon: MdOutlineSchedule,
+      icon: Icons.clock,
       accent: "var(--brand)",
       valueLabel: formatSessionDuration(avgSessionDuration.value),
       sparkline: avgSessionDuration.sparkline,
     },
     {
       id: "pageViews",
-      icon: MdOutlineVisibility,
+      icon: Icons.view,
       accent: "var(--status-pending)",
       valueLabel: formatCompactNumber(pageViews.value),
       sparkline: pageViews.sparkline,

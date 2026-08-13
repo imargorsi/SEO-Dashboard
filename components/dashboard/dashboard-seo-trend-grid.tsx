@@ -1,12 +1,8 @@
 "use client";
 
-import type { IconType } from "react-icons";
-import {
-  MdOutlineAdsClick,
-  MdOutlineLeaderboard,
-  MdOutlinePercent,
-  MdOutlineVisibility,
-} from "react-icons/md";
+import type { TAppIconComponent } from "@/components/ui/app-icon";
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useTranslation } from "react-i18next";
 
 import { AnalyticsTrendSparkline } from "@/components/analytics/analytics-trend-sparkline";
@@ -23,7 +19,7 @@ type TTrendCardId = "clicks" | "impressions" | "ctr" | "position";
 
 type TTrendCardDef = {
   id: TTrendCardId;
-  icon: IconType;
+  icon: TAppIconComponent;
   accent: string;
   format: (value: number | null | undefined) => string;
   metric: TAnalyticsCardMetricDto | undefined;
@@ -88,28 +84,28 @@ export function DashboardSeoTrendGrid({
   const cards: TTrendCardDef[] = [
     {
       id: "clicks",
-      icon: MdOutlineAdsClick,
+      icon: Icons.chartBar,
       accent: "var(--color-brand-primary)",
       format: formatCompactNumber,
       metric: cardsData?.clicks,
     },
     {
       id: "impressions",
-      icon: MdOutlineVisibility,
+      icon: Icons.view,
       accent: "var(--status-pending)",
       format: formatCompactNumber,
       metric: cardsData?.impressions,
     },
     {
       id: "ctr",
-      icon: MdOutlinePercent,
+      icon: Icons.chartLine,
       accent: "var(--status-active)",
       format: formatPercentRatio,
       metric: cardsData?.ctr,
     },
     {
       id: "position",
-      icon: MdOutlineLeaderboard,
+      icon: Icons.analytics,
       accent: "var(--color-brand-primary)",
       format: formatPosition,
       metric: cardsData?.position,

@@ -1,7 +1,8 @@
 "use client";
 
+import type { TAppIconComponent } from "@/components/ui/app-icon";
+
 import type { CSSProperties } from "react";
-import type { IconType } from "react-icons";
 
 import { elevatedCardSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
@@ -10,7 +11,7 @@ export type TSummaryMetricCard = {
   id: string;
   label: string;
   value: string;
-  icon: IconType;
+  icon: TAppIconComponent;
   accent: string;
 };
 
@@ -97,7 +98,7 @@ export function SummaryMetricCards({ cards, isLoading, className }: TSummaryMetr
                 style={iconPlateStyle}
                 aria-hidden
               >
-                <Icon className="size-6 sm:size-7" />
+                <Icon size={24} className="size-6 sm:size-7" />
               </span>
             </div>
           </div>

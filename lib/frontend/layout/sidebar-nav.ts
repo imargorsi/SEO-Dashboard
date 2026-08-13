@@ -1,14 +1,5 @@
-import type { IconType } from "react-icons";
-import {
-  IoAnalyticsOutline,
-  IoBriefcaseOutline,
-  IoOptionsOutline,
-  IoPeopleOutline,
-  IoPersonCircleOutline,
-  IoRocketOutline,
-  IoShieldCheckmarkOutline,
-  IoSpeedometerOutline,
-} from "react-icons/io5";
+import type { TAppIconComponent } from "@/components/ui/app-icon";
+import { Icons } from "@/lib/frontend/icons/app-icons";
 
 export type SidebarNavLabelKey =
   | "dashboard"
@@ -20,13 +11,12 @@ export type SidebarNavLabelKey =
   | "rolesPermissions"
   | "settings";
 
-
 export type SidebarNavGroupId = "general" | "reporting" | "settings";
 
 export type SidebarNavItem = {
   path: string;
   labelKey: SidebarNavLabelKey;
-  icon: IconType;
+  icon: TAppIconComponent;
   badge?: number;
   /** Extra path prefixes that mark this item active (e.g. `/permissions` for roles module). */
   matchPaths?: string[];
@@ -55,7 +45,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
   {
     path: "/dashboard",
     labelKey: "dashboard",
-    icon: IoSpeedometerOutline,
+    icon: Icons.dashboard,
     viewPermission: "dashboard.view",
     permissionScope: "project",
     group: "general",
@@ -63,7 +53,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
   {
     path: "/projects",
     labelKey: "projects",
-    icon: IoBriefcaseOutline,
+    icon: Icons.briefcase,
     viewPermission: null,
     permissionScope: "project",
     group: "general",
@@ -71,7 +61,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
   {
     path: "/users",
     labelKey: "users",
-    icon: IoPersonCircleOutline,
+    icon: Icons.userSharing,
     viewPermission: "admin.users.view",
     permissionScope: "platform",
     group: "general",
@@ -79,7 +69,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
   {
     path: "/roles",
     labelKey: "rolesPermissions",
-    icon: IoShieldCheckmarkOutline,
+    icon: Icons.access,
     viewPermission: "admin.roles.view",
     permissionScope: "platform",
     group: "general",
@@ -87,7 +77,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
   {
     path: "/analytics",
     labelKey: "analytics",
-    icon: IoAnalyticsOutline,
+    icon: Icons.analytics,
     viewPermission: "analytics.view",
     permissionScope: "project",
     group: "reporting",
@@ -95,7 +85,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
   {
     path: "/leads",
     labelKey: "leads",
-    icon: IoPeopleOutline,
+    icon: Icons.userGroup,
     viewPermission: "leads.view",
     permissionScope: "project",
     group: "reporting",
@@ -103,7 +93,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
   {
     path: "/seo-activities",
     labelKey: "seoActivities",
-    icon: IoRocketOutline,
+    icon: Icons.rocket,
     viewPermission: "seo_activities.view",
     permissionScope: "project",
     group: "reporting",
@@ -111,7 +101,7 @@ export const SIDEBAR_NAV_DEFINITIONS: readonly SidebarNavDefinition[] = [
   {
     path: "/settings",
     labelKey: "settings",
-    icon: IoOptionsOutline,
+    icon: Icons.settings,
     viewPermission: null,
     permissionScope: "platform",
     group: "settings",

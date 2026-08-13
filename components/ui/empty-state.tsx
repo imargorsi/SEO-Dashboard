@@ -1,17 +1,17 @@
 import type { ReactNode } from "react";
-import type { IconType } from "react-icons";
-import { IoFolderOpenOutline } from "react-icons/io5";
 
+import type { TAppIconComponent } from "@/components/ui/app-icon";
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
 import {
   emptyStateIconWellClass,
   emptyStateShellClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
+import { Icons } from "@/lib/frontend/icons/app-icons";
 import { cn } from "@/lib/utils";
 
 export type TEmptyStateProps = {
-  icon?: IconType;
+  icon?: TAppIconComponent;
   title: string;
   description: string;
   className?: string;
@@ -20,7 +20,7 @@ export type TEmptyStateProps = {
 
 /** Shared dashboard empty / no-data state — glassy icon well + spaced copy. */
 export function EmptyState({
-  icon: Icon = IoFolderOpenOutline,
+  icon: Icon = Icons.folderOpen,
   title,
   description,
   className,

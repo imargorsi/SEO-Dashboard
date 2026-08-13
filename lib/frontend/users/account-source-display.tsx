@@ -1,14 +1,21 @@
-import type { IconType } from "react-icons";
-import { FcGoogle } from "react-icons/fc";
-import { IoPersonAddOutline, IoPersonOutline } from "react-icons/io5";
+import type { ComponentType } from "react";
 
+import { GoogleBrandMark } from "@/components/auth/google-brand-mark";
+import { Icons } from "@/lib/frontend/icons/app-icons";
 import type { TUserAccountSourceKnown } from "@/lib/users/account-source";
+import { cn } from "@/lib/utils";
+
+export type TAccountSourceIconComponent = ComponentType<{ className?: string }>;
+
+function GoogleAccountSourceIcon({ className }: { className?: string }) {
+  return <GoogleBrandMark size={14} className={cn("shrink-0", className)} />;
+}
 
 /** Shared icons for account-source chips and admin filter dropdown. */
-export const ACCOUNT_SOURCE_ICON: Record<TUserAccountSourceKnown, IconType> = {
-  admin: IoPersonAddOutline,
-  self_register: IoPersonOutline,
-  google: FcGoogle,
+export const ACCOUNT_SOURCE_ICON: Record<TUserAccountSourceKnown, TAccountSourceIconComponent> = {
+  admin: Icons.userAdd,
+  self_register: Icons.user,
+  google: GoogleAccountSourceIcon,
 };
 
 /** Glass + brand-tinted chrome — aligns with dashboard frosted chips, not solid status fills. */

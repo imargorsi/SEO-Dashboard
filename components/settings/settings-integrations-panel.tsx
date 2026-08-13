@@ -1,8 +1,9 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { IoRefreshOutline, IoUnlinkOutline, IoWarningOutline } from "react-icons/io5";
 
 import { IntegrationServiceCard } from "@/components/settings/integrations/integration-service-card";
 import { AlertDialogCancel } from "@/components/ui/alert-dialog";
@@ -166,10 +167,10 @@ export function SettingsIntegrationsPanel() {
 
   const confirmIcon =
     pending?.type === "disconnect"
-      ? IoUnlinkOutline
+      ? Icons.unlink
       : pending?.type === "refresh"
-        ? IoRefreshOutline
-        : IoWarningOutline;
+        ? Icons.refresh
+        : Icons.alert;
 
   return (
     <div className="flex flex-col gap-6">
@@ -189,7 +190,7 @@ export function SettingsIntegrationsPanel() {
             onClick={() => setPending({ type: "refresh" })}
             className="shrink-0"
           >
-            <IoRefreshOutline className="size-4" aria-hidden />
+            <Icons.refresh className="size-4" aria-hidden />
             {t("refresh")}
           </Button>
         ) : null}

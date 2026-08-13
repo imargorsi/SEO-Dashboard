@@ -1,6 +1,7 @@
 "use client";
 
-import { IoSparklesOutline } from "react-icons/io5";
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 
 import { cn } from "@/lib/utils";
 
@@ -12,11 +13,11 @@ type TAssistantSparkleIconProps = {
 export function AssistantSparkleIcon({ className }: TAssistantSparkleIconProps) {
   return (
     <span className={cn("relative inline-flex size-6 items-center justify-center", className)}>
-      <IoSparklesOutline
+      <Icons.sparkles
         className="size-6 text-text-primary motion-safe:animate-[assistant-sparkle-pulse_2.4s_ease-in-out_infinite]"
         aria-hidden
       />
-      <IoSparklesOutline
+      <Icons.sparkles
         className="pointer-events-none absolute inset-0 size-6 text-text-primary opacity-40 motion-safe:animate-[assistant-sparkle-twinkle_1.8s_ease-in-out_infinite]"
         aria-hidden
       />

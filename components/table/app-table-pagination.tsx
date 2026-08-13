@@ -1,8 +1,7 @@
 "use client";
 
-import { IoChevronBack, IoChevronForward } from "react-icons/io5";
-
 import { Button } from "@/components/ui/button";
+import { Icons } from "@/lib/frontend/icons/app-icons";
 import {
   tablePaginationBarClass,
   tablePaginationIconActionClass,
@@ -51,7 +50,7 @@ export function AppTablePagination({
           disabled={safePage <= 1}
           onClick={() => onPageChange(safePage - 1)}
         >
-          <IoChevronBack className="size-3.5" aria-hidden />
+          <Icons.arrowLeft className="size-3.5" aria-hidden />
         </Button>
 
         {visiblePages.map((pageNumber) => {
@@ -87,7 +86,7 @@ export function AppTablePagination({
           disabled={safePage >= lastPage}
           onClick={() => onPageChange(safePage + 1)}
         >
-          <IoChevronForward className="size-3.5" aria-hidden />
+          <Icons.arrowRight className="size-3.5" aria-hidden />
         </Button>
       </div>
     </div>

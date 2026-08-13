@@ -3,8 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { IoSearchOutline } from "react-icons/io5";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import SelectDropdownArrowIcon from "@/components/icons/input-select-dropdown-arrow";
+import { Icons } from "@/lib/frontend/icons/app-icons";
 import { formFieldControlClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { COUNTRY_DIAL_CODES, DEFAULT_COUNTRY_DIAL_CODE, type TCountryDialCode } from "@/lib/frontend/phone/country-codes";
 import { cn } from "@/lib/utils";
@@ -69,7 +68,7 @@ function CountryOptionList({
     <>
       <div className="p-1 pb-1.5">
         <div className="relative">
-          <IoSearchOutline
+          <Icons.search
             className="pointer-events-none absolute inset-s-2.5 top-1/2 size-3.5 -translate-y-1/2 text-text-muted"
             aria-hidden
           />

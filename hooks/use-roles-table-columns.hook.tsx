@@ -1,8 +1,9 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { LuCircleDot, LuKeyRound, LuShield, LuUsers } from "react-icons/lu";
 
 import type { TAppTableColumn } from "@/components/table/app-table";
 import { TableRowIconActions } from "@/components/table/table-row-icon-actions";
@@ -52,7 +53,7 @@ export function useRolesTableColumns({
       {
         key: "role",
         label: t("colRole"),
-        headerIcon: LuShield,
+        headerIcon: Icons.security,
         render: (item) => (
           <div className="min-w-0">
             <p className="type-body-strong text-text-primary truncate">{item.name}</p>
@@ -63,7 +64,7 @@ export function useRolesTableColumns({
       {
         key: "permissions",
         label: t("colPermissions"),
-        headerIcon: LuKeyRound,
+        headerIcon: Icons.key,
         render: (item) => (
           <span className={tableGlassChipClass}>
             {t("permissionsCount", { count: item.permissions_count })}
@@ -73,7 +74,7 @@ export function useRolesTableColumns({
       {
         key: "members",
         label: t("colMembers"),
-        headerIcon: LuUsers,
+        headerIcon: Icons.userGroup,
         render: (item) => <span className="type-body text-text-primary tabular-nums">{item.members_count}</span>,
       },
       {
@@ -91,7 +92,7 @@ export function useRolesTableColumns({
       {
         key: "status",
         label: t("colStatus"),
-        headerIcon: LuCircleDot,
+        headerIcon: Icons.checkCircle,
         render: (item) => {
           const status = isActiveRoleStatus(item.status) ? "active" : "inactive";
 

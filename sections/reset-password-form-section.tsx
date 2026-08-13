@@ -1,9 +1,10 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
-import { IoLockClosedOutline } from "react-icons/io5";
 
 import { AuthFormHeader } from "@/components/auth/auth-form-header";
 import { AuthInput } from "@/components/auth/auth-input";
@@ -66,7 +67,7 @@ export function ResetPasswordFormSection({
                 placeholder="••••••••"
                 required
                 autoComplete="new-password"
-                startIcon={<IoLockClosedOutline className="size-4" />}
+                startIcon={<Icons.lock className="size-4" />}
                 error={errors.password?.message ?? ""}
                 {...register("password", {
                   required: t("fieldRequired"),
@@ -81,7 +82,7 @@ export function ResetPasswordFormSection({
                 placeholder="••••••••"
                 required
                 autoComplete="new-password"
-                startIcon={<IoLockClosedOutline className="size-4" />}
+                startIcon={<Icons.lock className="size-4" />}
                 error={errors.password_confirmation?.message ?? ""}
                 {...register("password_confirmation", {
                   required: t("fieldRequired"),

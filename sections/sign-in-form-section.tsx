@@ -1,9 +1,10 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
-import { IoLockClosedOutline, IoMailOutline } from "react-icons/io5";
 
 import { AuthFormHeader } from "@/components/auth/auth-form-header";
 import { AuthInput } from "@/components/auth/auth-input";
@@ -42,7 +43,7 @@ export function SignInFormSection({
           placeholder="you@company.com"
           required
           autoComplete="email"
-          startIcon={<IoMailOutline className="size-4" />}
+          startIcon={<Icons.mail className="size-4" />}
           error={errors.email?.message ?? ""}
           {...register("email", {
             required: t("fieldRequired"),
@@ -60,7 +61,7 @@ export function SignInFormSection({
           placeholder="••••••••"
           required
           autoComplete="current-password"
-          startIcon={<IoLockClosedOutline className="size-4" />}
+          startIcon={<Icons.lock className="size-4" />}
           error={errors.password?.message ?? ""}
           {...register("password", {
             required: t("fieldRequired"),

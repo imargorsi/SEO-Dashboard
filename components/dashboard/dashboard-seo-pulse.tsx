@@ -1,13 +1,8 @@
 "use client";
 
-import type { IconType } from "react-icons";
-import {
-  IoArrowForward,
-  IoDocumentTextOutline,
-  IoEyeOutline,
-  IoLinkOutline,
-  IoPeopleOutline,
-} from "react-icons/io5";
+import type { TAppIconComponent } from "@/components/ui/app-icon";
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 
@@ -30,7 +25,7 @@ type TPulseCardId = keyof TDashboardSeoPulseValues;
 type TPulseCardDef = {
   id: TPulseCardId;
   labelKey: TPulseCardId;
-  icon: IconType;
+  icon: TAppIconComponent;
   accent: string;
   href: string | null;
 };
@@ -86,28 +81,28 @@ export function DashboardSeoPulse({
     {
       id: "leads",
       labelKey: "leads",
-      icon: IoPeopleOutline,
+      icon: Icons.userGroup,
       accent: "var(--status-pending)",
       href: values.leads == null ? null : "/leads",
     },
     {
       id: "backlinks",
       labelKey: "backlinks",
-      icon: IoLinkOutline,
+      icon: Icons.link,
       accent: "var(--status-active)",
       href: values.backlinks == null ? null : "/seo-activities?type=backlinks",
     },
     {
       id: "pageViews",
       labelKey: "pageViews",
-      icon: IoEyeOutline,
+      icon: Icons.view,
       accent: "var(--color-secondary)",
       href: values.pageViews == null ? null : "/analytics",
     },
     {
       id: "blogs",
       labelKey: "blogs",
-      icon: IoDocumentTextOutline,
+      icon: Icons.file,
       accent: "var(--status-invited)",
       href: values.blogs == null ? null : "/seo-activities?type=blogs",
     },
@@ -192,7 +187,7 @@ export function DashboardSeoPulse({
                 className="absolute bottom-2.5 inset-e-2.5 z-10 inline-flex size-6 items-center justify-center rounded-full border border-border/40 bg-bg-card/30 text-text-muted opacity-70 backdrop-blur-sm transition-opacity group-hover:opacity-100 group-hover:text-brand"
                 aria-hidden
               >
-                <IoArrowForward className="size-3" />
+                <Icons.arrowRight className="size-3" />
               </span>
             ) : null}
 

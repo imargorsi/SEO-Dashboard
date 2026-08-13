@@ -1,9 +1,9 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { IoTrashOutline } from "react-icons/io5";
-import { PiPencilThin } from "react-icons/pi";
 
 import type { TAppTableColumn } from "@/components/table/app-table";
 import { TableRowIconActions } from "@/components/table/table-row-icon-actions";
@@ -55,7 +55,7 @@ function buildActionsColumn<T extends TSeoActivityRow>({
             ? [
                 {
                   key: "edit",
-                  icon: <PiPencilThin className="size-4" aria-hidden />,
+                  icon: <Icons.pencil className="size-4" aria-hidden />,
                   label: t("editActivity"),
                   onClick: () => onEdit(item),
                 },
@@ -65,7 +65,7 @@ function buildActionsColumn<T extends TSeoActivityRow>({
             ? [
                 {
                   key: "delete",
-                  icon: <IoTrashOutline className="size-4" aria-hidden />,
+                  icon: <Icons.delete className="size-4" aria-hidden />,
                   label: t("deleteActivity"),
                   onClick: () => onDelete(item),
                   className:

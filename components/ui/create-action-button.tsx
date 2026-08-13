@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { IoAdd } from "react-icons/io5";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
 import { cn } from "@/lib/utils";
 
 type TCreateActionButtonBase = {
@@ -48,7 +48,7 @@ function CreateActionContent({ children }: { children: ReactNode }) {
         )}
         aria-hidden
       >
-        <IoAdd className="size-3.5" />
+        <Icons.add className="size-3.5" />
       </span>
       <span className="relative z-10 leading-none">{children}</span>
     </>

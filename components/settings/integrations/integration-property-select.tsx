@@ -1,6 +1,7 @@
 "use client";
 
-import { IoCheckmark } from "react-icons/io5";
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 
 import SelectDropdownArrowIcon from "@/components/icons/input-select-dropdown-arrow";
 import {
@@ -59,7 +60,7 @@ export function IntegrationPropertySelect({
             )}
           >
             <span className="min-w-0 flex-1 truncate text-start">{placeholder}</span>
-            {!value ? <IoCheckmark className="size-3.5 shrink-0 text-brand" aria-hidden /> : null}
+            {!value ? <Icons.tick className="size-3.5 shrink-0 text-brand" aria-hidden /> : null}
           </DropdownMenuItem>
           {options.map((option) => {
             const isSelected = option.id === value;
@@ -71,7 +72,7 @@ export function IntegrationPropertySelect({
               >
                 <span className="min-w-0 flex-1 truncate text-start">{option.name}</span>
                 {isSelected ? (
-                  <IoCheckmark className="size-3.5 shrink-0 text-brand" aria-hidden />
+                  <Icons.tick className="size-3.5 shrink-0 text-brand" aria-hidden />
                 ) : null}
               </DropdownMenuItem>
             );

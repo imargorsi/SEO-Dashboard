@@ -1,13 +1,8 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useTranslation } from "react-i18next";
-import {
-  IoBriefcaseOutline,
-  IoCheckmarkCircle,
-  IoFlagOutline,
-  IoGridOutline,
-  IoPersonOutline,
-} from "react-icons/io5";
 
 import {
   ProjectDetailField,
@@ -41,7 +36,7 @@ export function ProjectDetailMainContent({ project }: ProjectDetailMainContentPr
       <ProjectDetailInfoCard
         title={tDetail("sectionBusinessTitle")}
         lead={tDetail("sectionBusinessLead")}
-        icon={<IoBriefcaseOutline className="size-4 shrink-0" aria-hidden />}
+        icon={<Icons.briefcase className="size-4 shrink-0" aria-hidden />}
       >
         <div className="grid gap-5 sm:grid-cols-2">
           <ProjectDetailField label={tForm("websiteUrl")} value={displayDetailValue(project.websiteUrl)} />
@@ -58,7 +53,7 @@ export function ProjectDetailMainContent({ project }: ProjectDetailMainContentPr
       <ProjectDetailInfoCard
         title={tDetail("sectionServicesTitle")}
         lead={tDetail("sectionServicesLead")}
-        icon={<IoGridOutline className="size-4 shrink-0" aria-hidden />}
+        icon={<Icons.grid className="size-4 shrink-0" aria-hidden />}
       >
         <ProjectDetailTagList items={project.servicesOffered} emptyLabel={tDetail("noServices")} />
       </ProjectDetailInfoCard>
@@ -66,7 +61,7 @@ export function ProjectDetailMainContent({ project }: ProjectDetailMainContentPr
       <ProjectDetailInfoCard
         title={tDetail("sectionSeoGoalsTitle")}
         lead={tDetail("sectionSeoGoalsLead")}
-        icon={<IoFlagOutline className="size-4 shrink-0" aria-hidden />}
+        icon={<Icons.flag className="size-4 shrink-0" aria-hidden />}
       >
         {project.seoGoals.length === 0 ? (
           <p className={cn("type-body", elevatedCardMutedClass)}>{tDetail("noSeoGoals")}</p>
@@ -85,7 +80,7 @@ export function ProjectDetailMainContent({ project }: ProjectDetailMainContentPr
                     <Icon className="size-5" aria-hidden />
                   </span>
                   <span className={cn("type-body-strong", elevatedCardTitleClass)}>{label}</span>
-                  <IoCheckmarkCircle className="ms-auto size-5 shrink-0 text-status-active" aria-hidden />
+                  <Icons.checkCircle className="ms-auto size-5 shrink-0 text-status-active" aria-hidden />
                 </li>
               );
             })}
@@ -96,7 +91,7 @@ export function ProjectDetailMainContent({ project }: ProjectDetailMainContentPr
       <ProjectDetailInfoCard
         title={tDetail("sectionIcpTitle")}
         lead={tDetail("sectionIcpLead")}
-        icon={<IoPersonOutline className="size-4 shrink-0" aria-hidden />}
+        icon={<Icons.user className="size-4 shrink-0" aria-hidden />}
       >
         <p className={cn("type-body leading-relaxed", elevatedCardBodyClass)}>
           {displayDetailValue(project.idealCustomerProfile, tDetail("noValue"))}

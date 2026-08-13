@@ -1,9 +1,9 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { IoEyeOutline, IoTrashOutline } from "react-icons/io5";
-import { PiPencilThin } from "react-icons/pi";
 
 import type { TAppTableColumn } from "@/components/table/app-table";
 import { TableRowIconActions } from "@/components/table/table-row-icon-actions";
@@ -103,7 +103,7 @@ export function useLeadsTableColumns({
               ? [
                   {
                     key: "view",
-                    icon: <IoEyeOutline className="size-4" aria-hidden />,
+                    icon: <Icons.view className="size-4" aria-hidden />,
                     label: t("viewLead"),
                     onClick: () => onView(item),
                   },
@@ -113,7 +113,7 @@ export function useLeadsTableColumns({
               ? [
                   {
                     key: "edit",
-                    icon: <PiPencilThin className="size-4" aria-hidden />,
+                    icon: <Icons.pencil className="size-4" aria-hidden />,
                     label: t("editLead"),
                     onClick: () => onEdit(item),
                   },
@@ -123,7 +123,7 @@ export function useLeadsTableColumns({
               ? [
                   {
                     key: "delete",
-                    icon: <IoTrashOutline className="size-4" aria-hidden />,
+                    icon: <Icons.delete className="size-4" aria-hidden />,
                     label: t("deleteLead"),
                     onClick: () => onDelete(item),
                     className:

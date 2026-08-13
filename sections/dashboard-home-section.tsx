@@ -1,8 +1,9 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { IoBriefcaseOutline, IoTimeOutline } from "react-icons/io5";
 
 import { DashboardAssistantPanel } from "@/components/dashboard/dashboard-assistant-panel";
 import { DashboardSeoPulse } from "@/components/dashboard/dashboard-seo-pulse";
@@ -118,7 +119,7 @@ export function DashboardHomeSection() {
                 "gap-2 rounded-full px-3 py-1.5 type-caption text-text-secondary",
               )}
             >
-              <IoBriefcaseOutline className="size-3.5 text-brand" aria-hidden />
+              <Icons.briefcase className="size-3.5 text-brand" aria-hidden />
               <span className="max-w-48 truncate font-medium text-text-primary">{projectName}</span>
             </span>
             <span
@@ -127,7 +128,7 @@ export function DashboardHomeSection() {
                 "gap-2 rounded-full px-3 py-1.5 type-caption text-text-secondary",
               )}
             >
-              <IoTimeOutline className="size-3.5 text-text-muted" aria-hidden />
+              <Icons.clock className="size-3.5 text-text-muted" aria-hidden />
               {t("rangeAllTime")}
             </span>
           </div>

@@ -1,6 +1,6 @@
 import * as React from "react";
-import { IoChevronForward, IoEllipsisHorizontal } from "react-icons/io5";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
 import { cn } from "@/lib/utils";
 import {
   breadcrumbChromeMutedClass,
@@ -85,7 +85,7 @@ function BreadcrumbSeparator({ children, className, ...props }: React.ComponentP
       )}
       {...props}
     >
-      {children ?? <IoChevronForward className="rtl:rotate-180" aria-hidden />}
+      {children ?? <Icons.arrowRight className="rtl:rotate-180" aria-hidden />}
     </li>
   );
 }
@@ -102,7 +102,7 @@ function BreadcrumbEllipsis({ className, ...props }: React.ComponentProps<"span"
       )}
       {...props}
     >
-      <IoEllipsisHorizontal className="size-4" />
+      <Icons.moreHorizontal className="size-4" />
       <span className="sr-only">More</span>
     </span>
   );

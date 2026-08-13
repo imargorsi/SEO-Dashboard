@@ -1,8 +1,9 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { IoArrowUp } from "react-icons/io5";
 
 import { WorldChoroplethMap } from "@/components/analytics/world-choropleth-map";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -116,7 +117,7 @@ export function AnalyticsUserDemographicsCard({
                 </p>
                 {leading ? (
                   <span className="mb-1 inline-flex items-center gap-1 type-caption font-medium text-success">
-                    <IoArrowUp className="size-3.5" aria-hidden />
+                    <Icons.arrowUp className="size-3.5" aria-hidden />
                     {leading.name}
                   </span>
                 ) : null}

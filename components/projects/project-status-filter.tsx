@@ -1,7 +1,8 @@
 "use client";
 
-import type { IconType } from "react-icons";
-import { IoGridOutline } from "react-icons/io5";
+import type { TAppIconComponent } from "@/components/ui/app-icon";
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useTranslation } from "react-i18next";
 
 import type { ProjectStatus } from "@/lib/projects/constants";
@@ -16,12 +17,12 @@ import { cn } from "@/lib/utils";
 type TStatusFilterOption = {
   id: TProjectStatusFilter;
   labelKey: TProjectStatusFilterLabelKey;
-  icon?: IconType;
+  icon?: TAppIconComponent;
   statusColorKey?: TStatusColorKey;
 };
 
 const FILTER_OPTIONS: TStatusFilterOption[] = [
-  { id: "all", labelKey: "all", icon: IoGridOutline },
+  { id: "all", labelKey: "all", icon: Icons.grid },
   { id: "active", labelKey: "active", statusColorKey: "active" },
   { id: "pending", labelKey: "pending", statusColorKey: "pending" },
   { id: "rejected", labelKey: "rejected", statusColorKey: "rejected" },

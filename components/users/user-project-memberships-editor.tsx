@@ -1,8 +1,9 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { IoAddOutline, IoPencilOutline, IoTrashOutline } from "react-icons/io5";
 
 import { Input } from "@/components/input";
 import { ProjectIdentity } from "@/components/projects/project-identity";
@@ -273,7 +274,7 @@ export function UserProjectMembershipsEditor({
             disabled={isBusy}
             onClick={openAddModal}
           >
-            <IoAddOutline className="size-4" aria-hidden />
+            <Icons.add className="size-4" aria-hidden />
             {t("add")}
           </Button>
         ) : null}
@@ -315,7 +316,7 @@ export function UserProjectMembershipsEditor({
                     title={t("removeAria", { name: row.projectName })}
                     onClick={() => requestRemove(row.projectId, row.projectName)}
                   >
-                    <IoTrashOutline className="size-4" aria-hidden />
+                    <Icons.delete className="size-4" aria-hidden />
                   </button>
                 </div>
 
@@ -410,7 +411,7 @@ export function UserProjectMembershipsEditor({
       <ConfirmDialog
         open={Boolean(pending)}
         onOpenChange={(open) => !open && setPending(null)}
-        icon={pending?.type === "remove" ? IoTrashOutline : IoPencilOutline}
+        icon={pending?.type === "remove" ? Icons.delete : Icons.pencil}
         tone={pending?.type === "remove" ? "destructive" : "default"}
         title={
           pending?.type === "remove" ? t("confirmRemoveTitle") : t("confirmUpdateTitle")

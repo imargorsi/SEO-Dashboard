@@ -1,6 +1,7 @@
 "use client";
 
-import { IoGridOutline, IoListOutline } from "react-icons/io5";
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useTranslation } from "react-i18next";
 
 import type { TProjectListViewMode } from "@/lib/frontend/projects/projects-list-view.utils";
@@ -15,11 +16,11 @@ type TProjectListViewToggleProps = {
 
 const VIEW_OPTIONS: {
   id: TProjectListViewMode;
-  icon: typeof IoGridOutline;
+  icon: typeof Icons.grid;
   labelKey: "cards" | "table";
 }[] = [
-  { id: "cards", icon: IoGridOutline, labelKey: "cards" },
-  { id: "table", icon: IoListOutline, labelKey: "table" },
+  { id: "cards", icon: Icons.grid, labelKey: "cards" },
+  { id: "table", icon: Icons.list, labelKey: "table" },
 ];
 
 export function ProjectListViewToggle({

@@ -1,5 +1,7 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useEffect, useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
@@ -10,7 +12,6 @@ import { Paragraph } from "@/components/paragraph";
 import { EmptyState } from "@/components/ui/empty-state";
 import { LoadingState } from "@/components/ui/loading-state";
 import { useProjectAccess } from "@/context/project-access-context";
-import { IoFolderOpenOutline, IoLockClosedOutline, IoWarningOutline } from "react-icons/io5";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
 import { useProjectQuery } from "@/features/projects/projects.api";
 import { ApiError } from "@/lib/frontend/api/errors";
@@ -61,7 +62,7 @@ export function ProjectsEditSection() {
         <EmptyState
           title={tDetail("notFoundTitle")}
           description={tDetail("notFoundBody")}
-          icon={IoFolderOpenOutline}
+          icon={Icons.folderOpen}
         />
       </div>
     );
@@ -78,7 +79,7 @@ export function ProjectsEditSection() {
         <EmptyState
           title={isNotFound ? tDetail("notFoundTitle") : tDetail("loadErrorTitle")}
           description={isNotFound ? tDetail("notFoundBody") : tDetail("loadErrorBody")}
-          icon={isNotFound ? IoFolderOpenOutline : IoWarningOutline}
+          icon={isNotFound ? Icons.folderOpen : Icons.alert}
         />
       </div>
     );
@@ -90,7 +91,7 @@ export function ProjectsEditSection() {
         <EmptyState
           title={tForm("editForbiddenTitle")}
           description={tForm("editForbiddenBody")}
-          icon={IoLockClosedOutline}
+          icon={Icons.lock}
         />
       </div>
     );
@@ -102,7 +103,7 @@ export function ProjectsEditSection() {
         <EmptyState
           title={tForm("editNotAllowedTitle")}
           description={tForm("editNotAllowedBody")}
-          icon={IoWarningOutline}
+          icon={Icons.alert}
         />
       </div>
     );

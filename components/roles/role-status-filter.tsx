@@ -1,6 +1,7 @@
 "use client";
 
-import { IoGridOutline } from "react-icons/io5";
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useTranslation } from "react-i18next";
 
 import type { TRoleStatus } from "@/lib/roles/constants";
@@ -16,12 +17,12 @@ import { cn } from "@/lib/utils";
 type TStatusFilterOption = {
   id: TRoleStatusFilter;
   labelKey: TRoleStatusFilterLabelKey;
-  icon?: typeof IoGridOutline;
+  icon?: typeof Icons.grid;
   statusColorKey?: TStatusColorKey;
 };
 
 const FILTER_OPTIONS: TStatusFilterOption[] = [
-  { id: "all", labelKey: "all", icon: IoGridOutline },
+  { id: "all", labelKey: "all", icon: Icons.grid },
   { id: "active", labelKey: "active", statusColorKey: "active" },
   { id: "inactive", labelKey: "inactive", statusColorKey: "inactive" },
 ];

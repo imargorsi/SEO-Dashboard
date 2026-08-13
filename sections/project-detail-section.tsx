@@ -1,5 +1,7 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
@@ -17,7 +19,6 @@ import { buttonVariants } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { LoadingState } from "@/components/ui/loading-state";
-import { IoFolderOpenOutline, IoTrashOutline, IoWarningOutline } from "react-icons/io5";
 import { useAuthUserQuery } from "@/features/auth/auth.api";
 import {
   useDeleteProjectMutation,
@@ -125,7 +126,7 @@ export function ProjectDetailSection() {
         <EmptyState
           title={t("notFoundTitle")}
           description={t("notFoundBody")}
-          icon={IoFolderOpenOutline}
+          icon={Icons.folderOpen}
         />
       </div>
     );
@@ -156,7 +157,7 @@ export function ProjectDetailSection() {
                 ? t("forbiddenBody")
                 : t("loadErrorBody")
           }
-          icon={isNotFound || isForbidden ? IoFolderOpenOutline : IoWarningOutline}
+          icon={isNotFound || isForbidden ? Icons.folderOpen : Icons.alert}
         />
       </div>
     );
@@ -168,7 +169,7 @@ export function ProjectDetailSection() {
         <EmptyState
           title={t("notFoundTitle")}
           description={t("notFoundBody")}
-          icon={IoFolderOpenOutline}
+          icon={Icons.folderOpen}
         />
       </div>
     );
@@ -209,7 +210,7 @@ export function ProjectDetailSection() {
       <ConfirmDialog
         open={isDeleteOpen}
         onOpenChange={setIsDeleteOpen}
-        icon={IoTrashOutline}
+        icon={Icons.delete}
         title={tTable("deleteConfirmTitle")}
         description={tTable("deleteConfirmDescription", { name: project.businessName })}
         action={

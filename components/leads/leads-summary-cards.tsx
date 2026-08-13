@@ -1,12 +1,8 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useTranslation } from "react-i18next";
-import {
-  IoCalendarOutline,
-  IoPeopleOutline,
-  IoTodayOutline,
-  IoTimeOutline,
-} from "react-icons/io5";
 
 import {
   formatSummaryMetricCount,
@@ -28,28 +24,28 @@ export function LeadsSummaryCards({ counts, isLoading, className }: TLeadsSummar
     {
       id: "total",
       label: t("total"),
-      icon: IoPeopleOutline,
+      icon: Icons.userGroup,
       accent: "var(--brand)",
       value: formatSummaryMetricCount(counts.total),
     },
     {
       id: "thisMonth",
       label: t("thisMonth"),
-      icon: IoTodayOutline,
+      icon: Icons.calendar,
       accent: "var(--status-pending)",
       value: formatSummaryMetricCount(counts.this_month),
     },
     {
       id: "lastMonth",
       label: t("lastMonth"),
-      icon: IoTimeOutline,
+      icon: Icons.clock,
       accent: "var(--status-active)",
       value: formatSummaryMetricCount(counts.last_month),
     },
     {
       id: "thisYear",
       label: t("thisYear"),
-      icon: IoCalendarOutline,
+      icon: Icons.calendar,
       accent: "var(--status-invited)",
       value: formatSummaryMetricCount(counts.this_year),
     },

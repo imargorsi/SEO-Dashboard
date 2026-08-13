@@ -1,8 +1,9 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { IoLinkOutline, IoUnlinkOutline } from "react-icons/io5";
 
 import { Input } from "@/components/input";
 import { GoogleIntegrationLogo } from "@/components/integrations/google-integration-logo";
@@ -143,7 +144,7 @@ export function IntegrationServiceCard({
                   onRequestConnectOrUpdate(propertyId, isLinked ? "update" : "connect")
                 }
               >
-                <IoLinkOutline className="size-4" aria-hidden />
+                <Icons.link className="size-4" aria-hidden />
                 {isLinked ? t("update") : t("connect")}
               </Button>
             ) : null}
@@ -155,7 +156,7 @@ export function IntegrationServiceCard({
                 disabled={isBusy}
                 onClick={onRequestDisconnect}
               >
-                <IoUnlinkOutline className="size-4" aria-hidden />
+                <Icons.unlink className="size-4" aria-hidden />
                 {t("disconnect")}
               </Button>
             ) : null}

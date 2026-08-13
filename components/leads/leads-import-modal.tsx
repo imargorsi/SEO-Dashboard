@@ -1,14 +1,10 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
-import {
-  IoArrowForward,
-  IoClose,
-  IoDocumentTextOutline,
-  IoTrashOutline,
-} from "react-icons/io5";
 
 import { Input } from "@/components/input";
 import { Button } from "@/components/ui/button";
@@ -270,7 +266,7 @@ export function LeadsImportModal({
             disabled={busy}
             className="absolute inset-e-3 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-text-muted transition-colors hover:bg-bg-hover hover:text-text-primary disabled:opacity-50"
           >
-            <IoClose className="size-4" aria-hidden />
+            <Icons.cancel className="size-4" aria-hidden />
             <span className="sr-only">{t("close")}</span>
           </button>
         </header>
@@ -311,7 +307,7 @@ export function LeadsImportModal({
                         "flex w-full flex-col items-center justify-center gap-2 rounded-xl border-dashed px-4 py-10 text-center transition-colors hover:bg-bg-hover/40",
                       )}
                     >
-                      <IoDocumentTextOutline className="size-8 text-brand" aria-hidden />
+                      <Icons.file className="size-8 text-brand" aria-hidden />
                       <span className="type-label text-text-primary">{t("chooseFile")}</span>
                       <span className="type-caption text-text-muted">{t("chooseFileHint")}</span>
                     </button>
@@ -323,7 +319,7 @@ export function LeadsImportModal({
                       )}
                     >
                       <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand/10 text-brand">
-                        <IoDocumentTextOutline className="size-5" aria-hidden />
+                        <Icons.file className="size-5" aria-hidden />
                       </span>
                       <div className="min-w-0 flex-1">
                         <p className="truncate type-body-strong text-text-primary">{file.name}</p>
@@ -338,7 +334,7 @@ export function LeadsImportModal({
                         aria-label={t("removeFile")}
                         title={t("removeFile")}
                       >
-                        <IoTrashOutline className="size-4" aria-hidden />
+                        <Icons.delete className="size-4" aria-hidden />
                       </button>
                     </div>
                   )}
@@ -409,7 +405,7 @@ export function LeadsImportModal({
                   className="gap-1.5"
                 >
                   {t("nextMatching")}
-                  <IoArrowForward className="size-4" aria-hidden />
+                  <Icons.arrowRight className="size-4" aria-hidden />
                 </Button>
               ) : (
                 <Button
@@ -421,7 +417,7 @@ export function LeadsImportModal({
                   className="gap-1.5"
                 >
                   {t("nextImport")}
-                  <IoArrowForward className="size-4" aria-hidden />
+                  <Icons.arrowRight className="size-4" aria-hidden />
                 </Button>
               )}
             </footer>

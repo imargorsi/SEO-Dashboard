@@ -14,7 +14,7 @@ import {
   type ReactNode,
   type Ref,
 } from "react";
-import { IoCheckmark, IoClose, IoEye, IoEyeOff } from "react-icons/io5";
+import { Icons } from "@/lib/frontend/icons/app-icons";
 import { useTranslation } from "react-i18next";
 import SelectDropdownArrowIcon from "@/components/icons/input-select-dropdown-arrow";
 import { resolveInputStartIcon } from "@/lib/frontend/forms/input-start-icons";
@@ -209,7 +209,7 @@ function SelectField({
                       {option.badge}
                     </span>
                     {isSelected ? (
-                      <IoCheckmark className="size-3.5 shrink-0 text-brand" aria-hidden />
+                      <Icons.tick className="size-3.5 shrink-0 text-brand" aria-hidden />
                     ) : null}
                   </DropdownMenuItem>
                 );
@@ -358,7 +358,7 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
                 className="inline-flex size-5 shrink-0 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-brand/20 hover:text-text-primary disabled:pointer-events-none disabled:opacity-60"
                 aria-label={t("removeChip", { value: chip })}
               >
-                <IoClose className="size-3.5" aria-hidden />
+                <Icons.cancel className="size-3.5" aria-hidden />
               </button>
             </span>
           ))}
@@ -458,9 +458,9 @@ export const Input = forwardRef<ControlElement, ReusableInputProps>(function Inp
               className="absolute inset-e-0 inset-y-0 z-10 flex items-center justify-center px-3 text-text-muted transition-colors hover:text-text-primary focus-visible:text-text-primary focus-visible:outline-none disabled:pointer-events-none disabled:opacity-60"
             >
               {passwordVisible ? (
-                <IoEyeOff className="size-4" aria-hidden />
+                <Icons.viewOff className="size-4" aria-hidden />
               ) : (
-                <IoEye className="size-4" aria-hidden />
+                <Icons.view className="size-4" aria-hidden />
               )}
             </button>
           ) : null}

@@ -1,9 +1,10 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useMemo, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
-import { IoArrowForward, IoSearchOutline, IoTimeOutline } from "react-icons/io5";
 
 import { AssistantNeonOutline } from "@/components/dashboard/assistant-neon-outline";
 import { AssistantSparkleIcon } from "@/components/dashboard/assistant-sparkle-icon";
@@ -220,7 +221,7 @@ export function DashboardAssistantPanel({
                   "disabled:opacity-50 dark:border-text-primary/20",
                 )}
               >
-                <IoSearchOutline className="size-3.5 shrink-0 opacity-70" aria-hidden />
+                <Icons.search className="size-3.5 shrink-0 opacity-70" aria-hidden />
                 {item.label}
               </button>
             ))}
@@ -283,7 +284,7 @@ export function DashboardAssistantPanel({
                     )}
                   >
                     {answer.action.label}
-                    <IoArrowForward className="size-3.5" aria-hidden />
+                    <Icons.arrowRight className="size-3.5" aria-hidden />
                   </Link>
                 ) : null}
               </div>
@@ -313,7 +314,7 @@ export function DashboardAssistantPanel({
                   )}
                   title={item.query}
                 >
-                  <IoTimeOutline className="size-3.5 shrink-0" aria-hidden />
+                  <Icons.clock className="size-3.5 shrink-0" aria-hidden />
                   <span className="truncate">{item.query}</span>
                 </button>
               ))}

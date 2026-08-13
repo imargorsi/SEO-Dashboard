@@ -1,10 +1,9 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useMemo } from "react";
-import type { IconType } from "react-icons";
 import { useTranslation } from "react-i18next";
-import { IoCheckmark, IoGridOutline } from "react-icons/io5";
-import { LuFilter } from "react-icons/lu";
 
 import SelectDropdownArrowIcon from "@/components/icons/input-select-dropdown-arrow";
 import {
@@ -13,7 +12,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ACCOUNT_SOURCE_ICON } from "@/lib/frontend/users/account-source-display";
+import {
+  ACCOUNT_SOURCE_ICON,
+  type TAccountSourceIconComponent,
+} from "@/lib/frontend/users/account-source-display";
 import { toolbarFilterControlClass } from "@/lib/frontend/layout/dashboard-chrome";
 import type { TUserAccountSourceKnown } from "@/lib/users/account-source";
 import type {
@@ -25,11 +27,11 @@ import { cn } from "@/lib/utils";
 type TSourceFilterOption = {
   id: TUserAccountSourceFilter;
   labelKey: "all" | TUserAccountSourceKnown;
-  icon: IconType;
+  icon: TAccountSourceIconComponent;
 };
 
 const FILTER_OPTIONS: TSourceFilterOption[] = [
-  { id: "all", labelKey: "all", icon: IoGridOutline },
+  { id: "all", labelKey: "all", icon: Icons.grid },
   { id: "admin", labelKey: "admin", icon: ACCOUNT_SOURCE_ICON.admin },
   { id: "self_register", labelKey: "self_register", icon: ACCOUNT_SOURCE_ICON.self_register },
   { id: "google", labelKey: "google", icon: ACCOUNT_SOURCE_ICON.google },
@@ -75,7 +77,7 @@ export function UserAccountSourceFilter({
           "inline-flex items-center gap-2 bg-bg-card/40 px-3.5 type-label text-text-primary outline-none hover:bg-bg-hover/40 focus-visible:border-accent-border focus-visible:ring-2 focus-visible:ring-accent-border",
         )}
       >
-        <LuFilter className="size-4 shrink-0 text-text-muted" aria-hidden />
+        <Icons.filter className="size-4 shrink-0 text-text-muted" aria-hidden />
         <span className="whitespace-nowrap">
           {t("label")}: <span className="text-text-secondary">{selectedLabel}</span>
         </span>
@@ -109,7 +111,7 @@ export function UserAccountSourceFilter({
                 {counts[option.id]}
               </span>
               {isSelected ? (
-                <IoCheckmark className="size-3.5 shrink-0 text-text-primary" aria-hidden />
+                <Icons.tick className="size-3.5 shrink-0 text-text-primary" aria-hidden />
               ) : (
                 <span className="size-3.5 shrink-0" aria-hidden />
               )}

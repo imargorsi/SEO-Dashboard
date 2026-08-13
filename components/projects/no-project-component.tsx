@@ -1,7 +1,8 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useTranslation } from "react-i18next";
-import { IoFolderOpenOutline, IoMailOutline } from "react-icons/io5";
 
 import { EmptyState } from "@/components/ui/empty-state";
 import { Button } from "@/components/ui/button";
@@ -28,7 +29,7 @@ export function NoProjectComponent({
 
   return (
     <EmptyState
-      icon={isEmailNotVerified ? IoMailOutline : IoFolderOpenOutline}
+      icon={isEmailNotVerified ? Icons.mail : Icons.folderOpen}
       title={isEmailNotVerified ? t("emailNotVerifiedTitle") : t("emptyTitle")}
       description={isEmailNotVerified ? t("emailNotVerifiedBody") : t("emptyBody")}
       className="sm:min-h-[min(28rem,calc(100vh-14rem))]"

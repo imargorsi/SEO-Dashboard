@@ -1,12 +1,8 @@
 "use client";
 
-import type { IconType } from "react-icons";
-import {
-  IoCalendarOutline,
-  IoConstructOutline,
-  IoDocumentTextOutline,
-  IoLinkOutline,
-} from "react-icons/io5";
+import type { TAppIconComponent } from "@/components/ui/app-icon";
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useTranslation } from "react-i18next";
 
 import {
@@ -23,25 +19,25 @@ type TSeoActivitySummaryCardsProps = {
 };
 
 type TMetricTheme = {
-  icon: IconType;
+  icon: TAppIconComponent;
   accent: string;
 };
 
 const METRIC_THEME: Record<TSeoActivitySummaryMetric["id"], TMetricTheme> = {
   blogs: {
-    icon: IoDocumentTextOutline,
+    icon: Icons.file,
     accent: "var(--brand)",
   },
   backlinks: {
-    icon: IoLinkOutline,
+    icon: Icons.link,
     accent: "var(--status-pending)",
   },
   technical_work: {
-    icon: IoConstructOutline,
+    icon: Icons.wrench,
     accent: "var(--status-active)",
   },
   total: {
-    icon: IoCalendarOutline,
+    icon: Icons.calendar,
     accent: "var(--status-invited)",
   },
 };

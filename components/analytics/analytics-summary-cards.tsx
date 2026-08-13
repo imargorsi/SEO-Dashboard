@@ -1,12 +1,8 @@
 "use client";
 
-import type { IconType } from "react-icons";
-import {
-  MdOutlineAdsClick,
-  MdOutlineLeaderboard,
-  MdOutlinePercent,
-  MdOutlineVisibility,
-} from "react-icons/md";
+import type { TAppIconComponent } from "@/components/ui/app-icon";
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useTranslation } from "react-i18next";
 
 import { AnalyticsTrendSparkline } from "@/components/analytics/analytics-trend-sparkline";
@@ -26,7 +22,7 @@ type TCardId = "clicks" | "impressions" | "ctr" | "position";
 type TCardDef = {
   id: TCardId;
   labelKey: TCardId;
-  icon: IconType;
+  icon: TAppIconComponent;
   accent: string;
   format: (value: number | null | undefined) => string;
   metric: TAnalyticsCardMetricDto | undefined;
@@ -75,7 +71,7 @@ export function AnalyticsSummaryCards({
     {
       id: "clicks",
       labelKey: "clicks",
-      icon: MdOutlineAdsClick,
+      icon: Icons.chartBar,
       accent: "var(--brand)",
       format: formatCompactNumber,
       metric: cardsData?.clicks,
@@ -83,7 +79,7 @@ export function AnalyticsSummaryCards({
     {
       id: "impressions",
       labelKey: "impressions",
-      icon: MdOutlineVisibility,
+      icon: Icons.view,
       accent: "var(--status-pending)",
       format: formatCompactNumber,
       metric: cardsData?.impressions,
@@ -91,7 +87,7 @@ export function AnalyticsSummaryCards({
     {
       id: "ctr",
       labelKey: "ctr",
-      icon: MdOutlinePercent,
+      icon: Icons.chartLine,
       accent: "var(--status-active)",
       format: formatPercentRatio,
       metric: cardsData?.ctr,
@@ -99,7 +95,7 @@ export function AnalyticsSummaryCards({
     {
       id: "position",
       labelKey: "position",
-      icon: MdOutlineLeaderboard,
+      icon: Icons.analytics,
       accent: "var(--color-brand-primary)",
       format: formatPosition,
       metric: cardsData?.position,

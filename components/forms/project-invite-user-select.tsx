@@ -1,8 +1,9 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { IoClose, IoSearchOutline } from "react-icons/io5";
 
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { Spinner } from "@/components/ui/spinner";
@@ -92,7 +93,7 @@ export function ProjectInviteUserSelect({
                 aria-label={t("inviteRemoveAria", { name: user.name })}
                 title={t("inviteRemoveAria", { name: user.name })}
               >
-                <IoClose className="size-4" aria-hidden />
+                <Icons.cancel className="size-4" aria-hidden />
               </button>
             </li>
           ))}
@@ -105,7 +106,7 @@ export function ProjectInviteUserSelect({
             {t("inviteSearchLabel")}
           </label>
           <div className="relative">
-            <IoSearchOutline
+            <Icons.search
               className="pointer-events-none absolute start-3.5 top-1/2 size-4 -translate-y-1/2 text-text-muted"
               aria-hidden
             />

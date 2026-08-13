@@ -1,11 +1,8 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useTranslation } from "react-i18next";
-import {
-  IoGitCompareOutline,
-  IoLocationOutline,
-  IoTimeOutline,
-} from "react-icons/io5";
 
 import {
   ProjectDetailInfoCard,
@@ -88,7 +85,7 @@ export function ProjectDetailSidebar({ project }: ProjectDetailSidebarProps) {
 
       <ProjectDetailInfoCard
         title={t("timelineTitle")}
-        icon={<IoTimeOutline className="size-4 shrink-0" aria-hidden />}
+        icon={<Icons.clock className="size-4 shrink-0" aria-hidden />}
       >
         <ol className="space-y-4">
           {timeline.map((entry) => (
@@ -108,7 +105,7 @@ export function ProjectDetailSidebar({ project }: ProjectDetailSidebarProps) {
       <ProjectDetailInfoCard
         title={t("sectionLocationsTitle")}
         lead={t("sectionLocationsLead")}
-        icon={<IoLocationOutline className="size-4 shrink-0" aria-hidden />}
+        icon={<Icons.location className="size-4 shrink-0" aria-hidden />}
       >
         <ProjectDetailTagList items={project.targetLocations} emptyLabel={t("noLocations")} />
       </ProjectDetailInfoCard>
@@ -116,7 +113,7 @@ export function ProjectDetailSidebar({ project }: ProjectDetailSidebarProps) {
       <ProjectDetailInfoCard
         title={t("sectionCompetitorsTitle")}
         lead={t("sectionCompetitorsLead")}
-        icon={<IoGitCompareOutline className="size-4 shrink-0" aria-hidden />}
+        icon={<Icons.gitCompare className="size-4 shrink-0" aria-hidden />}
       >
         {project.competitorUrls.length === 0 ? (
           <p className={cn("type-body", elevatedCardMutedClass)}>{t("noCompetitors")}</p>

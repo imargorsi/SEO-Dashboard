@@ -1,12 +1,8 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import type { ReactNode } from "react";
-import {
-  IoCallOutline,
-  IoGlobeOutline,
-  IoLocationOutline,
-  IoMailOutline,
-} from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 
 import { Heading } from "@/components/heading";
@@ -116,24 +112,24 @@ export function ProjectDetailHero({ project, isSuperAdmin = false }: ProjectDeta
 
           <div className={cn(typeMetaRowClass, "sm:flex-nowrap")}>
             <ContactItem
-              icon={<IoGlobeOutline className="size-3.5 shrink-0" />}
+              icon={<Icons.globe className="size-3.5 shrink-0" />}
               label={t("website")}
               value={displayDetailValue(project.websiteUrl)}
               href={project.websiteUrl}
             />
             <ContactItem
-              icon={<IoCallOutline className="size-3.5 shrink-0" />}
+              icon={<Icons.call className="size-3.5 shrink-0" />}
               label={t("contactNumber")}
               value={displayDetailValue(project.pocContactNumber)}
             />
             <ContactItem
-              icon={<IoMailOutline className="size-3.5 shrink-0" />}
+              icon={<Icons.mail className="size-3.5 shrink-0" />}
               label={t("contactEmail")}
               value={displayDetailValue(project.pocEmail)}
               href={project.pocEmail ? `mailto:${project.pocEmail}` : undefined}
             />
             <ContactItem
-              icon={<IoLocationOutline className="size-3.5 shrink-0" />}
+              icon={<Icons.location className="size-3.5 shrink-0" />}
               label={t("address")}
               value={displayDetailValue(project.businessAddress)}
             />

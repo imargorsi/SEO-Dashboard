@@ -1,46 +1,33 @@
-"use client";
-
-import type { IconType } from "react-icons";
-import {
-  IoAddOutline,
-  IoCloudDownloadOutline,
-  IoCloudUploadOutline,
-  IoEyeOutline,
-  IoPersonAddOutline,
-  IoPersonRemoveOutline,
-  IoRefreshOutline,
-  IoTrashOutline,
-  IoUnlinkOutline,
-} from "react-icons/io5";
-import { PiPencilThin } from "react-icons/pi";
+import type { TAppIconComponent } from "@/components/ui/app-icon";
+import { Icons } from "@/lib/frontend/icons/app-icons";
 
 /**
  * Unified icons for role / permission actions.
  * Use everywhere in roles UI (table, detail, matrix, dialogs).
  */
-export function roleActionIcon(action: string): IconType | null {
+export function roleActionIcon(action: string): TAppIconComponent | null {
   switch (action) {
     case "view":
-      return IoEyeOutline;
+      return Icons.view;
     case "create":
-      return IoAddOutline;
+      return Icons.add;
     case "edit":
     case "update":
-      return PiPencilThin;
+      return Icons.pencil;
     case "delete":
-      return IoTrashOutline;
+      return Icons.delete;
     case "invite":
-      return IoPersonAddOutline;
+      return Icons.userAdd;
     case "remove":
-      return IoPersonRemoveOutline;
+      return Icons.userMinus;
     case "disconnect":
-      return IoUnlinkOutline;
+      return Icons.unlink;
     case "refresh":
-      return IoRefreshOutline;
+      return Icons.refresh;
     case "import":
-      return IoCloudUploadOutline;
+      return Icons.cloudUpload;
     case "export":
-      return IoCloudDownloadOutline;
+      return Icons.cloudDownload;
     default:
       return null;
   }

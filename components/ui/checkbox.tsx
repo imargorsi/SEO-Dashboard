@@ -1,6 +1,6 @@
 import * as React from "react";
-import { IoCheckmark } from "react-icons/io5";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
 import { cn } from "@/lib/utils";
 
 const Checkbox = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
@@ -20,7 +20,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, React.ComponentProps<"input"
         )}
         {...props}
       />
-      <IoCheckmark
+      <Icons.tick
         className="pointer-events-none absolute size-3 text-text-primary opacity-0 peer-checked:opacity-100"
         aria-hidden
       />

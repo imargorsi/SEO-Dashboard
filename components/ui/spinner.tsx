@@ -1,10 +1,14 @@
-import * as React from "react";
-import { ImSpinner2 } from "react-icons/im";
-
+import { Icons } from "@/lib/frontend/icons/app-icons";
 import { cn } from "@/lib/utils";
 
-function Spinner({ className, ...props }: React.ComponentProps<"svg">) {
-  return <ImSpinner2 role="status" aria-label="Loading" className={cn("size-4 animate-spin", className)} {...props} />;
+function Spinner({ className }: { className?: string }) {
+  return (
+    <Icons.loading
+      role="status"
+      aria-label="Loading"
+      className={cn("size-4 animate-spin", className)}
+    />
+  );
 }
 
 export { Spinner };

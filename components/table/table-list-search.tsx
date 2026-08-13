@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { IoSearch } from "react-icons/io5";
 
 import { Spinner } from "@/components/ui/spinner";
 import {
   DEFAULT_TABLE_SEARCH_DEBOUNCE_MS,
   useDebouncedValue,
 } from "@/hooks/use-debounced-value.hook";
+import { Icons } from "@/lib/frontend/icons/app-icons";
 import { toolbarFilterControlClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
@@ -68,7 +68,7 @@ export function TableListSearch({
 
   return (
     <div className={cn("relative w-full sm:w-[26rem]", className)}>
-      <IoSearch
+      <Icons.search
         className="pointer-events-none absolute top-1/2 start-3 z-10 size-4 -translate-y-1/2 text-text-muted"
         aria-hidden
       />

@@ -1,8 +1,9 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
-import { IoArrowBackOutline } from "react-icons/io5";
 
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
@@ -42,7 +43,7 @@ export function ProjectDetailHeader({
         href="/projects"
         className="inline-flex items-center gap-2 type-body-strong text-text-secondary transition-colors hover:text-text-primary hover:underline"
       >
-        <IoArrowBackOutline className="size-4 shrink-0" aria-hidden />
+        <Icons.arrowLeft className="size-4 shrink-0" aria-hidden />
         {t("backToProjects")}
       </Link>
 

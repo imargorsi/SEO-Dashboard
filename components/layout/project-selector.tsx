@@ -1,8 +1,9 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useEffect, useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { IoCheckmark, IoChevronDown } from "react-icons/io5";
 
 import { useSelectedProject } from "@/context/selected-project-context";
 import { UserAvatar } from "@/components/ui/user-avatar";
@@ -54,7 +55,7 @@ function ProjectOption({
         </span>
       </span>
       {isSelected ? (
-        <IoCheckmark className="size-3.5 shrink-0 text-brand" aria-hidden />
+        <Icons.tick className="size-3.5 shrink-0 text-brand" aria-hidden />
       ) : (
         <span className="size-3.5 shrink-0" aria-hidden />
       )}
@@ -139,7 +140,7 @@ export function ProjectSelector({ isCollapsed = false }: ProjectSelectorProps) {
         <span className="min-w-0 flex-1 truncate text-start">
           {selectedProject ? selectedProject.businessName : t("selectPrompt")}
         </span>
-        <IoChevronDown
+        <Icons.arrowDown
           className={cn(
             "size-3.5 shrink-0 text-text-muted transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
             open && "rotate-180",

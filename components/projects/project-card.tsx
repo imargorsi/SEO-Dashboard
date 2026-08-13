@@ -1,6 +1,7 @@
 "use client";
 
-import { IoGlobeOutline } from "react-icons/io5";
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useTranslation } from "react-i18next";
 
 import { ProjectActionButton, ProjectActions } from "@/components/projects/project-actions";
@@ -93,7 +94,7 @@ export function ProjectCard({
       <div className={cn("mt-4", typeStackMdClass)}>
         <h3 className={cn("type-title", elevatedCardTitleClass)}>{project.businessName}</h3>
         <p className={cn(typeIconTextClass, "type-body", elevatedCardBodyClass)}>
-          <IoGlobeOutline className="size-3.5 shrink-0" aria-hidden />
+          <Icons.globe className="size-3.5 shrink-0" aria-hidden />
           <span className="truncate">{project.websiteUrl}</span>
         </p>
         <ProjectIntegrationStatusIcons integrations={project.integrations} />

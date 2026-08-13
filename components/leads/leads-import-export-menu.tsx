@@ -1,7 +1,8 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useTranslation } from "react-i18next";
-import { IoChevronDownOutline, IoCloudDownloadOutline, IoCloudUploadOutline } from "react-icons/io5";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -33,7 +34,7 @@ export function LeadsImportExportMenu({
       <DropdownMenuTrigger asChild>
         <Button type="button" variant="outline" size="md" className="shrink-0 gap-1.5">
           {t("trigger")}
-          <IoChevronDownOutline className="size-3.5 opacity-70" aria-hidden />
+          <Icons.arrowDown className="size-3.5 opacity-70" aria-hidden />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-44">
@@ -43,7 +44,7 @@ export function LeadsImportExportMenu({
               onImport();
             }}
           >
-            <IoCloudUploadOutline className="size-4" aria-hidden />
+            <Icons.cloudUpload className="size-4" aria-hidden />
             {t("import")}
           </DropdownMenuItem>
         ) : null}
@@ -53,7 +54,7 @@ export function LeadsImportExportMenu({
               onExport();
             }}
           >
-            <IoCloudDownloadOutline className="size-4" aria-hidden />
+            <Icons.cloudDownload className="size-4" aria-hidden />
             {t("export")}
           </DropdownMenuItem>
         ) : null}

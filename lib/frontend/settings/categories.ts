@@ -1,5 +1,5 @@
-import type { IconType } from "react-icons";
-import { IoColorPaletteOutline, IoLinkOutline } from "react-icons/io5";
+import type { TAppIconComponent } from "@/components/ui/app-icon";
+import { Icons } from "@/lib/frontend/icons/app-icons";
 
 export const SETTINGS_CATEGORY_IDS = ["theme", "integrations"] as const;
 
@@ -9,7 +9,7 @@ export type TSettingsCategory = {
   id: TSettingsCategoryId;
   /** i18n key under `settings.categories.*` */
   labelKey: TSettingsCategoryId;
-  icon: IconType;
+  icon: TAppIconComponent;
   /** When true, only `super_admin` sees this category. */
   requiresSuperAdmin: boolean;
   /** When true, needs `integrations.view` on the selected project (`super_admin` always qualifies). */
@@ -20,13 +20,13 @@ export const SETTINGS_CATEGORIES: readonly TSettingsCategory[] = [
   {
     id: "theme",
     labelKey: "theme",
-    icon: IoColorPaletteOutline,
+    icon: Icons.paintBoard,
     requiresSuperAdmin: false,
   },
   {
     id: "integrations",
     labelKey: "integrations",
-    icon: IoLinkOutline,
+    icon: Icons.link,
     requiresSuperAdmin: false,
     requiresIntegrationsView: true,
   },

@@ -190,32 +190,34 @@ export const sidebarBrandRowCollapsedClass = "md:px-2";
 
 /** Desktop collapse/expand control. */
 export const sidebarCollapseToggleClass =
-  "group hidden w-full items-center gap-2.5 rounded-full px-2.5 py-1.5 type-label text-text-muted transition-colors hover:bg-bg-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-border) focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar md:inline-flex";
+  "group hidden w-full items-center gap-3 rounded-xl px-2.5 py-2 type-label text-text-muted transition-colors hover:bg-bg-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-border) focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar md:inline-flex";
 
 export const sidebarCollapseToggleCollapsedClass = "md:justify-center md:px-0";
 
-/** Circular icon well inside sidebar nav rows. */
-export const sidebarNavIconWellClass =
-  "inline-flex size-7 shrink-0 items-center justify-center rounded-full border shadow-sm backdrop-blur-md backdrop-saturate-150 transition-[background-color,border-color,color,box-shadow] duration-200";
+/**
+ * Sidebar nav icons — bare glyphs (no circular wells).
+ * Circular frames at ~26px add stroke noise and soften complex Hugeicons.
+ */
+export const sidebarNavIconClass =
+  "inline-flex size-5 shrink-0 items-center justify-center transition-colors duration-200";
 
-export const sidebarNavIconWellActiveClass =
-  "border-text-on-brand bg-text-on-brand/20 text-text-on-brand shadow-none backdrop-blur-none";
+export const sidebarNavIconActiveClass = "text-text-on-brand";
 
-export const sidebarNavIconWellInactiveClass =
-  "border-border/70 bg-bg-card/50 text-text-primary shadow-sm dark:border-text-primary/45 dark:bg-text-primary/12 group-hover:border-accent-border group-hover:bg-bg-hover group-hover:text-text-primary group-hover:shadow-md dark:group-hover:border-text-primary/60 dark:group-hover:bg-text-primary/18";
+export const sidebarNavIconInactiveClass =
+  "text-text-muted group-hover:text-text-primary";
 
-/** Nav link: soft pill + circular icon wells. */
+/** Nav link: soft rounded row; active uses solid brand pill. */
 export const sidebarNavLinkClass =
-  "group relative flex items-center gap-2.5 rounded-full px-2.5 py-1.5 type-label transition-[border-color,background-color,background-image,color] duration-200";
+  "group relative flex items-center gap-3 rounded-xl px-2.5 py-2 type-label transition-[border-color,background-color,background-image,color] duration-200";
 
 export const sidebarNavLinkCollapsedClass = "md:justify-center md:gap-0 md:px-0";
 
 /** Keep gradient as background-image only — avoid border/bg-color utilities that punch holes in it. */
 export const sidebarNavLinkActiveClass =
-  "border-0 bg-brand text-text-on-brand shadow-none hover:bg-brand/90";
+  "border-0 bg-brand text-text-on-brand shadow-sm hover:bg-brand/90";
 
 export const sidebarNavLinkInactiveClass =
-  "border border-transparent bg-transparent text-text-secondary hover:border-border hover:bg-bg-card/80 hover:text-text-primary";
+  "border border-transparent bg-transparent text-text-secondary hover:border-border/60 hover:bg-bg-hover/55 hover:text-text-primary";
 
 /** Project selector — one shell that expands over sidebar content. */
 export const sidebarProjectSelectorShellClass =

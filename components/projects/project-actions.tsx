@@ -1,15 +1,9 @@
 "use client";
 
+import type { TAppIconComponent } from "@/components/ui/app-icon";
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import Link from "next/link";
-import type { IconType } from "react-icons";
-import {
-  IoCheckmarkCircleOutline,
-  IoCloseCircleOutline,
-  IoEyeOutline,
-  IoPersonAddOutline,
-  IoTrashOutline,
-} from "react-icons/io5";
-import { PiPencilThin } from "react-icons/pi";
 import { useTranslation } from "react-i18next";
 
 import { ActiveInactiveToggle } from "@/components/ui/active-inactive-toggle";
@@ -29,13 +23,13 @@ import { cn } from "@/lib/utils";
 
 export type TProjectActionSize = "small" | "big";
 
-const ACTION_ICONS: Record<Exclude<TProjectCardActionId, "activate" | "deactivate">, IconType> = {
-  approve: IoCheckmarkCircleOutline,
-  reject: IoCloseCircleOutline,
-  inviteUsers: IoPersonAddOutline,
-  viewDetails: IoEyeOutline,
-  edit: PiPencilThin,
-  delete: IoTrashOutline,
+const ACTION_ICONS: Record<Exclude<TProjectCardActionId, "activate" | "deactivate">, TAppIconComponent> = {
+  approve: Icons.checkCircle,
+  reject: Icons.cancel,
+  inviteUsers: Icons.userAdd,
+  viewDetails: Icons.view,
+  edit: Icons.pencil,
+  delete: Icons.delete,
 };
 
 type ProjectActionButtonProps = {

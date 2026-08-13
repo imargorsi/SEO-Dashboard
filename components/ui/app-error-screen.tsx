@@ -1,12 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { IoWarningOutline } from "react-icons/io5";
-
 import { AppLogo } from "@/components/layout/app-logo";
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { Icons } from "@/lib/frontend/icons/app-icons";
 import { elevatedCardSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
@@ -54,7 +53,7 @@ export function AppErrorScreen({
           className="mx-auto inline-flex size-12 items-center justify-center rounded-full border border-destructive/35 bg-destructive/12 text-destructive"
           aria-hidden
         >
-          <IoWarningOutline className="size-6" />
+          <Icons.alert className="size-6" />
         </span>
 
         <div className="mt-6 flex flex-col items-center gap-2.5">

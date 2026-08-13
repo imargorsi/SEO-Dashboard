@@ -1,7 +1,8 @@
 "use client";
 
+import type { TAppIconComponent } from "@/components/ui/app-icon";
+
 import type { ReactNode } from "react";
-import type { IconType } from "react-icons";
 
 import {
   detailIconWellOutlineClass,
@@ -25,7 +26,7 @@ export function DetailSectionHeading({ title, description }: TDetailSectionHeadi
 }
 
 type TDetailFieldRowProps = {
-  icon: IconType;
+  icon: TAppIconComponent;
   label: string;
   children: ReactNode;
 };

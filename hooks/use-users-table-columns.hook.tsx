@@ -1,15 +1,9 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  IoCheckmarkCircleOutline,
-  IoEyeOutline,
-  IoTimeOutline,
-  IoTrashOutline,
-} from "react-icons/io5";
-import { LuCircleDot, LuClock, LuFolder, LuUser } from "react-icons/lu";
-import { PiPencilThin } from "react-icons/pi";
 
 import { AccountSourceBadge } from "@/components/users/account-source-badge";
 import type { TAppTableColumn } from "@/components/table/app-table";
@@ -53,7 +47,7 @@ export function useUsersTableColumns({
       {
         key: "user",
         label: t("colUser"),
-        headerIcon: LuUser,
+        headerIcon: Icons.user,
         render: (item) => (
           <div className="flex min-w-0 items-center gap-3">
             <UserAvatar name={item.name} imageUrl={item.profile_image} size="md" variant="photo" />
@@ -70,7 +64,7 @@ export function useUsersTableColumns({
       {
         key: "projects",
         label: t("colProjects"),
-        headerIcon: LuFolder,
+        headerIcon: Icons.folderOpen,
         render: (item) => {
           const count = item.projects.length;
 
@@ -85,7 +79,7 @@ export function useUsersTableColumns({
       {
         key: "status",
         label: t("colStatus"),
-        headerIcon: LuCircleDot,
+        headerIcon: Icons.checkCircle,
         render: (item) => {
           const status = isActiveUserStatus(item.status) ? "active" : "inactive";
 
@@ -100,7 +94,7 @@ export function useUsersTableColumns({
       {
         key: "lastAction",
         label: t("colLastAction"),
-        headerIcon: LuClock,
+        headerIcon: Icons.clock,
         render: (item) => {
           const isVerified = Boolean(item.email_verified_at);
           const lastActionAt = isVerified ? item.updated_at : item.created_at;
@@ -109,9 +103,9 @@ export function useUsersTableColumns({
             <div className="min-w-0">
               <div className="flex items-center gap-2">
                 {isVerified ? (
-                  <IoCheckmarkCircleOutline className="size-4 shrink-0 text-status-active" aria-hidden />
+                  <Icons.checkCircle className="size-4 shrink-0 text-status-active" aria-hidden />
                 ) : (
-                  <IoTimeOutline className="size-4 shrink-0 text-text-muted" aria-hidden />
+                  <Icons.clock className="size-4 shrink-0 text-text-muted" aria-hidden />
                 )}
                 <p className="type-body text-text-primary">
                   {isVerified ? t("lastActionVerified") : t("lastActionCreated")}
@@ -139,13 +133,13 @@ export function useUsersTableColumns({
                 actions={[
                   {
                     key: "view",
-                    icon: <IoEyeOutline className="size-4" aria-hidden />,
+                    icon: <Icons.view className="size-4" aria-hidden />,
                     label: t("viewUser", { name: item.name }),
                     onClick: onViewUser ? () => onViewUser(item) : undefined,
                   },
                   {
                     key: "edit",
-                    icon: <PiPencilThin className="size-4" aria-hidden />,
+                    icon: <Icons.pencil className="size-4" aria-hidden />,
                     label: t("editUser", { name: item.name }),
                     onClick: onEditUser ? () => onEditUser(item) : undefined,
                   },
@@ -153,7 +147,7 @@ export function useUsersTableColumns({
                     ? [
                         {
                           key: "delete",
-                          icon: <IoTrashOutline className="size-4" aria-hidden />,
+                          icon: <Icons.delete className="size-4" aria-hidden />,
                           label: t("deleteUser", { name: item.name }),
                           onClick: () => onDeleteUser(item),
                           className: "text-destructive hover:bg-destructive/10 hover:text-destructive",

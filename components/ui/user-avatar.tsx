@@ -1,7 +1,6 @@
 "use client";
 
-import { IoAlertCircle, IoCheckmark, IoPerson } from "react-icons/io5";
-
+import { Icons } from "@/lib/frontend/icons/app-icons";
 import { getStatusTextClassName } from "@/lib/frontend/theme/status-colors";
 import { cn } from "@/lib/utils";
 
@@ -111,7 +110,7 @@ export function UserAvatar({
       ) : initials !== "?" ? (
         <span className="select-none">{initials}</span>
       ) : (
-        <IoPerson className={cn(sizeClasses.icon, "opacity-90")} aria-hidden />
+        <Icons.user className={cn(sizeClasses.icon, "opacity-90")} aria-hidden />
       )}
     </div>
   );
@@ -130,7 +129,7 @@ export function UserAvatar({
           )}
           aria-hidden
         >
-          <IoCheckmark className={cn(sizeClasses.badgeIcon, "stroke-[2.5]")} aria-hidden />
+          <Icons.tick className={cn(sizeClasses.badgeIcon, "stroke-[2.5]")} aria-hidden />
         </span>
       ) : (
         <span
@@ -141,7 +140,7 @@ export function UserAvatar({
           )}
           aria-hidden
         >
-          <IoAlertCircle className={sizeClasses.badgeIcon} aria-hidden />
+          <Icons.alert className={sizeClasses.badgeIcon} aria-hidden />
         </span>
       )}
     </div>

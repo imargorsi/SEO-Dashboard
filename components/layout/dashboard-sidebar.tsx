@@ -1,10 +1,11 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { IoChevronBack, IoChevronForward, IoClose } from "react-icons/io5";
 
 import { NavbarProfileMenu } from "@/components/layout/navbar-profile-menu";
 import { AppLogo } from "@/components/layout/app-logo";
@@ -26,9 +27,9 @@ import {
   sidebarCollapseToggleCollapsedClass,
   sidebarNavGroupClass,
   sidebarNavGroupLabelClass,
-  sidebarNavIconWellActiveClass,
-  sidebarNavIconWellClass,
-  sidebarNavIconWellInactiveClass,
+  sidebarNavIconActiveClass,
+  sidebarNavIconClass,
+  sidebarNavIconInactiveClass,
   sidebarNavLinkActiveClass,
   sidebarNavLinkClass,
   sidebarNavLinkCollapsedClass,
@@ -78,11 +79,11 @@ function SidebarNavLink({
     >
       <span
         className={cn(
-          sidebarNavIconWellClass,
-          isActive ? sidebarNavIconWellActiveClass : sidebarNavIconWellInactiveClass,
+          sidebarNavIconClass,
+          isActive ? sidebarNavIconActiveClass : sidebarNavIconInactiveClass,
         )}
       >
-        <Icon className="size-3.5" aria-hidden />
+        <Icon size={20} strokeWidth={1.75} className="size-5" aria-hidden />
       </span>
       <span className={cn("min-w-0 flex-1 truncate", isCollapsed && "md:hidden")}>{label}</span>
       {item.badge != null ? (
@@ -159,7 +160,7 @@ export function DashboardSidebar({ onClose }: DashboardSidebarProps) {
             className="absolute inset-e-3 top-1/2 z-10 inline-flex size-8 -translate-y-1/2 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-bg-hover hover:text-text-primary md:hidden"
             aria-label={tNav("closeMenu")}
           >
-            <IoClose className="size-4" aria-hidden />
+            <Icons.cancel className="size-4" aria-hidden />
           </button>
         ) : null}
       </div>
@@ -202,11 +203,13 @@ export function DashboardSidebar({ onClose }: DashboardSidebarProps) {
               aria-expanded={!isCollapsed}
               title={collapseLabel}
             >
-              <span className={cn(sidebarNavIconWellClass, sidebarNavIconWellInactiveClass)}>
+              <span
+                className={cn(sidebarNavIconClass, sidebarNavIconInactiveClass)}
+              >
                 {isCollapsed ? (
-                  <IoChevronForward className="size-3.5 rtl:rotate-180" aria-hidden />
+                  <Icons.arrowRight size={20} strokeWidth={1.75} className="size-5 rtl:rotate-180" aria-hidden />
                 ) : (
-                  <IoChevronBack className="size-3.5 rtl:rotate-180" aria-hidden />
+                  <Icons.arrowLeft size={20} strokeWidth={1.75} className="size-5 rtl:rotate-180" aria-hidden />
                 )}
               </span>
               <span className={cn("min-w-0 flex-1 truncate text-start", isCollapsed && "md:hidden")}>

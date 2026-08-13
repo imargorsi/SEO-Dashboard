@@ -1,8 +1,9 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { IoDownloadOutline } from "react-icons/io5";
 
 import { AnalyticsDemographicsEngagementRow } from "@/components/analytics/analytics-demographics-engagement-row";
 import { AnalyticsPerformanceTrendChart } from "@/components/analytics/analytics-performance-trend-chart";
@@ -242,7 +243,7 @@ export function AnalyticsSection() {
               disabled={exportMutation.isPending}
               className="shrink-0"
             >
-              <IoDownloadOutline className="size-4" aria-hidden />
+              <Icons.cloudDownload className="size-4" aria-hidden />
               {exportMutation.isPending ? t("export.exporting") : t("export.excel")}
             </Button>
           </div>

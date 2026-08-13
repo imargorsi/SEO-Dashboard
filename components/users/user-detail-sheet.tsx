@@ -1,13 +1,8 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useTranslation } from "react-i18next";
-import {
-  IoCalendarOutline,
-  IoCheckmarkCircleOutline,
-  IoMailOutline,
-  IoPersonOutline,
-  IoRefreshOutline,
-} from "react-icons/io5";
 
 import {
   DetailFieldRow,
@@ -80,23 +75,23 @@ export function UserDetailSheet({ user, open, onOpenChange }: UserDetailSheetPro
             <section className={detailSectionClass}>
               <DetailSectionHeading title={t("accountTitle")} description={t("accountLead")} />
               <div>
-                <DetailFieldRow icon={IoMailOutline} label={t("email")}>
+                <DetailFieldRow icon={Icons.mail} label={t("email")}>
                   {user.email}
                 </DetailFieldRow>
-                <DetailFieldRow icon={IoPersonOutline} label={t("accountSource")}>
+                <DetailFieldRow icon={Icons.user} label={t("accountSource")}>
                   {isKnownUserAccountSource(user.account_source) ? (
                     <AccountSourceBadge source={user.account_source} />
                   ) : (
                     t("accountSourceUnknown")
                   )}
                 </DetailFieldRow>
-                <DetailFieldRow icon={IoCalendarOutline} label={t("createdAt")}>
+                <DetailFieldRow icon={Icons.calendar} label={t("createdAt")}>
                   {formatShortDate(user.created_at, i18n.language)}
                 </DetailFieldRow>
-                <DetailFieldRow icon={IoRefreshOutline} label={t("updatedAt")}>
+                <DetailFieldRow icon={Icons.refresh} label={t("updatedAt")}>
                   {formatShortDate(user.updated_at, i18n.language)}
                 </DetailFieldRow>
-                <DetailFieldRow icon={IoCheckmarkCircleOutline} label={t("emailVerifiedAt")}>
+                <DetailFieldRow icon={Icons.checkCircle} label={t("emailVerifiedAt")}>
                   {user.email_verified_at
                     ? formatShortDate(user.email_verified_at, i18n.language)
                     : t("emailNotVerified")}

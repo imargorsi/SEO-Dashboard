@@ -1,17 +1,10 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import {
-  IoCheckmarkCircleOutline,
-  IoCloseCircleOutline,
-  IoEyeOutline,
-  IoPersonAddOutline,
-  IoTrashOutline,
-} from "react-icons/io5";
-import { LuBriefcase, LuCircleDot, LuLink, LuUser } from "react-icons/lu";
-import { PiPencilThin } from "react-icons/pi";
 
 import type { TAppTableColumn } from "@/components/table/app-table";
 import { TableRowIconActions } from "@/components/table/table-row-icon-actions";
@@ -46,12 +39,12 @@ type TUseProjectsTableColumnsInput = {
 };
 
 function actionIcon(actionId: TProjectCardActionId) {
-  if (actionId === "approve") return <IoCheckmarkCircleOutline className="size-4" aria-hidden />;
-  if (actionId === "reject") return <IoCloseCircleOutline className="size-4" aria-hidden />;
-  if (actionId === "inviteUsers") return <IoPersonAddOutline className="size-4" aria-hidden />;
-  if (actionId === "viewDetails") return <IoEyeOutline className="size-4" aria-hidden />;
-  if (actionId === "delete") return <IoTrashOutline className="size-4" aria-hidden />;
-  return <PiPencilThin className="size-4" aria-hidden />;
+  if (actionId === "approve") return <Icons.checkCircle className="size-4" aria-hidden />;
+  if (actionId === "reject") return <Icons.cancel className="size-4" aria-hidden />;
+  if (actionId === "inviteUsers") return <Icons.userAdd className="size-4" aria-hidden />;
+  if (actionId === "viewDetails") return <Icons.view className="size-4" aria-hidden />;
+  if (actionId === "delete") return <Icons.delete className="size-4" aria-hidden />;
+  return <Icons.pencil className="size-4" aria-hidden />;
 }
 
 export function useProjectsTableColumns({
@@ -73,7 +66,7 @@ export function useProjectsTableColumns({
       {
         key: "project",
         label: t("table.colBusinessName"),
-        headerIcon: LuBriefcase,
+        headerIcon: Icons.briefcase,
         render: (item) => (
           <div className="flex min-w-0 items-center gap-3">
             <UserAvatar
@@ -92,7 +85,7 @@ export function useProjectsTableColumns({
       {
         key: "owner",
         label: tCard("projectOwnerLabel"),
-        headerIcon: LuUser,
+        headerIcon: Icons.user,
         render: (item) => {
           const ownerName = item.owner?.name?.trim() || tCard("projectOwnerFallback");
           return (
@@ -111,13 +104,13 @@ export function useProjectsTableColumns({
       {
         key: "integrations",
         label: t("table.colIntegrations"),
-        headerIcon: LuLink,
+        headerIcon: Icons.link,
         render: (item) => <ProjectIntegrationStatusIcons integrations={item.integrations} />,
       },
       {
         key: "status",
         label: t("table.colStatus"),
-        headerIcon: LuCircleDot,
+        headerIcon: Icons.checkCircle,
         render: (item) => <ProjectStatusChip status={item.status} />,
       },
       {

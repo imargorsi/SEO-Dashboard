@@ -1,9 +1,10 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useEffect, useId, useState } from "react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
-import { IoClose } from "react-icons/io5";
 
 import { ProjectInviteUserSelect } from "@/components/forms/project-invite-user-select";
 import { useProjectInviteUsers } from "@/components/forms/hooks/use-project-invite-users.hook";
@@ -65,7 +66,7 @@ function ProjectInviteUsersQuickAddBody({
           onClick={() => onOpenChange(false)}
           className="absolute inset-e-4 top-4 rounded-lg p-2 text-text-muted transition-colors hover:bg-bg-hover hover:text-text-primary"
         >
-          <IoClose className="size-4" aria-hidden />
+          <Icons.cancel className="size-4" aria-hidden />
           <span className="sr-only">{t("close")}</span>
         </button>
 

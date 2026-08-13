@@ -1,8 +1,6 @@
 "use client";
 
 import { useMemo } from "react";
-import { IoArrowDown, IoArrowUp, IoCheckmark } from "react-icons/io5";
-import { LuArrowUpDown } from "react-icons/lu";
 
 import SelectDropdownArrowIcon from "@/components/icons/input-select-dropdown-arrow";
 import {
@@ -11,6 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Icons } from "@/lib/frontend/icons/app-icons";
 import { toolbarFilterControlClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { cn } from "@/lib/utils";
 
@@ -32,8 +31,8 @@ type TTableListSortProps = {
 };
 
 function sortOptionIcon(option: TTableListSortOption, index: number) {
-  if (option.value === "newest" || index === 0) return IoArrowUp;
-  if (option.value === "oldest" || index === 1) return IoArrowDown;
+  if (option.value === "newest" || index === 0) return Icons.arrowUp;
+  if (option.value === "oldest" || index === 1) return Icons.arrowDown;
   return null;
 }
 
@@ -62,7 +61,7 @@ export function TableListSort({
           "inline-flex items-center gap-2 bg-bg-card/40 px-3.5 type-label text-text-primary outline-none hover:bg-bg-hover/40 focus-visible:border-accent-border focus-visible:ring-2 focus-visible:ring-accent-border",
         )}
       >
-        <LuArrowUpDown className="size-4 shrink-0 text-text-muted" aria-hidden />
+        <Icons.arrowUpDown className="size-4 shrink-0 text-text-muted" aria-hidden />
         <span className="whitespace-nowrap">
           {label}: <span className="text-text-secondary">{selectedShort}</span>
         </span>
@@ -94,7 +93,7 @@ export function TableListSort({
               )}
               <span className="min-w-0 flex-1 truncate">{option.label}</span>
               {isSelected ? (
-                <IoCheckmark className="size-3.5 shrink-0 text-text-primary" aria-hidden />
+                <Icons.tick className="size-3.5 shrink-0 text-text-primary" aria-hidden />
               ) : (
                 <span className="size-3.5 shrink-0" aria-hidden />
               )}

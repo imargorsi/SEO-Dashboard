@@ -1,8 +1,8 @@
 "use client";
 
-import { FcGoogle } from "react-icons/fc";
 import { useTranslation } from "react-i18next";
 
+import { GoogleBrandMark } from "@/components/auth/google-brand-mark";
 import { Button } from "@/components/ui/button";
 
 type GoogleAuthButtonProps = {
@@ -34,7 +34,7 @@ export function GoogleAuthButton({ disabled = false }: GoogleAuthButtonProps) {
           disabled={disabled}
           onClick={startGoogleSignIn}
         >
-          <FcGoogle className="size-5 shrink-0" aria-hidden />
+          <GoogleBrandMark size={20} className="shrink-0" />
           <span>{t("continueGoogle")}</span>
         </Button>
       </div>

@@ -1,7 +1,8 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import type { ReactNode } from "react";
-import { IoGlobeOutline } from "react-icons/io5";
 
 import { UserAvatar } from "@/components/ui/user-avatar";
 import {
@@ -47,7 +48,7 @@ export function ProjectIdentity({
           <p className="truncate type-title text-text-primary">{name}</p>
           {url ? (
             <p className={cn(typeIconTextClass, "type-caption text-text-muted")}>
-              <IoGlobeOutline className="size-3.5 shrink-0" aria-hidden />
+              <Icons.globe className="size-3.5 shrink-0" aria-hidden />
               <span className="min-w-0 truncate">{url}</span>
             </p>
           ) : null}

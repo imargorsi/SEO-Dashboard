@@ -1,16 +1,9 @@
 "use client";
 
+import type { TAppIconComponent } from "@/components/ui/app-icon";
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useTranslation } from "react-i18next";
-import type { IconType } from "react-icons";
-import {
-  IoAnalyticsOutline,
-  IoCheckmarkCircleOutline,
-  IoLockClosedOutline,
-  IoPeopleOutline,
-  IoPulseOutline,
-  IoSpeedometerOutline,
-  IoTimeOutline,
-} from "react-icons/io5";
 
 import { Heading } from "@/components/heading";
 import { AppLogo } from "@/components/layout/app-logo";
@@ -27,37 +20,37 @@ import { cn } from "@/lib/utils";
 type THeroFeature = {
   titleKey: "heroFeature1Title" | "heroFeature2Title" | "heroFeature3Title";
   bodyKey: "heroFeature1Body" | "heroFeature2Body" | "heroFeature3Body";
-  icon: IconType;
+  icon: TAppIconComponent;
 };
 
 type TTrustItem = {
   labelKey: "trustSecure" | "trustUptime" | "trustMultiClient" | "trustInsights";
-  icon: IconType;
+  icon: TAppIconComponent;
 };
 
 const HERO_FEATURES: THeroFeature[] = [
   {
     titleKey: "heroFeature1Title",
     bodyKey: "heroFeature1Body",
-    icon: IoSpeedometerOutline,
+    icon: Icons.dashboard,
   },
   {
     titleKey: "heroFeature2Title",
     bodyKey: "heroFeature2Body",
-    icon: IoTimeOutline,
+    icon: Icons.clock,
   },
   {
     titleKey: "heroFeature3Title",
     bodyKey: "heroFeature3Body",
-    icon: IoAnalyticsOutline,
+    icon: Icons.analytics,
   },
 ];
 
 const TRUST_ITEMS: TTrustItem[] = [
-  { labelKey: "trustSecure", icon: IoLockClosedOutline },
-  { labelKey: "trustUptime", icon: IoCheckmarkCircleOutline },
-  { labelKey: "trustMultiClient", icon: IoPeopleOutline },
-  { labelKey: "trustInsights", icon: IoPulseOutline },
+  { labelKey: "trustSecure", icon: Icons.lock },
+  { labelKey: "trustUptime", icon: Icons.checkCircle },
+  { labelKey: "trustMultiClient", icon: Icons.userGroup },
+  { labelKey: "trustInsights", icon: Icons.chartLine },
 ];
 
 export function SignInHeroSection() {

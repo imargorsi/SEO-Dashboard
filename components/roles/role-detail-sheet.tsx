@@ -1,13 +1,8 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useTranslation } from "react-i18next";
-import {
-  IoCalendarOutline,
-  IoKeyOutline,
-  IoPeopleOutline,
-  IoRefreshOutline,
-  IoShieldOutline,
-} from "react-icons/io5";
 
 import {
   DetailFieldRow,
@@ -145,7 +140,7 @@ export function RoleDetailSheet({ roleId, open, onOpenChange }: TRoleDetailSheet
             <section>
               <div className={detailHeroRowClass}>
                 <span className={cn(detailIconWellOutlineClass, "size-12 shrink-0")} aria-hidden>
-                  <IoShieldOutline className="size-5" />
+                  <Icons.security className="size-5" />
                 </span>
                 <div className="flex min-w-0 flex-1 items-start justify-between gap-3">
                   <div className={cn("min-w-0", typeStackIdentityClass)}>
@@ -171,16 +166,16 @@ export function RoleDetailSheet({ roleId, open, onOpenChange }: TRoleDetailSheet
             <section className={detailSectionClass}>
               <DetailSectionHeading title={t("overviewTitle")} description={t("overviewLead")} />
               <div>
-                <DetailFieldRow icon={IoPeopleOutline} label={t("members")}>
+                <DetailFieldRow icon={Icons.userGroup} label={t("members")}>
                   {role.members_count}
                 </DetailFieldRow>
-                <DetailFieldRow icon={IoKeyOutline} label={t("permissionsCount")}>
+                <DetailFieldRow icon={Icons.lock} label={t("permissionsCount")}>
                   {role.permissions.length}
                 </DetailFieldRow>
-                <DetailFieldRow icon={IoCalendarOutline} label={t("createdAt")}>
+                <DetailFieldRow icon={Icons.calendar} label={t("createdAt")}>
                   {formatShortDate(role.created_at, i18n.language)}
                 </DetailFieldRow>
-                <DetailFieldRow icon={IoRefreshOutline} label={t("updatedAt")}>
+                <DetailFieldRow icon={Icons.refresh} label={t("updatedAt")}>
                   {formatShortDate(role.updated_at, i18n.language)}
                 </DetailFieldRow>
               </div>

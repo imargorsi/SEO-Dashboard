@@ -1,8 +1,9 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { IoTrashOutline } from "react-icons/io5";
 
 import { LeadDetailSheet } from "@/components/leads/lead-detail-sheet";
 import { LeadEditorModal, type TLeadEditorTarget } from "@/components/leads/lead-editor-modal";
@@ -354,7 +355,7 @@ export function LeadsSection() {
       <ConfirmDialog
         open={Boolean(deleteTarget)}
         onOpenChange={(open) => !open && setDeleteTarget(null)}
-        icon={IoTrashOutline}
+        icon={Icons.delete}
         title={t("table.deleteTitle")}
         description={t("table.deleteBody")}
         action={

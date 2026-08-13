@@ -1,6 +1,6 @@
+import { Icons } from "@/lib/frontend/icons/app-icons";
 import { sanitizeHttpUrl } from "@/lib/frontend/seo-activities/sanitize-url.utils";
 import { cn } from "@/lib/utils";
-import { IoOpenOutline } from "react-icons/io5";
 
 type TSeoActivityLinkCellProps = {
   href: string | null;
@@ -112,7 +112,7 @@ export function SeoActivityLinkCell({ href, className }: TSeoActivityLinkCellPro
       title={safeHref}
     >
       <span className="truncate">{displayUrl(safeHref)}</span>
-      <IoOpenOutline className="size-3.5 shrink-0" aria-hidden />
+      <Icons.linkSquare className="size-3.5 shrink-0" aria-hidden />
     </a>
   );
 }

@@ -1,15 +1,8 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useTranslation } from "react-i18next";
-import {
-  IoBriefcaseOutline,
-  IoCalendarOutline,
-  IoCallOutline,
-  IoChatbubbleOutline,
-  IoDocumentTextOutline,
-  IoMailOutline,
-  IoPersonOutline,
-} from "react-icons/io5";
 
 import {
   DetailFieldRow,
@@ -70,17 +63,17 @@ export function LeadDetailSheet({ lead, open, onOpenChange }: TLeadDetailSheetPr
             <section>
               <div className={detailHeroRowClass}>
                 <span className={cn(detailIconWellOutlineClass, "size-12 shrink-0")} aria-hidden>
-                  <IoPersonOutline className="size-5" />
+                  <Icons.user className="size-5" />
                 </span>
                 <div className={cn("min-w-0 flex-1", typeStackIdentityClass)}>
                   <p className="truncate type-title leading-snug text-text-primary">{displayName}</p>
                   <div className={typeMetaRowClass}>
                     <span className={cn(typeIconTextClass, "type-caption text-text-muted")}>
-                      <IoMailOutline className="size-3.5 shrink-0" aria-hidden />
+                      <Icons.mail className="size-3.5 shrink-0" aria-hidden />
                       <span className="truncate">{lead.email}</span>
                     </span>
                     <span className={cn(typeIconTextClass, "type-caption text-text-muted")}>
-                      <IoCallOutline className="size-3.5 shrink-0" aria-hidden />
+                      <Icons.call className="size-3.5 shrink-0" aria-hidden />
                       <span className="truncate">{lead.phone}</span>
                     </span>
                   </div>
@@ -91,13 +84,13 @@ export function LeadDetailSheet({ lead, open, onOpenChange }: TLeadDetailSheetPr
             <section className={detailSectionClass}>
               <DetailSectionHeading title={t("leadTitle")} description={t("leadSectionLead")} />
               <div>
-                <DetailFieldRow icon={IoCalendarOutline} label={t("leadDate")}>
+                <DetailFieldRow icon={Icons.calendar} label={t("leadDate")}>
                   {formatLeadDate(lead.leadDate, i18n.language)}
                 </DetailFieldRow>
-                <DetailFieldRow icon={IoBriefcaseOutline} label={t("services")}>
+                <DetailFieldRow icon={Icons.briefcase} label={t("services")}>
                   {lead.servicesInterestedIn?.trim() || "—"}
                 </DetailFieldRow>
-                <DetailFieldRow icon={IoChatbubbleOutline} label={t("message")}>
+                <DetailFieldRow icon={Icons.megaphone} label={t("message")}>
                   {lead.message.trim() || "—"}
                 </DetailFieldRow>
               </div>
@@ -108,7 +101,7 @@ export function LeadDetailSheet({ lead, open, onOpenChange }: TLeadDetailSheetPr
                 <DetailSectionHeading title={t("extrasTitle")} description={t("extrasLead")} />
                 <div>
                   {extrasEntries.map(([key, value]) => (
-                    <DetailFieldRow key={key} icon={IoDocumentTextOutline} label={key}>
+                    <DetailFieldRow key={key} icon={Icons.file} label={key}>
                       {value.trim() || "—"}
                     </DetailFieldRow>
                   ))}

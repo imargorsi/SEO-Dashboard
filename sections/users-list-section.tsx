@@ -1,9 +1,10 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { IoTrashOutline } from "react-icons/io5";
 
 import { TableListSearch } from "@/components/table/table-list-search";
 import { TableListSort } from "@/components/table/table-list-sort";
@@ -290,7 +291,7 @@ export function UsersListSection() {
       <ConfirmDialog
         open={Boolean(deleteTarget)}
         onOpenChange={(open) => !open && setDeleteTarget(null)}
-        icon={IoTrashOutline}
+        icon={Icons.delete}
         title={t("table.deleteTitle")}
         description={t("table.deleteBody")}
         action={

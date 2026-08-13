@@ -1,7 +1,8 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useTranslation } from "react-i18next";
-import { IoMailOutline } from "react-icons/io5";
 
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
@@ -43,7 +44,7 @@ export function EmailVerificationSection() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
               <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-bg-hover">
-                <IoMailOutline className="size-4 text-(--text-on-elevated)" aria-hidden />
+                <Icons.mail className="size-4 text-(--text-on-elevated)" aria-hidden />
               </span>
               <p className={cn("type-body leading-6", elevatedCardBodyClass)}>{t("description")}</p>
             </div>

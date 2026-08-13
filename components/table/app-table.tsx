@@ -1,10 +1,9 @@
 "use client";
 
 import type { ReactNode } from "react";
-import type { IconType } from "react-icons";
 import { useTranslation } from "react-i18next";
-import { IoSearchOutline } from "react-icons/io5";
 
+import type { TAppIconComponent } from "@/components/ui/app-icon";
 import { AppTablePagination, type TAppTablePaginationProps } from "@/components/table/app-table-pagination";
 import { TableSkeleton } from "@/components/skeletons/table-skeleton";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -16,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Icons } from "@/lib/frontend/icons/app-icons";
 import {
   tableBodyCellClass,
   tableBodyRowClass,
@@ -29,7 +29,7 @@ export type TAppTableColumn<T> = {
   key: string;
   label: ReactNode;
   /** Optional icon shown before the header label. */
-  headerIcon?: IconType;
+  headerIcon?: TAppIconComponent;
   render?: (item: T, index: number) => ReactNode;
   headerClassName?: string;
   cellClassName?: string;
@@ -89,7 +89,7 @@ function TableColumnHeader({
   align,
 }: {
   label: ReactNode;
-  Icon?: IconType;
+  Icon?: TAppIconComponent;
   align?: TAppTableColumn<unknown>["align"];
 }) {
   return (
@@ -167,7 +167,7 @@ export function AppTable<T extends Record<string, unknown>>({
                     <EmptyState
                       title={resolvedEmptyTitle}
                       description={resolvedEmptyBody ?? ""}
-                      icon={IoSearchOutline}
+                      icon={Icons.search}
                       className="py-6 sm:py-8"
                     />
                   )}

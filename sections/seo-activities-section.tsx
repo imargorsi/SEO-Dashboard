@@ -1,8 +1,9 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { IoDownloadOutline, IoTrashOutline } from "react-icons/io5";
 
 import { SeoActivitiesTable } from "@/components/seo-activities/seo-activities-table";
 import { SeoActivityDateRangeFilter } from "@/components/seo-activities/seo-activity-date-range-filter";
@@ -296,7 +297,7 @@ export function SeoActivitiesSection() {
               onClick={() => void onExportExcel()}
               className="shrink-0"
             >
-              <IoDownloadOutline className="size-4" aria-hidden />
+              <Icons.cloudDownload className="size-4" aria-hidden />
               {t("export.excel")}
             </Button>
           </div>
@@ -327,7 +328,7 @@ export function SeoActivitiesSection() {
       <ConfirmDialog
         open={Boolean(deleteTarget)}
         onOpenChange={(open) => !open && setDeleteTarget(null)}
-        icon={IoTrashOutline}
+        icon={Icons.delete}
         title={t("table.deleteTitle")}
         description={t("table.deleteBody")}
         action={

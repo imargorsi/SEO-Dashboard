@@ -1,10 +1,11 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { IoAlertCircle, IoCheckmarkCircle, IoChevronDown, IoLogOutOutline, IoPersonCircle } from "react-icons/io5";
 
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { Spinner } from "@/components/ui/spinner";
@@ -131,7 +132,7 @@ export function NavbarProfileMenu({ placement = "topbar", isCollapsed = false }:
             <span className="block truncate type-caption-xs text-text-muted">{roleLine}</span>
           ) : null}
         </span>
-        <IoChevronDown
+        <Icons.arrowDown
           className={cn(
             "size-3.5 shrink-0 text-text-muted transition-transform",
             open && "rotate-180",
@@ -178,7 +179,7 @@ export function NavbarProfileMenu({ placement = "topbar", isCollapsed = false }:
 
           {verified ? (
             <div className={cn("flex items-center gap-2 border-b border-border px-3 py-2.5 type-caption", getStatusTextClassName("active"))}>
-              <IoCheckmarkCircle className="size-4 shrink-0" aria-hidden />
+              <Icons.checkCircle className="size-4 shrink-0" aria-hidden />
               <span>{t("emailVerified")}</span>
             </div>
           ) : (
@@ -192,7 +193,7 @@ export function NavbarProfileMenu({ placement = "topbar", isCollapsed = false }:
               {resendMutation.isPending ? (
                 <Spinner className={cn("mt-0.5 size-4 shrink-0", getStatusTextClassName("pending"))} aria-hidden />
               ) : (
-                <IoAlertCircle className={cn("mt-0.5 size-4 shrink-0", getStatusTextClassName("pending"))} aria-hidden />
+                <Icons.alert className={cn("mt-0.5 size-4 shrink-0", getStatusTextClassName("pending"))} aria-hidden />
               )}
               <span className="min-w-0 flex-1">
                 <span className={cn("block type-caption", getStatusTextClassName("pending"))}>{t("emailNotVerified")}</span>
@@ -203,7 +204,7 @@ export function NavbarProfileMenu({ placement = "topbar", isCollapsed = false }:
 
           <div className="p-1.5" role="none">
             <Link href="/edit-profile" role="menuitem" className={menuItemClass} onClick={close}>
-              <IoPersonCircle className="size-4 shrink-0 opacity-80" aria-hidden />
+              <Icons.userCircle className="size-4 shrink-0 opacity-80" aria-hidden />
               {t("editProfile")}
             </Link>
             <button
@@ -221,7 +222,7 @@ export function NavbarProfileMenu({ placement = "topbar", isCollapsed = false }:
               {logoutMutation.isPending ? (
                 <Spinner className="size-4 shrink-0 text-current" aria-hidden />
               ) : (
-                <IoLogOutOutline className="size-4 shrink-0 opacity-90" aria-hidden />
+                <Icons.logout className="size-4 shrink-0 opacity-90" aria-hidden />
               )}
               {t("logOut")}
             </button>

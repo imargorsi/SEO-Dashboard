@@ -1,9 +1,10 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
-import { IoCalendarOutline, IoChevronBack, IoChevronDown, IoChevronForward } from "react-icons/io5";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -241,7 +242,7 @@ export function SeoActivityDateRangeFilter({
                       setViewMonth(next.monthIndex);
                     }}
                   >
-                    <IoChevronBack className="size-4" aria-hidden />
+                    <Icons.arrowLeft className="size-4" aria-hidden />
                   </button>
                   <p className="type-body-strong text-text-primary">
                     {monthLabel} {viewYear}
@@ -256,7 +257,7 @@ export function SeoActivityDateRangeFilter({
                       setViewMonth(next.monthIndex);
                     }}
                   >
-                    <IoChevronForward className="size-4" aria-hidden />
+                    <Icons.arrowRight className="size-4" aria-hidden />
                   </button>
                 </div>
 
@@ -333,9 +334,9 @@ export function SeoActivityDateRangeFilter({
         onClick={() => setOpen((prev) => !prev)}
         className={cn("gap-2", open && "bg-bg-selected")}
       >
-        <IoCalendarOutline className="size-4 shrink-0 text-text-muted" aria-hidden />
+        <Icons.calendar className="size-4 shrink-0 text-text-muted" aria-hidden />
         <span className="max-w-48 truncate font-semibold">{triggerLabel}</span>
-        <IoChevronDown
+        <Icons.arrowDown
           className={cn("size-3.5 shrink-0 text-text-muted transition-transform", open && "rotate-180")}
           aria-hidden
         />

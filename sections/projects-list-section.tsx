@@ -1,5 +1,7 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
@@ -19,7 +21,6 @@ import { buttonVariants } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { CreateActionButton } from "@/components/ui/create-action-button";
 import { EmptyState } from "@/components/ui/empty-state";
-import { IoFilterOutline, IoTrashOutline } from "react-icons/io5";
 import { useProjectAccess } from "@/context/project-access-context";
 import { useSelectedProject } from "@/context/selected-project-context";
 import { useAuthUserQuery, useResendEmailVerificationMutation } from "@/features/auth/auth.api";
@@ -227,7 +228,7 @@ export function ProjectsListSection() {
           <EmptyState
             title={t("statusFilter.emptyTitle")}
             description={t("statusFilter.emptyBody")}
-            icon={IoFilterOutline}
+            icon={Icons.filter}
           />
         ) : viewMode === "table" ? (
           <ProjectsTable
@@ -273,7 +274,7 @@ export function ProjectsListSection() {
       <ConfirmDialog
         open={Boolean(deleteTarget)}
         onOpenChange={(open) => !open && setDeleteTarget(null)}
-        icon={IoTrashOutline}
+        icon={Icons.delete}
         title={t("table.deleteConfirmTitle")}
         description={t("table.deleteConfirmDescription", { name: deleteTarget?.businessName ?? "" })}
         action={

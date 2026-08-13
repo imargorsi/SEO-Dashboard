@@ -1,10 +1,11 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import { useEffect, useId, useState } from "react";
 import { createPortal } from "react-dom";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { IoClose } from "react-icons/io5";
 
 import { Input } from "@/components/input";
 import { Button } from "@/components/ui/button";
@@ -144,7 +145,7 @@ export function SeoActivityQuickAdd({
             onClick={() => onOpenChange(false)}
             className="absolute inset-e-3 top-3 rounded-lg p-2 text-text-muted transition-colors hover:bg-bg-hover hover:text-text-primary"
           >
-            <IoClose className="size-4" aria-hidden />
+            <Icons.cancel className="size-4" aria-hidden />
             <span className="sr-only">{t("close")}</span>
           </button>
 

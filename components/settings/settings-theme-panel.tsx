@@ -1,8 +1,9 @@
 "use client";
 
+import { Icons } from "@/lib/frontend/icons/app-icons";
+
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import { IoCheckmarkCircle } from "react-icons/io5";
 
 import { useFontPack } from "@/components/providers/font-pack-provider";
 import { useThemePack } from "@/components/providers/theme-pack-provider";
@@ -171,7 +172,7 @@ function ThemePackCard({
         </div>
         <p className="min-w-0 flex-1 truncate type-label text-text-primary">{title}</p>
         {isSelected ? (
-          <IoCheckmarkCircle className="size-3.5 shrink-0 text-brand" aria-hidden />
+          <Icons.checkCircle className="size-3.5 shrink-0 text-brand" aria-hidden />
         ) : null}
       </div>
       <p className="truncate type-caption text-text-muted">{description}</p>
@@ -220,7 +221,7 @@ function FontPackCard({
           {sample}
         </p>
         {isSelected ? (
-          <IoCheckmarkCircle className="size-3.5 shrink-0 text-brand" aria-hidden />
+          <Icons.checkCircle className="size-3.5 shrink-0 text-brand" aria-hidden />
         ) : null}
       </div>
       <p className="truncate type-caption text-text-muted">{description}</p>

@@ -1,15 +1,15 @@
 "use client";
 
 import type { ReactNode } from "react";
-import type { IconType } from "react-icons";
-import { IoTrashOutline } from "react-icons/io5";
 
+import type { TAppIconComponent } from "@/components/ui/app-icon";
 import {
   AlertDialog,
   AlertDialogContent,
 } from "@/components/ui/alert-dialog";
 import { Heading } from "@/components/heading";
 import { Paragraph } from "@/components/paragraph";
+import { Icons } from "@/lib/frontend/icons/app-icons";
 import { cn } from "@/lib/utils";
 
 export type TConfirmDialogTone = "destructive" | "default";
@@ -17,7 +17,7 @@ export type TConfirmDialogTone = "destructive" | "default";
 export type TConfirmDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  icon?: IconType;
+  icon?: TAppIconComponent;
   title: string;
   description: string;
   /** Footer actions (e.g. Cancel + Confirm). */
@@ -38,7 +38,7 @@ const ICON_WELL: Record<TConfirmDialogTone, string> = {
 export function ConfirmDialog({
   open,
   onOpenChange,
-  icon: Icon = IoTrashOutline,
+  icon: Icon = Icons.delete,
   title,
   description,
   action,

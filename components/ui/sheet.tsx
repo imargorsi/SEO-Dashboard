@@ -3,9 +3,8 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
-import { IoClose } from "react-icons/io5";
-
 import { cn } from "@/lib/utils";
+import { Icons } from "@/lib/frontend/icons/app-icons";
 import { sheetSurfaceClass } from "@/lib/frontend/layout/dashboard-chrome";
 import { SHEET_TRANSITION_MS } from "@/lib/frontend/layout/sheet.constants";
 import { overlayClass } from "@/lib/frontend/theme/chrome-tones";
@@ -132,7 +131,7 @@ function SheetContent({
           className="absolute end-3 top-3 rounded-md p-1.5 text-text-muted opacity-80 outline-none transition-opacity hover:bg-bg-hover hover:text-text-primary hover:opacity-100 focus-visible:ring-2 focus-visible:ring-accent-border"
           onClick={() => setOpen(false)}
         >
-          <IoClose className="size-4" aria-hidden />
+          <Icons.cancel className="size-4" aria-hidden />
           <span className="sr-only">{t("close")}</span>
         </button>
       </div>

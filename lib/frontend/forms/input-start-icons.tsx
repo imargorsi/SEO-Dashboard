@@ -1,21 +1,6 @@
 import type { ReactNode } from "react";
-import {
-  IoBusinessOutline,
-  IoCalendarOutline,
-  IoCallOutline,
-  IoDocumentTextOutline,
-  IoEarthOutline,
-  IoLinkOutline,
-  IoLocationOutline,
-  IoLockClosedOutline,
-  IoMailOutline,
-  IoPersonOutline,
-  IoPricetagOutline,
-  IoSearchOutline,
-  IoShieldCheckmarkOutline,
-  IoTextOutline,
-  IoTimeOutline,
-} from "react-icons/io5";
+
+import { Icons } from "@/lib/frontend/icons/app-icons";
 
 const iconClassName = "size-4";
 
@@ -37,49 +22,49 @@ type TAutoIconInputType =
  */
 export const fieldStartIcons = {
   get person() {
-    return <IoPersonOutline className={iconClassName} />;
+    return <Icons.user className={iconClassName} />;
   },
   get mail() {
-    return <IoMailOutline className={iconClassName} />;
+    return <Icons.mail className={iconClassName} />;
   },
   get lock() {
-    return <IoLockClosedOutline className={iconClassName} />;
+    return <Icons.lock className={iconClassName} />;
   },
   get link() {
-    return <IoLinkOutline className={iconClassName} />;
+    return <Icons.link className={iconClassName} />;
   },
   get phone() {
-    return <IoCallOutline className={iconClassName} />;
+    return <Icons.call className={iconClassName} />;
   },
   get search() {
-    return <IoSearchOutline className={iconClassName} />;
+    return <Icons.search className={iconClassName} />;
   },
   get business() {
-    return <IoBusinessOutline className={iconClassName} />;
+    return <Icons.building className={iconClassName} />;
   },
   get location() {
-    return <IoLocationOutline className={iconClassName} />;
+    return <Icons.location className={iconClassName} />;
   },
   get globe() {
-    return <IoEarthOutline className={iconClassName} />;
+    return <Icons.globe className={iconClassName} />;
   },
   get document() {
-    return <IoDocumentTextOutline className={iconClassName} />;
+    return <Icons.file className={iconClassName} />;
   },
   get text() {
-    return <IoTextOutline className={iconClassName} />;
+    return <Icons.text className={iconClassName} />;
   },
   get tag() {
-    return <IoPricetagOutline className={iconClassName} />;
+    return <Icons.tag className={iconClassName} />;
   },
   get calendar() {
-    return <IoCalendarOutline className={iconClassName} />;
+    return <Icons.calendar className={iconClassName} />;
   },
   get time() {
-    return <IoTimeOutline className={iconClassName} />;
+    return <Icons.clock className={iconClassName} />;
   },
   get shield() {
-    return <IoShieldCheckmarkOutline className={iconClassName} />;
+    return <Icons.security className={iconClassName} />;
   },
 } as const;
 

@@ -1,0 +1,17 @@
+# Icons — Hugeicons only (platform-wide)
+
+Crawllex uses **Hugeicons free Stroke Rounded** for all UI chrome icons.
+
+## Do
+
+- Import from `Icons` in `lib/frontend/icons/app-icons.ts` (or extend that map with `createAppIcon`)
+- Use `AppIcon` / integer `size` + `absoluteStrokeWidth` for crisp rendering
+- Keep brand SVGs for Google auth (`GoogleBrandMark`) and GSC/GA4 (`GoogleIntegrationLogo`)
+
+## Don't
+
+- ❌ Install or import `react-icons`, Lucide, Heroicons, Simple Icons, etc.
+- ❌ Import `@hugeicons/core-free-icons` ad hoc in feature files when an `Icons.*` entry should exist
+- ❌ Put circular bordered wells around sidebar nav icons (`sidebarNavIconClass` = bare glyphs)
+
+Canonical rules: `AGENTS.md` → **Icons (Must Follow)** · `doc/frontend.md`.

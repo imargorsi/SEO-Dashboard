@@ -41,6 +41,7 @@ Internal docs live in **`doc/`** and root **`AGENTS.md`** (local/agent use — g
 - **`app/(auth)/`** — Sign in, register, password flows
 - **`app/(dashboard)/`** — Authenticated app shell and modules
 - **`app/api/v1/`** — REST API
+- **`plugin/`** — WordPress Lead Capture plugin (copy to `wp-content/plugins/crawllex-lead-capture/`)
 - **`laravel-old/`** — Original Laravel API (**reference only** — reuse business rules, not implementation)
 
 ## Principles

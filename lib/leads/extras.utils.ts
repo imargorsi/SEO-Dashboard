@@ -8,6 +8,13 @@ import {
 } from "@/lib/leads/constants";
 import type { TLeadColumnMapping, TLeadField } from "@/types/lead.types";
 
+const RESERVED_EXTRAS_KEYS = new Set<string>([
+  ...LEAD_FIELDS,
+  "extras",
+  "idempotencyKey",
+  "pluginVersion",
+]);
+
 /** CSV headers currently assigned to a core Crawllex field. */
 export function coreMappedHeaders(
   mapping: Pick<TLeadColumnMapping, TLeadField>,
@@ -61,6 +68,21 @@ export function buildLeadExtras(
     const key = header.trim().slice(0, LEAD_EXTRAS_KEY_MAX_LENGTH);
     if (!key || key in out) continue;
     const value = (row[header] ?? "").trim().slice(0, LEAD_EXTRAS_VALUE_MAX_LENGTH);
+    if (!value) continue;
+    out[key] = value;
+  }
+  return out;
+}
+
+/** Cap and drop reserved/core keys from a plugin extras map. */
+export function sanitizeLeadExtras(raw: Record<string, string> | undefined): Record<string, string> {
+  if (!raw) return {};
+  const out: Record<string, string> = {};
+  for (const [header, rawValue] of Object.entries(raw)) {
+    if (Object.keys(out).length >= LEAD_EXTRAS_MAX_KEYS) break;
+    const key = header.trim().slice(0, LEAD_EXTRAS_KEY_MAX_LENGTH);
+    if (!key || key in out || RESERVED_EXTRAS_KEYS.has(key)) continue;
+    const value = rawValue.trim().slice(0, LEAD_EXTRAS_VALUE_MAX_LENGTH);
     if (!value) continue;
     out[key] = value;
   }

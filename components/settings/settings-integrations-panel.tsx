@@ -2,10 +2,11 @@
 
 import { Icons } from "@/lib/frontend/icons/app-icons";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { IntegrationServiceCard } from "@/components/settings/integrations/integration-service-card";
+import { WordpressLeadSourceCard } from "@/components/settings/integrations/wordpress-lead-source-card";
 import { AlertDialogCancel } from "@/components/ui/alert-dialog";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -20,6 +21,12 @@ import {
   useGooglePropertiesQuery,
   useSyncGoogleIntegrationsMutation,
 } from "@/features/analytics/analytics.api";
+import {
+  useCreateLeadSourceMutation,
+  useDisconnectLeadSourceMutation,
+  useLeadSourcesQuery,
+  useRotateLeadSourceMutation,
+} from "@/features/leads/lead-sources.api";
 import { ApiError } from "@/lib/frontend/api/errors";
 import { notify } from "@/lib/frontend/feedback/notify";
 import { analyticsHeadingStackClass } from "@/lib/frontend/layout/dashboard-chrome";
@@ -40,6 +47,7 @@ export function SettingsIntegrationsPanel() {
   const { data: authUser } = useAuthUserQuery();
   const { projectPermissions } = useProjectAccess();
   const projectId = selectedProject?.id ?? null;
+  const projectStatus = selectedProject?.status ?? null;
   const dateRange = useMemo(() => defaultAnalyticsDateRange(), []);
 
   const permissions = useMemo(
@@ -59,6 +67,10 @@ export function SettingsIntegrationsPanel() {
   const connectMutation = useConnectGoogleIntegrationMutation(projectId);
   const disconnectMutation = useDisconnectGoogleIntegrationMutation(projectId);
   const syncMutation = useSyncGoogleIntegrationsMutation(projectId);
+  const leadSourcesQuery = useLeadSourcesQuery(projectId, { enabled: Boolean(projectId) });
+  const createLeadSourceMutation = useCreateLeadSourceMutation(projectId);
+  const rotateLeadSourceMutation = useRotateLeadSourceMutation(projectId);
+  const disconnectLeadSourceMutation = useDisconnectLeadSourceMutation(projectId);
 
   const gsc = overviewQuery.data?.integrations.gsc ?? null;
   const ga4 = overviewQuery.data?.integrations.ga4 ?? null;
@@ -73,8 +85,29 @@ export function SettingsIntegrationsPanel() {
     [propertiesQuery.data],
   );
 
-  const isBusy =
+  const wordpressSource = leadSourcesQuery.data?.items[0] ?? null;
+  const loadErrorNotified = useRef(false);
+
+  const isGoogleBusy =
     connectMutation.isPending || disconnectMutation.isPending || syncMutation.isPending;
+  const isWordpressBusy =
+    createLeadSourceMutation.isPending ||
+    rotateLeadSourceMutation.isPending ||
+    disconnectLeadSourceMutation.isPending;
+
+  useEffect(() => {
+    loadErrorNotified.current = false;
+  }, [projectId]);
+
+  useEffect(() => {
+    if (!leadSourcesQuery.error || loadErrorNotified.current) return;
+    loadErrorNotified.current = true;
+    notify.error(
+      leadSourcesQuery.error instanceof Error
+        ? leadSourcesQuery.error.message
+        : t("wordpress.loadError"),
+    );
+  }, [leadSourcesQuery.error, t]);
 
   function requestConnectOrUpdate(
     service: TGoogleIntegrationService,
@@ -186,7 +219,7 @@ export function SettingsIntegrationsPanel() {
             type="button"
             variant="outlined"
             size="md"
-            disabled={isBusy}
+            disabled={isGoogleBusy}
             onClick={() => setPending({ type: "refresh" })}
             className="shrink-0"
           >
@@ -206,7 +239,7 @@ export function SettingsIntegrationsPanel() {
             requestConnectOrUpdate("gsc", nextPropertyId, mode)
           }
           onRequestDisconnect={() => setPending({ type: "disconnect", service: "gsc" })}
-          isBusy={isBusy}
+          isBusy={isGoogleBusy}
           canUpdate={canUpdate}
           canDisconnect={canDisconnect}
         />
@@ -219,9 +252,25 @@ export function SettingsIntegrationsPanel() {
             requestConnectOrUpdate("ga4", nextPropertyId, mode)
           }
           onRequestDisconnect={() => setPending({ type: "disconnect", service: "ga4" })}
-          isBusy={isBusy}
+          isBusy={isGoogleBusy}
           canUpdate={canUpdate}
           canDisconnect={canDisconnect}
+        />
+        <WordpressLeadSourceCard
+          source={wordpressSource}
+          projectStatus={projectStatus}
+          isBusy={isWordpressBusy}
+          isListPending={leadSourcesQuery.isPending}
+          hasListError={Boolean(leadSourcesQuery.error)}
+          canUpdate={canUpdate}
+          canDisconnect={canDisconnect}
+          onConnect={() => createLeadSourceMutation.mutateAsync()}
+          onRotate={(sourceId) => rotateLeadSourceMutation.mutateAsync(sourceId)}
+          onDisconnect={(sourceId) => disconnectLeadSourceMutation.mutateAsync(sourceId)}
+          onSecretDialogClose={() => {
+            createLeadSourceMutation.reset();
+            rotateLeadSourceMutation.reset();
+          }}
         />
       </div>
 
@@ -234,7 +283,7 @@ export function SettingsIntegrationsPanel() {
         description={confirmBody}
         action={
           <>
-            <AlertDialogCancel disabled={isBusy}>{t("confirmCancel")}</AlertDialogCancel>
+            <AlertDialogCancel disabled={isGoogleBusy}>{t("confirmCancel")}</AlertDialogCancel>
             <button
               type="button"
               className={cn(
@@ -243,7 +292,7 @@ export function SettingsIntegrationsPanel() {
                   size: "md",
                 }),
               )}
-              disabled={isBusy}
+              disabled={isGoogleBusy}
               onClick={() => void runPending()}
             >
               {confirmLabel}

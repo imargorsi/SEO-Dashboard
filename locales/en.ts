@@ -160,6 +160,41 @@ export interface Translation {
         disconnected: string;
         error: string;
       };
+      wordpress: {
+        title: string;
+        lead: string;
+        connect: string;
+        rotate: string;
+        disconnect: string;
+        keyEndingIn: string;
+        connectedAt: string;
+        lastVerified: string;
+        ingestStats: string;
+        inactiveProject: string;
+        loadError: string;
+        connectSuccess: string;
+        connectError: string;
+        rotateSuccess: string;
+        rotateError: string;
+        disconnectSuccess: string;
+        disconnectError: string;
+        confirmConnectTitle: string;
+        confirmConnectBody: string;
+        confirmConnect: string;
+        confirmRotateTitle: string;
+        confirmRotateBody: string;
+        confirmRotate: string;
+        confirmDisconnectTitle: string;
+        confirmDisconnectBody: string;
+        confirmDisconnect: string;
+        keyDialogTitle: string;
+        keyDialogLead: string;
+        keyLabel: string;
+        copyKey: string;
+        keyCopied: string;
+        copyError: string;
+        done: string;
+      };
     };
   };
   profile: {
@@ -1644,10 +1679,10 @@ const translation: Translation = {
       interDescription: "Modern UI sans optimized for dense screens and long reading.",
     },
     integrations: {
-      lead: "Link Search Console and GA4 properties for the selected project. Only platform admins can manage these connections.",
+      lead: "Link Search Console, GA4, and WordPress lead capture for the selected project.",
       projectContext: "Selected Project: {{name}}",
       selectProjectTitle: "Select A Project",
-      selectProjectBody: "Choose a project from the sidebar before linking Google properties.",
+      selectProjectBody: "Choose a project from the sidebar before linking integrations.",
       refresh: "Refresh Data",
       connect: "Connect",
       update: "Update",
@@ -1693,6 +1728,44 @@ const translation: Translation = {
         connected: "Connected",
         disconnected: "Disconnected",
         error: "Error",
+      },
+      wordpress: {
+        title: "WordPress",
+        lead: "Create a lead source key for the WordPress plugin. The key is shown once.",
+        connect: "Connect",
+        rotate: "Rotate Key",
+        disconnect: "Disconnect",
+        keyEndingIn: "Key Ending In {{prefix}}",
+        connectedAt: "Connected {{value}}",
+        lastVerified: "Last Verified {{value}}",
+        ingestStats: "Ingested {{ingested}} · Failed {{failed}}",
+        inactiveProject: "WordPress can only be connected when the project is active.",
+        loadError: "Could not load the WordPress lead source.",
+        connectSuccess: "Lead source connected. Copy the key now.",
+        connectError: "Could not connect WordPress.",
+        rotateSuccess: "Lead source key rotated. Copy the new key now.",
+        rotateError: "Could not rotate the lead source key.",
+        disconnectSuccess: "WordPress disconnected.",
+        disconnectError: "Could not disconnect WordPress.",
+        confirmConnectTitle: "Connect WordPress?",
+        confirmConnectBody:
+          "Create a lead source key for this project. You will see the key once — store it in the WordPress plugin.",
+        confirmConnect: "Connect WordPress",
+        confirmRotateTitle: "Rotate Lead Source Key?",
+        confirmRotateBody:
+          "The current key will stop working immediately. You will see the new key once.",
+        confirmRotate: "Rotate Key",
+        confirmDisconnectTitle: "Disconnect WordPress?",
+        confirmDisconnectBody:
+          "The WordPress plugin will no longer be able to send leads to this project.",
+        confirmDisconnect: "Disconnect",
+        keyDialogTitle: "Lead Source Key",
+        keyDialogLead: "Copy this key now. Crawllex will not show it again.",
+        keyLabel: "Lead Source Key",
+        copyKey: "Copy Key",
+        keyCopied: "Key copied.",
+        copyError: "Could not copy the key.",
+        done: "Done",
       },
     },
   },

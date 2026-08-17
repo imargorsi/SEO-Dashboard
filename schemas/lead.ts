@@ -4,6 +4,9 @@ import {
   LEAD_DATE_USE_TODAY,
   LEAD_EMAIL_MAX_LENGTH,
   LEAD_EXTRAS_MAX_KEYS,
+  LEAD_INGEST_IDEMPOTENCY_KEY_MAX_LENGTH,
+  LEAD_INGEST_IDEMPOTENCY_KEY_MIN_LENGTH,
+  LEAD_INGEST_PLUGIN_VERSION_MAX_LENGTH,
   LEAD_MESSAGE_MAX_LENGTH,
   LEAD_NAME_MAX_LENGTH,
   LEAD_PHONE_MAX_LENGTH,
@@ -79,6 +82,60 @@ export const updateLeadSchema = leadFieldsSchema;
 
 export type CreateLeadInput = z.infer<typeof createLeadSchema>;
 export type UpdateLeadInput = z.infer<typeof updateLeadSchema>;
+
+const pluginVersionSchema = z
+  .string()
+  .trim()
+  .min(1, "Plugin version is required.")
+  .max(
+    LEAD_INGEST_PLUGIN_VERSION_MAX_LENGTH,
+    `Use at most ${LEAD_INGEST_PLUGIN_VERSION_MAX_LENGTH} characters.`,
+  );
+
+const idempotencyKeySchema = z
+  .string()
+  .trim()
+  .min(
+    LEAD_INGEST_IDEMPOTENCY_KEY_MIN_LENGTH,
+    `Use at least ${LEAD_INGEST_IDEMPOTENCY_KEY_MIN_LENGTH} characters.`,
+  )
+  .max(
+    LEAD_INGEST_IDEMPOTENCY_KEY_MAX_LENGTH,
+    `Use at most ${LEAD_INGEST_IDEMPOTENCY_KEY_MAX_LENGTH} characters.`,
+  )
+  .regex(/^[A-Za-z0-9._:-]+$/, "Use letters, numbers, dots, underscores, colons, or hyphens.");
+
+export const ingestVerifySchema = z.object({
+  pluginVersion: pluginVersionSchema,
+});
+
+export const ingestLeadSchema = z.object({
+  firstName: leadFirstNameSchema,
+  lastName: leadLastNameSchema,
+  email: leadEmailSchema,
+  phone: leadPhoneSchema,
+  servicesInterestedIn: leadServicesSchema,
+  message: leadMessageSchema,
+  leadDate: z
+    .string()
+    .trim()
+    .optional()
+    .transform((value) => (value && value.length > 0 ? value : todayLeadDate()))
+    .refine((value) => isValidLeadDate(value), "Enter a valid date."),
+  extras: z
+    .record(z.string(), z.string())
+    .optional()
+    .default({})
+    .refine(
+      (value) => Object.keys(value).length <= LEAD_EXTRAS_MAX_KEYS,
+      `Keep at most ${LEAD_EXTRAS_MAX_KEYS} extra fields.`,
+    ),
+  idempotencyKey: idempotencyKeySchema,
+  pluginVersion: pluginVersionSchema,
+});
+
+export type IngestVerifyInput = z.infer<typeof ingestVerifySchema>;
+export type IngestLeadInput = z.infer<typeof ingestLeadSchema>;
 
 export const leadImportMappingSchema = z
   .object({

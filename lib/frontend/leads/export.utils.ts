@@ -1,5 +1,6 @@
 import type { TDateRange } from "@/lib/frontend/seo-activities/date-range.utils";
 import { downloadBrowserFile } from "@/lib/frontend/seo-activities/export.utils";
+import { leadSourceGroup } from "@/lib/frontend/leads/origin-display";
 import type { TLeadDto } from "@/types/lead.types";
 
 export type TLeadExportLabels = {
@@ -10,6 +11,9 @@ export type TLeadExportLabels = {
   phone: string;
   servicesInterestedIn: string;
   message: string;
+  source: string;
+  sourceWordpress: string;
+  sourceInternal: string;
 };
 
 /** Prefix formula-like values so Excel/LibreOffice treat them as text. */
@@ -47,6 +51,7 @@ function buildExportTable(rows: readonly TLeadDto[], labels: TLeadExportLabels) 
     labels.lastName,
     labels.email,
     labels.phone,
+    labels.source,
     ...(includeServices ? [labels.servicesInterestedIn] : []),
     labels.message,
     ...extrasKeys,
@@ -57,6 +62,7 @@ function buildExportTable(rows: readonly TLeadDto[], labels: TLeadExportLabels) 
     row.lastName,
     row.email,
     row.phone,
+    leadSourceGroup(row.origin) === "wordpress" ? labels.sourceWordpress : labels.sourceInternal,
     ...(includeServices ? [row.servicesInterestedIn ?? ""] : []),
     row.message,
     ...extrasKeys.map((key) => row.extras?.[key] ?? ""),

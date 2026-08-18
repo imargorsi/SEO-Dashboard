@@ -11,6 +11,8 @@ final class Crawllex_Lead_Capture_Contact_Form_7
 {
     private const ACCEPT_STATUSES = array('mail_sent', 'mail_failed', 'demo_mode');
 
+    private static bool $handled = false;
+
     public static function init(): void
     {
         add_action('wpcf7_submit', array(self::class, 'handle'), 10, 2);
@@ -22,6 +24,9 @@ final class Crawllex_Lead_Capture_Contact_Form_7
      */
     public static function handle($form, $result): void
     {
+        if (self::$handled) {
+            return;
+        }
         if (!is_array($result) || !isset($result['status'])) {
             return;
         }
@@ -41,6 +46,8 @@ final class Crawllex_Lead_Capture_Contact_Form_7
         if (!is_array($posted)) {
             return;
         }
+
+        self::$handled = true;
 
         $form_id = (is_object($form) && method_exists($form, 'id')) ? (int) $form->id() : 0;
         $posted_hash = isset($result['posted_data_hash']) ? (string) $result['posted_data_hash'] : '';

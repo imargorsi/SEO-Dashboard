@@ -1,16 +1,22 @@
 import mongoose, { type Types } from "mongoose";
 import { NextResponse } from "next/server";
 
-import { NotFoundError, ValidationError } from "@/lib/api/http-errors";
+import { HttpError, NotFoundError, ValidationError } from "@/lib/api/http-errors";
 import { ApiResponse } from "@/lib/api/response";
 import type { AuthContext } from "@/lib/auth/guards";
 import { assertProjectActiveForLeads } from "@/lib/leads/assert-project-active";
 import {
   LEAD_SOURCE_DEFAULT_NAME,
+  LEAD_SOURCE_KEY_UNAVAILABLE_MESSAGE,
   LEAD_SOURCE_MVP_MAX_PER_PROJECT,
   LEAD_SOURCE_PROVIDER,
 } from "@/lib/leads/constants";
-import { generateLeadSourceKey, hashLeadSourceKey } from "@/lib/leads/lead-source-key";
+import {
+  decryptLeadSourceKey,
+  encryptLeadSourceKey,
+  generateLeadSourceKey,
+  hashLeadSourceKey,
+} from "@/lib/leads/lead-source-key";
 import { serializeLeadSource } from "@/lib/leads/serialize-lead-source";
 import { isDuplicateKeyError } from "@/lib/roles/role-mutation.utils";
 import { LeadSource, type LeadSourceDocument } from "@/models";
@@ -75,6 +81,8 @@ export async function createLeadSource(
       status: "connected",
       keyHash: generated.keyHash,
       keyPrefix: generated.keyPrefix,
+      keyCiphertext: encryptLeadSourceKey(generated.plaintext),
+      siteUrl: null,
       lastVerifiedAt: null,
       lastIngestedAt: null,
       lastError: null,
@@ -108,6 +116,7 @@ export async function rotateLeadSourceKey(
 
   source.keyHash = generated.keyHash;
   source.keyPrefix = generated.keyPrefix;
+  source.keyCiphertext = encryptLeadSourceKey(generated.plaintext);
   source.status = "connected";
   source.lastError = null;
   source.connectedByUserId = auth.user._id as Types.ObjectId;
@@ -133,6 +142,25 @@ export async function findLeadSourceByPlainKey(
   if (!trimmed) return null;
   const keyHash = hashLeadSourceKey(trimmed);
   return LeadSource.findOne({ keyHash, status: "connected" });
+}
+
+export async function revealLeadSourceKey(
+  projectId: string,
+  sourceId: string,
+): Promise<TLeadSourceSecretDto> {
+  const source = await findProjectSource(projectId, sourceId);
+  const plaintext = source.keyCiphertext ? decryptLeadSourceKey(source.keyCiphertext) : null;
+  if (!plaintext) {
+    throw new HttpError(422, LEAD_SOURCE_KEY_UNAVAILABLE_MESSAGE);
+  }
+  return {
+    source: serializeLeadSource(source),
+    plaintextKey: plaintext,
+  };
+}
+
+export function buildRevealLeadSourceKeyResponse(payload: TLeadSourceSecretDto): NextResponse {
+  return ApiResponse.success(payload);
 }
 
 export function buildListLeadSourcesResponse(payload: TLeadSourceListDto): NextResponse {

@@ -225,6 +225,9 @@ export function LeadsSection() {
           phone: t("table.colPhone"),
           servicesInterestedIn: t("table.colServices"),
           message: t("table.colMessage"),
+          source: t("table.colSource"),
+          sourceWordpress: t("source.wordpress"),
+          sourceInternal: t("source.internal"),
         },
       });
       notify.success(t("importExport.exportSuccess"));

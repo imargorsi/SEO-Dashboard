@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import type { TAppTableColumn } from "@/components/table/app-table";
 import { TableRowIconActions } from "@/components/table/table-row-icon-actions";
+import { LeadSourceBadge } from "@/components/leads/lead-source-badge";
 import { formatLeadDisplayName } from "@/lib/leads/serialize-lead";
 import type { TLeadDto } from "@/types/lead.types";
 
@@ -59,6 +60,11 @@ export function useLeadsTableColumns({
             {formatLeadDisplayName(item.firstName, item.lastName)}
           </span>
         ),
+      },
+      {
+        key: "origin",
+        label: t("colSource"),
+        render: (item) => <LeadSourceBadge origin={item.origin} />,
       },
       {
         key: "email",

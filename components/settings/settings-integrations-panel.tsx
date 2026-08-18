@@ -25,11 +25,15 @@ import {
   useCreateLeadSourceMutation,
   useDisconnectLeadSourceMutation,
   useLeadSourcesQuery,
-  useRotateLeadSourceMutation,
+  useRevealLeadSourceKeyMutation,
 } from "@/features/leads/lead-sources.api";
 import { ApiError } from "@/lib/frontend/api/errors";
 import { notify } from "@/lib/frontend/feedback/notify";
-import { analyticsHeadingStackClass } from "@/lib/frontend/layout/dashboard-chrome";
+import {
+  analyticsHeadingStackClass,
+  settingsInsetDividerClass,
+  typeStackMdClass,
+} from "@/lib/frontend/layout/dashboard-chrome";
 import type { TGoogleIntegrationService } from "@/lib/integrations/constants";
 import { defaultAnalyticsDateRange } from "@/lib/integrations/date.utils";
 import { hasPermission, mergePermissions } from "@/lib/rbac/access";
@@ -69,7 +73,7 @@ export function SettingsIntegrationsPanel() {
   const syncMutation = useSyncGoogleIntegrationsMutation(projectId);
   const leadSourcesQuery = useLeadSourcesQuery(projectId, { enabled: Boolean(projectId) });
   const createLeadSourceMutation = useCreateLeadSourceMutation(projectId);
-  const rotateLeadSourceMutation = useRotateLeadSourceMutation(projectId);
+  const revealLeadSourceKeyMutation = useRevealLeadSourceKeyMutation(projectId);
   const disconnectLeadSourceMutation = useDisconnectLeadSourceMutation(projectId);
 
   const gsc = overviewQuery.data?.integrations.gsc ?? null;
@@ -92,7 +96,7 @@ export function SettingsIntegrationsPanel() {
     connectMutation.isPending || disconnectMutation.isPending || syncMutation.isPending;
   const isWordpressBusy =
     createLeadSourceMutation.isPending ||
-    rotateLeadSourceMutation.isPending ||
+    revealLeadSourceKeyMutation.isPending ||
     disconnectLeadSourceMutation.isPending;
 
   useEffect(() => {
@@ -207,72 +211,89 @@ export function SettingsIntegrationsPanel() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
-        <div className={cn(analyticsHeadingStackClass, "max-w-2xl")}>
-          <p className="type-label text-text-primary">
-            {t("projectContext", { name: selectedProject?.businessName ?? "—" })}
-          </p>
-          <p className="type-caption text-text-muted">{t("lead")}</p>
-        </div>
-        {canRefresh ? (
-          <Button
-            type="button"
-            variant="outlined"
-            size="md"
-            disabled={isGoogleBusy}
-            onClick={() => setPending({ type: "refresh" })}
-            className="shrink-0"
-          >
-            <Icons.refresh className="size-4" aria-hidden />
-            {t("refresh")}
-          </Button>
-        ) : null}
+      <div className={cn(analyticsHeadingStackClass, "max-w-2xl")}>
+        <p className="type-label text-text-primary">
+          {t("projectContext", { name: selectedProject?.businessName ?? "—" })}
+        </p>
+        <p className="type-caption text-text-muted">{t("lead")}</p>
       </div>
 
-      <div className="grid gap-5 md:grid-cols-2">
-        <IntegrationServiceCard
-          key={`gsc-${projectId}-${gsc?.externalPropertyId ?? "none"}-${gsc?.status ?? "out"}`}
-          service="gsc"
-          integration={gsc}
-          propertyOptions={gscOptions}
-          onRequestConnectOrUpdate={(nextPropertyId, mode) =>
-            requestConnectOrUpdate("gsc", nextPropertyId, mode)
-          }
-          onRequestDisconnect={() => setPending({ type: "disconnect", service: "gsc" })}
-          isBusy={isGoogleBusy}
-          canUpdate={canUpdate}
-          canDisconnect={canDisconnect}
-        />
-        <IntegrationServiceCard
-          key={`ga4-${projectId}-${ga4?.externalPropertyId ?? "none"}-${ga4?.status ?? "out"}`}
-          service="ga4"
-          integration={ga4}
-          propertyOptions={ga4Options}
-          onRequestConnectOrUpdate={(nextPropertyId, mode) =>
-            requestConnectOrUpdate("ga4", nextPropertyId, mode)
-          }
-          onRequestDisconnect={() => setPending({ type: "disconnect", service: "ga4" })}
-          isBusy={isGoogleBusy}
-          canUpdate={canUpdate}
-          canDisconnect={canDisconnect}
-        />
-        <WordpressLeadSourceCard
-          source={wordpressSource}
-          projectStatus={projectStatus}
-          isBusy={isWordpressBusy}
-          isListPending={leadSourcesQuery.isPending}
-          hasListError={Boolean(leadSourcesQuery.error)}
-          canUpdate={canUpdate}
-          canDisconnect={canDisconnect}
-          onConnect={() => createLeadSourceMutation.mutateAsync()}
-          onRotate={(sourceId) => rotateLeadSourceMutation.mutateAsync(sourceId)}
-          onDisconnect={(sourceId) => disconnectLeadSourceMutation.mutateAsync(sourceId)}
-          onSecretDialogClose={() => {
-            createLeadSourceMutation.reset();
-            rotateLeadSourceMutation.reset();
-          }}
-        />
-      </div>
+      <section className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+          <div className={cn(typeStackMdClass, "max-w-2xl")}>
+            <h3 className="type-title text-text-primary">{t("analyticsTitle")}</h3>
+            <p className="type-caption text-text-muted">{t("analyticsLead")}</p>
+          </div>
+          {canRefresh ? (
+            <Button
+              type="button"
+              variant="outlined"
+              size="md"
+              disabled={isGoogleBusy}
+              onClick={() => setPending({ type: "refresh" })}
+              className="shrink-0"
+            >
+              <Icons.refresh className="size-4" aria-hidden />
+              {t("refresh")}
+            </Button>
+          ) : null}
+        </div>
+        <div className="grid gap-5 md:grid-cols-2">
+          <IntegrationServiceCard
+            key={`gsc-${projectId}-${gsc?.externalPropertyId ?? "none"}-${gsc?.status ?? "out"}`}
+            service="gsc"
+            integration={gsc}
+            propertyOptions={gscOptions}
+            onRequestConnectOrUpdate={(nextPropertyId, mode) =>
+              requestConnectOrUpdate("gsc", nextPropertyId, mode)
+            }
+            onRequestDisconnect={() => setPending({ type: "disconnect", service: "gsc" })}
+            isBusy={isGoogleBusy}
+            canUpdate={canUpdate}
+            canDisconnect={canDisconnect}
+          />
+          <IntegrationServiceCard
+            key={`ga4-${projectId}-${ga4?.externalPropertyId ?? "none"}-${ga4?.status ?? "out"}`}
+            service="ga4"
+            integration={ga4}
+            propertyOptions={ga4Options}
+            onRequestConnectOrUpdate={(nextPropertyId, mode) =>
+              requestConnectOrUpdate("ga4", nextPropertyId, mode)
+            }
+            onRequestDisconnect={() => setPending({ type: "disconnect", service: "ga4" })}
+            isBusy={isGoogleBusy}
+            canUpdate={canUpdate}
+            canDisconnect={canDisconnect}
+          />
+        </div>
+      </section>
+
+      <div className={settingsInsetDividerClass} aria-hidden />
+
+      <section className="flex flex-col gap-4">
+        <div className={cn(typeStackMdClass, "max-w-2xl")}>
+          <h3 className="type-title text-text-primary">{t("leadsTitle")}</h3>
+          <p className="type-caption text-text-muted">{t("leadsLead")}</p>
+        </div>
+        <div className="grid gap-5 md:grid-cols-2">
+          <WordpressLeadSourceCard
+            source={wordpressSource}
+            projectStatus={projectStatus}
+            isBusy={isWordpressBusy}
+            isListPending={leadSourcesQuery.isPending}
+            hasListError={Boolean(leadSourcesQuery.error)}
+            canUpdate={canUpdate}
+            canDisconnect={canDisconnect}
+            onConnect={() => createLeadSourceMutation.mutateAsync()}
+            onViewKey={(sourceId) => revealLeadSourceKeyMutation.mutateAsync(sourceId)}
+            onDisconnect={(sourceId) => disconnectLeadSourceMutation.mutateAsync(sourceId)}
+            onSecretDialogClose={() => {
+              createLeadSourceMutation.reset();
+              revealLeadSourceKeyMutation.reset();
+            }}
+          />
+        </div>
+      </section>
 
       <ConfirmDialog
         open={Boolean(pending)}

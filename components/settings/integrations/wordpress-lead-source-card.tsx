@@ -11,6 +11,7 @@ import { AlertDialogCancel } from "@/components/ui/alert-dialog";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { ApiError } from "@/lib/frontend/api/errors";
+import { downloadHrefAsFile } from "@/lib/frontend/download-file";
 import { notify } from "@/lib/frontend/feedback/notify";
 import {
   analyticsHeadingStackClass,
@@ -18,10 +19,11 @@ import {
   elevatedCardSurfaceClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
 import { getStatusChipClassName } from "@/lib/frontend/theme/status-colors";
+import { WP_PLUGIN_ZIP_FILENAME, WP_PLUGIN_ZIP_HREF } from "@/lib/leads/constants";
 import { cn } from "@/lib/utils";
 import type { TLeadSourceDto } from "@/types/lead-source.types";
 
-type TWordpressPending = "connect" | "rotate" | "disconnect" | null;
+type TWordpressPending = "connect" | "disconnect" | null;
 
 type TWordpressLeadSourceCardProps = {
   source: TLeadSourceDto | null;
@@ -32,7 +34,7 @@ type TWordpressLeadSourceCardProps = {
   canUpdate: boolean;
   canDisconnect: boolean;
   onConnect: () => Promise<{ plaintextKey: string }>;
-  onRotate: (sourceId: string) => Promise<{ plaintextKey: string }>;
+  onViewKey: (sourceId: string) => Promise<{ plaintextKey: string }>;
   onDisconnect: (sourceId: string) => Promise<void>;
   onSecretDialogClose?: () => void;
 };
@@ -66,7 +68,7 @@ export function WordpressLeadSourceCard({
   canUpdate,
   canDisconnect,
   onConnect,
-  onRotate,
+  onViewKey,
   onDisconnect,
   onSecretDialogClose,
 }: TWordpressLeadSourceCardProps) {
@@ -77,6 +79,14 @@ export function WordpressLeadSourceCard({
   const isActiveProject = projectStatus === "active";
   const actionsLocked = isBusy || isListPending;
 
+  async function downloadPlugin() {
+    try {
+      await downloadHrefAsFile(WP_PLUGIN_ZIP_HREF, WP_PLUGIN_ZIP_FILENAME);
+    } catch {
+      notify.error(t("wordpress.downloadError"));
+    }
+  }
+
   function requestConnect() {
     if (!canUpdate || hasListError || isListPending) return;
     if (!isActiveProject) {
@@ -86,13 +96,14 @@ export function WordpressLeadSourceCard({
     setPending("connect");
   }
 
-  function requestRotate() {
-    if (!canUpdate || !source) return;
-    if (!isActiveProject) {
-      notify.error(t("wordpress.inactiveProject"));
-      return;
+  async function viewKey() {
+    if (!canUpdate || !source || actionsLocked) return;
+    try {
+      const result = await onViewKey(source.id);
+      setRevealedKey(result.plaintextKey);
+    } catch (error) {
+      notify.error(error instanceof ApiError ? error.message : t("wordpress.viewKeyError"));
     }
-    setPending("rotate");
   }
 
   async function runPending() {
@@ -106,13 +117,6 @@ export function WordpressLeadSourceCard({
         notify.success(t("wordpress.connectSuccess"));
         return;
       }
-      if (pending === "rotate" && source) {
-        const result = await onRotate(source.id);
-        setPending(null);
-        setRevealedKey(result.plaintextKey);
-        notify.success(t("wordpress.rotateSuccess"));
-        return;
-      }
       if (pending === "disconnect" && source) {
         await onDisconnect(source.id);
         setPending(null);
@@ -120,35 +124,25 @@ export function WordpressLeadSourceCard({
       }
     } catch (error) {
       const fallback =
-        pending === "rotate"
-          ? t("wordpress.rotateError")
-          : pending === "disconnect"
-            ? t("wordpress.disconnectError")
-            : t("wordpress.connectError");
+        pending === "disconnect" ? t("wordpress.disconnectError") : t("wordpress.connectError");
       notify.error(error instanceof ApiError ? error.message : fallback);
     }
   }
 
   const confirmTitle =
-    pending === "rotate"
-      ? t("wordpress.confirmRotateTitle")
-      : pending === "disconnect"
-        ? t("wordpress.confirmDisconnectTitle")
-        : t("wordpress.confirmConnectTitle");
+    pending === "disconnect"
+      ? t("wordpress.confirmDisconnectTitle")
+      : t("wordpress.confirmConnectTitle");
 
   const confirmBody =
-    pending === "rotate"
-      ? t("wordpress.confirmRotateBody")
-      : pending === "disconnect"
-        ? t("wordpress.confirmDisconnectBody")
-        : t("wordpress.confirmConnectBody");
+    pending === "disconnect"
+      ? t("wordpress.confirmDisconnectBody")
+      : t("wordpress.confirmConnectBody");
 
   const confirmLabel =
-    pending === "rotate"
-      ? t("wordpress.confirmRotate")
-      : pending === "disconnect"
-        ? t("wordpress.confirmDisconnect")
-        : t("wordpress.confirmConnect");
+    pending === "disconnect"
+      ? t("wordpress.confirmDisconnect")
+      : t("wordpress.confirmConnect");
 
   return (
     <section className={cn(elevatedCardSurfaceClass, analyticsPanelClass, "h-full")}>
@@ -168,10 +162,18 @@ export function WordpressLeadSourceCard({
             />
           </div>
           <p className="type-caption text-text-muted">{t("wordpress.lead")}</p>
-          {source ? (
-            <p className="type-caption text-text-muted">
-              {t("wordpress.keyEndingIn", { prefix: source.keyPrefix })}
-            </p>
+          {source?.siteUrl ? (
+            <a
+              href={source.siteUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex max-w-full items-center gap-1.5 type-caption text-text-muted transition-colors hover:text-text-primary"
+            >
+              <Icons.globe className="size-3.5 shrink-0" aria-hidden />
+              <span className="truncate">{source.siteUrl}</span>
+            </a>
+          ) : source ? (
+            <p className="type-caption text-text-muted">{t("wordpress.siteUrlPending")}</p>
           ) : null}
           {source?.connectedAt ? (
             <p className="type-caption text-text-muted">
@@ -200,6 +202,10 @@ export function WordpressLeadSourceCard({
         </div>
 
         <div className="flex shrink-0 flex-wrap items-center gap-2">
+          <Button type="button" variant="outlined" size="md" onClick={() => void downloadPlugin()}>
+            <Icons.cloudDownload className="size-4" aria-hidden />
+            {t("wordpress.downloadPlugin")}
+          </Button>
           {canUpdate && !isLinked && !hasListError && !isListPending ? (
             <Button
               type="button"
@@ -218,10 +224,10 @@ export function WordpressLeadSourceCard({
               variant="primary"
               size="md"
               disabled={actionsLocked}
-              onClick={requestRotate}
+              onClick={() => void viewKey()}
             >
-              <Icons.refresh className="size-4" aria-hidden />
-              {t("wordpress.rotate")}
+              <Icons.view className="size-4" aria-hidden />
+              {t("wordpress.viewKey")}
             </Button>
           ) : null}
           {isLinked && canDisconnect ? (
@@ -242,7 +248,7 @@ export function WordpressLeadSourceCard({
       <ConfirmDialog
         open={Boolean(pending)}
         onOpenChange={(open) => !open && setPending(null)}
-        icon={pending === "disconnect" ? Icons.unlink : pending === "rotate" ? Icons.key : Icons.link}
+        icon={pending === "disconnect" ? Icons.unlink : Icons.link}
         tone={pending === "disconnect" ? "destructive" : "default"}
         title={confirmTitle}
         description={confirmBody}

@@ -73,6 +73,18 @@ export function useRotateLeadSourceMutation(projectId: string | null | undefined
   });
 }
 
+export function useRevealLeadSourceKeyMutation(projectId: string | null | undefined) {
+  return useMutation({
+    mutationFn: async (sourceId: string) => {
+      const envelope = await baseQuery.get<TLeadSourceSecretDto>(
+        `projects/${projectId}/integrations/lead-sources/${sourceId}/key`,
+      );
+      return envelope.data;
+    },
+    gcTime: 0,
+  });
+}
+
 export function useDisconnectLeadSourceMutation(projectId: string | null | undefined) {
   const queryClient = useQueryClient();
 

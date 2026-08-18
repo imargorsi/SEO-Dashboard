@@ -9,6 +9,7 @@ export function serializeLeadSource(doc: LeadSourceDocument): TLeadSourceDto {
     name: doc.name,
     status: doc.status,
     keyPrefix: doc.keyPrefix,
+    siteUrl: doc.siteUrl ? doc.siteUrl : null,
     lastVerifiedAt: doc.lastVerifiedAt ? doc.lastVerifiedAt.toISOString() : null,
     lastIngestedAt: doc.lastIngestedAt ? doc.lastIngestedAt.toISOString() : null,
     lastError: doc.lastError ? doc.lastError : null,

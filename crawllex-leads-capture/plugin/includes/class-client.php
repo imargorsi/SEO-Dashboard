@@ -19,6 +19,7 @@ final class Crawllex_Lead_Capture_Client
     {
         return $this->post(CRAWLLEX_LC_VERIFY_PATH, array(
             'pluginVersion' => CRAWLLEX_LC_VERSION,
+            'siteUrl' => home_url(),
         ));
     }
 
@@ -29,7 +30,26 @@ final class Crawllex_Lead_Capture_Client
     public function ingest(array $payload): array
     {
         $payload['pluginVersion'] = CRAWLLEX_LC_VERSION;
+        $payload['siteUrl'] = home_url();
         return $this->post(CRAWLLEX_LC_INGEST_PATH, $payload);
+    }
+
+    /**
+     * @return array{ok: bool, status: int, message: string, data: mixed}
+     */
+    public function update_check(): array
+    {
+        return $this->get(CRAWLLEX_LC_UPDATE_PATH);
+    }
+
+    /**
+     * PHP/cURL often resolves "localhost" to IPv6 (::1) while Next.js listens on IPv4.
+     */
+    public static function request_url(string $base_url, string $path): string
+    {
+        $base = untrailingslashit($base_url);
+        $base = (string) preg_replace('#^(https?://)localhost(?=[:/]|$)#i', '${1}127.0.0.1', $base);
+        return $base . $path;
     }
 
     /**
@@ -48,18 +68,47 @@ final class Crawllex_Lead_Capture_Client
             );
         }
 
-        $url = self::request_url($this->base_url, $path);
-        $response = wp_remote_post($url, array(
-            'timeout' => 15,
+        $response = wp_remote_post(self::request_url($this->base_url, $path), $this->request_args(array(
+            'body' => $json,
+        )));
+        return $this->parse_response($response);
+    }
+
+    /**
+     * @return array{ok: bool, status: int, message: string, data: mixed}
+     */
+    private function get(string $path): array
+    {
+        $response = wp_remote_get(self::request_url($this->base_url, $path), $this->request_args());
+        return $this->parse_response($response);
+    }
+
+    /**
+     * @param array<string, mixed> $extra
+     * @return array<string, mixed>
+     */
+    private function request_args(array $extra = array()): array
+    {
+        return array_merge(array(
+            'timeout' => CRAWLLEX_LC_HTTP_TIMEOUT,
             'redirection' => 0,
+            'sslverify' => true,
+            'limit_response_size' => CRAWLLEX_LC_HTTP_RESPONSE_MAX,
             'headers' => array(
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
+                'User-Agent' => 'Crawllex-Lead-Capture/' . CRAWLLEX_LC_VERSION,
                 CRAWLLEX_LC_KEY_HEADER => $this->source_key,
             ),
-            'body' => $json,
-        ));
+        ), $extra);
+    }
 
+    /**
+     * @param array<string, mixed>|WP_Error $response
+     * @return array{ok: bool, status: int, message: string, data: mixed}
+     */
+    private function parse_response($response): array
+    {
         if (is_wp_error($response)) {
             return array(
                 'ok' => false,
@@ -94,16 +143,6 @@ final class Crawllex_Lead_Capture_Client
             'message' => self::clip_message($message),
             'data' => $data,
         );
-    }
-
-    /**
-     * PHP/cURL often resolves "localhost" to IPv6 (::1) while Next.js listens on IPv4.
-     */
-    private static function request_url(string $base_url, string $path): string
-    {
-        $base = untrailingslashit($base_url);
-        $base = (string) preg_replace('#^(https?://)localhost(?=[:/]|$)#i', '${1}127.0.0.1', $base);
-        return $base . $path;
     }
 
     private static function connect_error_message(WP_Error $error, string $base_url): string

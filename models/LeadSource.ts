@@ -24,8 +24,12 @@ const leadSourceSchema = new Schema(
     },
     /** SHA-256 hex of the plaintext Lead Source Key. Never returned to the client. */
     keyHash: { type: String, required: true },
-    /** Last 4 characters of the secret, for Settings display. */
+    /** Last 4 characters of the secret (debug / rotate identity). */
     keyPrefix: { type: String, required: true },
+    /** AES-GCM payload of the plaintext key for admin View Key. Never listed on GET. */
+    keyCiphertext: { type: String, default: null },
+    /** WordPress site URL reported by the plugin on verify/ingest. */
+    siteUrl: { type: String, default: null, trim: true },
     lastVerifiedAt: { type: Date, default: null },
     lastIngestedAt: { type: Date, default: null },
     lastError: { type: String, default: null, trim: true },
@@ -52,6 +56,8 @@ export type LeadSourceDocument = InferSchemaType<typeof leadSourceSchema> &
     status: (typeof LEAD_SOURCE_STATUSES)[number];
     keyHash: string;
     keyPrefix: string;
+    keyCiphertext: string | null;
+    siteUrl: string | null;
     lastVerifiedAt: Date | null;
     lastIngestedAt: Date | null;
     lastError: string | null;
@@ -75,6 +81,8 @@ function registerLeadSourceModel(): Model<LeadSourceDocument> {
   if (
     existing?.schema.path("keyHash") &&
     existing.schema.path("keyPrefix") &&
+    existing.schema.path("keyCiphertext") &&
+    existing.schema.path("siteUrl") &&
     hasMvpUniqueIndex(existing.schema)
   ) {
     return existing;

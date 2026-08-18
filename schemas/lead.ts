@@ -11,6 +11,7 @@ import {
   LEAD_NAME_MAX_LENGTH,
   LEAD_PHONE_MAX_LENGTH,
   LEAD_SERVICES_MAX_LENGTH,
+  LEAD_SOURCE_SITE_URL_MAX_LENGTH,
 } from "@/lib/leads/constants";
 import {
   isValidLeadDate,
@@ -46,6 +47,17 @@ const leadPhoneSchema = z
   .min(1, "Phone number is required.")
   .max(LEAD_PHONE_MAX_LENGTH, `Use at most ${LEAD_PHONE_MAX_LENGTH} characters.`)
   .refine((value) => normalizeLeadPhone(value).length >= 7, "Enter a valid phone number.");
+
+const leadIngestPhoneSchema = z
+  .string()
+  .trim()
+  .max(LEAD_PHONE_MAX_LENGTH, `Use at most ${LEAD_PHONE_MAX_LENGTH} characters.`)
+  .optional()
+  .transform((value) => value ?? "")
+  .refine(
+    (value) => value === "" || normalizeLeadPhone(value).length >= 7,
+    "Enter a valid phone number.",
+  );
 
 const leadServicesSchema = z
   .string()
@@ -107,13 +119,14 @@ const idempotencyKeySchema = z
 
 export const ingestVerifySchema = z.object({
   pluginVersion: pluginVersionSchema,
+  siteUrl: z.string().trim().max(LEAD_SOURCE_SITE_URL_MAX_LENGTH).optional(),
 });
 
 export const ingestLeadSchema = z.object({
   firstName: leadFirstNameSchema,
   lastName: leadLastNameSchema,
   email: leadEmailSchema,
-  phone: leadPhoneSchema,
+  phone: leadIngestPhoneSchema,
   servicesInterestedIn: leadServicesSchema,
   message: leadMessageSchema,
   leadDate: z
@@ -132,6 +145,7 @@ export const ingestLeadSchema = z.object({
     ),
   idempotencyKey: idempotencyKeySchema,
   pluginVersion: pluginVersionSchema,
+  siteUrl: z.string().trim().max(LEAD_SOURCE_SITE_URL_MAX_LENGTH).optional(),
 });
 
 export type IngestVerifyInput = z.infer<typeof ingestVerifySchema>;

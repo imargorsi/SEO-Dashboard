@@ -42,6 +42,7 @@ final class Crawllex_Lead_Capture_Field_Map
         'phone' => 'phone',
         'phone number' => 'phone',
         'your phone' => 'phone',
+        'your phone number' => 'phone',
         'your tel' => 'phone',
         'tel' => 'phone',
         'telephone' => 'phone',
@@ -84,7 +85,7 @@ final class Crawllex_Lead_Capture_Field_Map
         'entry date' => 'leadDate',
     );
 
-    private const SKIP_PREFIXES = array('_wpcf7', '_', 'g-recaptcha', 'h-captcha', 'cf-turnstile');
+    private const SKIP_PREFIXES = array('_wpcf7', '_', 'g-recaptcha', 'h-captcha', 'cf-turnstile', 'akismet');
 
     /**
      * @param array<string, mixed> $posted
@@ -144,7 +145,7 @@ final class Crawllex_Lead_Capture_Field_Map
             $parts = array();
             foreach ($raw as $item) {
                 if (is_scalar($item)) {
-                    $part = trim((string) $item);
+                    $part = self::clean_text((string) $item);
                     if ($part !== '') {
                         $parts[] = $part;
                     }
@@ -153,8 +154,14 @@ final class Crawllex_Lead_Capture_Field_Map
             return implode(', ', $parts);
         }
         if (is_scalar($raw)) {
-            return trim((string) $raw);
+            return self::clean_text((string) $raw);
         }
         return '';
+    }
+
+    private static function clean_text(string $value): string
+    {
+        $value = str_replace("\0", '', $value);
+        return trim($value);
     }
 }

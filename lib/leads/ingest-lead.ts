@@ -13,6 +13,7 @@ import { sanitizeLeadExtras } from "@/lib/leads/extras.utils";
 import { normalizeLeadEmail, normalizeLeadPhone } from "@/lib/leads/normalize";
 import { serializeLead } from "@/lib/leads/serialize-lead";
 import { isDuplicateKeyError } from "@/lib/roles/role-mutation.utils";
+import { stampLeadSourceSiteUrl } from "@/lib/leads/lead-source-site-url";
 import { Lead, LeadSource, type LeadDocument, type LeadSourceDocument } from "@/models";
 import type { IngestLeadInput } from "@/schemas/lead";
 import type { TLeadIngestResultDto, TLeadIngestVerifyDto } from "@/types/lead.types";
@@ -57,6 +58,7 @@ async function recordLeadSourceIngestSuccess(source: LeadSourceDocument): Promis
 
 export async function verifyLeadSourceIngest(
   source: LeadSourceDocument,
+  siteUrl?: string,
 ): Promise<TLeadIngestVerifyDto> {
   try {
     await assertProjectActiveForLeads(String(source.projectId), LEAD_INGEST_INACTIVE_MESSAGE);
@@ -79,6 +81,7 @@ export async function verifyLeadSourceIngest(
       },
     },
   );
+  await stampLeadSourceSiteUrl(source, siteUrl);
 
   return {
     source: {
@@ -107,6 +110,7 @@ export async function ingestLeadFromSource(
   }
 
   const extras = sanitizeLeadExtras(input.extras);
+  await stampLeadSourceSiteUrl(source, input.siteUrl);
   const normalizedEmail = normalizeLeadEmail(input.email);
   const normalizedPhone = normalizeLeadPhone(input.phone);
 

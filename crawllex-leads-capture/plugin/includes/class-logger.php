@@ -22,13 +22,22 @@ final class Crawllex_Lead_Capture_Logger
             'message' => self::clip($message),
         ));
 
-        $patch = array_merge($extra, array(
+        $patch = array(
             'logs' => array_slice($logs, 0, CRAWLLEX_LC_LOG_LIMIT),
-        ));
+        );
+
+        if (isset($extra['last_verified_at'])) {
+            $patch['last_verified_at'] = (string) $extra['last_verified_at'];
+        }
+        if (isset($extra['last_status'])) {
+            $patch['last_status'] = (string) $extra['last_status'];
+        }
 
         if ($context === 'ingest') {
             if ($status === 'success') {
-                $patch['ingest_count'] = $options['ingest_count'] + 1;
+                if (empty($extra['replayed'])) {
+                    $patch['ingest_count'] = $options['ingest_count'] + 1;
+                }
             } else {
                 $patch['failed_count'] = $options['failed_count'] + 1;
             }

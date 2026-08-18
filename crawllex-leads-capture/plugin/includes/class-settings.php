@@ -29,6 +29,10 @@ final class Crawllex_Lead_Capture_Settings
         if (!is_admin() || !current_user_can('manage_options')) {
             return;
         }
+        $page = isset($_REQUEST['page']) ? sanitize_key((string) wp_unslash($_REQUEST['page'])) : '';
+        if ($page !== 'crawllex-lead-capture') {
+            return;
+        }
         if (!isset($_POST['crawllex_lc_action'])) {
             return;
         }
@@ -40,7 +44,6 @@ final class Crawllex_Lead_Capture_Settings
             self::redirect();
         }
 
-        $base_url = self::sanitize_base_url((string) wp_unslash($_POST['crawllex_lc_base_url'] ?? ''));
         $posted_key = trim((string) wp_unslash($_POST['crawllex_lc_source_key'] ?? ''));
         $existing = Crawllex_Lead_Capture_Plugin::options();
         $source_key = $existing['source_key'];
@@ -54,7 +57,6 @@ final class Crawllex_Lead_Capture_Settings
         }
 
         Crawllex_Lead_Capture_Plugin::update_options(array(
-            'base_url' => $base_url,
             'source_key' => $source_key,
         ));
 
@@ -63,15 +65,17 @@ final class Crawllex_Lead_Capture_Settings
             self::redirect();
         }
 
-        if ($base_url === '' || $source_key === '') {
-            self::set_notice('error', __('Enter the dashboard base URL and lead source key first.', 'crawllex-lead-capture'));
+        $dashboard_url = Crawllex_Lead_Capture_Plugin::dashboard_url();
+        if ($dashboard_url === '' || $source_key === '') {
+            self::set_notice('error', __('Enter the lead source key first.', 'crawllex-lead-capture'));
             self::redirect();
         }
 
-        $client = new Crawllex_Lead_Capture_Client($base_url, $source_key);
+        $client = new Crawllex_Lead_Capture_Client($dashboard_url, $source_key);
         $result = $client->verify();
 
         if ($result['ok']) {
+            Crawllex_Lead_Capture_Updater::clear_cache();
             Crawllex_Lead_Capture_Logger::record('verify', 'success', $result['message'], array(
                 'last_verified_at' => gmdate('c'),
                 'last_status' => 'connected',
@@ -94,30 +98,28 @@ final class Crawllex_Lead_Capture_Settings
         }
 
         $options = Crawllex_Lead_Capture_Plugin::options();
+        $latest = Crawllex_Lead_Capture_Updater::latest_version();
         ?>
         <div class="wrap">
             <h1><?php echo esc_html__('Crawllex Lead Capture', 'crawllex-lead-capture'); ?></h1>
-            <p><?php echo esc_html__('Enter the Crawllex dashboard URL and the lead source key from Settings → Integrations. The key is stored on this site only.', 'crawllex-lead-capture'); ?></p>
-            <p><?php echo esc_html__('Contact Form 7 submissions are sent automatically after a successful (or skipped-mail) submit. The form still needs first name, email, phone, and message.', 'crawllex-lead-capture'); ?></p>
+            <p><?php echo esc_html__('Paste the lead source key from Crawllex Settings → Integrations. The dashboard URL is set by Crawllex and cannot be changed here.', 'crawllex-lead-capture'); ?></p>
+            <p><?php echo esc_html__('Contact Form 7 and Elementor form submissions are sent automatically after a successful submit. Email is required. If name, phone, or message is missing, Crawllex fills what it can and keeps other answers as extra fields.', 'crawllex-lead-capture'); ?></p>
+            <p>
+                <strong><?php echo esc_html__('Current Version', 'crawllex-lead-capture'); ?>:</strong>
+                <?php echo esc_html(CRAWLLEX_LC_VERSION); ?>
+                ·
+                <strong><?php echo esc_html__('Latest Version', 'crawllex-lead-capture'); ?>:</strong>
+                <?php echo esc_html($latest); ?>
+            </p>
 
             <form method="post" action="<?php echo esc_url(admin_url('options-general.php?page=crawllex-lead-capture')); ?>" autocomplete="off">
                 <?php wp_nonce_field('crawllex_lc_settings'); ?>
                 <table class="form-table" role="presentation">
                     <tr>
-                        <th scope="row">
-                            <label for="crawllex_lc_base_url"><?php echo esc_html__('Dashboard Base URL', 'crawllex-lead-capture'); ?></label>
-                        </th>
+                        <th scope="row"><?php echo esc_html__('Dashboard Base URL', 'crawllex-lead-capture'); ?></th>
                         <td>
-                            <input
-                                type="url"
-                                class="regular-text"
-                                id="crawllex_lc_base_url"
-                                name="crawllex_lc_base_url"
-                                value="<?php echo esc_attr($options['base_url']); ?>"
-                                placeholder="https://app.crawllex.com"
-                                required
-                            />
-                            <p class="description"><?php echo esc_html__('The Crawllex origin only — no path after the host.', 'crawllex-lead-capture'); ?></p>
+                            <code><?php echo esc_html(Crawllex_Lead_Capture_Plugin::dashboard_url()); ?></code>
+                            <p class="description"><?php echo esc_html__('Fixed by Crawllex for this plugin package.', 'crawllex-lead-capture'); ?></p>
                         </td>
                     </tr>
                     <tr>
@@ -140,7 +142,7 @@ final class Crawllex_Lead_Capture_Settings
                                 <p class="description">
                                     <?php echo esc_html(sprintf(
                                         /* translators: %s: last four characters of the stored key */
-                                        __('Key Ending In %s', 'crawllex-lead-capture'),
+                                        __('Key ending in %s.', 'crawllex-lead-capture'),
                                         self::key_suffix($options['source_key'])
                                     )); ?>
                                 </p>
@@ -231,23 +233,6 @@ final class Crawllex_Lead_Capture_Settings
             esc_attr($class),
             esc_html((string) $notice['message'])
         );
-    }
-
-    private static function sanitize_base_url(string $value): string
-    {
-        $value = esc_url_raw(trim($value));
-        if ($value === '') {
-            return '';
-        }
-        $parts = wp_parse_url($value);
-        if (!is_array($parts) || empty($parts['scheme']) || empty($parts['host'])) {
-            return '';
-        }
-        if (!in_array(strtolower((string) $parts['scheme']), array('http', 'https'), true)) {
-            return '';
-        }
-        $port = isset($parts['port']) ? ':' . $parts['port'] : '';
-        return strtolower((string) $parts['scheme']) . '://' . $parts['host'] . $port;
     }
 
     private static function sanitize_source_key(string $value): string

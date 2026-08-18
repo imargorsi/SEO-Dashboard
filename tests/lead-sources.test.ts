@@ -9,6 +9,7 @@ import {
   disconnectLeadSource,
   findLeadSourceByPlainKey,
   listLeadSources,
+  revealLeadSourceKey,
   rotateLeadSourceKey,
 } from "@/lib/leads/manage-lead-source";
 import { createProject } from "@/lib/projects/create-project";
@@ -18,7 +19,7 @@ import { LeadSource, Project, User } from "@/models";
 import { authContextFor, projectInput } from "@/tests/helpers/project-test-utils";
 
 describe("Lead sources", () => {
-  it("creates a wordpress source, shows the key once, and never stores plaintext", async () => {
+  it("creates a wordpress source, never stores plaintext, and can reveal the key", async () => {
     await seedSystemRoles();
 
     const owner = await User.create({
@@ -55,13 +56,20 @@ describe("Lead sources", () => {
     const listed = await listLeadSources(projectId);
     expect(listed.items).toHaveLength(1);
     expect(listed.items[0]?.id).toBe(created.source.id);
+    expect(listed.items[0]?.siteUrl).toBeNull();
     expect(JSON.stringify(listed)).not.toContain(created.plaintextKey);
     expect(JSON.stringify(listed)).not.toContain(stored?.keyHash);
+    expect(JSON.stringify(listed)).not.toContain("keyCiphertext");
+    expect(stored?.keyCiphertext).toBeTruthy();
 
     const found = await findLeadSourceByPlainKey(created.plaintextKey);
     expect(found?._id.toString()).toBe(created.source.id);
     expect(await findLeadSourceByPlainKey(`  ${created.plaintextKey}  `)).not.toBeNull();
     expect(await findLeadSourceByPlainKey("   ")).toBeNull();
+
+    const revealed = await revealLeadSourceKey(projectId, created.source.id);
+    expect(revealed.plaintextKey).toBe(created.plaintextKey);
+    expect(revealed.source.id).toBe(created.source.id);
   });
 
   it("rejects a second wordpress source and inactive-project connect", async () => {

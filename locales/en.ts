@@ -147,9 +147,14 @@ export interface Translation {
       confirmRefreshTitle: string;
       confirmRefreshBody: string;
       confirmRefresh: string;
+      analyticsTitle: string;
+      analyticsLead: string;
+      leadsTitle: string;
+      leadsLead: string;
       services: {
         gsc: string;
         ga4: string;
+        wordpress: string;
       };
       serviceLead: {
         gsc: string;
@@ -164,9 +169,12 @@ export interface Translation {
         title: string;
         lead: string;
         connect: string;
-        rotate: string;
+        viewKey: string;
+        viewKeyError: string;
         disconnect: string;
-        keyEndingIn: string;
+        downloadPlugin: string;
+        downloadError: string;
+        siteUrlPending: string;
         connectedAt: string;
         lastVerified: string;
         ingestStats: string;
@@ -174,16 +182,11 @@ export interface Translation {
         loadError: string;
         connectSuccess: string;
         connectError: string;
-        rotateSuccess: string;
-        rotateError: string;
         disconnectSuccess: string;
         disconnectError: string;
         confirmConnectTitle: string;
         confirmConnectBody: string;
         confirmConnect: string;
-        confirmRotateTitle: string;
-        confirmRotateBody: string;
-        confirmRotate: string;
         confirmDisconnectTitle: string;
         confirmDisconnectBody: string;
         confirmDisconnect: string;
@@ -589,6 +592,7 @@ export interface Translation {
         short: {
           gsc: string;
           ga4: string;
+          wordpress: string;
         };
       };
       editProjectTitle: string;
@@ -1213,6 +1217,7 @@ export interface Translation {
         colPhone: string;
         colServices: string;
         colMessage: string;
+        colSource: string;
         colActions: string;
         viewLead: string;
         editLead: string;
@@ -1225,6 +1230,10 @@ export interface Translation {
         deleteErrorFallback: string;
         loadErrorBody: string;
       };
+      source: {
+        wordpress: string;
+        internal: string;
+      };
       detail: {
         title: string;
         lead: string;
@@ -1232,6 +1241,7 @@ export interface Translation {
         leadTitle: string;
         leadSectionLead: string;
         leadDate: string;
+        source: string;
         services: string;
         message: string;
         extrasTitle: string;
@@ -1294,6 +1304,9 @@ export interface Translation {
         cancel: string;
         chooseFile: string;
         chooseFileHint: string;
+        downloadSample: string;
+        downloadSampleHint: string;
+        downloadSampleError: string;
         removeFile: string;
         nextMatching: string;
         nextImport: string;
@@ -1716,9 +1729,14 @@ const translation: Translation = {
       confirmRefreshTitle: "Refresh Analytics Data?",
       confirmRefreshBody: "Pull The Latest Search Console And GA4 Metrics For This Project. Manual Refresh Is Limited To Once Per Hour.",
       confirmRefresh: "Refresh Data",
+      analyticsTitle: "Analytics",
+      analyticsLead: "Connect Search Console and GA4 for cached search and traffic metrics.",
+      leadsTitle: "Leads",
+      leadsLead: "Connect WordPress lead capture for the selected project.",
       services: {
         gsc: "Search Console",
         ga4: "Google Analytics 4",
+        wordpress: "WordPress",
       },
       serviceLead: {
         gsc: "Connect the Search Console property used for organic search performance.",
@@ -1731,36 +1749,33 @@ const translation: Translation = {
       },
       wordpress: {
         title: "WordPress",
-        lead: "Create a lead source key for the WordPress plugin. The key is shown once.",
+        lead: "Download the WordPress plugin and connect a lead source key. The key stays hidden until you view or copy it.",
         connect: "Connect",
-        rotate: "Rotate Key",
+        viewKey: "View Key",
+        viewKeyError: "Could not load the lead source key.",
         disconnect: "Disconnect",
-        keyEndingIn: "Key Ending In {{prefix}}",
+        downloadPlugin: "Download Plugin",
+        downloadError: "The plugin could not be downloaded.",
+        siteUrlPending: "Website URL will appear after the plugin tests the connection.",
         connectedAt: "Connected {{value}}",
         lastVerified: "Last Verified {{value}}",
         ingestStats: "Ingested {{ingested}} · Failed {{failed}}",
         inactiveProject: "WordPress can only be connected when the project is active.",
         loadError: "Could not load the WordPress lead source.",
-        connectSuccess: "Lead source connected. Copy the key now.",
+        connectSuccess: "Lead source connected. Copy the key into the WordPress plugin.",
         connectError: "Could not connect WordPress.",
-        rotateSuccess: "Lead source key rotated. Copy the new key now.",
-        rotateError: "Could not rotate the lead source key.",
         disconnectSuccess: "WordPress disconnected.",
         disconnectError: "Could not disconnect WordPress.",
         confirmConnectTitle: "Connect WordPress?",
         confirmConnectBody:
-          "Create a lead source key for this project. You will see the key once — store it in the WordPress plugin.",
+          "Create a lead source key for this project. Paste it in the WordPress plugin. You can view it again from this card.",
         confirmConnect: "Connect WordPress",
-        confirmRotateTitle: "Rotate Lead Source Key?",
-        confirmRotateBody:
-          "The current key will stop working immediately. You will see the new key once.",
-        confirmRotate: "Rotate Key",
         confirmDisconnectTitle: "Disconnect WordPress?",
         confirmDisconnectBody:
           "The WordPress plugin will no longer be able to send leads to this project.",
         confirmDisconnect: "Disconnect",
         keyDialogTitle: "Lead Source Key",
-        keyDialogLead: "Copy this key now. Crawllex will not show it again.",
+        keyDialogLead: "Copy this key and paste it in the WordPress plugin. You can view it again from Integrations.",
         keyLabel: "Lead Source Key",
         copyKey: "Copy Key",
         keyCopied: "Key copied.",
@@ -2160,11 +2175,12 @@ const translation: Translation = {
         projectOwnerFallback: "Project Owner",
       },
       listIntegrations: {
-        ariaLabel: "Google Integrations",
+        ariaLabel: "Project Integrations",
         tooltip: "{{service}}: {{status}}",
         short: {
           gsc: "GSC",
           ga4: "GA4",
+          wordpress: "WP",
         },
       },
       editProjectTitle: "Edit Project",
@@ -2777,7 +2793,7 @@ const translation: Translation = {
     },
     leads: {
       title: "Leads",
-      subtitle: "Review and manage project leads from imports and manual entry.",
+      subtitle: "Review and manage project leads from imports, manual entry, and WordPress.",
       selectProjectTitle: "Select A Project",
       selectProjectBody: "Choose a project from the sidebar to manage its leads.",
       summary: {
@@ -2788,7 +2804,7 @@ const translation: Translation = {
       },
       table: {
         emptyTitle: "No Leads Found",
-        emptyBody: "Import a CSV or add a lead to get started.",
+        emptyBody: "Import a CSV, add a lead, or capture from WordPress.",
         summary: "Showing {{shown}} Of {{total}} Leads",
         previousPage: "Previous Page",
         nextPage: "Next Page",
@@ -2801,6 +2817,7 @@ const translation: Translation = {
         colPhone: "Phone Number",
         colServices: "Services Interested In",
         colMessage: "Message",
+        colSource: "Source",
         colActions: "Actions",
         viewLead: "View Lead",
         editLead: "Edit Lead",
@@ -2813,13 +2830,18 @@ const translation: Translation = {
         deleteErrorFallback: "Could not delete lead.",
         loadErrorBody: "Could not load leads.",
       },
+      source: {
+        wordpress: "WordPress Integration",
+        internal: "Internal",
+      },
       detail: {
         title: "Lead Details",
-        lead: "Contact details, message, and any extra fields from import.",
+        lead: "Contact details, source, message, and any extra fields from import or WordPress.",
         unnamed: "Lead",
         leadTitle: "Lead Details",
-        leadSectionLead: "Date, services, and the original message.",
+        leadSectionLead: "Date, source, services, and the original message.",
         leadDate: "Date",
+        source: "Source",
         services: "Services Interested In",
         message: "Message",
         extrasTitle: "Additional Fields",
@@ -2882,6 +2904,9 @@ const translation: Translation = {
         cancel: "Cancel",
         chooseFile: "Choose CSV File",
         chooseFileHint: "Upload a .CSV export from Sheets or Excel.",
+        downloadSample: "Download Sample CSV",
+        downloadSampleHint: "Use this sheet to see the expected columns.",
+        downloadSampleError: "The sample CSV could not be downloaded.",
         removeFile: "Remove File",
         nextMatching: "Matching",
         nextImport: "Import",

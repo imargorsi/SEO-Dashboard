@@ -11,6 +11,7 @@ export type TLeadSourceDto = {
   name: string;
   status: TLeadSourceStatus;
   keyPrefix: string;
+  siteUrl: string | null;
   lastVerifiedAt: string | null;
   lastIngestedAt: string | null;
   lastError: string | null;
@@ -25,7 +26,7 @@ export type TLeadSourceListDto = {
   items: TLeadSourceDto[];
 };
 
-/** Returned only from create / rotate — plaintext is never stored or listed. */
+/** Returned from create and from View Key. List endpoints never include plaintext. */
 export type TLeadSourceSecretDto = {
   source: TLeadSourceDto;
   plaintextKey: string;

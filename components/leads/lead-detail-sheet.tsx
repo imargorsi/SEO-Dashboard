@@ -4,6 +4,7 @@ import { Icons } from "@/lib/frontend/icons/app-icons";
 
 import { useTranslation } from "react-i18next";
 
+import { LeadSourceBadge } from "@/components/leads/lead-source-badge";
 import {
   DetailFieldRow,
   DetailSectionHeading,
@@ -86,6 +87,9 @@ export function LeadDetailSheet({ lead, open, onOpenChange }: TLeadDetailSheetPr
               <div>
                 <DetailFieldRow icon={Icons.calendar} label={t("leadDate")}>
                   {formatLeadDate(lead.leadDate, i18n.language)}
+                </DetailFieldRow>
+                <DetailFieldRow icon={Icons.building} label={t("source")}>
+                  <LeadSourceBadge origin={lead.origin} />
                 </DetailFieldRow>
                 <DetailFieldRow icon={Icons.briefcase} label={t("services")}>
                   {lead.servicesInterestedIn?.trim() || "—"}

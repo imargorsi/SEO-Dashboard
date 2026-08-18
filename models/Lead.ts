@@ -8,7 +8,7 @@ const leadSchema = new Schema(
     firstName: { type: String, required: true },
     lastName: { type: String, default: "" },
     email: { type: String, required: true },
-    phone: { type: String, required: true },
+    phone: { type: String, default: "" },
     servicesInterestedIn: { type: String, default: null },
     message: { type: String, required: true },
     /** Calendar date for the lead (YYYY-MM-DD) — from CSV match or today. */
@@ -19,7 +19,7 @@ const leadSchema = new Schema(
      */
     extras: { type: Schema.Types.Mixed, default: () => ({}) },
     normalizedEmail: { type: String, required: true },
-    normalizedPhone: { type: String, required: true },
+    normalizedPhone: { type: String, default: "" },
     origin: { type: String, enum: LEAD_ORIGINS, required: true },
     /** WordPress ingest only — which LeadSource accepted the payload. */
     leadSourceId: { type: Schema.Types.ObjectId, ref: "LeadSource", default: null },

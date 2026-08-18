@@ -2,9 +2,11 @@ import { describe, expect, it } from "vitest";
 
 import { UnauthorizedError, ValidationError } from "@/lib/api/http-errors";
 import { hashPassword } from "@/lib/auth/password";
+import { guessLeadFieldFromHeader, suggestLeadColumnMapping } from "@/lib/leads/column-aliases";
 import {
   LEAD_DUPLICATE_MESSAGE,
   LEAD_EXTRAS_MAX_KEYS,
+  LEAD_INGEST_IDEMPOTENCY_KEY_MAX_LENGTH,
   LEAD_INGEST_KEY_HEADER,
 } from "@/lib/leads/constants";
 import {
@@ -96,6 +98,14 @@ describe("Lead ingest", () => {
     expect(extractLeadSourcePlainKey(missing)).toBeNull();
   });
 
+  it("stamps the WordPress site URL from verify", async () => {
+    const { source } = await seedConnectedSource();
+
+    await verifyLeadSourceIngest(source, "https://wp.example.com/blog/?utm=1");
+    const reloaded = await LeadSource.findById(source._id);
+    expect(reloaded?.siteUrl).toBe("https://wp.example.com/blog");
+  });
+
   it("verifies a connected key on an active project and stamps lastVerifiedAt", async () => {
     const { source } = await seedConnectedSource();
 
@@ -149,7 +159,27 @@ describe("Lead ingest", () => {
     expect(reloaded?.lastError).toBeNull();
   });
 
-  it("replays the same idempotencyKey without creating a second lead", async () => {
+  it("ingests a wordpress lead when phone is omitted and extras carry the answers", async () => {
+    const { source } = await seedConnectedSource();
+    const input = ingestLeadSchema.parse({
+      firstName: "Website Visitor",
+      email: "quote@example.com",
+      message: "Company: Acme\nBudget: 5k",
+      extras: { Company: "Acme", Budget: "5k" },
+      idempotencyKey: "el-form-missing-phone",
+      pluginVersion: "0.1.0",
+    });
+
+    expect(input.phone).toBe("");
+
+    const { lead } = await ingestLeadFromSource(source, input);
+    expect(lead.phone).toBe("");
+    expect(lead.normalizedPhone).toBe("");
+    expect(lead.firstName).toBe("Website Visitor");
+    expect(lead.extras).toEqual({ Company: "Acme", Budget: "5k" });
+  });
+
+  it("replays the same idempotency key without creating a second lead", async () => {
     const { source } = await seedConnectedSource();
     const input = ingestInput({ idempotencyKey: "retry-key-0001" });
 
@@ -271,5 +301,115 @@ describe("Lead ingest", () => {
     expect(response.status).toBe(200);
     expect(body.success).toBe(true);
     expect(body.data.source.provider).toBe("wordpress");
+  });
+
+  it("maps Contact Form 7 tags the same way the plugin does", () => {
+    expect(guessLeadFieldFromHeader("your-name")).toBe("firstName");
+    expect(guessLeadFieldFromHeader("your-email")).toBe("email");
+    expect(guessLeadFieldFromHeader("your-phone")).toBe("phone");
+    expect(guessLeadFieldFromHeader("your-tel")).toBe("phone");
+    expect(guessLeadFieldFromHeader("your-message")).toBe("message");
+    expect(guessLeadFieldFromHeader("your-last-name")).toBe("lastName");
+    expect(guessLeadFieldFromHeader("your-service")).toBe("servicesInterestedIn");
+    expect(guessLeadFieldFromHeader("your-subject")).toBeNull();
+
+    const mapping = suggestLeadColumnMapping([
+      "your-name",
+      "your-email",
+      "your-phone",
+      "your-message",
+      "your-subject",
+    ]);
+    expect(mapping).toMatchObject({
+      firstName: "your-name",
+      email: "your-email",
+      phone: "your-phone",
+      message: "your-message",
+    });
+    expect(mapping.extras).toEqual(["your-subject"]);
+  });
+
+  it("maps Elementor form labels the same way the plugin does", () => {
+    expect(guessLeadFieldFromHeader("name")).toBe("firstName");
+    expect(guessLeadFieldFromHeader("Name")).toBe("firstName");
+    expect(guessLeadFieldFromHeader("Full Name")).toBe("firstName");
+    expect(guessLeadFieldFromHeader("email")).toBe("email");
+    expect(guessLeadFieldFromHeader("Email")).toBe("email");
+    expect(guessLeadFieldFromHeader("tel")).toBe("phone");
+    expect(guessLeadFieldFromHeader("Phone")).toBe("phone");
+    expect(guessLeadFieldFromHeader("message")).toBe("message");
+    expect(guessLeadFieldFromHeader("Message")).toBe("message");
+
+    const mapping = suggestLeadColumnMapping(["Name", "Email", "Phone", "Message", "Company"]);
+    expect(mapping).toMatchObject({
+      firstName: "Name",
+      email: "Email",
+      phone: "Phone",
+      message: "Message",
+    });
+    expect(mapping.extras).toEqual(["Company"]);
+
+    const elementorKey = `el-abc123-${"b".repeat(40)}`;
+    expect(ingestLeadSchema.parse({
+      firstName: "Amina",
+      email: "amina@example.com",
+      phone: "+92 300 1234567",
+      message: "Quote for Crown Axis.",
+      extras: { Company: "Crown Axis" },
+      idempotencyKey: elementorKey,
+      pluginVersion: "0.1.0",
+    }).extras).toEqual({ Company: "Crown Axis" });
+  });
+
+  it("accepts a Contact Form 7 plugin payload through the public ingest route", async () => {
+    const { owner, plaintextKey } = await seedConnectedSource();
+    const idempotencyKey = `cf7-12-${"a".repeat(40)}`;
+    expect(idempotencyKey.length).toBeLessThanOrEqual(LEAD_INGEST_IDEMPOTENCY_KEY_MAX_LENGTH);
+
+    const pluginBody = {
+      firstName: "Amina",
+      email: "amina@example.com",
+      phone: "+92 300 1234567",
+      message: "Quote for Crown Axis.",
+      extras: { "your-subject": "Get a Quote" },
+      idempotencyKey,
+      pluginVersion: "0.1.0",
+    };
+
+    const parsed = ingestLeadSchema.parse(pluginBody);
+    expect(parsed.leadDate).toBe(todayLeadDate());
+    expect(parsed.extras).toEqual({ "your-subject": "Get a Quote" });
+    expect("your-subject" in parsed).toBe(false);
+
+    const { POST } = await import("@/app/api/v1/leads/ingest/route");
+    const requestInit = {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        [LEAD_INGEST_KEY_HEADER]: plaintextKey,
+      },
+      body: JSON.stringify(pluginBody),
+    } as const;
+
+    const created = await POST(new Request("http://localhost/api/v1/leads/ingest", requestInit));
+    const createdBody = await created.json();
+    expect(created.status).toBe(201);
+    expect(createdBody.success).toBe(true);
+    expect(createdBody.message).toBe("Lead ingested.");
+    expect(createdBody.data.replayed).toBe(false);
+    expect(createdBody.data.lead.origin).toBe("wordpress");
+    expect(createdBody.data.lead.firstName).toBe("Amina");
+    expect(createdBody.data.lead.extras).toEqual({ "your-subject": "Get a Quote" });
+
+    const stored = await Lead.findById(createdBody.data.lead.id);
+    expect(String(stored?.createdBy)).toBe(String(owner._id));
+    expect(stored?.idempotencyKey).toBe(idempotencyKey);
+
+    const replayed = await POST(new Request("http://localhost/api/v1/leads/ingest", requestInit));
+    const replayedBody = await replayed.json();
+    expect(replayed.status).toBe(200);
+    expect(replayedBody.message).toBe("Lead already ingested.");
+    expect(replayedBody.data.replayed).toBe(true);
+    expect(replayedBody.data.lead.id).toBe(createdBody.data.lead.id);
   });
 });

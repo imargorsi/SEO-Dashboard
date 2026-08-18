@@ -98,6 +98,7 @@ final class Crawllex_Lead_Capture_Settings
         <div class="wrap">
             <h1><?php echo esc_html__('Crawllex Lead Capture', 'crawllex-lead-capture'); ?></h1>
             <p><?php echo esc_html__('Enter the Crawllex dashboard URL and the lead source key from Settings → Integrations. The key is stored on this site only.', 'crawllex-lead-capture'); ?></p>
+            <p><?php echo esc_html__('Contact Form 7 submissions are sent automatically after a successful (or skipped-mail) submit. The form still needs first name, email, phone, and message.', 'crawllex-lead-capture'); ?></p>
 
             <form method="post" action="<?php echo esc_url(admin_url('options-general.php?page=crawllex-lead-capture')); ?>" autocomplete="off">
                 <?php wp_nonce_field('crawllex_lc_settings'); ?>

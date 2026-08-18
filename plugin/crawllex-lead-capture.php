@@ -32,7 +32,9 @@ define('CRAWLLEX_LC_MESSAGE_MAX', 200);
 
 require_once CRAWLLEX_LC_DIR . 'includes/class-logger.php';
 require_once CRAWLLEX_LC_DIR . 'includes/class-client.php';
+require_once CRAWLLEX_LC_DIR . 'includes/class-field-map.php';
 require_once CRAWLLEX_LC_DIR . 'includes/class-normalizer.php';
+require_once CRAWLLEX_LC_DIR . 'includes/class-submit.php';
 require_once CRAWLLEX_LC_DIR . 'includes/class-settings.php';
 require_once CRAWLLEX_LC_DIR . 'includes/class-forms.php';
 require_once CRAWLLEX_LC_DIR . 'includes/class-plugin.php';

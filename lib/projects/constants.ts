@@ -28,6 +28,9 @@ export function isSelectableProjectStatus(status: string): boolean {
   return status === "active" || status === "pending";
 }
 
+/** API + UI copy when a regular user already owns a pending project. */
+export const PENDING_PROJECT_LIMIT_MESSAGE = "You already have a project awaiting approval.";
+
 export function isSeoGoal(value: string): value is TSeoGoal {
   return (SEO_GOALS as readonly string[]).includes(value);
 }

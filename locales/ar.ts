@@ -531,6 +531,8 @@ const translation: Translation = {
       verifyEmailCta: "تحقق من البريد",
       listTitle: "المشاريع",
       createProjectTitle: "إنشاء مشروع جديد",
+      pendingLimitTitle: "مشروع بانتظار الموافقة",
+      pendingLimitBody: "لديك مشروع بانتظار الموافقة. انتظر القرار قبل إنشاء مشروع آخر.",
       statusFilter: {
         ariaLabel: "تصفية المشاريع حسب الحالة",
         all: "كل المشاريع",

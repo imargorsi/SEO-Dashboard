@@ -527,6 +527,8 @@ export interface Translation {
       verifyEmailCta: string;
       listTitle: string;
       createProjectTitle: string;
+      pendingLimitTitle: string;
+      pendingLimitBody: string;
       statusFilter: {
         ariaLabel: string;
         all: string;
@@ -2117,6 +2119,9 @@ const translation: Translation = {
       verifyEmailCta: "Verify Email",
       listTitle: "Projects",
       createProjectTitle: "Create A New Project",
+      pendingLimitTitle: "Project Awaiting Approval",
+      pendingLimitBody:
+        "You already have a project pending approval. Wait for a decision before creating another.",
       statusFilter: {
         ariaLabel: "Filter Projects By Status",
         all: "All Projects",

@@ -1489,10 +1489,12 @@ export interface Translation {
       heroFeature2Body: string;
       heroFeature3Title: string;
       heroFeature3Body: string;
+      heroFeature4Title: string;
+      heroFeature4Body: string;
       trustSecure: string;
       trustUptime: string;
-      trustMultiClient: string;
-      trustInsights: string;
+      trustRoles: string;
+      trustGoogle: string;
       continueWith: string;
       continueGoogle: string;
       continueSso: string;
@@ -3081,20 +3083,22 @@ const translation: Translation = {
       password: "Password",
       submit: "Log In",
       forgotPassword: "Forgot Password?",
-      heroTitleStart: "SEO Clarity For",
+      heroTitleStart: "SEO Operations For",
       heroTitleAccent: "Every Client",
       heroLead:
-        "Track rankings, spot opportunities, and keep stakeholders aligned from one calm workspace.",
-      heroFeature1Title: "Multi-Client Dashboards",
-      heroFeature1Body: "Run every client workspace without spreadsheet chaos.",
-      heroFeature2Title: "Scheduled Checks You Trust",
-      heroFeature2Body: "Reliable history and cadence your team can depend on.",
-      heroFeature3Title: "Insights Built For Accuracy",
-      heroFeature3Body: "Clear performance signals designed for SEO operators.",
+        "Run every client from one workspace — dashboard assistant, WordPress leads, search analytics, and SEO activity in the same place.",
+      heroFeature1Title: "Dashboard Assistant",
+      heroFeature1Body: "Ask in plain English and get answers from leads, analytics, and SEO activity.",
+      heroFeature2Title: "WordPress Integration",
+      heroFeature2Body: "Website forms land in Crawllex automatically with the official plugin.",
+      heroFeature3Title: "Search Performance",
+      heroFeature3Body: "Clicks, impressions, rankings, and engagement in one client-ready view.",
+      heroFeature4Title: "Multi-Client Dashboards",
+      heroFeature4Body: "Switch projects in a click and keep every client workspace separate.",
       trustSecure: "Secure Access",
       trustUptime: "Always On",
-      trustMultiClient: "Multi-Client",
-      trustInsights: "Live Insights",
+      trustRoles: "Team Roles",
+      trustGoogle: "Google Sign-In",
       continueWith: "Or Continue With",
       continueGoogle: "Continue With Google",
       continueSso: "SSO",

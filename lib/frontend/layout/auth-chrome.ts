@@ -8,7 +8,7 @@ export const authFormPanelClass = "relative z-10 flex min-h-svh flex-1 flex-col 
 export const authHeroPanelClass = "relative z-10 flex min-h-0 flex-1 flex-col lg:h-full lg:overflow-y-auto";
 
 /** Footer link under Google / submit — consistent breathing room on every auth card. */
-export const authFormFooterClass = "mt-12 pt-2 text-center leading-relaxed";
+export const authFormFooterClass = "mt-8 pt-2 text-center leading-relaxed";
 
 /**
  * Auth form card over the video background.
@@ -42,11 +42,19 @@ export const authHeroMutedClass = "text-(--auth-hero-muted)!";
 export const authHeroAccentClass = "text-brand";
 
 /**
- * Frosted icon well on the dark video hero — light ink, soft white hairline.
- * Not dashboard chrome (those assume page canvas, not photography).
+ * Circular icon well on the dark video hero — outline only, no card fill behind the row.
  */
 export const authHeroIconWellClass = cn(
-  "inline-flex size-10 shrink-0 items-center justify-center rounded-xl",
-  "border border-white/20 bg-white/10 text-(--auth-hero-fg)",
+  "inline-flex size-11 shrink-0 items-center justify-center rounded-full",
+  "border border-white/25 bg-white/12 text-brand",
   "shadow-sm backdrop-blur-md",
+);
+
+/** Feature row on the video hero — icon + copy, no tile fill. */
+export const authHeroFeatureCardClass = "flex items-center gap-3.5 p-1";
+
+/** Compact proof chip — bottom of the hero column, over the video. */
+export const authHeroTrustChipClass = cn(
+  "inline-flex min-h-9 items-center gap-2 rounded-full border border-white/16 bg-white/10 px-3 py-1.5",
+  "backdrop-blur-md",
 );

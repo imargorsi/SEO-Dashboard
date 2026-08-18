@@ -9,6 +9,7 @@ type AuthScreenShellProps = {
 
 /**
  * Auth split layout — hero left, form right on desktop.
+ * Both columns vertically center their content. Trust chips sit at the bottom of the hero.
  *
  * Form centering uses the min-h-full + items-center scroll pattern so the card
  * stays vertically centered when it fits, and scrolls from a sensible start when

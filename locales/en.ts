@@ -1234,7 +1234,7 @@ export interface Translation {
       };
       source: {
         wordpress: string;
-        internal: string;
+        others: string;
       };
       detail: {
         title: string;
@@ -2839,14 +2839,14 @@ const translation: Translation = {
       },
       source: {
         wordpress: "WordPress Integration",
-        internal: "Internal",
+        others: "Others",
       },
       detail: {
         title: "Lead Details",
         lead: "Contact details, source, message, and any extra fields from import or WordPress.",
         unnamed: "Lead",
         leadTitle: "Lead Details",
-        leadSectionLead: "Date, source, services, and the original message.",
+        leadSectionLead: "Date, source, and the original message.",
         leadDate: "Date",
         source: "Source",
         services: "Services Interested In",

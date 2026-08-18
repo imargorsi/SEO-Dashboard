@@ -1243,14 +1243,14 @@ const translation: Translation = {
       },
       source: {
         wordpress: "تكامل ووردبريس",
-        internal: "داخلي",
+        others: "أخرى",
       },
       detail: {
         title: "تفاصيل العميل",
         lead: "بيانات التواصل والمصدر والرسالة وأي حقول إضافية من الاستيراد أو ووردبريس.",
         unnamed: "عميل محتمل",
         leadTitle: "تفاصيل العميل",
-        leadSectionLead: "التاريخ والمصدر والخدمات والرسالة الأصلية.",
+        leadSectionLead: "التاريخ والمصدر والرسالة الأصلية.",
         leadDate: "التاريخ",
         source: "المصدر",
         services: "الخدمات المهتم بها",

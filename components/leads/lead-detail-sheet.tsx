@@ -19,6 +19,7 @@ import {
   typeMetaRowClass,
   typeStackIdentityClass,
 } from "@/lib/frontend/layout/dashboard-chrome";
+import { leadExtrasForDisplay } from "@/lib/leads/extras.utils";
 import { formatLeadDisplayName } from "@/lib/leads/serialize-lead";
 import { cn } from "@/lib/utils";
 import type { TLeadDto } from "@/types/lead.types";
@@ -43,7 +44,7 @@ function formatLeadDate(isoDate: string, locale: string): string {
 
 export function LeadDetailSheet({ lead, open, onOpenChange }: TLeadDetailSheetProps) {
   const { t, i18n } = useTranslation("translation", { keyPrefix: "modules.leads.detail" });
-  const extrasEntries = lead ? Object.entries(lead.extras ?? {}) : [];
+  const extrasEntries = lead ? leadExtrasForDisplay(lead, t("services")) : [];
   const displayName = lead
     ? formatLeadDisplayName(lead.firstName, lead.lastName) || t("unnamed")
     : "";
@@ -90,9 +91,6 @@ export function LeadDetailSheet({ lead, open, onOpenChange }: TLeadDetailSheetPr
                 </DetailFieldRow>
                 <DetailFieldRow icon={Icons.building} label={t("source")}>
                   <LeadSourceBadge origin={lead.origin} />
-                </DetailFieldRow>
-                <DetailFieldRow icon={Icons.briefcase} label={t("services")}>
-                  {lead.servicesInterestedIn?.trim() || "—"}
                 </DetailFieldRow>
                 <DetailFieldRow icon={Icons.megaphone} label={t("message")}>
                   {lead.message.trim() || "—"}

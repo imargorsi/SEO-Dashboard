@@ -227,7 +227,7 @@ export function LeadsSection() {
           message: t("table.colMessage"),
           source: t("table.colSource"),
           sourceWordpress: t("source.wordpress"),
-          sourceInternal: t("source.internal"),
+          sourceOthers: t("source.others"),
         },
       });
       notify.success(t("importExport.exportSuccess"));

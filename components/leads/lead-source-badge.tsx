@@ -16,7 +16,7 @@ type TLeadSourceBadgeProps = {
 
 const CHIP_CLASS = {
   wordpress: ACCOUNT_SOURCE_CHIP_CLASS.google,
-  internal: ACCOUNT_SOURCE_CHIP_CLASS.self_register,
+  others: ACCOUNT_SOURCE_CHIP_CLASS.self_register,
 } as const;
 
 /** Compact source chip — Title Case labels, not StatusChip uppercase. */
@@ -35,7 +35,7 @@ export function LeadSourceBadge({ origin, className }: TLeadSourceBadgeProps) {
       {group === "wordpress" ? (
         <WordpressIntegrationLogo size={14} className="shrink-0" />
       ) : (
-        <Icons.building className="size-3.5 shrink-0" aria-hidden />
+        <Icons.grid className="size-3.5 shrink-0" aria-hidden />
       )}
       <span>{t(group)}</span>
     </span>

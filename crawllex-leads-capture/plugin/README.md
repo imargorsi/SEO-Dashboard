@@ -41,7 +41,7 @@ Default CF7 tags map automatically (`your-name`, `your-email`, `your-message`). 
 [textarea* your-message]
 ```
 
-Optional: `[text your-last-name]`, a services field (`your-service` / `services`). Leftover tags go to `extras`. File uploads are not sent.
+Optional: `[text your-last-name]`. Service / project-type tags stay in `extras`. File uploads are not sent.
 
 If the form omits a mapped name, phone, or message, the plugin still sends the lead when it can find an **email** (mapped or inside extras). Missing name becomes `Website Visitor`. Missing message becomes the extra fields joined together, or `Submitted from the website form.` Missing phone is stored empty. A submit with no email is logged and not sent.
 
@@ -63,7 +63,7 @@ Default Elementor field IDs and labels map automatically (`name`, `email`, `mess
 | Email (type `email`) | email |
 | Tel (type `tel`) | phone |
 | Message (textarea) | message |
-| Last Name, Services, other labels | lastName / servicesInterestedIn / extras |
+| Last Name, Services, other labels | lastName / extras |
 
 If name, phone, or message is missing, the plugin recovers them from extra answers or uses fallbacks. Email is still required.
 

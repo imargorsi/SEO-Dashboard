@@ -84,14 +84,11 @@ final class Crawllex_Lead_Capture_Elementor
                 continue;
             }
 
-            $key = is_string($id) && $id !== '' ? $id : (isset($field['id']) ? (string) $field['id'] : '');
-            if ($key !== '') {
-                $posted[$key] = $value;
-            }
-
             $title = isset($field['title']) ? trim((string) $field['title']) : '';
-            if ($title !== '' && strtolower($title) !== strtolower($key)) {
-                $posted[$title] = $value;
+            $id_key = is_string($id) && $id !== '' ? $id : (isset($field['id']) ? (string) $field['id'] : '');
+            $key = self::posted_key($title, $id_key, $type, $posted, $value);
+            if ($key !== null) {
+                $posted[$key] = $value;
             }
 
             if ($type === 'email' && $email_from_type === '' && is_scalar($value)) {
@@ -116,6 +113,48 @@ final class Crawllex_Lead_Capture_Elementor
         }
 
         return $posted;
+    }
+
+    /**
+     * Prefer the visible label. Untitled typed fields map to core names.
+     * Duplicate labels keep both values instead of overwriting.
+     *
+     * @param array<string, mixed> $posted
+     */
+    private static function posted_key(
+        string $title,
+        string $id_key,
+        string $type,
+        array $posted,
+        mixed $value,
+    ): ?string {
+        $key = $title;
+        if ($key === '') {
+            if ($type === 'email') {
+                $key = 'email';
+            } elseif ($type === 'tel') {
+                $key = 'phone';
+            } elseif ($type === 'textarea') {
+                $key = 'message';
+            } else {
+                $key = $id_key;
+            }
+        }
+        if ($key === '') {
+            return null;
+        }
+        if (!isset($posted[$key])) {
+            return $key;
+        }
+        if ((string) $posted[$key] === (string) $value) {
+            return null;
+        }
+        $suffix = $id_key !== '' && strcasecmp($id_key, $key) !== 0 ? $id_key : '2';
+        $disambiguated = $key . ' (' . $suffix . ')';
+        if (!isset($posted[$disambiguated])) {
+            return $disambiguated;
+        }
+        return $key . ' (' . $suffix . '-2)';
     }
 
     /**

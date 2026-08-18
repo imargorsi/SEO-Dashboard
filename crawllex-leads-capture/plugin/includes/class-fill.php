@@ -84,7 +84,49 @@ final class Crawllex_Lead_Capture_Fill
                 : self::FALLBACK_MESSAGE;
         }
 
+        $extras = self::prune_extras($core, $extras);
+
         return array_merge($core, $extras);
+    }
+
+    /**
+     * @param array<string, string> $core
+     * @param array<string, string> $extras
+     * @return array<string, string>
+     */
+    private static function prune_extras(array $core, array $extras): array
+    {
+        $kept = array();
+        $first = trim($core['firstName'] ?? '');
+        $last = trim($core['lastName'] ?? '');
+        $full_name = trim($first . ' ' . $last);
+        $core_values = array();
+        foreach (array($first, $full_name, trim($core['email'] ?? ''), trim($core['message'] ?? '')) as $value) {
+            if ($value !== '') {
+                $core_values[] = strtolower($value);
+            }
+        }
+        $phone_digits = preg_replace('/\D+/', '', $core['phone'] ?? '');
+
+        foreach ($extras as $key => $value) {
+            $lower = strtolower(trim($value));
+            if (in_array($lower, $core_values, true)) {
+                continue;
+            }
+            $digits = preg_replace('/\D+/', '', $value);
+            if (
+                is_string($phone_digits)
+                && $phone_digits !== ''
+                && is_string($digits)
+                && strlen($digits) >= 7
+                && $digits === $phone_digits
+            ) {
+                continue;
+            }
+            $kept[$key] = $value;
+        }
+
+        return $kept;
     }
 
     /**

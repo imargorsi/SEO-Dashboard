@@ -63,16 +63,6 @@ final class Crawllex_Lead_Capture_Field_Map
         'notes' => 'message',
         'details' => 'message',
 
-        'services' => 'servicesInterestedIn',
-        'service' => 'servicesInterestedIn',
-        'services interested in' => 'servicesInterestedIn',
-        'service interested in' => 'servicesInterestedIn',
-        'your service' => 'servicesInterestedIn',
-        'interested in' => 'servicesInterestedIn',
-        'services interested' => 'servicesInterestedIn',
-        'interest' => 'servicesInterestedIn',
-        'interests' => 'servicesInterestedIn',
-
         'lead message' => 'message',
 
         'date' => 'leadDate',

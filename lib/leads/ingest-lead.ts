@@ -109,7 +109,13 @@ export async function ingestLeadFromSource(
     throw error;
   }
 
-  const extras = sanitizeLeadExtras(input.extras);
+  const extras = sanitizeLeadExtras(input.extras, {
+    firstName: input.firstName,
+    lastName: input.lastName,
+    email: input.email,
+    phone: input.phone,
+    message: input.message,
+  });
   await stampLeadSourceSiteUrl(source, input.siteUrl);
   const normalizedEmail = normalizeLeadEmail(input.email);
   const normalizedPhone = normalizeLeadPhone(input.phone);

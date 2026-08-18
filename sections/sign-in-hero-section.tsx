@@ -71,7 +71,7 @@ export function SignInHeroSection() {
           surface="onDark"
           className="mb-12 block h-auto w-64 max-w-full sm:w-72"
           width={288}
-          height={49}
+          height={96}
           priority
         />
 

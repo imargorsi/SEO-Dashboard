@@ -64,6 +64,7 @@ final class Crawllex_Lead_Capture_Field_Map
         'details' => 'message',
 
         'lead message' => 'message',
+        'comment or message' => 'message',
 
         'date' => 'leadDate',
         'lead date' => 'leadDate',

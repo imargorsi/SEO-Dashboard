@@ -22,7 +22,7 @@ import { resolvePublicResourceFile } from "@/lib/leads/public-resources";
 
 describe("WordPress plugin package", () => {
   it("reads the plugin header version", () => {
-    expect(readWordpressPluginVersion()).toBe("0.3.0");
+    expect(readWordpressPluginVersion()).toBe("0.4.1");
   });
 
   it("builds a zip whose entries live under the WordPress plugin slug", () => {
@@ -31,6 +31,9 @@ describe("WordPress plugin package", () => {
     expect(zip[1]).toBe(0x4b);
     expect(zip.includes(Buffer.from(`${WP_PLUGIN_SLUG}/${WP_PLUGIN_SLUG}.php`))).toBe(true);
     expect(zip.includes(Buffer.from("includes/class-updater.php"))).toBe(true);
+    expect(zip.includes(Buffer.from("includes/forms/class-wpforms.php"))).toBe(true);
+    expect(zip.includes(Buffer.from("assets/admin.css"))).toBe(true);
+    expect(zip.includes(Buffer.from("assets/logo-wpforms.png"))).toBe(true);
     expect(zip.includes(Buffer.from("includes/dashboard-url.php"))).toBe(true);
   });
 
@@ -76,7 +79,7 @@ describe("WordPress plugin package", () => {
     const payload = buildWordpressPluginUpdateDto();
     expect(payload.slug).toBe(WP_PLUGIN_SLUG);
     expect(payload.plugin).toBe(WP_PLUGIN_BASENAME);
-    expect(payload.version).toBe("0.3.0");
+    expect(payload.version).toBe("0.4.1");
     expect(payload.downloadUrl).toBe(`http://localhost:3000${WP_PLUGIN_ZIP_HREF}`);
     expect(WP_PLUGIN_ZIP_FILENAME).toBe("crawllex-lead-capture.zip");
   });

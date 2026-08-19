@@ -109,7 +109,7 @@ final class Crawllex_Lead_Capture_Updater
             'requires_php' => $remote['requires_php'],
             'download_link' => $remote['download_url'],
             'sections' => array(
-                'description' => 'Send Contact Form 7 and Elementor form submissions to Crawllex with a Lead Source Key.',
+                'description' => 'Send Contact Form 7, Elementor, and WPForms submissions to Crawllex with a Lead Source Key.',
             ),
         );
     }

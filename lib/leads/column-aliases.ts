@@ -68,6 +68,7 @@ const ALIAS_MAP: Record<string, TLeadField> = {
   notes: "message",
   details: "message",
   "lead message": "message",
+  "comment or message": "message",
 
   date: "leadDate",
   "lead date": "leadDate",

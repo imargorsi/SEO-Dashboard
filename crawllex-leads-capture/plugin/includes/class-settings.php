@@ -9,6 +9,7 @@ final class Crawllex_Lead_Capture_Settings
     public static function init(): void
     {
         add_action('admin_menu', array(self::class, 'register_page'));
+        add_action('admin_enqueue_scripts', array('Crawllex_Lead_Capture_Supported_Forms', 'enqueue'));
         add_action('admin_init', array(self::class, 'handle_post'));
         add_action('admin_notices', array(self::class, 'notices'));
     }
@@ -111,8 +112,8 @@ final class Crawllex_Lead_Capture_Settings
                 />
                 <?php echo esc_html__('Crawllex Lead Capture', 'crawllex-lead-capture'); ?>
             </h1>
-            <p><?php echo esc_html__('Paste the lead source key from Crawllex Settings → Integrations. The dashboard URL is set by Crawllex and cannot be changed here.', 'crawllex-lead-capture'); ?></p>
-            <p><?php echo esc_html__('Contact Form 7 and Elementor form submissions are sent automatically after a successful submit. Email is required. If name, phone, or message is missing, Crawllex fills what it can and keeps other answers as extra fields.', 'crawllex-lead-capture'); ?></p>
+            <p><?php echo esc_html__('Paste the lead source key from Crawllex Settings → Integrations.', 'crawllex-lead-capture'); ?></p>
+            <?php Crawllex_Lead_Capture_Supported_Forms::render(); ?>
             <p>
                 <strong><?php echo esc_html__('Current Version', 'crawllex-lead-capture'); ?>:</strong>
                 <?php echo esc_html(CRAWLLEX_LC_VERSION); ?>

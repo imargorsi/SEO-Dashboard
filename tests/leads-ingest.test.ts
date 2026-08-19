@@ -361,6 +361,42 @@ describe("Lead ingest", () => {
     }).extras).toEqual({ Company: "Crown Axis" });
   });
 
+  it("maps WPForms labels the same way the plugin does", () => {
+    expect(guessLeadFieldFromHeader("Name")).toBe("firstName");
+    expect(guessLeadFieldFromHeader("first name")).toBe("firstName");
+    expect(guessLeadFieldFromHeader("last name")).toBe("lastName");
+    expect(guessLeadFieldFromHeader("Email")).toBe("email");
+    expect(guessLeadFieldFromHeader("Phone")).toBe("phone");
+    expect(guessLeadFieldFromHeader("Comment or Message")).toBe("message");
+
+    const mapping = suggestLeadColumnMapping([
+      "Name",
+      "Email",
+      "Phone",
+      "Comment or Message",
+      "Company",
+    ]);
+    expect(mapping).toMatchObject({
+      firstName: "Name",
+      email: "Email",
+      phone: "Phone",
+      message: "Comment or Message",
+    });
+    expect(mapping.extras).toEqual(["Company"]);
+
+    const wpformsKey = `wp-5-${"c".repeat(40)}`;
+    expect(ingestLeadSchema.parse({
+      firstName: "Amina",
+      lastName: "Khan",
+      email: "amina@example.com",
+      phone: "+92 300 1234567",
+      message: "Quote for Crown Axis.",
+      extras: { Company: "Crown Axis" },
+      idempotencyKey: wpformsKey,
+      pluginVersion: "0.4.0",
+    }).extras).toEqual({ Company: "Crown Axis" });
+  });
+
   it("accepts a Contact Form 7 plugin payload through the public ingest route", async () => {
     const { owner, plaintextKey } = await seedConnectedSource();
     const idempotencyKey = `cf7-12-${"a".repeat(40)}`;

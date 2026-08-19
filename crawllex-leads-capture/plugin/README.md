@@ -2,14 +2,14 @@
 
 WordPress plugin that pushes form submissions into Crawllex. Lives in this repo at `crawllex-leads-capture/plugin/`.
 
-**Requirements:** WordPress 6.2+ · PHP 8.1+ · Contact Form 7 and/or Elementor Pro Forms for capture (settings work without them)  
-**Version:** 0.3.0
+**Requirements:** WordPress 6.2+ · PHP 8.1+ · Contact Form 7, Elementor Pro Forms, and/or WPForms for capture (settings work without them)  
+**Version:** 0.4.1
 
 Download the zip from `/resources/crawllex-lead-capture.zip` (or Crawllex **Settings → Integrations → WordPress → Download Plugin**), then upload it in WordPress (Plugins → Add Plugin → Upload). Or copy this folder into `wp-content/plugins/crawllex-lead-capture/` (the folder name on the WordPress site should be the plugin slug).
 
 ## Current slice
 
-- Settings → Crawllex Lead Capture (shows **Current Version** and **Latest Version** from Crawllex)
+- Settings → Crawllex Lead Capture (supported form logos + **Current Version** / **Latest Version** from Crawllex)
 - Updates via Crawllex (`GET /api/v1/leads/plugin/update` points at the public zip)
 - **Dashboard Base URL** is fixed in the plugin package (`APP_URL` at pack time) — not editable in WordPress
 - **Lead Source Key** (paste from Crawllex **View Key**)
@@ -17,14 +17,15 @@ Download the zip from `/resources/crawllex-lead-capture.zip` (or Crawllex **Sett
 - Plugin-local status, ingest/failed counts, last 20 events
 - **Contact Form 7** → `POST /api/v1/leads/ingest` after `mail_sent`, `mail_failed`, or `demo_mode`
 - **Elementor Pro Forms** → `POST /api/v1/leads/ingest` on `elementor_pro/forms/new_record`
-- WPForms, Gravity Forms, and Fluent Forms are not wired yet
+- **WPForms** → `POST /api/v1/leads/ingest` on `wpforms_process_complete`
+- Gravity Forms and Fluent Forms are not wired yet
 
 ## Setup
 
 1. In Crawllex: project **Active** → Settings → Integrations → **Download Plugin** → Connect WordPress → copy the key (**View Key** can show it again).
 2. In WordPress: upload the zip (or copy this folder), then paste the `clx_ls_…` key. The dashboard URL is already set.
 3. Click **Test Connection**. Crawllex then shows this website URL on the WordPress card.
-4. Use a Contact Form 7 or Elementor form with first name, email, phone, and message. Submit it and confirm the lead in Crawllex `/leads`. Plugin logs show success or the API message.
+4. Use a Contact Form 7, Elementor, or WPForms form with first name, email, phone, and message. Submit it and confirm the lead in Crawllex `/leads`. Plugin logs show success or the API message.
 
 Pack local vs production zips with the matching `APP_URL` (`.env.local` or `.env.production.local`). Do not use a dashboard user password or access token. Auth is the Lead Source Key only (`X-Lead-Source-Key`).
 
@@ -69,6 +70,24 @@ If name, phone, or message is missing, the plugin recovers them from extra answe
 
 Ingest runs in the same request (up to 10 seconds). Idempotency uses `el-{formId}-{hash}`.
 
+## WPForms
+
+Works with **WPForms Lite** and Pro. The visitor-facing form is not failed if Crawllex ingest errors. File uploads, captcha, honeypot, HTML, page breaks, and payment-card fields are skipped.
+
+Default labels and field types map automatically (`Name`, `Email`, `Phone`, `Comment or Message`). A Name field with first/last subfields maps to firstName / lastName.
+
+| WPForms field | Crawllex |
+|---------------|----------|
+| Name (simple or first/last) | firstName / lastName |
+| Email (type `email`) | email |
+| Phone (type `phone`) | phone |
+| Comment or Message / textarea | message |
+| Other labels | extras |
+
+If name, phone, or message is missing, the plugin recovers them from extra answers or uses fallbacks. Email is still required.
+
+Ingest runs in the same request (up to 10 seconds). Idempotency uses `wp-{formId}-{hash}`.
+
 ## Limits (same as Crawllex ingest)
 
 | Field | Cap |
@@ -96,6 +115,9 @@ Plugin **Ingested** / **Failed** counts are local. Dashboard Settings → Integr
 |------|------|
 | `includes/dashboard-url.php` | Crawllex origin (`CRAWLLEX_LC_DASHBOARD_URL`) stamped at pack time |
 | `includes/class-settings.php` | Admin UI, save, Test Connection, version line |
+| `includes/class-supported-forms.php` | Settings **Supported Forms** logos + install state |
+| `assets/admin.css` | Settings form-logo cards |
+| `assets/logo-contact-form-7.png` · `logo-elementor.png` · `logo-wpforms.png` | Official form marks |
 | `includes/class-updater.php` | Private update check + zip download against Crawllex |
 | `includes/class-client.php` | `verify` / `ingest` / `update` via `wp_remote_*` |
 | `includes/class-field-map.php` | Form keys → core fields / extras |
@@ -104,3 +126,4 @@ Plugin **Ingested** / **Failed** counts are local. Dashboard Settings → Integr
 | `includes/class-submit.php` | Required-field checks + send + log |
 | `includes/forms/class-contact-form-7.php` | `wpcf7_submit` adapter |
 | `includes/forms/class-elementor.php` | `elementor_pro/forms/new_record` adapter |
+| `includes/forms/class-wpforms.php` | `wpforms_process_complete` adapter |

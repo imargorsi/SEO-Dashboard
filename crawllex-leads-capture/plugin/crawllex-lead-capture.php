@@ -2,8 +2,8 @@
 /**
  * Plugin Name: Crawllex Lead Capture
  * Plugin URI: https://crawllex.com
- * Description: Send Contact Form 7 and Elementor form submissions to Crawllex with a Lead Source Key.
- * Version: 0.3.0
+ * Description: Send Contact Form 7, Elementor, and WPForms submissions to Crawllex with a Lead Source Key.
+ * Version: 0.4.1
  * Requires at least: 6.2
  * Requires PHP: 8.1
  * Author: Crawllex
@@ -15,7 +15,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('CRAWLLEX_LC_VERSION', '0.3.0');
+define('CRAWLLEX_LC_VERSION', '0.4.1');
 define('CRAWLLEX_LC_FILE', __FILE__);
 define('CRAWLLEX_LC_DIR', plugin_dir_path(__FILE__));
 define('CRAWLLEX_LC_OPTION', 'crawllex_lead_capture');
@@ -45,6 +45,7 @@ require_once CRAWLLEX_LC_DIR . 'includes/class-field-map.php';
 require_once CRAWLLEX_LC_DIR . 'includes/class-fill.php';
 require_once CRAWLLEX_LC_DIR . 'includes/class-normalizer.php';
 require_once CRAWLLEX_LC_DIR . 'includes/class-submit.php';
+require_once CRAWLLEX_LC_DIR . 'includes/class-supported-forms.php';
 require_once CRAWLLEX_LC_DIR . 'includes/class-settings.php';
 require_once CRAWLLEX_LC_DIR . 'includes/class-updater.php';
 require_once CRAWLLEX_LC_DIR . 'includes/class-forms.php';
